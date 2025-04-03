@@ -1,10 +1,12 @@
+<!-- Icon.svelte -->
 <script>
     import Tijuana from "$lib/components/Tijuana.svelte";
-	import PDF from "$lib/components/PDF.svelte";
+    import PDF from "$lib/components/PDF.svelte";
     let { type, class: classes = "w-16 h-16" } = $props();
 </script>
 
-<div class={classes + "flex place-content-center justify-center"}>
+<!-- Componente para mostrar iconos dinámicamente según el tipo -->
+<div class={classes + " flex place-content-center justify-center"}>
     {#if type === "Tijuana"}
         <Tijuana />
     {:else if type === "Bomberos"}
