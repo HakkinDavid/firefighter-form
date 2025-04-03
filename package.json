@@ -33,6 +33,7 @@
 	"dependencies": {
 		"@capacitor/android": "^7.0.1",
 		"@capacitor/cli": "^7.0.1",
-		"@capacitor/core": "^7.0.1"
+		"@capacitor/core": "^7.0.1",
+		"@capacitor/preferences": "^7.0.1"
 	}
 }
