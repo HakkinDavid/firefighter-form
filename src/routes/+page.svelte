@@ -6,6 +6,9 @@
     
     import { Preferences } from '@capacitor/preferences';
     import { onMount } from 'svelte';
+    // Esto es temporal, después se moverá de lugar
+	import FormRenderer from '$lib/components/forms/FormRenderer.svelte';
+    import formulario from '../lib/components/forms/formulario.json';
 
     let forms = $state(undefined);
     let logged_in = $state(false);
@@ -53,4 +56,6 @@
         text="Añadir registro de prueba"
         class="w-min px-6 py-2 rounded-lg cursor-pointer border border-black bg-red-500 text-white"/>
     </div>
+    <!-- Pueden eliminar esto -->
+    <FormRenderer template={formulario}/>
 {/if}
