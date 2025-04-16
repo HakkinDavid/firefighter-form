@@ -1,0 +1,52 @@
+{
+    "formname": "Formulario de bomberos",
+    "fields": [
+        {
+            "name": "campoinput",
+            "label": "Campo Input",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "camposelect",
+            "label": "Campo Select",
+            "type": "select",
+            "options": ["Algo 1a", "Algo 2b"]
+        },
+        {
+            "name": "campotextarea",
+            "label": "Campo Text area",
+            "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "campodetexto",
+            "type": "text",
+            "className": "text-black-1000",
+            "text": "<p>Campos tipo Autocomplete</p>"
+        },
+        {
+            "name": "campoautocomplete",
+            "label": "Campo Autocomplete",
+            "type": "input",
+            "inputType": "text",
+            "options": ["Opcion1", "Opcion2"]
+        },
+        {
+            "name": "campomultipleautocomplete",
+            "label": "Campo Autocomplete múltiple",
+            "type": "input",
+            "inputType": "text",
+            "multiple": true,
+            "options": ["Yes", "No", "Maybe"],
+            "allowOwnOptions": true
+        },
+        {
+            "name": "grupo",
+            "label": "Opcion Multiple",
+            "type": "multiple",
+            "inputType": "checkbox",
+            "options": ["Opcion1", "Opcion2", "Opcion3"]
+        }
+    ]
+}
