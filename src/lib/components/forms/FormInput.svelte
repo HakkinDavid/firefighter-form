@@ -3,8 +3,10 @@
 	import Button from "../Button.svelte";
     export let field;
     export let fieldValue;
+    export let fieldIdx = "";
     export let errorValue;
     export let disabled = false;
+    let fieldName = field.name + fieldIdx;
     let suggestions = [];
     let tempValue;
 
@@ -60,12 +62,12 @@
 </script>
 
 <div class={field.className}>
-    <label class="block text-gray-700 text-sm font-bold mb-2" for={field.name}>{field.label}</label>
+    <label class="block text-gray-700 text-sm font-bold mb-2" for={fieldName}>{field.label}</label>
     {#if field.inputType === "checkbox"}
-        <input id={field.name} name={field.name} type="checkbox" checked={fieldValue}
+        <input id={fieldName} name={fieldName} type="checkbox" checked={fieldValue}
             on:input={handleInput} disabled={disabled} autocomplete="off"/>
     {:else}
-        <input id={field.name} name={field.name} type={field.inputType} value={field.multiple ? tempValue : fieldValue}
+        <input id={fieldName} name={fieldName} type={field.inputType} value={field.multiple ? tempValue : fieldValue}
             on:input={handleInput} on:keydown={handleKeyDown} disabled={disabled} autocomplete="off"/>
         {#if field.options}
             <button type="button" class="toggle" on:click={toggleDropdown}>▼</button>

@@ -5,6 +5,7 @@
 	import FormMultipleOption from "./FormMultipleOption.svelte";
 	import FormText from "./FormText.svelte";
     import FormSignature from "./FormSignature.svelte";
+	import FormTuple from "./FormTuple.svelte";
 
     export let template;
     export let ReadOnly = false;
@@ -12,7 +13,7 @@
             .filter(field => field.type !== 'text')
             .map(field => {
         let defaultValue;
-        if (field.multiple || (field.type === 'multiple' && field.inputType === 'checkbox')) {
+        if (field.multiple || field.type === 'tuple' || (field.type === 'multiple' && field.inputType === 'checkbox')) {
             defaultValue = [];
         } else if (field.inputType === 'checkbox') {
             defaultValue = false;
@@ -27,8 +28,11 @@
         select: FormSelect,
         textarea: FormTextarea,
         multiple: FormMultipleOption,
-        text: FormText,
-        signature: FormSignature    };
+        signature: FormSignature,    
+        tuple: FormTuple,
+        text: FormText
+    };
+
 </script>
 
 <div>

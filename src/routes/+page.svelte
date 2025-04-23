@@ -56,5 +56,6 @@
         text="Añadir registro de prueba"
         class="w-min px-6 py-2 rounded-lg cursor-pointer border border-black bg-red-500 text-white"/>
     </div>
+    <!-- Pueden eliminar esto -->
     <FormRenderer template={formulario}/>
 {/if}

@@ -2,8 +2,10 @@
     import { createEventDispatcher } from "svelte";
     export let field;
     export let fieldValue;
+	export let fieldIdx = "";
     export let errorValue;
     export let disabled = false;
+	let fieldName = field.name + fieldIdx;
 
     const dispatch = createEventDispatcher();
 
@@ -35,7 +37,7 @@
     {#each field.options as option}
 		<label class="flex items-center space-x-2 mb-1">
             <!-- Input type debe ser checkbox o radio -->
-			<input type={field.inputType} name={field.name} value={option}
+			<input type={field.inputType} name={fieldName} value={option}
 				checked={isChecked(option)}
 				on:change={(e) => handleInput(e, option)}
 				disabled={disabled}
