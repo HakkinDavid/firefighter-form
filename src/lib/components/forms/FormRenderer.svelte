@@ -4,6 +4,7 @@
 	import FormTextarea from "$lib/components/forms/FormTextarea.svelte";
 	import FormMultipleOption from "./FormMultipleOption.svelte";
 	import FormText from "./FormText.svelte";
+    import FormSignature from "./FormSignature.svelte";
 
     export let template;
     export let ReadOnly = false;
@@ -26,13 +27,13 @@
         select: FormSelect,
         textarea: FormTextarea,
         multiple: FormMultipleOption,
-        text: FormText
-    };
+        text: FormText,
+        signature: FormSignature    };
 </script>
 
 <div>
     <form class="" id="template" on:submit|preventDefault={() => console.log(formData)}>
-        <h2>{template.formname}</h2>
+        <h2><b>{template.formname}</b></h2>
         {#each template.fields as field (field.name)}
             {#if fieldComponentMap[field.type]}
                 <svelte:component this={fieldComponentMap[field.type]} {field} disabled={ReadOnly}
