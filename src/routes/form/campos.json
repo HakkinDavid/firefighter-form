@@ -1,0 +1,487 @@
+{
+    "formname": "Formato de Registro de Atención Prehospitalaria",
+    "fields": [
+        {
+            "name": "label1",
+            "type": "text",
+            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "text": "<h1>DATOS DEL SERVICIO</h1>"
+        },
+        {
+            "name": "campoturno",
+            "label": "TURNO",
+            "type": "input",
+            "inputType": "text",
+            "options": ["Opcion1", "Opcion2"]
+        },
+        {
+            "name": "campoestacion",
+            "label": "ESTACION",
+            "type": "input",
+            "inputType": "text",
+            "options": ["Central de Bomberos", "Estación 1", "Estación 2", "Estación 3", "Estación 4"]
+        },
+        {
+            "name": "fecha",
+            "label": "FECHA",
+            "type": "input",
+            "inputType": "date"
+        },
+        {
+            "name": "cronometria",
+            "type": "text",
+            "className": "block text-gray-500 text-big font-bold mt-2 mb-2",
+            "text": "<p>CRONOMETRIA (HORA)</p>"
+        },
+        {
+            "name": "camposervicio",
+            "label": "TIPO DE SERVICIO",
+            "type": "input",
+            "inputType": "time"
+        },
+        {
+            "name": "campollamada",
+            "label": "HORA DE LLAMADA",
+            "type": "input",
+            "inputType": "time"
+        },
+        {
+            "name": "salida",
+            "label": "HORA DE SALIDA",
+            "type": "input",
+            "inputType": "time"
+        },
+        {
+            "name": "llegada",
+            "label": "HORA DE LLEGADA",
+            "type": "input",
+            "inputType": "time"
+        },
+        {
+            "name": "traslado",
+            "label": "HORA DE TRASLADO",
+            "type": "input",
+            "inputType": "time"
+        },
+        {
+            "name": "hospital",
+            "label": "HORA DE HOSPITAL",
+            "type": "input",
+            "inputType": "time"
+        },
+        {
+            "name": "disponible",
+            "label": "HORA DE DISPONIBLE",
+            "type": "input",
+            "inputType": "time"
+        },
+        {
+            "name": "servicioubi",
+            "type": "text",
+            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "text": "<p>Ubicación del Servicio</p>"
+        },
+        {
+            "name": "calle",
+            "label": "CALLE",
+            "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "esquina",
+            "label": "ESQUINA/PROXIMA",
+            "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "colonia",
+            "label": "COLONIA/COMUNIDAD",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "codigopostal",
+            "label": "C.P.",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "municipio",
+            "label": "MUNICIPIO",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "estado",
+            "label": "ESTADO",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "ocurrencia",
+            "label": "LUGAR DE OCURRENCIA",
+            "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "resultado",
+            "label": "RESULTADO DEL DESPACHO",
+            "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "telefono",
+            "label": "TELEFONO",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "tripulacion",
+            "type": "text",
+            "className": "block text-gray-500 text-big font-bold mt-2 mb-2",
+            "text": "<p>TRIPULACION</p>"
+        },
+        {
+            "name": "jefe",
+            "label": "JEFE DEL SERVICIO",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "maquinista",
+            "label": "MAQUINISTA",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "auxiliares",
+            "label": "AUXILIARES",
+            "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "pacienteinfo",
+            "type": "text",
+            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "text": "<p>PACIENTE</p>"
+        },
+        {
+            "name": "nombre",
+            "label": "NOMBRE DEL PACIENTE",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "genero",
+            "label": "GENERO",
+            "type": "input",
+            "inputType": "text",
+            "multiple": false,
+            "options": ["Mujer", "Hombre"],
+            "allowOwnOptions": true
+        },
+        {
+            "name": "edad",
+            "label": "EDAD",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "serviciomedico",
+            "label": "SERVICIO MEDICO",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "domiciliopaciente",
+            "type": "text",
+            "className": "block text-gray-500 text-big font-bold mt-2 mb-2",
+            "text": "<p>DOMICILIO DEL PACIENTE</p>"
+        },
+        {
+            "name": "callepaciente",
+            "label": "CALLE",
+            "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "esquinapaciente",
+            "label": "ESQUINA/PROXIMA",
+            "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "coloniapaciente",
+            "label": "COLONIA/COMUNIDAD",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "codigopostalpaciente",
+            "label": "C.P.",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "municipiopaciente",
+            "label": "MUNICIPIO",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "estadopaciente",
+            "label": "ESTADO",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "telefonopaciente",
+            "label": "TELEFONO",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "correopaciente",
+            "label": "CORREO ELECTORNICO",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "ocupacionpaciente",
+            "label": "OCUPACIÓN",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "primeraeval",
+            "type": "text",
+            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "text": "<p>EVALUACIÓN PRIMARIA</p>"
+        },
+        {
+            "name": "motivo",
+            "label": "MOTIVO DE LA ATENCIÓN",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "CONCIENCIA",
+            "label": "NIVEL DE CONCIENCIA",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "prioridad",
+            "label": "PRIORIDAD INICIAL",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "viaaerea",
+            "label": "VÍA AÉREA",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "ventilacion",
+            "label": "VENTILACION",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "calidadventilacion",
+            "label": "CALIDAD",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "pulsos",
+            "label": "PULSOS",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "calidadpulsos",
+            "label": "CALIDAD",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "ritmo",
+            "label": "RITMO",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "coloracion",
+            "label": "COLORACIÓN",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "temp",
+            "label": "TEMPERATURA",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "condicion",
+            "label": "CONDICION",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "pos",
+            "label": "POSICIÓN, ORIENTACIÓN (DÓNDE Y CÓMO SE ENCONTRÓ AL PACIENTE)",
+            "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "segundaeval",
+            "type": "text",
+            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "text": "<p>EVALUACIÓN SECUNDARIA</p>"
+        },
+        {
+            "name": "pupilader",
+            "label": "PUPILA DERECHA",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "pupilaizq",
+            "label": "PUPILA IZQUIERDA",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "neurologicos",
+            "label": "SIGNOS NEUROLÓGICOS",
+            "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "pulmonderecho",
+            "label":"AUSCULTACIÓN PULMÓN DERECHO",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "pulmonizq",
+            "label":"AUSCULTACIÓN PULMÓN IZQUIERDO",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "corazon",
+            "label":"AUSCULTACIÓN CORAZÓN",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "ritmosegeval",
+            "label": "RITMO",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "diagnosticoelectrografico",
+            "label":"DIAGNÓSTICOELECTROGRÁFICO",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "signosvitales",
+            "type": "text",
+            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "text": "<p>SIGNOS VITALES</p>"
+        },
+        {
+            "name": "hallazgosmultiple",
+            "label": "HALLAZGOS FISICOS",
+            "type": "multiple",
+            "inputType": "checkbox",
+            "options": ["DEFORMIDADES", "CONTUSIONES", "ABRASIONES", "PENETRACIONES", "QUEMADURAS", "LACERACIONES", "ABULSIONES/AMPUTACIONES", "EDEMA", "CREPITACIÓN", "ENFISEMA SUBCUTÁNEO", "DOLOR/HIPERSTESIA", "PARESTESIA", "ALTERACION A LA MOVILIDAD", "PARÁLISIS", "MOVIMIENTO PARADÓJICO"]
+        },
+        {
+            "name": "semiologia",
+            "type": "text",
+            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "text": "<p>SEMIOLOGIA DEL DOLOR</p>"
+        },
+        {
+            "name": "aparicion",
+            "label": "APARICIÓN",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "iniciodolor",
+            "label": "HORA DE INICIO",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "localizaciondolor",
+            "label":"LOCALIZACIÓN",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "irradiaciondolor",
+            "label":"IRRADIACIÓN",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "cardolor",
+            "label":"CARACTERISTICAS",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "intensidaddolor",
+            "label":"INTENSIDAD(EVA)",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "alivio",
+            "label":"ALIVIO",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "firmaPacienteAtencion",
+            "label": "NEGATIVA A RECIBIR ATENCIÓN/ SER TRASLADADO EXIMIENTE DE RESPONSABILIDAD",
+            "nombreLabel": "Firma del paciente",
+            "declaracion": "Declaró que no aceptó las recomendaciones  del personal de la ambulancia o vehículo de primer contacto de bomberos tijuana en cuanto al ( tratamiento) y o traslado a un hospital ,por lo que eximo a la dirección de bomberos tijuana y a dichas personas de toda responsabilidad que pudiera derivar al haberse respetado y cumplido mi decisión.",
+            "type": "signature",
+            "className": "mt-6" 
+        },
+        {
+            "name": "firmaBomberoAtencion",
+            "label": "",
+            "nombreLabel": "Firma del Bombero",
+            "declaracion": "", 
+            "type": "signature",
+            "className": "mt-6" 
+        },
+        {
+            "name": "firmapacienteconcentimiento",
+            "label": "CONSENTIMIENTO INFORMADO",
+            "nombreLabel": "Firma del paciente",
+            "declaracion": "Declaró haber recibido oportunamente información completa y adecuada sobre mi cuadro clínico y los procedimientos diagnósticos y/o terapéuticos qué se realizarán los riesgos que esto pueda presentar y las alternativas disponibles.  A si mismo Declaró haber comprendido la información proporcionada y que he tenido la oportunidad de fórmula mis preguntas y dudas.  Las que han sido contestadas y aclaradas a mi entera satisfacción por lo anteriormente expuesto  Declaró mi consentimiento para ser sometido al tratamiento y a las acciones que el equipo  paramédico considere necesarias en caso de surgir situaciones no esperadas o complicaciones, es expresado en forma libre e informada",
+            "type": "signature",
+            "className": "mt-6" 
+        },
+        {
+            "name": "firmaBomberoConcentimiento",
+            "label": "",
+            "nombreLabel": "Firma del Bombero",
+            "declaracion": "", 
+            "type": "signature",
+            "className": "mt-6" 
+        }
+    ]
+}

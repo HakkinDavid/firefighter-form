@@ -49,6 +49,14 @@
             "options": ["Opcion1", "Opcion2", "Opcion3"]
         },
         {
+            "name": "firma",
+            "label": "Firma",
+            "nombreLabel": "Firma del bombero/paciente",
+            "declaracion": "Declaracion",
+            "type": "signature",
+            "className": "mt-6" 
+        },
+        {
             "name": "campo",
             "label": "Tupla",
             "type": "tuple",
