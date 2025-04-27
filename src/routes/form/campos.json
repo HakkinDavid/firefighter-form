@@ -386,7 +386,7 @@
         },
         {
             "name": "diagnosticoelectrografico",
-            "label":"DIAGNÓSTICOELECTROGRÁFICO",
+            "label":"DIAGNÓSTICO ELECTROGRÁFICO",
              "type": "textarea",
             "rows": 5
         },
@@ -395,6 +395,91 @@
             "type": "text",
             "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
             "text": "<p>SIGNOS VITALES</p>"
+        },
+        {
+            "name": "campo",
+            "label": "HISTORICO DE SIGNOS VITALES",
+            "type": "tuple",
+            "tuple": [
+                {
+                    "name": "hora",
+                    "label": "HORA",
+                    "type": "input",
+                    "inputType": "time"
+                },
+                {
+                    "name": "fcsignovitales",
+                    "label": "FC",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "frsignovitales",
+                    "label": "FR",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "tassignovitales",
+                    "label": "TAS",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "tadsignovitales",
+                    "label": "TAD",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "sa02ignovitales",
+                    "label": "Sa02",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "tempsignovitales",
+                    "label": "TEMP",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "glucosasignovitales",
+                    "label": "GLUCOSA",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "glasgow",
+                    "type": "text",
+                    "className": "block text-gray-500 text-big font-bold mt-2 mb-2",
+                    "text": "<p>GLASGOW</p>"
+                },
+                {
+                    "name": "msignovitales",
+                    "label": "M",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "msignovitales",
+                    "label": "O",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "vsignovitales",
+                    "label": "V",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "totalsignovitales",
+                    "label": "TOTAL",
+                    "type": "input",
+                    "inputType": "text"
+                }
+            ]
         },
         {
             "name": "hallazgosmultiple",
@@ -451,6 +536,491 @@
              "type": "textarea",
             "rows": 5
         },
+        {
+            "name": "sampler",
+            "type": "text",
+            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "text": "<p>SAMPLER</p>"
+        },
+        {
+            "name": "signos",
+            "label":"SIGNOS",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "medicamentos",
+            "label":"MEDICAMENTOS",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "alergias",
+            "label":"ALERGIAS",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "padecimientos",
+            "label":"PADECIMIENTOS",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "ultimacomida",
+            "label":"ULTIMA COMIDA",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "eventos relacionados",
+            "label":"EVENTOS RELACIONADOS",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "factoresriesgo",
+            "label":"FACTORES DE RIESGO",
+             "type": "textarea",
+            "rows": 5
+        },
+        {
+            "name": "tratamiento",
+            "type": "text",
+            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "text": "<p>TRATAMIENTO</p>"
+        },
+        {
+            "name": "manejovia",
+            "type": "text",
+            "className": "block text-gray-500 text-big font-bold mt-2 mb-2",
+            "text": "<p>MANEJO DE VÍA AEREA</p>"
+        },
+        {
+            "name": "aspiracion",
+            "label": "ASPIRACION",
+            "type": "multiple",
+            "inputType": "checkbox",
+            "options": ["SI", "NO"]
+        },
+        {
+            "name": "manejoviaaeriacheck",
+            "label": "MANEJO DE VÍA AEREA",
+            "type": "multiple",
+            "inputType": "checkbox",
+            "options": ["NO NECESITÓ", "MANUAL", "MECÁNICO", "TRANSTTRAQUEAL"]
+        },
+        {
+            "name": "dispositivoapertura",
+            "label": "DISPOSITIVO DE APERTURA",
+            "type": "input",
+            "inputType": "text",
+            "options": ["NO APLICA", "CÁNULA NASOFARÍNGEA", "CÁNULA OROFARÍNGEA", "DISP. SUPRAGLÓTICO", "TUBO ENDOTRAQUEAL", "VTP/CANULA TRAQUEOS"]
+        },
+        {
+            "name": "intubacion",
+            "type": "text",
+            "className": "block text-gray-500 text-sm font-bold mt-2 mb-2",
+            "text": "<p>INTUBACIÓN</p>"
+        },
+        {
+            "name": "horaintubacion",
+            "label": "HORA DEL PROCEDIMIENTO",
+            "type": "input",
+            "inputType": "time"
+        },
+        {
+            "name": "diametrointubacion",
+            "label": "DIÁMETRO INTERNO DEL TUBO",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "insercionintubacion",
+            "label": "PROFUNDIDAD DE INSERCIÓN EN CM",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "intentosintubacion",
+            "label": "NÚMERO DE INTENTOS",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "sri",
+            "label": "SRI",
+            "type": "multiple",
+            "inputType": "checkbox",
+            "options": ["NO", "SI"]
+        },
+        {
+            "name": "asistenciaventilatoria",
+            "type": "text",
+            "className": "block text-gray-500 text-sm font-bold mt-2 mb-2",
+            "text": "<p>ASISTENCIA VENTILATORIA</p>"
+        },
+        {
+            "name": "dispositivoav",
+            "label": "DISPOSITIVO",
+            "type": "input",
+            "inputType": "text",
+            "options": ["BOLSA VÁLVUÑA MASCARILLA", "CPAP", "VENTILADOR MECÁNICO"]
+        },
+        {
+            "name": "frecuenciaav",
+            "label": "FRECUENCIA",
+            "type": "input",
+            "inputType": "NUMBER"
+        },
+        {
+            "name": "volumenav",
+            "label": "VOLUMEN",
+            "type": "input",
+            "inputType": "NUMBER"
+        },
+        {
+            "name": "modalidadventilatoria",
+            "label": "MODALIDAD VENTILATORIA",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "oxigenoterapia",
+            "label": "OXIGENOTERAPIA",
+            "type": "input",
+            "inputType": "text",
+            "options": ["NO NECESITÓ", "PUNTAS NASALES", "MASCARILLA SIMPLE", "MASCARILLA CON RESERVORIO", "MICRONEBULIZADOR"]
+        },
+        {
+            "name": "lpm",
+            "label": "LITROS POR MINUTO",
+            "type": "input",
+            "inputType": "number"
+        },  
+        {
+            "name": "decompresionpleural",
+            "type": "text",
+            "className": "block text-gray-500 text-sm font-bold mt-2 mb-2",
+            "text": "<p>DECOMPLRESIÓN PLEURAL</p>"
+        },
+        {
+            "name": "hemitorax",
+            "label": "HEMITORAX",
+            "type": "input",
+            "inputType": "text",
+            "options": ["NO NECESITÓ", "DERECHO", "IZQUIERDO"]
+        },
+        {
+            "name": "calibre",
+            "label": "CALIBRE",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "controlhemarrogias",
+            "type": "text",
+            "className": "block text-gray-500 text-sm font-bold mt-2 mb-2",
+            "text": "<p>CONTROL DE HEMARRAGIAS</p>"
+        },
+        {
+            "name": "controldehemarragiasselect",
+            "label": "CONTROL DE HEMARRAGIAS",
+            "type": "input",
+            "inputType": "text",
+            "options": ["NO NECESITÓ", "PRESIÓN DIRECTA", "PRESIÓN INDIRECTA","AGENTE COAGULANTE", "TORNIQUETE"]
+        },
+        {
+            "name": "horacolocacionhemarragias",
+            "label": "HORA DE COLOCACIÓN",
+            "type": "input",
+            "inputType": "time"
+        },
+        {
+            "name": "acessocirculatoria",
+            "type": "text",
+            "className": "block text-gray-500 text-sm font-bold mt-2 mb-2",
+            "text": "<p>ACCESO CIRCULATORIO</p>"
+        },
+        {
+            "name": "viadeaccesoselect",
+            "label": "VIA DE ACCESO",
+            "type": "input",
+            "inputType": "text",
+            "options": ["NO NECESITÓ", "INTRAVASCULAR PERIFERICO", "INTRAOSEO"]
+        },
+        {
+            "name": "zonacolocacion",
+            "label": "ZONA DE COLOCACIÓN",
+            "type": "input",
+            "inputType": "text",
+            "options": ["MANO", "ANTERCOBITAL", "YUGULAR EXTERNO", "OTROS", "TIBIA", "HÚMERO", "ESTERNON"]
+        },
+        {
+            "name": "colocacionacessocirculatorio",
+            "label": "HORA DE COLOCACIÓN",
+            "type": "input",
+            "inputType": "time"
+        },
+        {
+            "name": "calibreaccesocirculatorio",
+            "label": "CALIBRE",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "volumeninfundido",
+            "label": "VOLUMEN INFUNDIDO",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "tiposolucion",
+            "label": "TIPO DE SOLUCIÓN",
+            "type": "multiple",
+            "inputType": "checkbox",
+            "options": ["HARTMANN", "NaCl 0.9%", "GLUCOSA 5%", "MIXTA", "OTRAS"]
+        },
+        {
+            "name": "intervenciones",
+            "type": "text",
+            "className": "block text-gray-500 text-sm font-bold mt-2 mb-2",
+            "text": "<p>INTERVENCIONES</p>"
+        },
+        {
+            "name": "controlcervical",
+            "label": "CONTROL CERVICAL",
+            "type": "input",
+            "inputType": "text",
+            "options": ["NO", "SI"]
+        },
+        {
+            "name": "inmovilizacion",
+            "label": "INMOVILIZACIÓN DE EXTREMIDADES",
+            "type": "input",
+            "inputType": "text",
+            "options": ["NO", "SI"]
+        },
+        {
+            "name": "empaquetamiento",
+            "label": "EMPAQUETAMIENTO",
+            "type": "input",
+            "inputType": "text",
+            "options": ["NO", "SI"]
+        },
+        {
+            "name": "curacion",
+            "label": "CURACIÓN/VENDAJE",
+            "type": "input",
+            "inputType": "text",
+            "options": ["NO", "SI"]
+        },
+        {
+            "name": "medicamentotupla",
+            "label": "MEDICAMENTOS",
+            "type": "tuple",
+            "tuple": [
+                {
+                    "name": "horameds",
+                    "label": "HORA",
+                    "type": "input",
+                    "inputType": "time"
+                },
+                {
+                    "name": "medicamentos",
+                    "label": "MEDICAMENTO",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "dosismeds",
+                    "label": "DOSIS",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "viaadministracion",
+                    "label": "VÍA DE ADMINISTRACIÓN",
+                    "type": "input",
+                    "inputType": "text"
+                }
+            ]
+        },
+        {
+            "name": "terapiaelectrica",
+            "type": "text",
+            "className": "block text-gray-500 text-sm font-bold mt-2 mb-2",
+            "text": "<p>TERAPIA ELÉCTRICA</p>"
+        },
+        {
+            "name": "terapiaelectricacheckbox",
+            "label": "TIPO DE SOLUCIÓN",
+            "type": "multiple",
+            "inputType": "checkbox",
+            "options": ["DESFIBRILACIÓN", "CARDIOVERSIÓN", "MARCAPASOS TRANSCUTANEO"]
+        },
+        {
+            "name": "descargas",
+            "label": "DESCARGAS",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "joules",
+            "label": "JOULES",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "ma",
+            "label": "mA",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "frecuenciaterapiaelectrica",
+            "label": "FRECUENCIA",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "resultados",
+            "type": "text",
+            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "text": "<p>RESULTADOS</p>"
+        },
+        {
+            "name": "resultadosignovitales",
+            "label": "RESUMEN DE SIGNOS VITALES DE SEGUIMIENTO AL TRASLADO",
+            "type": "tuple",
+            "tuple": [
+                {
+                    "name": "reshora",
+                    "label": "HORA",
+                    "type": "input",
+                    "inputType": "time"
+                },
+                {
+                    "name": "resfcsignovitales",
+                    "label": "FC",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "resfrsignovitales",
+                    "label": "FR",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "restassignovitales",
+                    "label": "TAS",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "restadsignovitales",
+                    "label": "TAD",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "ressa02ignovitales",
+                    "label": "Sa02",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "restempsignovitales",
+                    "label": "TEMP",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "resglucosasignovitales",
+                    "label": "GLUCOSA",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "resglasgow",
+                    "type": "text",
+                    "className": "block text-gray-500 text-big font-bold mt-2 mb-2",
+                    "text": "<p>GLASGOW</p>"
+                },
+                {
+                    "name": "resmsignovitales",
+                    "label": "M",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "resmsignovitales",
+                    "label": "O",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "resvsignovitales",
+                    "label": "V",
+                    "type": "input",
+                    "inputType": "text"
+                },
+                {
+                    "name": "restotalsignovitales",
+                    "label": "TOTAL",
+                    "type": "input",
+                    "inputType": "text"
+                }
+            ]
+        },
+        {
+            "name": "resultadoemergencia",
+            "type": "text",
+            "className": "block text-gray-500 text-big font-bold mt-2 mb-2",
+            "text": "<p>RESULTADO DE LA EMERGENCIA</p>"
+        },
+        {
+            "name": "resultadoemergenciacheckbox",
+            "label": "RESULTADO DE LA EMERGENCIA",
+            "type": "multiple",
+            "inputType": "checkbox",
+            "options": ["NO AMERITA", "TRASLADO", "SE NIEGA", "CADAVER EN EL LUGAR"]
+        },
+        {
+            "name": "trasladomultiple",
+            "label": "TRASLADO",
+            "type": "multiple",
+            "inputType": "checkbox",
+            "options": ["HOSPITAL", "DOMICILIO", "HELICOPTERO", "AMBULANCIA"]
+        },
+        {
+            "name": "denominacion",
+            "label": "DENOMINACIÓN/MATRICULA",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "foliorecepcion",
+            "label": "FOLIO RECEPCIÓN",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "medico",
+            "label": "MÉDICO QUE RECIBE",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "prioridadfinal",
+            "label": "PRIORIDAD FINAL",
+            "type": "multiple",
+            "inputType": "checkbox",
+            "options": ["VERDE", "AMARILLA", "ROJA", "NEGRA"]
+        },
+
+        
         {
             "name": "firmaPacienteAtencion",
             "label": "NEGATIVA A RECIBIR ATENCIÓN/ SER TRASLADADO EXIMIENTE DE RESPONSABILIDAD",
