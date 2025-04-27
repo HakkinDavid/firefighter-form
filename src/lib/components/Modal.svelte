@@ -1,6 +1,7 @@
 <script>
-	import { jsPDF } from 'jspdf';
-	let { showModal = $bindable(), header, children } = $props();
+	import jsPDF from 'jspdf';
+	import html2canvas from 'html2canvas';
+	let { showModal = $bindable(), header, children, allowpdf } = $props();
 	let modalContent;
 
 	function openModal() {
@@ -11,25 +12,29 @@
 		showModal = false;
 	}
 
-	function generatePdf() {
-		const pdf = new jsPDF();
+	async function generatePdf() {
+		const canvas = await html2canvas(modalContent, {
+			scrollY: -window.scrollY, //captura el contenido completo sin depender del scroll
+			windowHeight: modalContent.scrollHeight //ajusta la altura para capturar todo
+		});
 
-		pdf.setFontSize(14);
-		pdf.text(
-			'Texto de ejemplo por el momento porque está siendo realmente un desafío guardar el',
-			10,
-			10
-		);
-		pdf.text('pdf del modal de manera adecuada...', 10, 20);
-		pdf.save('archivo.pdf');
-		/*pdf.html(modalContent, {
-			callback: function (doc) {
-				doc.save('captura.pdf');
-			}
-		});*/
+		const imgData = canvas.toDataURL('image/png');
+
+		const pdf = new jsPDF({
+			orientation: 'p', // "p" para vertical, "l" para horizontal
+			unit: 'mm',
+			format: 'a4'
+		});
+
+		const imgWidth = 150;
+		const imgHeight = (canvas.height * imgWidth) / canvas.width; // Mantiene proporciones
+
+		const pageWidth = pdf.internal.pageSize.width;
+		const centerX = (pageWidth - imgWidth) / 2;
+
+		pdf.addImage(imgData, 'PNG', centerX, 10, imgWidth, imgHeight);
+		pdf.save(`archivo.pdf`);
 	}
-
-	export { generatePdf };
 </script>
 
 <!-- Overlay -->
@@ -38,7 +43,7 @@
 	onclick={closeModal}
 ></div>
 
-<!-- Modal -->
+<!-- Modal con 'div' en lugar de 'dialog' por necesidad al descargar pdf desde la tabla-->
 <div
 	class={`modal fixed top-1/2 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-4 shadow-lg ${showModal ? 'block' : 'hidden'}`}
 >
@@ -47,13 +52,25 @@
 		<hr class="my-2" />
 		{@render children?.()}
 		<hr class="my-2" />
+	</div>
 
-		<button
-			onclick={closeModal}
-			class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
-		>
-			Cerrar
-		</button>
+	<div>
+		<div class="flex justify-between">
+			<button
+				onclick={closeModal}
+				class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
+			>
+				Cerrar
+			</button>
+			{#if allowpdf}
+				<button
+					onclick={generatePdf}
+					class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
+				>
+					Pdf
+				</button>
+			{/if}
+		</div>
 	</div>
 </div>
 
