@@ -1,37 +1,89 @@
 <!-- FormsList.svelte -->
 <script>
-    import Icon from "$lib/components/Icon.svelte";
+	import Icon from '$lib/components/Icon.svelte';
+	import { stopPropagation } from 'svelte/legacy';
+	import Modal from './Modal.svelte';
 
-    let {
-        forms = $bindable([]) // Lista de formularios vinculada al estado
-    } = $props();
+	let showModal = $state(false);
+	let selectedDoc = $state(null);
+
+	let {
+		forms = $bindable([]) // Lista de formularios vinculada al estado
+	} = $props();
+
+	function deleteDoc(index) {
+		forms = forms.toSpliced(index, 1);
+	}
+
+	function selectDoc(form) {
+		selectedDoc = form;
+		showModal = true;
+	}
+
+	let modalContent;
+	function generatePdf(form) {
+		modalContent.generatePdf();
+	}
 </script>
 
 <!-- Tabla que muestra la lista de formularios -->
-<div class="flex w-full h-full px-8 py-16">
-    <table class="w-full h-full border-2 border-black text-center">
-        <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Responsable</th>
-              <th>Paciente</th>
-              <th>Estado</th>
-              <th><pre>    </pre></th>
-              <th><pre>    </pre></th>
-            </tr>
-        </thead>
-        <tbody>
-            {#each forms as form}
-                <tr class="border border-black place-items-center justify-center">
-                    <td>{form.date.toLocaleString()}</td>
-                    <td>{form.filler.name}</td>
-                    <td>{form.patient.name}</td>
-                    <td>{form.status}</td>
-                    <!-- Iconos para acciones en cada fila -->
-                    <td><Icon type="Borrar" class="w-8 h-8"/></td>
-                    <td><Icon type="PDF" class="w-8 h-8"/></td>
-                </tr>
-            {/each}
-        </tbody>
-    </table>
+<div class="flex h-full w-full px-8 py-16">
+	<table class="h-full w-full border-2 border-black text-center">
+		<thead>
+			<tr>
+				<th>Fecha</th>
+				<th>Responsable</th>
+				<th>Paciente</th>
+				<th>Estado</th>
+				<th><pre></pre></th>
+				<th><pre></pre></th>
+			</tr>
+		</thead>
+		<tbody>
+			{#each forms as form, index}
+				<tr
+					class="cursor-pointer place-items-center justify-center border border-black"
+					onclick={() => selectDoc(form)}
+				>
+					<td>{form.date.toLocaleString()}</td>
+					<td>{form.filler.name}</td>
+					<td>{form.patient.name}</td>
+					<td>{form.status}</td>
+					<!-- Iconos para acciones en cada fila -->
+					<td
+						onclick={(event) => {
+							deleteDoc(index);
+							event.stopPropagation();
+						}}
+						class="place-items-center justify-center"
+						><Icon type="Borrar" class="h-8 w-8 cursor-pointer" /></td
+					>
+					<td
+						onclick={(event) => {
+							generatePdf(form);
+							event.stopPropagation();
+						}}
+						class="place-items-center justify-center"
+						><Icon type="PDF" class="h-8 w-8 cursor-pointer" /></td
+					>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
 </div>
+
+<Modal bind:showModal bind:this={modalContent}>
+	{#snippet header()}
+		<h2>
+			{selectedDoc && `Formulario de ${selectedDoc.patient.name}`}
+		</h2>
+	{/snippet}
+
+	{#if selectedDoc}
+		<!--Esto se modifica para mostrar la información con base en el template cuando ya se guarde adecuadamente en la tabla-->
+		<p>Fecha de creación: {selectedDoc.date}</p>
+		<p>Atiende: {selectedDoc.filler.name}</p>
+		<p>Paciente: {selectedDoc.patient.name}</p>
+		<p>Estado: {selectedDoc.status}</p>
+	{/if}
+</Modal>

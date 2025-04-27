@@ -35,6 +35,8 @@
 		"@capacitor/cli": "^7.0.1",
 		"@capacitor/core": "^7.0.1",
 		"@capacitor/preferences": "^7.0.1",
+		"html2canvas": "^1.4.1",
+		"jspdf": "^3.0.1",
 		"signature_pad": "^5.0.7"
 	}
 }
