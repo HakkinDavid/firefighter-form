@@ -20,6 +20,12 @@
 		showModal = true;
 	}
 
+	let modalContent;
+	function generatePdf(form) {
+		selectedDoc = form;
+		modalContent.callPdf();
+	}
+
 </script>
 
 <!-- Tabla que muestra la lista de formularios -->
@@ -54,16 +60,14 @@
 						class="place-items-center justify-center transition hover:bg-red-300"
 						><Icon type="Borrar" class="h-8 w-8 cursor-pointer" /></td
 					>
-					<!--
 					<td
 						onclick={(event) => {
 							generatePdf(form);
 							event.stopPropagation();
 						}}
-						class="place-items-center justify-center"
+						class="place-items-center justify-center transition hover:bg-blue-300"
 						><Icon type="PDF" class="h-8 w-8 cursor-pointer" /></td
 					>
-					-->
 				</tr>
 			{/each}
 		</tbody>
@@ -71,7 +75,7 @@
 </div>
 
 <!--Aqui solo cambiamos la variable allowpdf para mostrar o no mostrar el botón de descarga-->
-<Modal bind:showModal allowpdf={true}>
+<Modal bind:showModal allowpdf={true} bind:this={modalContent}>
 	{#snippet header()}
 		<h2>
 			{selectedDoc && `Formulario de ${selectedDoc.patient.name}`}

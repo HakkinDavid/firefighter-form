@@ -3,6 +3,7 @@
 	import html2canvas from 'html2canvas';
 	let { showModal = $bindable(), header, children, allowpdf } = $props();
 	let modalContent;
+	let hide = $state(false);
 
 	function openModal() {
 		showModal = true;
@@ -19,6 +20,7 @@
 		});
 
 		const imgData = canvas.toDataURL('image/png');
+		console.log(canvas.width, canvas.height);
 
 		const pdf = new jsPDF({
 			orientation: 'p', // "p" para vertical, "l" para horizontal
@@ -35,6 +37,16 @@
 		pdf.addImage(imgData, 'PNG', centerX, 10, imgWidth, imgHeight);
 		pdf.save(`archivo.pdf`);
 	}
+
+	async function callPdf() {
+		hide = true;
+		await openModal();
+		await generatePdf();
+		closeModal();
+		hide = false;
+	}
+
+	export { callPdf }
 </script>
 
 <!-- Overlay -->
@@ -43,9 +55,12 @@
 	onclick={closeModal}
 ></div>
 
+<!-- Loading Icon -->
+<div class={`spinner fixed top-1/2 left-1/2 z-60 ${hide ? 'block' : 'hidden'}`}></div>
+
 <!-- Modal con 'div' en lugar de 'dialog' por necesidad al descargar pdf desde la tabla-->
 <div
-	class={`modal fixed top-1/2 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-4 shadow-lg ${showModal ? 'block' : 'hidden'}`}
+	class={`modal fixed ${!hide ? 'top-1/2': 'top-9999'} left-1/2 z-50 w-fit max-w-2/3 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-4 shadow-lg ${showModal ? 'block' : 'hidden'}`}
 >
 	<div bind:this={modalContent}>
 		{@render header?.()}
@@ -67,7 +82,7 @@
 					onclick={generatePdf}
 					class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
 				>
-					Pdf
+					Descargar pdf
 				</button>
 			{/if}
 		</div>
@@ -89,4 +104,19 @@
 		max-height: 90%;
 		overflow-y: auto;
 	}
+
+	.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: auto;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 </style>
