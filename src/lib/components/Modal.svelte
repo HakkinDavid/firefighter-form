@@ -4,6 +4,7 @@
 	let { showModal = $bindable(), header, children, allowpdf } = $props();
 	let modalContent;
 	let hide = $state(false);
+	let modalRef;
 
 	function openModal() {
 		showModal = true;
@@ -11,6 +12,9 @@
 
 	function closeModal() {
 		showModal = false;
+		if (modalRef) {
+			modalRef.scrollTop = 0;
+		}
 	}
 
 	async function generatePdf() {
@@ -59,17 +63,11 @@
 <div class={`spinner fixed top-1/2 left-1/2 z-60 ${hide ? 'block' : 'hidden'}`}></div>
 
 <!-- Modal con 'div' en lugar de 'dialog' por necesidad al descargar pdf desde la tabla-->
-<div
-	class={`modal fixed ${!hide ? 'top-1/2': 'top-9999'} left-1/2 z-50 w-fit max-w-2/3 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-4 shadow-lg ${showModal ? 'block' : 'hidden'}`}
+<div bind:this={modalRef}
+	class={`fixed inset-0 z-50 rounded-md bg-white p-4 shadow-lg overflow-y-auto h-full ${showModal ? 'block' : 'hidden'}`}
 >
 	<div bind:this={modalContent}>
-		{@render header?.()}
-		<hr class="my-2" />
-		{@render children?.()}
-		<hr class="my-2" />
-	</div>
-
-	<div>
+		
 		<div class="flex justify-between">
 			<button
 				onclick={closeModal}
@@ -85,8 +83,14 @@
 					Descargar pdf
 				</button>
 			{/if}
+			{@render header?.()}
 		</div>
+		<hr class="my-2" />
+		{#key showModal}
+			{@render children?.()}
+		{/key}
 	</div>
+
 </div>
 
 <style>

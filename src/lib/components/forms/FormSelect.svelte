@@ -16,8 +16,8 @@
 
 <div class={field.className}>
     <label class="block text-gray-700 text-sm font-bold mb-2" for={fieldName}>{field.label}</label>
-    <select id={fieldName} name={fieldName} value={fieldValue} on:input={handleInput}>
-        <option value="" disabled={disabled}>Seleccione una opción</option>
+    <select id={fieldName} name={fieldName} value={fieldValue} on:input={handleInput} disabled={disabled}>
+        <option value="">Seleccione una opción</option>
         {#each field.options as option}
             <option value={option}>{option}</option>
         {/each}

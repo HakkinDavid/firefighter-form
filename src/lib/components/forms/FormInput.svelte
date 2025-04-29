@@ -74,7 +74,7 @@
         {/if}
     {/if}
     <!-- Autocomplete -->
-    {#if field.options}
+    {#if field.options && !disabled}
         <ul>
         {#each suggestions as suggestion}
             <li>
@@ -90,7 +90,9 @@
         {#each fieldValue as value, idx}
             <li>
                 {value}
+                {#if !disabled}
                 <Button onclick={() => removeOption(idx)} text="-"/>
+                {/if}
             </li>
         {/each}
         </ul>
