@@ -63,10 +63,14 @@
                 on:update={(e) => updateField(idx, subfield.name, e.detail)}/>
             {/if}
         {/each}
+        {#if !disabled}
         <Button onclick={() => removeTuple(idx)} text="Eliminar"/>
+        {/if}
     {/each}
+    {#if !disabled}
     <div>
         <Button onclick={addTuple} text="Añadir"/>
     </div>
+    {/if}
     <p class="text-red-500">{errorValue}</p>
 </div>

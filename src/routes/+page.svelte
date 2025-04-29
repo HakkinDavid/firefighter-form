@@ -6,14 +6,13 @@
 
 	import { Preferences } from '@capacitor/preferences';
 	import { onMount } from 'svelte';
-	// Esto es temporal, después se moverá de lugar
 	import FormRenderer from '$lib/components/forms/FormRenderer.svelte';
-	import formulario from '../lib/components/forms/formulario.json';
-
+	import formulario from '$lib/components/forms/formulario.json';
 	import Modal from '../lib/components/Modal.svelte';
-	let showModal = $state(false);
 
+	let showModal = $state(false);
 	let forms = $state(undefined);
+	let selectedForm = $state(undefined);
 	let logged_in = $state(false);
 
 	// Función para guardar un objeto en almacenamiento persistente
@@ -34,6 +33,18 @@
 		forms = await get_object('forms');
 		if (!forms) forms = [];
 	});
+
+	function saveForm(data) {
+		if (selectedForm) {
+			const index = forms.findIndex(f => f.date === selectedForm.date);
+			forms[index] = data;
+		} else {
+			forms.push(data);
+		}
+		showModal = false;
+		// Reemplazar por sqlite
+		// set_object("forms", forms);
+	}
 </script>
 
 {#if !logged_in}
@@ -44,43 +55,28 @@
 		}}
 	/>
 {:else}
-
-	<button
-		class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600 mx-8"
-		onclick={() => {
-			showModal = true;
-		}}
-	>
-		Crear Nuevo
-	</button>
 	<!-- Lista de formularios cargados -->
-	<FormsList bind:forms />
+	<FormsList bind:forms bind:selectedDoc={selectedForm} bind:showModal/>
 	
 	<div class="flex w-full place-items-center justify-center">
 		<!-- Botón para añadir un formulario de prueba -->
 		<Button
 			onclick={() => {
-				forms.push({
-					date: new Date(),
-					filler: {
-						name: 'Bombero Prueba'
-					},
-					patient: {
-						name: 'Paciente Prueba'
-					},
-					status: 'Completo'
-				});
+				selectedForm = undefined;
+				showModal = true;
 			}}
-			text="Añadir registro de prueba"
+			text="Añadir registro"
 			class="w-min cursor-pointer rounded-lg border border-black bg-red-500 px-6 py-2 text-white"
 		/>
 	</div>
 
-	<Modal bind:showModal allowpdf={false}>
+	<Modal bind:showModal allowpdf={true}>
 		{#snippet header()}
 			<h2>Nuevo Fomulario</h2>
 		{/snippet}
-
-		<FormRenderer template={formulario} />
+		
+		{#snippet children()}
+			<FormRenderer template={formulario} formData={selectedForm} on:submit={e => saveForm(e.detail)}/>
+		{/snippet}
 	</Modal>
 {/if}
