@@ -7,7 +7,8 @@
 	let {
 		forms = $bindable([]), // Lista de formularios vinculada al estado
 		selectedDoc = $bindable(undefined),
-		showModal = $bindable(false)
+		showModal = $bindable(false),
+		modal
 	} = $props();
 
 	function deleteDoc(index) {
@@ -19,10 +20,10 @@
 		showModal = true;
 	}
 
-	let modalContent;
+
 	function generatePdf(form) {
 		selectedDoc = form;
-		modalContent.callPdf();
+		modal.callPdf();
 	}
 
 </script>
@@ -53,6 +54,7 @@
 					<td>{form.status}</td>
 					<!-- Iconos para acciones en cada fila -->
 					<td
+						colspan={form.status == "Guardado" ? 2 : 1}
 						onclick={(event) => {
 							deleteDoc(index);
 							event.stopPropagation();
@@ -60,14 +62,16 @@
 						class="place-items-center justify-center transition hover:bg-red-300"
 						><Icon type="Borrar" class="h-8 w-8 cursor-pointer" /></td
 					>
-					<td
-						onclick={(event) => {
-							generatePdf(form);
-							event.stopPropagation();
-						}}
-						class="place-items-center justify-center transition hover:bg-blue-300"
-						><Icon type="PDF" class="h-8 w-8 cursor-pointer" /></td
-					>
+					{#if form.status == "Completado"}
+						<td
+							onclick={(event) => {
+								generatePdf(form);
+								event.stopPropagation();
+							}}
+							class="place-items-center justify-center transition hover:bg-blue-300"
+							><Icon type="PDF" class="h-8 w-8 cursor-pointer" /></td
+						>
+					{/if}
 				</tr>
 				{/if}
 			{/each}

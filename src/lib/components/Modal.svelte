@@ -50,47 +50,51 @@
 		hide = false;
 	}
 
-	export { callPdf }
+	export { callPdf };
 </script>
 
 <!-- Overlay -->
 <div
 	class={`fixed inset-0 z-50 bg-black/30 ${showModal ? 'block' : 'hidden'}`}
-	onclick={closeModal}
 ></div>
 
 <!-- Loading Icon -->
 <div class={`spinner fixed top-1/2 left-1/2 z-60 ${hide ? 'block' : 'hidden'}`}></div>
 
 <!-- Modal con 'div' en lugar de 'dialog' por necesidad al descargar pdf desde la tabla-->
-<div bind:this={modalRef}
-	class={`fixed inset-0 z-50 rounded-md bg-white p-4 shadow-lg overflow-y-auto h-full ${showModal ? 'block' : 'hidden'}`}
+<div
+	bind:this={modalRef}
+	class={`fixed ${hide ? 'top-9999' : ''} inset-0 z-50 h-full overflow-y-auto rounded-md bg-white p-4 shadow-lg ${showModal ? 'block' : 'hidden'}`}
 >
-	<div bind:this={modalContent}>
-		
-		<div class="flex justify-between">
-			<button
-				onclick={closeModal}
-				class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
-			>
-				Cerrar
-			</button>
-			{#if allowpdf}
-				<button
-					onclick={generatePdf}
-					class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
-				>
-					Descargar pdf
-				</button>
-			{/if}
+	<div class="flex justify-between">
+		<button
+			onclick={closeModal}
+			class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
+		>
+			Regresar
+		</button>
+
+		<div class="mt-4 block px-4 py-2 font-bold">
 			{@render header?.()}
 		</div>
-		<hr class="my-2" />
+
+		{#if allowpdf}
+			<button
+				onclick={generatePdf}
+				class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
+			>
+				Descargar pdf
+			</button>
+		{:else}
+			<div></div>
+		{/if}
+	</div>
+	<hr class="my-2" />
+	<div bind:this={modalContent} class="pb-10">
 		{#key showModal}
 			{@render children?.()}
 		{/key}
 	</div>
-
 </div>
 
 <style>
@@ -110,17 +114,21 @@
 	}
 
 	.spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    animation: spin 1s linear infinite;
-    margin: auto;
-  }
+		border: 4px solid #f3f3f3;
+		border-top: 4px solid #3498db;
+		border-radius: 50%;
+		width: 30px;
+		height: 30px;
+		animation: spin 1s linear infinite;
+		margin: auto;
+	}
 
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+	@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
 </style>
