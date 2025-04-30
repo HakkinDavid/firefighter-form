@@ -1,7 +1,7 @@
 <script>
 	import jsPDF from 'jspdf';
 	import html2canvas from 'html2canvas';
-	let { showModal = $bindable(), header, children, allowpdf } = $props();
+	let { showModal = $bindable(), header, children, allowpdf, formRenderer = $bindable() } = $props();
 	let modalContent;
 	let hide = $state(false);
 	let modalRef;
@@ -51,6 +51,25 @@
 	}
 
 	export { callPdf };
+
+	let showWarning = $state(false);
+
+	function confirm() {
+		showWarning = false;
+		closeModal();
+	}
+
+	function cancel() {
+		showWarning = false;
+	}
+
+	function back() {
+		if ( formRenderer.localFormData && formRenderer.formData && JSON.stringify($state.snapshot(formRenderer.localFormData)) !== JSON.stringify($state.snapshot(formRenderer.formData))) {
+			showWarning = true
+		} else {
+			closeModal();
+		}
+	}
 </script>
 
 <!-- Overlay -->
@@ -68,7 +87,7 @@
 >
 	<div class="flex justify-between">
 		<button
-			onclick={closeModal}
+			onclick={ allowpdf ? closeModal : back}
 			class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
 		>
 			Regresar
@@ -96,6 +115,20 @@
 		{/key}
 	</div>
 </div>
+
+
+<!-- Mensaje de aviso -->
+{#if showWarning}
+  <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+    <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
+      <p class="mb-4 text-gray-800">¡Tiene cambios sin guardar!</p>
+      <div class="flex justify-end gap-2">
+        <button onclick={cancel} class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancelar</button>
+        <button onclick={confirm} class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Salir</button>
+      </div>
+    </div>
+  </div>
+{/if}
 
 <style>
 	@keyframes zoom {

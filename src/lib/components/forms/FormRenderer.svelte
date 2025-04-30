@@ -8,9 +8,9 @@
 	import FormTuple from "./FormTuple.svelte";
 	import { createEventDispatcher } from "svelte";
 
-    export let template;
-    export let formData;
-    let localFormData;
+
+    let localFormData = $state();
+    let { template, formData } = $props();
 
     const dispatch = createEventDispatcher();
 
@@ -39,8 +39,6 @@
         localFormData = { ...formData };
     }
 
-    let ReadOnly = localFormData.status === "Completado";
-
     const fieldComponentMap = {
         input: FormInput,
         select: FormSelect,
@@ -55,6 +53,8 @@
         localFormData.status = completed ? "Completado" : "Guardado";
         dispatch('submit', localFormData);
     }
+
+    export { formData, localFormData };
 </script>
 
 <div>
@@ -62,13 +62,12 @@
         <h2><b>{template.formname}</b></h2>
         {#each template.fields as field (field.name)}
             {#if fieldComponentMap[field.type]}
-                <svelte:component this={fieldComponentMap[field.type]} {field} disabled={ReadOnly}
+                <svelte:component this={fieldComponentMap[field.type]} {field}
                 fieldValue={localFormData[field.name]} 
                 on:update={(e) => localFormData[field.name] = e.detail}/>
             {/if}
         {/each}
         <div class="flex justify-end sticky bottom-0">
-            {#if !ReadOnly}
             <button type="button" form="template" on:click={() => handleSubmit(false)}
                 class="mt-4 block cursor-pointer rounded bg-gray-400 px-4 py-2 text-white transition hover:bg-gray-600 mr-3">
                 Guardar
@@ -77,7 +76,6 @@
                 class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600">
                 Finalizar
             </button>
-            {/if}
         </div>
     </form>
 </div>

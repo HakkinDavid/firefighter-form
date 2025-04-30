@@ -15,7 +15,8 @@
 	let forms = $state(undefined);
 	let selectedForm = $state(undefined);
 	let logged_in = $state(false);
-	let modal;
+	let modal = $state(undefined);
+	let formRenderer = $state(undefined);
 
 	// Función para guardar un objeto en almacenamiento persistente
 	async function set_object(k, v) {
@@ -72,7 +73,7 @@
 		/>
 	</div>
 
-	<Modal bind:showModal allowpdf={selectedForm && selectedForm.status == "Completado"} bind:this={modal}>
+	<Modal bind:showModal allowpdf={selectedForm && selectedForm.status == "Completado"} bind:this={modal} bind:formRenderer>
 		{#snippet header()}
 			<h2>Nuevo Fomulario</h2>
 		{/snippet}
@@ -81,7 +82,7 @@
 			{#if selectedForm && selectedForm.status == "Completado"}
 				<PdfPreview formData={selectedForm}/>
 			{:else}
-				<FormRenderer template={formulario} formData={selectedForm} on:submit={e => saveForm(e.detail)}/>
+				<FormRenderer template={formulario} bind:this={formRenderer} formData={selectedForm} on:submit={e => saveForm(e.detail)}/>
 			{/if}
 		{/snippet}
 	</Modal>
