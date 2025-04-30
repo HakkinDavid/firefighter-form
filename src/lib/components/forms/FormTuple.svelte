@@ -63,10 +63,14 @@
                 on:update={(e) => updateField(idx, subfield.name, e.detail)}/>
             {/if}
         {/each}
-        <Button onclick={() => removeTuple(idx)} text="Eliminar"/>
+        <Button 
+        class="mt-4 block cursor-pointer rounded bg-red-500 px-4 py-2 text-white transition hover:bg-red-600 mx-8"
+        onclick={() => removeTuple(idx)} text="Eliminar"/>
     {/each}
     <div>
-        <Button onclick={addTuple} text="Añadir"/>
+        <Button 
+        class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600 mx-8"
+        onclick={addTuple} text="Añadir"/>
     </div>
     <p class="text-red-500">{errorValue}</p>
 </div>

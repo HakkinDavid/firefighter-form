@@ -63,23 +63,27 @@
 
 <div class={field.className}>
     <label class="block text-gray-700 text-sm font-bold mb-2" for={fieldName}>{field.label}</label>
-    {#if field.inputType === "checkbox"}
-        <input id={fieldName} name={fieldName} type="checkbox" checked={fieldValue}
-            on:input={handleInput} disabled={disabled} autocomplete="off"/>
-    {:else}
-        <input id={fieldName} name={fieldName} type={field.inputType} value={field.multiple ? tempValue : fieldValue}
-            on:input={handleInput} on:keydown={handleKeyDown} disabled={disabled} autocomplete="off"/>
-        {#if field.options}
-            <button type="button" class="toggle" on:click={toggleDropdown}>▼</button>
+    <div class = "relative">
+        {#if field.inputType === "checkbox"}
+            <input id={fieldName} name={fieldName} type="checkbox" checked={fieldValue}
+                on:input={handleInput} disabled={disabled} autocomplete="off"/>
+        {:else}
+            <input id={fieldName} name={fieldName} type={field.inputType} value={field.multiple ? tempValue : fieldValue}
+                on:input={handleInput} on:keydown={handleKeyDown} disabled={disabled} autocomplete="off"/>
+            {#if field.options}
+                <button type="button" class="absolute top-2 left-45 toggle" on:click={toggleDropdown}>▼</button>
+            {/if}
         {/if}
-    {/if}
+    </div>
     <!-- Autocomplete -->
     {#if field.options}
         <ul>
         {#each suggestions as suggestion}
             <li>
                 {suggestion}
-                <Button onclick={() => handleSuggestion(suggestion)} text="+"/>
+                <Button 
+                class = "mt-1 cursor-pointer rounded bg-blue-500 px-3 py-1 text-white transition hover:bg-blue-600 mx-1"
+                onclick={() => handleSuggestion(suggestion)} text="+"/>
             </li>
         {/each}
         </ul>

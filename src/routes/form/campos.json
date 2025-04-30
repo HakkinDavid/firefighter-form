@@ -22,7 +22,7 @@
             "options": ["Central de Bomberos", "Estación 1", "Estación 2", "Estación 3", "Estación 4"]
         },
         {
-            "name": "fecha",
+            "name": "date",
             "label": "FECHA",
             "type": "input",
             "inputType": "date"
@@ -166,7 +166,7 @@
             "text": "<p>PACIENTE</p>"
         },
         {
-            "name": "nombre",
+            "name": "patient",
             "label": "NOMBRE DEL PACIENTE",
             "type": "input",
             "inputType": "text"
@@ -1028,6 +1028,12 @@
             "declaracion": "Declaró que no aceptó las recomendaciones  del personal de la ambulancia o vehículo de primer contacto de bomberos tijuana en cuanto al ( tratamiento) y o traslado a un hospital ,por lo que eximo a la dirección de bomberos tijuana y a dichas personas de toda responsabilidad que pudiera derivar al haberse respetado y cumplido mi decisión.",
             "type": "signature",
             "className": "mt-6" 
+        },
+        {
+            "name": "filler",
+            "label": "NOMBRE DEL BOMBERO",
+            "type": "input",
+            "inputType": "text"
         },
         {
             "name": "firmaBomberoAtencion",

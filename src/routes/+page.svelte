@@ -8,8 +8,8 @@
 	import { onMount } from 'svelte';
 	// Esto es temporal, después se moverá de lugar
 	import FormRenderer from '$lib/components/forms/FormRenderer.svelte';
-	import formulario from '../lib/components/forms/formulario.json';
-
+	//import formulario from '../lib/components/forms/formulario.json';
+	import formulario from './form/campos.json'
 	import Modal from '../lib/components/Modal.svelte';
 	let showModal = $state(false);
 
@@ -78,7 +78,8 @@
 
 	<Modal bind:showModal allowpdf={false}>
 		{#snippet header()}
-			<h2>Nuevo Fomulario</h2>
+		<!-- folio? -->
+			<h2>Nuevo Fomulario</h2> 
 		{/snippet}
 
 		<FormRenderer template={formulario} />
