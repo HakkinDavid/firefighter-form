@@ -4,11 +4,11 @@
 	import { stopPropagation } from 'svelte/legacy';
 	import Modal from './Modal.svelte';
 
-	let showModal = $state(false);
-	let selectedDoc = $state(null);
-
 	let {
-		forms = $bindable([]) // Lista de formularios vinculada al estado
+		forms = $bindable([]), // Lista de formularios vinculada al estado
+		selectedDoc = $bindable(undefined),
+		showModal = $bindable(false),
+		modal
 	} = $props();
 
 	function deleteDoc(index) {
@@ -20,10 +20,10 @@
 		showModal = true;
 	}
 
-	let modalContent;
+
 	function generatePdf(form) {
 		selectedDoc = form;
-		modalContent.callPdf();
+		modal.callPdf();
 	}
 
 </script>
@@ -43,16 +43,18 @@
 		</thead>
 		<tbody>
 			{#each forms as form, index}
+				{#if form}
 				<tr
 					class="cursor-pointer place-items-center justify-center border border-black transition hover:bg-gray-200"
 					onclick={() => selectDoc(form)}
 				>
-					<td>{form.date.toLocaleString()}</td>
-					<td>{form.filler.name}</td>
-					<td>{form.patient.name}</td>
+					<td>{form.date?.toLocaleString()}</td>
+					<td>{form.filler}</td>
+					<td>{form.patient}</td>
 					<td>{form.status}</td>
 					<!-- Iconos para acciones en cada fila -->
 					<td
+						colspan={form.status == "Guardado" ? 2 : 1}
 						onclick={(event) => {
 							deleteDoc(index);
 							event.stopPropagation();
@@ -60,33 +62,19 @@
 						class="place-items-center justify-center transition hover:bg-red-300"
 						><Icon type="Borrar" class="h-8 w-8 cursor-pointer" /></td
 					>
-					<td
-						onclick={(event) => {
-							generatePdf(form);
-							event.stopPropagation();
-						}}
-						class="place-items-center justify-center transition hover:bg-blue-300"
-						><Icon type="PDF" class="h-8 w-8 cursor-pointer" /></td
-					>
+					{#if form.status == "Completado"}
+						<td
+							onclick={(event) => {
+								generatePdf(form);
+								event.stopPropagation();
+							}}
+							class="place-items-center justify-center transition hover:bg-blue-300"
+							><Icon type="PDF" class="h-8 w-8 cursor-pointer" /></td
+						>
+					{/if}
 				</tr>
+				{/if}
 			{/each}
 		</tbody>
 	</table>
 </div>
-
-<!--Aqui solo cambiamos la variable allowpdf para mostrar o no mostrar el botón de descarga-->
-<Modal bind:showModal allowpdf={true} bind:this={modalContent}>
-	{#snippet header()}
-		<h2>
-			{selectedDoc && `Formulario de ${selectedDoc.patient.name}`}
-		</h2>
-	{/snippet}
-
-	{#if selectedDoc}
-		<!--Esto se modifica para mostrar la información con base en el template cuando ya se guarde adecuadamente en la tabla-->
-		<p>Fecha de creación: {selectedDoc.date}</p>
-		<p>Atiende: {selectedDoc.filler.name}</p>
-		<p>Paciente: {selectedDoc.patient.name}</p>
-		<p>Estado: {selectedDoc.status}</p>
-	{/if}
-</Modal>
