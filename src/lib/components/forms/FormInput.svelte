@@ -62,33 +62,35 @@
 </script>
 
 <div class={field.className}>
-    <label class="block text-gray-700 text-sm font-bold mb-2" for={fieldName}>{field.label}</label>
+    <label class="block text-charcoal-gray text-sm font-bold mb-2" for={fieldName}>{field.label}</label>
     {#if field.inputType === "checkbox"}
         <input id={fieldName} name={fieldName} type="checkbox" checked={fieldValue}
             on:input={handleInput} disabled={disabled} autocomplete="off"/>
     {:else}
-        <input id={fieldName} name={fieldName} type={field.inputType} value={field.multiple ? tempValue : fieldValue}
-            on:input={handleInput} on:keydown={handleKeyDown} disabled={disabled} autocomplete="off"/>
-        {#if field.options}
-            <button type="button" class="toggle" on:click={toggleDropdown}>▼</button>
-        {/if}
-    {/if}
-    <!-- Autocomplete -->
-    {#if field.options && !disabled}
-        <ul>
-        {#each suggestions as suggestion}
-            <li>
-                {suggestion}
-                <Button onclick={() => handleSuggestion(suggestion)} text="+"/>
-            </li>
-        {/each}
-        </ul>
+        <div class="relative w-full">
+            <input id={fieldName} name={fieldName} type={field.inputType} value={field.multiple ? tempValue : fieldValue}
+                on:input={handleInput} on:keydown={handleKeyDown} disabled={disabled} autocomplete="off" class="mt-1 block w-full"/>
+            {#if field.options}
+                <button type="button" class="absolute inset-y-0 right-2 flex items-center" on:click={toggleDropdown}>▼</button>
+            {/if}
+            <!-- Autocomplete -->
+            {#if field.options && !disabled}
+                <ul class="absolute w-full z-10 mt-2 bg-white max-h-60 overflow-y-auto">
+                {#each suggestions as suggestion}
+                    <li class="flex justify-between items-center cursor-pointer border border-gray-200">
+                        <Button onclick={() => handleSuggestion(suggestion)} text={suggestion} 
+                            class="w-full text-left px-4 py-2 hover:bg-gray-100"/>
+                    </li>
+                {/each}
+                </ul>
+            {/if}
+        </div>
     {/if}
     <!-- Mostrar al usuario todas las opciones seleccionadas -->
     {#if field.multiple}
-        <ul>
+        <ul class="mt-3 space-y-2 max-h-30 overflow-y-auto">
         {#each fieldValue as value, idx}
-            <li>
+            <li class="flex justify-between items-center px-4 py-2 border border-gray-200 rounded">
                 {value}
                 {#if !disabled}
                 <Button onclick={() => removeOption(idx)} text="-"/>

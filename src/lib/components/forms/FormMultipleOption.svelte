@@ -32,7 +32,7 @@
 </script>
 
 <div class={field.className}>
-    <p class="block text-gray-700 text-sm font-bold mb-2">{field.label}</p>
+    <p class="block text-charcoal-gray text-sm font-bold mb-2">{field.label}</p>
 
     {#each field.options as option}
 		<label class="flex items-center space-x-2 mb-1">

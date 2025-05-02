@@ -31,8 +31,8 @@
 <!-- Tabla que muestra la lista de formularios -->
 <div class="flex h-full w-full px-8 py-3">
 	<table class="h-full w-full border-2 border-black text-center">
-		<thead>
-			<tr>
+		<thead class="bg-crimson">
+			<tr class="text-white">
 				<th>Fecha</th>
 				<th>Responsable</th>
 				<th>Paciente</th>
@@ -45,7 +45,7 @@
 			{#each forms as form, index}
 				{#if form}
 				<tr
-					class="cursor-pointer place-items-center justify-center border border-black transition hover:bg-gray-200"
+					class="text-charcoal-gray cursor-pointer place-items-center justify-center border border-black transition hover:bg-gray-200"
 					onclick={() => selectDoc(form)}
 				>
 					<td>{form.date?.toLocaleString()}</td>

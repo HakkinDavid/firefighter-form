@@ -10,6 +10,8 @@
 	import formulario from '$lib/components/forms/formulario.json';
 	import Modal from '../lib/components/Modal.svelte';
 	import PdfPreview from '$lib/components/PdfPreview.svelte';
+	import Navbar from '$lib/components/Navbar.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 
 	let showModal = $state(false);
 	let forms = $state(undefined);
@@ -58,6 +60,7 @@
 		}}
 	/>
 {:else}
+	<Navbar/>
 	<!-- Lista de formularios cargados -->
 	<FormsList bind:forms bind:selectedDoc={selectedForm} bind:showModal bind:modal />
 	
@@ -69,7 +72,7 @@
 				showModal = true;
 			}}
 			text="Añadir registro"
-			class="w-min cursor-pointer rounded-lg border border-black bg-red-500 px-6 py-2 text-white"
+			class="w-min cursor-pointer rounded-lg border border-black bg-bronze px-6 py-2 text-white"
 		/>
 	</div>
 

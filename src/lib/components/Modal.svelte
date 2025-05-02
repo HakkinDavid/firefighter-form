@@ -88,7 +88,7 @@
 	<div class="flex justify-between">
 		<button
 			onclick={ allowpdf ? closeModal : back}
-			class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
+			class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-blue-600"
 		>
 			Regresar
 		</button>
@@ -100,7 +100,7 @@
 		{#if allowpdf}
 			<button
 				onclick={generatePdf}
-				class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
+				class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-blue-600"
 			>
 				Descargar pdf
 			</button>
