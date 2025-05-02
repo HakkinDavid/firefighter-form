@@ -62,12 +62,12 @@
 </script>
 
 <div class={field.className}>
-    <label class="block text-charcoal-gray text-sm font-bold mb-2" for={fieldName}>{field.label}</label>
+    <label class="block text-charcoal-gray text-sm font-bold mb-2 mt-auto" for={fieldName}>{field.label}</label>
     {#if field.inputType === "checkbox"}
         <input id={fieldName} name={fieldName} type="checkbox" checked={fieldValue}
             on:input={handleInput} disabled={disabled} autocomplete="off"/>
     {:else}
-        <div class="relative w-full mt-auto">
+        <div class="relative w-full">
             <input id={fieldName} name={fieldName} type={field.inputType} value={field.multiple ? tempValue : fieldValue}
                 on:input={handleInput} on:keydown={handleKeyDown} disabled={disabled} autocomplete="off" class="mt-1 block w-full"/>
             {#if field.options}
