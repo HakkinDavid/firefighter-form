@@ -1,57 +1,12 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 
-.bg-wine {
-    background-color: #500028;
-}
-.text-wine {
-    color: #500028;
-}
-.hover-bg-wine:hover {
-    background-color: #500028;
-}
-
-.bg-lightwine {
-    background-color: #992449;
-}
-.text-lightwine {
-    color: #992449;
-}
-  
-.bg-bronze {
-    background-color: #B38E5D;
-}
-.text-bronze {
-    color: #B38E5D;
-}
-.hover-bg-bronze:hover {
-    background-color: #B38E5D;
-}
-  
-.bg-davy-gray {
-    background-color: #555555;
-}
-.text-davy-gray {
-    color: #555555;
-}
-
-.bg-charcoal-gray {
-    background-color: #333333;
-}
-.text-charcoal-gray {
-    color: #333333;
-}
-
-.bg-crimson {
-    background-color: #990000;
-}
-.text-crimson {
-    color: #990000;
-}
-  
-.bg-sand {
-    background-color: #D4C199;
-}
-.text-sand {
-    color: #D4C199;
+@theme {
+    --color-wine: #500028;
+    --color-lightwine: #992449;
+    --color-bronze: #B38E5D;
+    --color-davy-gray: #555555;
+    --color-charcoal-gray: #333333;
+    --color-crimson: #990000;
+    --color-sand: #D4C199;
 }

@@ -66,13 +66,13 @@
         {#if !disabled}
         <div class="col-span-1 flex items-end">
             <Button onclick={() => removeTuple(idx)} text="Eliminar"
-                class="w-full py-2 rounded-lg cursor-pointer border border-black bg-bronze text-white"/>
+                class="w-full py-2 rounded-lg cursor-pointer border border-black bg-bronze text-white transition hover:bg-wine"/>
         </div>
         {/if}
     {/each}
     {#if !disabled}
     <div class="col-span-full">
-        <Button onclick={addTuple} text="Añadir" class="w-min px-6 py-2 rounded-lg cursor-pointer border border-black bg-bronze text-white"/>
+        <Button onclick={addTuple} text="Añadir" class="w-min px-6 py-2 rounded-lg cursor-pointer border border-black bg-bronze text-white transition hover:bg-wine"/>
     </div>
     {/if}
     <p class="text-red-500">{errorValue}</p>

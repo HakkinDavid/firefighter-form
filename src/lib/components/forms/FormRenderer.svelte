@@ -70,11 +70,11 @@
     </form>
     <div class="flex justify-end sticky bottom-0">
         <button type="button" form="template" on:click={() => handleSubmit(false)}
-            class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-gray-600 mr-3">
+            class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-wine mr-3">
             Guardar
         </button>
         <button type="button" form="template" on:click={() => handleSubmit(true)} 
-            class="mt-4 block cursor-pointer rounded bg-wine px-4 py-2 text-white transition hover:bg-blue-600">
+            class="mt-4 block cursor-pointer rounded bg-wine px-4 py-2 text-white transition hover:bg-lightwine">
             Finalizar
         </button>
     </div>

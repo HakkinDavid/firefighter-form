@@ -16,7 +16,7 @@
 		signaturePad = new SignaturePad(canvas, {
 			width: 600,
 			height: 200,
-			backgroundColor: "rgba(255,0,0,.5)", 
+			backgroundColor: "rgba(1,1,1,.05)", 
 			penColor: "black"
 		});
 
@@ -45,6 +45,7 @@
     <p class ="text-gray-700">{field.nombreLabel}</p>
 
 	<div class="flex space-x-2 mt-2">
-		<Button text="Borrar Firma" onclick={borrarFirma} />
+		<Button text="Borrar Firma" onclick={borrarFirma} 
+		class="w-full py-2 rounded-lg cursor-pointer border border-black bg-bronze text-white transition hover:bg-wine"/>
 	</div>
 </div>

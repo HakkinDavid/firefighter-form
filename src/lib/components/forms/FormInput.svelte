@@ -77,7 +77,7 @@
             {#if field.options && !disabled}
                 <ul class="absolute w-full z-10 mt-2 bg-white max-h-60 overflow-y-auto">
                 {#each suggestions as suggestion}
-                    <li class="flex justify-between items-center cursor-pointer border border-gray-200">
+                    <li class="flex justify-between items-center cursor-pointer border border-gray-400">
                         <Button onclick={() => handleSuggestion(suggestion)} text={suggestion} 
                             class="w-full text-left px-4 py-2 hover:bg-gray-100"/>
                     </li>
@@ -88,12 +88,13 @@
     {/if}
     <!-- Mostrar al usuario todas las opciones seleccionadas -->
     {#if field.multiple}
-        <ul class="mt-3 space-y-2 max-h-30 overflow-y-auto">
+        <ul class="mt-3 max-h-30 overflow-y-auto">
         {#each fieldValue as value, idx}
-            <li class="flex justify-between items-center px-4 py-2 border border-gray-200 rounded">
+            <li class="flex justify-between items-center px-4 py-2 border border-gray-300 rounded">
                 {value}
                 {#if !disabled}
-                <Button onclick={() => removeOption(idx)} text="-"/>
+                <Button onclick={() => removeOption(idx)} text="-"
+                    class="px-4 py-2 border border-black rounded bg-red-700 text-white transition hover:bg-red-900"/>
                 {/if}
             </li>
         {/each}

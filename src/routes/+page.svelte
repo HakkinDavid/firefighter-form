@@ -72,13 +72,13 @@
 				showModal = true;
 			}}
 			text="Añadir registro"
-			class="w-min cursor-pointer rounded-lg border border-black bg-bronze px-6 py-2 text-white"
+			class="w-min cursor-pointer rounded-lg border border-black bg-bronze text-white transition hover:bg-wine px-6 py-2"
 		/>
 	</div>
 
 	<Modal bind:showModal allowpdf={selectedForm && selectedForm.status == "Completado"} bind:this={modal} bind:formRenderer>
 		{#snippet header()}
-			<h2>Nuevo Fomulario</h2>
+			<h2 class="text-charcoal-gray">Nuevo Fomulario</h2>
 		{/snippet}
 		
 		{#snippet children()}
