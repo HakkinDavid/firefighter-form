@@ -67,7 +67,7 @@
         <input id={fieldName} name={fieldName} type="checkbox" checked={fieldValue}
             on:input={handleInput} disabled={disabled} autocomplete="off"/>
     {:else}
-        <div class="relative w-full">
+        <div class="relative w-full mt-auto">
             <input id={fieldName} name={fieldName} type={field.inputType} value={field.multiple ? tempValue : fieldValue}
                 on:input={handleInput} on:keydown={handleKeyDown} disabled={disabled} autocomplete="off" class="mt-1 block w-full"/>
             {#if field.options}
