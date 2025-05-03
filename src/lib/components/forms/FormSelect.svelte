@@ -23,5 +23,5 @@
             <option value={option}>{option}</option>
         {/each}
     </select>
-    <p class="text-red-500">{errorValue}</p>
+    <p class="text-red-500 whitespace-pre-line">{errorValue}</p>
 </div>
