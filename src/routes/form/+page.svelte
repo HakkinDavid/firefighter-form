@@ -12,7 +12,7 @@
     import formulario from './campos.json';
 
 
-    let forms = $state(undefined);
+    let forms = $state([]);
     let logged_in = $state(false);
 
 
@@ -28,12 +28,6 @@
     async function get_object(k) {
         return JSON.parse((await Preferences.get({ key: k })).value);
     }
-
-    // Se ejecuta al montar el componente, recuperando los formularios guardados
-    onMount(async () => {
-        forms = await get_object('forms');
-        if (!forms) forms = [];
-    });
 </script>
 <Header></Header>
 

@@ -7,6 +7,7 @@
     import FormSignature from "./FormSignature.svelte";
 	import FormTuple from "./FormTuple.svelte";
 	import { createEventDispatcher } from "svelte";
+	import { STATUSES } from "$lib/Dictionary.svelte";
 
 
     let localFormData = $state();
@@ -15,7 +16,7 @@
     const dispatch = createEventDispatcher();
 
     function defaultFormData(template) {
-        const data = Object.fromEntries(template.fields
+        const data = {data: Object.fromEntries(template.fields
             .filter(field => field.type !== 'text')
             .map(field => {
             let defaultValue;
@@ -27,9 +28,11 @@
                 defaultValue = "";
             }
             return [field.name, defaultValue];
-        }));
+        }))};
+        data.filler = "Bombero"
+        data.patient = "Paciente"
         data.date = new Date();
-        data.status = "Nuevo";
+        data.status = STATUSES.NEW;
         return data;
     }
 
@@ -50,7 +53,7 @@
     };
 
     function handleSubmit(completed) {
-        localFormData.status = completed ? "Completado" : "Guardado";
+        localFormData.status = completed ? STATUSES.FINISHED : STATUSES.DRAFT;
         dispatch('submit', localFormData);
     }
 
@@ -59,22 +62,22 @@
 
 <div class="p-4">
     <h2><b>{template.formname}</b></h2>
-    <form class="grid grid-cols-3 gap-4" id="template" on:submit|preventDefault={() => console.log(localFormData)}>
+    <form class="grid grid-cols-3 gap-4" id="template" onsubmit={(e) => {e.preventDefault(); console.log(localFormData)}}>
         {#each template.fields as field (field.name)}
             {#if fieldComponentMap[field.type]}
                 <svelte:component this={fieldComponentMap[field.type]} {field}
-                fieldValue={localFormData[field.name]} 
-                on:update={(e) => localFormData[field.name] = e.detail}/>
+                fieldValue={localFormData.data[field.name]} 
+                on:update={(e) => localFormData.data[field.name] = e.detail}/>
             {/if}
         {/each}
     </form>
 </div>
 <div class="flex justify-end sticky bottom-0 bg-gray-100">
-    <button type="button" form="template" on:click={() => handleSubmit(false)}
+    <button type="button" form="template" onclick={() => handleSubmit(false)}
         class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-wine mr-3">
         Guardar
     </button>
-    <button type="button" form="template" on:click={() => handleSubmit(true)} 
+    <button type="button" form="template" onclick={() => handleSubmit(true)} 
         class="mt-4 block cursor-pointer rounded bg-wine px-4 py-2 text-white transition hover:bg-lightwine">
         Finalizar
     </button>
