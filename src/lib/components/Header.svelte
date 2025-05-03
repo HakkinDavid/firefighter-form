@@ -4,7 +4,7 @@
 </script>
 
 <!-- Header -->
-<div class="flex w-full h-full flex-col place-content-center justify-center px-4 py-8 text-center gap-8">
+<div class="bg-pink-950 text-white flex w-full h-full flex-col place-content-center justify-center px-4 py-8 text-center gap-8">
     <div class="flex flex-row place-content-center justify-center gap-12">
         <Icon type="Tijuana" />
         <div class="flex flex-col text-lg">

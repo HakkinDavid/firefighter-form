@@ -4,6 +4,7 @@
 function handleRestriction(fieldValue, data, restriction, value){
     switch (restriction) {
         case "notEmpty":
+
             return fieldValue !== "" && fieldValue !== null && fieldValue !== undefined;
         case "lessThan":
             return fieldValue < value;

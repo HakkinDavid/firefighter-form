@@ -37,7 +37,7 @@
             "name": "camposervicio",
             "label": "TIPO DE SERVICIO",
             "type": "input",
-            "inputType": "time"
+            "inputType": "text"
         },
         {
             "name": "campollamada",
@@ -504,7 +504,7 @@
             "name": "iniciodolor",
             "label": "HORA DE INICIO",
             "type": "input",
-            "inputType": "text"
+            "inputType": "time"
         },
         {
             "name": "localizaciondolor",
@@ -1025,7 +1025,7 @@
             "name": "firmaPacienteAtencion",
             "label": "NEGATIVA A RECIBIR ATENCIÓN/ SER TRASLADADO EXIMIENTE DE RESPONSABILIDAD",
             "nombreLabel": "Firma del paciente",
-            "declaracion": "Declaró que no aceptó las recomendaciones  del personal de la ambulancia o vehículo de primer contacto de bomberos tijuana en cuanto al ( tratamiento) y o traslado a un hospital ,por lo que eximo a la dirección de bomberos tijuana y a dichas personas de toda responsabilidad que pudiera derivar al haberse respetado y cumplido mi decisión.",
+            "declaracion": "Declaró que no aceptó las recomendaciones  del personal de la ambulancia o vehículo de primer contacto de bomberos tijuana en cuanto al (tratamiento) y o traslado a un hospital, por lo que eximo a la dirección de bomberos tijuana y a dichas personas de toda responsabilidad que pudiera derivar al haberse respetado y cumplido mi decisión.",
             "type": "signature",
             "className": "mt-6" 
         },
@@ -1047,7 +1047,7 @@
             "name": "firmapacienteconcentimiento",
             "label": "CONSENTIMIENTO INFORMADO",
             "nombreLabel": "Firma del paciente",
-            "declaracion": "Declaró haber recibido oportunamente información completa y adecuada sobre mi cuadro clínico y los procedimientos diagnósticos y/o terapéuticos qué se realizarán los riesgos que esto pueda presentar y las alternativas disponibles.  A si mismo Declaró haber comprendido la información proporcionada y que he tenido la oportunidad de fórmula mis preguntas y dudas.  Las que han sido contestadas y aclaradas a mi entera satisfacción por lo anteriormente expuesto  Declaró mi consentimiento para ser sometido al tratamiento y a las acciones que el equipo  paramédico considere necesarias en caso de surgir situaciones no esperadas o complicaciones, es expresado en forma libre e informada",
+            "declaracion": "Declaró haber recibido oportunamente información completa y adecuada sobre mi cuadro clínico y los procedimientos diagnósticos y/o terapéuticos qué se realizarán los riesgos que esto pueda presentar y las alternativas disponibles.  A si mismo. Declaró haber comprendido la información proporcionada y que he tenido la oportunidad de fórmula mis preguntas y dudas.  Las que han sido contestadas y aclaradas a mi entera satisfacción por lo anteriormente expuesto  Declaró mi consentimiento para ser sometido al tratamiento y a las acciones que el equipo  paramédico considere necesarias en caso de surgir situaciones no esperadas o complicaciones, es expresado en forma libre e informada.",
             "type": "signature",
             "className": "mt-6" 
         },
@@ -1059,5 +1059,47 @@
             "type": "signature",
             "className": "mt-6" 
         }
-    ]
+    ],
+
+    
+        "restrictions": {
+            "notEmpty": [
+                {"name": "firmaBomberoAtencion", "message": "La firma es obligatoria"},
+                {"name": "firmaPacienteAtencion", "message": "La firma es obligatoria"},
+                {"name": "firmapacienteconcentimiento", "message": "La firma es obligatoria"},
+                {"name": "firmaBomberoConcentimiento", "message": "La firma es obligatoria"},
+                {"name": "patient", "message": "El nombre del paciente es obligatorio"},
+                {"name": "date", "message": "La fecha es obligatoria"},
+                {"name": "campoturno", "message": "El turno es obligatorio"},
+                {"name": "campoestacion", "message": "La estación es obligatoria"},
+                {"name": "camposervicio", "message": "El tipo de servicio es obligatorio"},
+                {"name": "campollamada", "message": "La hora de llamada es obligatoria"},
+                {"name": "salida", "message": "La hora de salida es obligatoria"},
+                {"name": "llegada", "message": "La hora de llegada es obligatoria"},
+                {"name": "calle", "message": "La ubicación es obligatoria"},
+                {"name": "colonia", "message": "La colonia es obligatoria"},
+                {"name": "municipio", "message": "El municipio es obligatorio"},
+                {"name": "jefe", "message": "El jefe de servicio es obligatorio"},
+                {"name": "maquinista", "message": "El maquinista es obligatorio"},
+                {"name": "CONCIENCIA", "message": "El nivel de conciencia es obligatorio"},                
+                {"name": "campo", "subname": "hora", "message": "La hora de los signos vitales es obligatoria"},
+                {"name": "resultadoemergenciacheckbox", "message": "El resultado de la emergencia es obligatorio"}
+
+     
+            ],
+            "greaterThanDate": [
+                {"name": "date", "value": -1, "message": "La fecha no puede ser anterior a hoy"}
+            ],
+            "lessThanDate": [
+                {"name": "date", "value": 1, "message": "La fecha no puede ser posterior a mañana"}
+            ],
+            "greaterThanNumber": [
+                {"name": "edad", "value": 0, "message": "La edad debe ser mayor a 0"}
+            ]
+
+        }
+          
+    
+
+
 }

@@ -2,16 +2,19 @@
 	import { onMount } from "svelte";
     import Button from "../Button.svelte";
     import FormTextarea from "$lib/components/forms/FormTextarea.svelte";
+	import { createEventDispatcher } from "svelte";
+
+	const dispatch = createEventDispatcher();
 	export let field;
 	export let dataURL = "";
+	export let firmado = false;
+	export let errorValue;
+
+
     let declaracion = ""; 
     let nombreLabel = "";
-
 	let message = "";
-	let firmado = false;
-	
 	let disabled = false;
-
 	let canvas;
 	let signaturePad;
 
@@ -32,13 +35,16 @@
 		});
 		window.addEventListener('resize', resizeCanvas);
   		resizeCanvas();
+		dispatch("update", "");
 	});
 	function borrarFirma() {
 		if (disabled) return; // no se puede borrar si el formulario ya fue completado
 		signaturePad.clear();
+		dispatch("update", "");
 		firmado = false;
 		message = "";
 		signaturePad.on()
+		 
 	}
 
 	function guardarFirma() {
@@ -46,15 +52,16 @@
 			message = "Es necesario firmar antes de guardar.";
 			firmado = false;
 		} else {
-			dataURL = signaturePad.toDataURL();
+			dataURL = signaturePad.toDataURL('image/png');
 			message = "Firmado.";
 			firmado = true;
+			dispatch("update", dataURL);
 			signaturePad.off() // bloquea el canvas caundo se guarda la firma
 
 		}
 	}
 
-	export function disablePad() { // cuando se complete el formulario. 
+	function disablePad() { // cuando se complete el formulario. 
 		disabled = true;
 		signaturePad.off()
 	}
@@ -90,6 +97,7 @@
 		 text="Guardar"
 		 />
 	</div>
+	<p class="text-red-500 whitespace-pre-line">{errorValue}</p>
 	{#if message}
 	<p class={firmado ? "text-green-500" : "text-red-500"}>{message}</p>
 	{/if}

@@ -53,9 +53,9 @@
         text: FormText
     };
 
-    function handleSubmit(completed) {
+    function handleSubmit(completed) {  
         restrictions = handleFieldRestrictions(localFormData.data, template.restrictions);
-        if (Object.keys(restrictions).length === 0) {
+        if (Object.keys(restrictions).length === 0 ) {
             localFormData.status = completed ? STATUSES.FINISHED : STATUSES.DRAFT;
             dispatch('submit', localFormData);
         }

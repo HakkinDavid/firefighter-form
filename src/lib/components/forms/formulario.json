@@ -104,7 +104,7 @@
         ],
         "lessThanSize": [
             {"name":"grupo", "value": 3, "message": "Dos campos o menos."},
-            {"name":"campo", "subname": "nombre", "value": 5, "message": "Solo valores menores a 5 letras awaawawaw."}
+            {"name":"campo", "subname": "nombre", "value": 5, "message": "Solo valores menores a 5 letras."}
         ],
         "greaterThanDate": [
             {"name":"campofecha", "value": 0, "message": "Fecha mayor a hoy."}

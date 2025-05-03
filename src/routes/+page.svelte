@@ -18,6 +18,7 @@
 
 	import { CapacitorSQLite, SQLiteConnection, SQLiteDBConnection } from '@capacitor-community/sqlite';
 	import { STATUSES } from '$lib/Dictionary.svelte';
+	import Header from '$lib/components/Header.svelte';
 
 	let showModal = $state(false);
 	let forms = $state([]);
@@ -144,6 +145,7 @@
 		}}
 	/>
 {:else}
+<Header></Header>
 	<!-- Lista de formularios cargados -->
 	<FormsList bind:forms bind:selectedFormIndex={selectedFormIndex} bind:showModal bind:modal on:delete={(e) => delete_form(e.detail.index)}/>
 	
