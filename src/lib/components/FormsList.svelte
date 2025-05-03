@@ -30,7 +30,7 @@
 
 <!-- Tabla que muestra la lista de formularios -->
 <div class="flex h-full w-full px-8 py-3">
-	<table class="h-full w-full border-2 border-black text-center">
+	<table class="h-full min-w-full border-2 border-black text-center">
 		<thead class="bg-crimson">
 			<tr class="text-white">
 				<th>Fecha</th>

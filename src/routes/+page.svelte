@@ -52,6 +52,7 @@
 	}
 </script>
 
+<Navbar/>
 {#if !logged_in}
 	<!-- Pantalla de bienvenida que se muestra antes de iniciar sesión -->
 	<WelcomeScreen
@@ -60,7 +61,6 @@
 		}}
 	/>
 {:else}
-	<Navbar/>
 	<!-- Lista de formularios cargados -->
 	<FormsList bind:forms bind:selectedDoc={selectedForm} bind:showModal bind:modal />
 	
@@ -90,3 +90,4 @@
 		{/snippet}
 	</Modal>
 {/if}
+<Footer/>

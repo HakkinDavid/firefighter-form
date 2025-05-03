@@ -13,7 +13,7 @@
             "label": "Campo Select",
             "type": "select",
             "options": ["Algo 1a", "Algo 2b"],
-            "className": "col-span-1"
+            "className": "col-span-2"
         },
         {
             "name": "campotextarea",
@@ -34,7 +34,7 @@
             "type": "input",
             "inputType": "text",
             "options": ["Opcion1", "Opcion2"],
-            "className":"col-span-1"
+            "className":"col-span-1 flex flex-col"
         },
         {
             "name": "campomultipleautocomplete",
@@ -44,14 +44,15 @@
             "multiple": true,
             "options": ["Yes", "No", "Maybe"],
             "allowOwnOptions": true,
-            "className":"col-span-1"
+            "className":"col-span-1 flex flex-col"
         },
         {
             "name": "grupo",
             "label": "Opcion Multiple",
             "type": "multiple",
             "inputType": "checkbox",
-            "options": ["Opcion1", "Opcion2", "Opcion3"]
+            "options": ["Opcion1", "Opcion2", "Opcion3"],
+            "className":"col-span-1 flex flex-col"
         },
         {
             "name": "firma",
@@ -59,13 +60,13 @@
             "nombreLabel": "Firma del bombero/paciente",
             "declaracion": "Declaracion",
             "type": "signature",
-            "className": "mt-6 col-span-3" 
+            "className": "col-span-2" 
         },
         {
             "name": "campo",
             "label": "Tupla",
             "type": "tuple",
-            "className": "grid grid-cols-3 gap-3 mt-2 col-span-2",
+            "className": "grid grid-cols-3 gap-3 col-span-2 max-h-80 overflow-y-auto",
             "tuple": [
                 {
                     "name": "nombre",
@@ -82,6 +83,13 @@
                     "className":"col-span-1 flex flex-col"
                 }
             ]
+        },
+        {
+            "name": "campoinput2",
+            "label": "Campo Input",
+            "type": "input",
+            "inputType": "text",
+            "className":"col-span-1"
         }
     ]
 }

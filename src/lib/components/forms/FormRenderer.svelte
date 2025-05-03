@@ -57,7 +57,7 @@
     export { formData, localFormData };
 </script>
 
-<div>
+<div class="p-4">
     <h2><b>{template.formname}</b></h2>
     <form class="grid grid-cols-3 gap-4" id="template" on:submit|preventDefault={() => console.log(localFormData)}>
         {#each template.fields as field (field.name)}
@@ -68,14 +68,14 @@
             {/if}
         {/each}
     </form>
-    <div class="flex justify-end sticky bottom-0">
-        <button type="button" form="template" on:click={() => handleSubmit(false)}
-            class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-wine mr-3">
-            Guardar
-        </button>
-        <button type="button" form="template" on:click={() => handleSubmit(true)} 
-            class="mt-4 block cursor-pointer rounded bg-wine px-4 py-2 text-white transition hover:bg-lightwine">
-            Finalizar
-        </button>
-    </div>
+</div>
+<div class="flex justify-end sticky bottom-0 bg-gray-100">
+    <button type="button" form="template" on:click={() => handleSubmit(false)}
+        class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-wine mr-3">
+        Guardar
+    </button>
+    <button type="button" form="template" on:click={() => handleSubmit(true)} 
+        class="mt-4 block cursor-pointer rounded bg-wine px-4 py-2 text-white transition hover:bg-lightwine">
+        Finalizar
+    </button>
 </div>

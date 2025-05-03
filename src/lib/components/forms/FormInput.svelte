@@ -79,7 +79,7 @@
                 {#each suggestions as suggestion}
                     <li class="flex justify-between items-center cursor-pointer border border-gray-400">
                         <Button onclick={() => handleSuggestion(suggestion)} text={suggestion} 
-                            class="w-full text-left px-4 py-2 hover:bg-gray-100"/>
+                            class="w-full text-left px-4 py-2 text-wine transition hover:text-bronze hover:bg-gray-50"/>
                     </li>
                 {/each}
                 </ul>
@@ -88,7 +88,7 @@
     {/if}
     <!-- Mostrar al usuario todas las opciones seleccionadas -->
     {#if field.multiple}
-        <ul class="mt-3 max-h-30 overflow-y-auto">
+        <ul class="max-h-30 overflow-y-auto">
         {#each fieldValue as value, idx}
             <li class="flex justify-between items-center px-4 py-2 border border-gray-300 rounded">
                 {value}
