@@ -173,3 +173,9 @@
 	</Modal>
 {/if}
 <Footer/>
+
+<svelte:head>
+	<title>
+		Formato de Atención Médica Digital
+	</title>
+</svelte:head>
