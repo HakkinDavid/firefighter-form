@@ -54,12 +54,13 @@
 </script>
 
 <div class={field.className}>
-    <p class="block text-gray-700 text-sm font-bold mb-2">{field.label}</p>
+    <p class="block text-charcoal-gray text-sm font-bold mb-2 col-span-full sticky top-0 bg-white z-50 h-min">{field.label}</p>
     {#each fieldValue as tuple, idx}
         {#each field.tuple as subfield}
             {#if fieldComponentMap[subfield.type]}
                 <svelte:component this={fieldComponentMap[subfield.type]} field={subfield} disabled={disabled}
                 fieldValue={tuple[subfield.name]} fieldIdx={idx}
+                errorValue={errorValue?.[idx]?.[subfield.name] || ''}
                 on:update={(e) => updateField(idx, subfield.name, e.detail)}/>
             {/if}
         {/each}
@@ -74,5 +75,5 @@
         onclick={addTuple} text="Añadir"/>
     </div>
     {/if}
-    <p class="text-red-500">{errorValue}</p>
+    <!-- <p class="text-red-500 whitespace-pre-line">{errorValue}</p> -->
 </div>

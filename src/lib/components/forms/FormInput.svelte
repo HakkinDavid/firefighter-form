@@ -62,44 +62,43 @@
 </script>
 
 <div class={field.className}>
-    <label class="block text-gray-700 text-sm font-bold mb-2" for={fieldName}>{field.label}</label>
-    <div class = "relative">
-        {#if field.inputType === "checkbox"}
-            <input id={fieldName} name={fieldName} type="checkbox" checked={fieldValue}
-                on:input={handleInput} disabled={disabled} autocomplete="off"/>
-        {:else}
+    <label class="block text-charcoal-gray text-sm font-bold mb-2 mt-auto" for={fieldName}>{field.label}</label>
+    {#if field.inputType === "checkbox"}
+        <input id={fieldName} name={fieldName} type="checkbox" checked={fieldValue}
+            on:input={handleInput} disabled={disabled} autocomplete="off"/>
+    {:else}
+        <div class="relative w-full">
             <input id={fieldName} name={fieldName} type={field.inputType} value={field.multiple ? tempValue : fieldValue}
-                on:input={handleInput} on:keydown={handleKeyDown} disabled={disabled} autocomplete="off"/>
+                on:input={handleInput} on:keydown={handleKeyDown} disabled={disabled} autocomplete="off" class="mt-1 block w-full"/>
             {#if field.options}
-                <button type="button" class="absolute top-2 left-45 toggle" on:click={toggleDropdown}>▼</button>
+                <button type="button" class="absolute inset-y-0 right-2 flex items-center" on:click={toggleDropdown}>▼</button>
             {/if}
-        {/if}
-    </div>
-    <!-- Autocomplete -->
-    {#if field.options && !disabled}
-        <ul>
-        {#each suggestions as suggestion}
-            <li>
-                {suggestion}
-                <Button 
-                class = "mt-1 cursor-pointer rounded bg-blue-500 px-3 py-1 text-white transition hover:bg-blue-600 mx-1"
-                onclick={() => handleSuggestion(suggestion)} text="+"/>
-            </li>
-        {/each}
-        </ul>
+            <!-- Autocomplete -->
+            {#if field.options && !disabled}
+                <ul class="absolute w-full z-10 mt-2 bg-white max-h-60 overflow-y-auto">
+                {#each suggestions as suggestion}
+                    <li class="flex justify-between items-center cursor-pointer border border-gray-400">
+                        <Button onclick={() => handleSuggestion(suggestion)} text={suggestion} 
+                            class="w-full text-left px-4 py-2 text-wine transition hover:text-bronze hover:bg-gray-50"/>
+                    </li>
+                {/each}
+                </ul>
+            {/if}
+        </div>
     {/if}
     <!-- Mostrar al usuario todas las opciones seleccionadas -->
     {#if field.multiple}
-        <ul>
+        <ul class="max-h-30 overflow-y-auto">
         {#each fieldValue as value, idx}
-            <li>
+            <li class="flex justify-between items-center px-4 py-2 border border-gray-300 rounded">
                 {value}
                 {#if !disabled}
-                <Button onclick={() => removeOption(idx)} text="-"/>
+                <Button onclick={() => removeOption(idx)} text="-"
+                    class="px-4 py-2 border border-black rounded bg-red-700 text-white transition hover:bg-red-900"/>
                 {/if}
             </li>
         {/each}
         </ul>
     {/if}
-    <p class="text-red-500">{errorValue}</p>
+    <p class="text-red-500 whitespace-pre-line">{errorValue}</p>
 </div>

@@ -32,7 +32,7 @@
 </script>
 
 <div class={field.className}>
-    <p class="block text-gray-700 text-sm font-bold mb-2">{field.label}</p>
+    <p class="block text-charcoal-gray text-sm font-bold mb-2">{field.label}</p>
 
     {#each field.options as option}
 		<label class="flex items-center space-x-2 mb-1">
@@ -45,5 +45,5 @@
 			<span>{option}</span>
 		</label>
 	{/each}
-    <p class="text-red-500">{errorValue}</p>
+    <p class="text-red-500 whitespace-pre-line">{errorValue}</p>
 </div>

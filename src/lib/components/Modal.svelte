@@ -83,12 +83,12 @@
 <!-- Modal con 'div' en lugar de 'dialog' por necesidad al descargar pdf desde la tabla-->
 <div
 	bind:this={modalRef}
-	class={`fixed ${hide ? 'top-9999' : ''} inset-0 z-50 h-full overflow-y-auto rounded-md bg-white p-4 shadow-lg ${showModal ? 'block' : 'hidden'}`}
+	class={`fixed ${hide ? 'top-9999' : ''} inset-0 z-50 h-full overflow-y-auto rounded-md bg-white p-0 shadow-lg ${showModal ? 'block' : 'hidden'}`}
 >
-	<div class="flex justify-between">
+	<div class="flex justify-between ml-4">
 		<button
 			onclick={ allowpdf ? closeModal : back}
-			class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
+			class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine"
 		>
 			Regresar
 		</button>
@@ -100,7 +100,7 @@
 		{#if allowpdf}
 			<button
 				onclick={generatePdf}
-				class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
+				class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-blue-600"
 			>
 				Descargar pdf
 			</button>
@@ -108,8 +108,8 @@
 			<div></div>
 		{/if}
 	</div>
-	<hr class="my-2" />
-	<div bind:this={modalContent} class="pb-10">
+	<div class="w-full h-[1px] bg-gray-300 my-2 p-0"></div>
+	<div bind:this={modalContent}>
 		{#key showModal}
 			{@render children?.()}
 		{/key}

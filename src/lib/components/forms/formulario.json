@@ -5,24 +5,27 @@
             "name": "campoinput",
             "label": "Campo Input",
             "type": "input",
-            "inputType": "text"
+            "inputType": "text",
+            "className":"col-span-1"
         },
         {
             "name": "camposelect",
             "label": "Campo Select",
             "type": "select",
-            "options": ["Algo 1a", "Algo 2b"]
+            "options": ["Algo 1a", "Algo 2b"],
+            "className": "col-span-2"
         },
         {
             "name": "campotextarea",
             "label": "Campo Text area",
             "type": "textarea",
-            "rows": 5
+            "rows": 5,
+            "className":"col-span-2"
         },
         {
             "name": "campodetexto",
             "type": "text",
-            "className": "text-black-1000",
+            "className": "col-span-3",
             "text": "<p>Campos tipo Autocomplete</p>"
         },
         {
@@ -30,7 +33,8 @@
             "label": "Campo Autocomplete",
             "type": "input",
             "inputType": "text",
-            "options": ["Opcion1", "Opcion2"]
+            "options": ["Opcion1", "Opcion2"],
+            "className":"col-span-1 flex flex-col"
         },
         {
             "name": "campomultipleautocomplete",
@@ -39,14 +43,16 @@
             "inputType": "text",
             "multiple": true,
             "options": ["Yes", "No", "Maybe"],
-            "allowOwnOptions": true
+            "allowOwnOptions": true,
+            "className":"col-span-1 flex flex-col"
         },
         {
             "name": "grupo",
             "label": "Opcion Multiple",
             "type": "multiple",
             "inputType": "checkbox",
-            "options": ["Opcion1", "Opcion2", "Opcion3"]
+            "options": ["Opcion1", "Opcion2", "Opcion3"],
+            "className":"col-span-1 flex flex-col"
         },
         {
             "name": "firma",
@@ -54,26 +60,54 @@
             "nombreLabel": "Firma del bombero/paciente",
             "declaracion": "Declaracion",
             "type": "signature",
-            "className": "mt-6" 
+            "className": "col-span-2" 
         },
         {
             "name": "campo",
             "label": "Tupla",
             "type": "tuple",
+            "className": "grid grid-cols-3 gap-3 col-span-2 max-h-80 overflow-y-auto",
             "tuple": [
                 {
                     "name": "nombre",
                     "label": "Campo Input",
                     "type": "input",
-                    "inputType": "text"
+                    "inputType": "text",
+                    "className":"col-span-1 flex flex-col"
                 },
                 {
                     "name": "camposelect",
-                    "label": "Campo Select",
+                    "label": "Select Tupla texto demasiado grande, increiblemente grande",
                     "type": "select",
-                    "options": ["Algo 1a", "Algo 2b"]
+                    "options": ["Algo 1a", "Algo 2b"],
+                    "className":"col-span-1 flex flex-col"
                 }
             ]
+        },
+        {
+            "name": "campofecha",
+            "label": "Fecha",
+            "type": "input",
+            "inputType": "date",
+            "className":"col-span-1"
         }
-    ]
+    ],
+    "restrictions": {
+        "notEmpty": [
+            {"name": "campoinput", "message": "Llena este campo."}, 
+            {"name": "campoautocomplete", "message":"Mensaje de error personalizado número 2."},
+            {"name": "campo", "subname": "nombre", "message": "Llena este campo."}
+        ],
+        "greaterThanSize": [
+            {"name": "campoinput", "value": 10, "message": "Tamaño debe ser mayor a 10."},
+            {"name": "campomultipleautocomplete", "value": 2, "message": "Selecciona por lo menos tres campos."}
+        ],
+        "lessThanSize": [
+            {"name":"grupo", "value": 3, "message": "Dos campos o menos."},
+            {"name":"campo", "subname": "nombre", "value": 5, "message": "Solo valores menores a 5 letras awaawawaw."}
+        ],
+        "greaterThanDate": [
+            {"name":"campofecha", "value": 0, "message": "Fecha mayor a hoy."}
+        ]
+    }
 }

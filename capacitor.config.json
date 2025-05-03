@@ -1,5 +1,22 @@
 {
   "appId": "mx.cetys.firefighterform",
   "appName": "Formato de Atención Médica Digital",
-  "webDir": "build"
+  "webDir": "build",
+  "plugins": {
+    "CapacitorSQLite": {
+      "iosDatabaseLocation": "Library/CapacitorDatabase",
+      "iosIsEncryption": false,
+      "iosKeychainPrefix": "angular-sqlite-app-starter",
+      "iosBiometric": {
+        "biometricAuth": false,
+        "biometricTitle" : "Datos protegidos por biometría"
+      },
+      "androidIsEncryption": false,
+      "androidBiometric": {
+        "biometricAuth" : false,
+        "biometricTitle" : "Datos protegidos por biometría",
+        "biometricSubTitle" : "Inicia sesión"
+      }
+    }
+  }
 }
