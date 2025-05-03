@@ -45,5 +45,5 @@
 			<span>{option}</span>
 		</label>
 	{/each}
-    <p class="text-red-500">{errorValue}</p>
+    <p class="text-red-500 whitespace-pre-line">{errorValue}</p>
 </div>

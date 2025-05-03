@@ -8,9 +8,10 @@
 	import FormTuple from "./FormTuple.svelte";
 	import { createEventDispatcher } from "svelte";
 	import { STATUSES } from "$lib/Dictionary.svelte";
-
+    import { handleFieldRestrictions } from "./RestrictionHandler";
 
     let localFormData = $state();
+    let restrictions = $state({});
     let { template, formData } = $props();
 
     const dispatch = createEventDispatcher();
@@ -53,8 +54,11 @@
     };
 
     function handleSubmit(completed) {
-        localFormData.status = completed ? STATUSES.FINISHED : STATUSES.DRAFT;
-        dispatch('submit', localFormData);
+        restrictions = handleFieldRestrictions(localFormData.data, template.restrictions);
+        if (Object.keys(restrictions).length === 0) {
+            localFormData.status = completed ? STATUSES.FINISHED : STATUSES.DRAFT;
+            dispatch('submit', localFormData);
+        }
     }
 
     export { formData, localFormData };
@@ -65,8 +69,10 @@
     <form class="grid grid-cols-3 gap-4" id="template" onsubmit={(e) => {e.preventDefault(); console.log(localFormData)}}>
         {#each template.fields as field (field.name)}
             {#if fieldComponentMap[field.type]}
-                <svelte:component this={fieldComponentMap[field.type]} {field}
-                fieldValue={localFormData.data[field.name]} 
+                {@const Component = fieldComponentMap[field.type]}
+                <Component {field}
+                fieldValue={localFormData.data[field.name]}
+                errorValue={restrictions[field.name]}
                 on:update={(e) => localFormData.data[field.name] = e.detail}/>
             {/if}
         {/each}

@@ -85,11 +85,29 @@
             ]
         },
         {
-            "name": "campoinput2",
-            "label": "Campo Input",
+            "name": "campofecha",
+            "label": "Fecha",
             "type": "input",
-            "inputType": "text",
+            "inputType": "date",
             "className":"col-span-1"
         }
-    ]
+    ],
+    "restrictions": {
+        "notEmpty": [
+            {"name": "campoinput", "message": "Llena este campo."}, 
+            {"name": "campoautocomplete", "message":"Mensaje de error personalizado número 2."},
+            {"name": "campo", "subname": "nombre", "message": "Llena este campo."}
+        ],
+        "greaterThanSize": [
+            {"name": "campoinput", "value": 10, "message": "Tamaño debe ser mayor a 10."},
+            {"name": "campomultipleautocomplete", "value": 2, "message": "Selecciona por lo menos tres campos."}
+        ],
+        "lessThanSize": [
+            {"name":"grupo", "value": 3, "message": "Dos campos o menos."},
+            {"name":"campo", "subname": "nombre", "value": 5, "message": "Solo valores menores a 5 letras awaawawaw."}
+        ],
+        "greaterThanDate": [
+            {"name":"campofecha", "value": 0, "message": "Fecha mayor a hoy."}
+        ]
+    }
 }

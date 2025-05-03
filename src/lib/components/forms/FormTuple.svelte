@@ -60,6 +60,7 @@
             {#if fieldComponentMap[subfield.type]}
                 <svelte:component this={fieldComponentMap[subfield.type]} field={subfield} disabled={disabled}
                 fieldValue={tuple[subfield.name]} fieldIdx={idx}
+                errorValue={errorValue?.[idx]?.[subfield.name] || ''}
                 on:update={(e) => updateField(idx, subfield.name, e.detail)}/>
             {/if}
         {/each}
@@ -76,5 +77,5 @@
         class="w-min px-6 py-2 rounded-lg cursor-pointer border border-black bg-bronze text-white transition hover:bg-wine"/>
     </div>
     {/if}
-    <p class="text-red-500">{errorValue}</p>
+    <!-- <p class="text-red-500 whitespace-pre-line">{errorValue}</p> -->
 </div>
