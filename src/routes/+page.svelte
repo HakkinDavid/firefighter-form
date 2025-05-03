@@ -10,6 +10,8 @@
 	import formulario from '$lib/components/forms/formulario.json';
 	import Modal from '../lib/components/Modal.svelte';
 	import PdfPreview from '$lib/components/PdfPreview.svelte';
+	import Navbar from '$lib/components/Navbar.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 
 	let showModal = $state(false);
 	let forms = $state(undefined);
@@ -50,6 +52,7 @@
 	}
 </script>
 
+<Navbar/>
 {#if !logged_in}
 	<!-- Pantalla de bienvenida que se muestra antes de iniciar sesión -->
 	<WelcomeScreen
@@ -69,13 +72,13 @@
 				showModal = true;
 			}}
 			text="Añadir registro"
-			class="w-min cursor-pointer rounded-lg border border-black bg-red-500 px-6 py-2 text-white"
+			class="w-min cursor-pointer rounded-lg border border-black bg-bronze text-white transition hover:bg-wine px-6 py-2"
 		/>
 	</div>
 
 	<Modal bind:showModal allowpdf={selectedForm && selectedForm.status == "Completado"} bind:this={modal} bind:formRenderer>
 		{#snippet header()}
-			<h2>Nuevo Fomulario</h2>
+			<h2 class="text-charcoal-gray">Nuevo Fomulario</h2>
 		{/snippet}
 		
 		{#snippet children()}
@@ -87,3 +90,4 @@
 		{/snippet}
 	</Modal>
 {/if}
+<Footer/>

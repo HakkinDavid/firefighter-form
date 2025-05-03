@@ -1,2 +1,12 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
+
+@theme {
+    --color-wine: #500028;
+    --color-lightwine: #992449;
+    --color-bronze: #B38E5D;
+    --color-davy-gray: #555555;
+    --color-charcoal-gray: #333333;
+    --color-crimson: #990000;
+    --color-sand: #D4C199;
+}

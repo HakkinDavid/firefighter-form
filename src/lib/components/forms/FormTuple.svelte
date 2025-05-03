@@ -54,7 +54,7 @@
 </script>
 
 <div class={field.className}>
-    <p class="block text-gray-700 text-sm font-bold mb-2">{field.label}</p>
+    <p class="block text-charcoal-gray text-sm font-bold mb-2 col-span-full sticky top-0 bg-white z-50 h-min">{field.label}</p>
     {#each fieldValue as tuple, idx}
         {#each field.tuple as subfield}
             {#if fieldComponentMap[subfield.type]}
@@ -64,12 +64,16 @@
             {/if}
         {/each}
         {#if !disabled}
-        <Button onclick={() => removeTuple(idx)} text="Eliminar"/>
+        <div class="col-span-1 flex items-end">
+            <Button onclick={() => removeTuple(idx)} text="Eliminar"
+                class="w-full py-2 rounded-lg cursor-pointer border border-black bg-bronze text-white transition hover:bg-wine"/>
+        </div>
         {/if}
     {/each}
     {#if !disabled}
-    <div>
-        <Button onclick={addTuple} text="Añadir"/>
+    <div class="col-span-full sticky bottom-0 bg-white h-min">
+        <Button onclick={addTuple} text="Añadir" 
+        class="w-min px-6 py-2 rounded-lg cursor-pointer border border-black bg-bronze text-white transition hover:bg-wine"/>
     </div>
     {/if}
     <p class="text-red-500">{errorValue}</p>
