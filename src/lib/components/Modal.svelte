@@ -1,6 +1,6 @@
 <script>
 	import jsPDF from 'jspdf';
-	import html2canvas from 'html2canvas';
+	import html2canvas from 'html2canvas-pro'; // Esto debería solucionar el error de oklch que mencionaba Brandon.
 	let { showModal = $bindable(), header, children, allowpdf, formRenderer = $bindable() } = $props();
 	let modalContent;
 	let hide = $state(false);
