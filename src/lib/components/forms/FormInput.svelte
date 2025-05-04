@@ -101,5 +101,5 @@
         {/each}
         </ul>
     {/if}
-    <FormError bind:errorValue/>
+    <FormError errorValue/>
 </div>

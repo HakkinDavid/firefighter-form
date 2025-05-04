@@ -3,6 +3,6 @@
         errorValue = $bindable()
     } = $props();
 </script>
-{#if errorValue}
+{#if typeof errorValue === 'object' || typeof errorValue === 'string'}
     <p class="text-red-500 whitespace-pre-line">{typeof errorValue === 'object' ? errorValue.join("\n") : errorValue}</p>
 {/if}

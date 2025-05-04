@@ -78,5 +78,5 @@
         class="w-min px-6 py-2 rounded-lg cursor-pointer border border-black bg-bronze text-white transition hover:bg-wine"/>
     </div>
     {/if}
-    <!-- <FormError bind:errorValue/> -->
+    <!-- <FormError errorValue/> -->
 </div>
