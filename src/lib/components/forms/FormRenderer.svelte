@@ -38,6 +38,9 @@
         localFormData = defaultFormData(template);
     } else {
         localFormData = { ...formData };
+        localFormData.data.filler = formData.filler;
+        localFormData.data.patient = formData.patient;
+        localFormData.data.date = formData.date;
     }
 
     const fieldComponentMap = {
@@ -55,7 +58,7 @@
         if (Object.keys(restrictions).length === 0 ) {
             localFormData.filler = localFormData.data.filler;
             delete localFormData.data.filler;
-            
+
             localFormData.patient = localFormData.data.patient;
             delete localFormData.data.patient;
 
