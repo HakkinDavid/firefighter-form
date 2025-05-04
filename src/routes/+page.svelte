@@ -75,7 +75,7 @@
 		const dataJson = JSON.stringify(form.data);
 
 		// Si ya existe el formulario, se actualiza.
-		if (form.id) {
+		if (!isNaN(form.id)) {
 			await db.run(
 				`UPDATE forms SET date = ?, filler = ?, patient = ?, status = ?, data = ? WHERE id = ?`,
 				[form.date, form.filler, form.patient, form.status, dataJson, form.id]
