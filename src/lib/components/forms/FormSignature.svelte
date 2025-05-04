@@ -7,7 +7,7 @@
 
 	const dispatch = createEventDispatcher();
 	export let field;
-	export let dataURL = "";
+	export let fieldValue = "";
 	export let firmado = false;
 	export let errorValue;
 
@@ -24,7 +24,6 @@
 		canvas.width = canvas.offsetWidth * ratio;
 		canvas.height = canvas.offsetHeight * ratio;
 		canvas.getContext('2d').scale(ratio, ratio);
-		signaturePad.clear(); // optional: clear existing content
 	}
 
     onMount(async () => {
@@ -35,15 +34,22 @@
 		});
 		window.addEventListener('resize', resizeCanvas);
   		resizeCanvas();
-		dispatch("update", "");
+		if (fieldValue) {
+			signaturePad.fromDataURL(fieldValue);
+			message = "Firmado."
+			firmado = true;
+			signaturePad.off();
+		}
+		else {
+			dispatch("update", "");
+		}
 	});
 	function borrarFirma() {
 		signaturePad.clear();
 		dispatch("update", "");
 		firmado = false;
 		message = "";
-		signaturePad.on()
-		 
+		signaturePad.on();
 	}
 
 	function guardarFirma() {
@@ -51,10 +57,10 @@
 			message = "Es necesario firmar antes de guardar.";
 			firmado = false;
 		} else {
-			dataURL = signaturePad.toDataURL('image/png');
+			fieldValue = signaturePad.toDataURL('image/png');
 			message = "Firmado.";
 			firmado = true;
-			dispatch("update", dataURL);
+			dispatch("update", fieldValue);
 			signaturePad.off() // bloquea el canvas caundo se guarda la firma
 
 		}
