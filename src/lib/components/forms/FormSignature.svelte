@@ -3,6 +3,7 @@
     import Button from "../Button.svelte";
     import FormTextarea from "$lib/components/forms/FormTextarea.svelte";
 	import { createEventDispatcher } from "svelte";
+	import FormError from "./FormError.svelte";
 
 	const dispatch = createEventDispatcher();
 	export let field;
@@ -91,7 +92,7 @@
 		 text="Guardar"
 		 />
 	</div>
-	<p class="text-red-500 whitespace-pre-line">{errorValue}</p>
+	<FormError bind:errorValue/>
 	{#if message}
 	<p class={firmado ? "text-green-500" : "text-red-500"}>{message}</p>
 	{/if}

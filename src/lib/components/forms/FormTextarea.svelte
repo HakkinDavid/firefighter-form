@@ -1,5 +1,6 @@
 <script>
     import { createEventDispatcher } from "svelte";
+	import FormError from "./FormError.svelte";
     export let field;
     export let fieldValue;
     export let fieldIdx = "";
@@ -18,5 +19,5 @@
     <label class="block text-charcoal-gray text-sm font-bold mb-2" for={fieldName}>{field.label}</label>
     <textarea name={fieldName} id={fieldName} value={fieldValue} on:input={handleInput}
         rows={field.rows} disabled={disabled} class="mt-1 block w-full"></textarea>
-    <p class="text-red-500 whitespace-pre-line">{errorValue}</p>
+    <FormError bind:errorValue/>
 </div>

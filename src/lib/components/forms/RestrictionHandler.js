@@ -59,8 +59,8 @@ export function handleFieldRestrictions(data, restrictions){
                         const errorMessage = field.message || `Error en ${field.subname}`;
                         if (!fieldErrors[field.name]) fieldErrors[field.name] = [];
                         if (!fieldErrors[field.name][idx]) fieldErrors[field.name][idx] = {};
-                        if (!fieldErrors[field.name][idx][field.subname]) fieldErrors[field.name][idx][field.subname] = "";
-                        fieldErrors[field.name][idx][field.subname] += errorMessage;
+                        if (!fieldErrors[field.name][idx][field.subname]) fieldErrors[field.name][idx][field.subname] = [];
+                        fieldErrors[field.name][idx][field.subname].push(errorMessage);
                     }
                 });
                 // Sí es un campo a nivel global
@@ -68,8 +68,8 @@ export function handleFieldRestrictions(data, restrictions){
                 const passed = handleRestriction(data[field.name], data, key, field.value);
                 if (!passed) {
                     let errorMessage = field.message || `Error en ${field.name}`;
-                    if (!fieldErrors[field.name]) fieldErrors[field.name] = "";
-                    fieldErrors[field.name] += errorMessage;
+                    if (!fieldErrors[field.name]) fieldErrors[field.name] = [];
+                    fieldErrors[field.name].push(errorMessage);
                 }
             }
         });

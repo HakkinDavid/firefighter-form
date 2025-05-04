@@ -8,6 +8,7 @@
 	import FormText from "./FormText.svelte";
 	import FormTuple from "./FormTuple.svelte";
 	import Button from "../Button.svelte";
+	import FormError from "./FormError.svelte";
     export let field;
     export let fieldValue = [];
     export let errorValue;
@@ -77,5 +78,5 @@
         class="w-min px-6 py-2 rounded-lg cursor-pointer border border-black bg-bronze text-white transition hover:bg-wine"/>
     </div>
     {/if}
-    <!-- <p class="text-red-500 whitespace-pre-line">{errorValue}</p> -->
+    <!-- <FormError bind:errorValue/> -->
 </div>
