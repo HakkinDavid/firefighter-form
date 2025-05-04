@@ -64,15 +64,17 @@
                 on:update={(e) => updateField(idx, subfield.name, e.detail)}/>
             {/if}
         {/each}
-        <Button 
-        class="mt-4 block cursor-pointer rounded bg-red-500 px-4 py-2 text-white transition hover:bg-red-600 mx-8"
-        onclick={() => removeTuple(idx)} text="Eliminar"/>
+        {#if !disabled}
+        <div class="col-span-1 flex items-end">
+            <Button onclick={() => removeTuple(idx)} text="Eliminar"
+                class="w-full py-2 rounded-lg cursor-pointer border border-black bg-red-700 text-white transition hover:bg-red-900"/>
+        </div>
+        {/if}
     {/each}
     {#if !disabled}
-    <div>
-        <Button 
-        class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600 mx-8"
-        onclick={addTuple} text="Añadir"/>
+    <div class="col-span-full sticky bottom-0 bg-white h-min">
+        <Button onclick={addTuple} text="Añadir" 
+        class="w-min px-6 py-2 rounded-lg cursor-pointer border border-black bg-bronze text-white transition hover:bg-wine"/>
     </div>
     {/if}
     <!-- <p class="text-red-500 whitespace-pre-line">{errorValue}</p> -->
