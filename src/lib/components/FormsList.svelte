@@ -71,7 +71,7 @@
 					{#if form.status == STATUSES.FINISHED}
 						<td
 							onclick={(event) => {
-								generatePdf(form);
+								generatePdf(index);
 								event.stopPropagation();
 							}}
 							class="place-items-center justify-center transition hover:bg-blue-300"
