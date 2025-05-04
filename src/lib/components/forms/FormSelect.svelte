@@ -24,5 +24,5 @@
             <option value={option}>{option}</option>
         {/each}
     </select>
-    <FormError errorValue/>
+    <FormError bind:errorValue/>
 </div>

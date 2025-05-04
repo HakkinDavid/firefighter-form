@@ -46,5 +46,5 @@
 			<span>{option}</span>
 		</label>
 	{/each}
-    <FormError errorValue/>
+    <FormError bind:errorValue/>
 </div>

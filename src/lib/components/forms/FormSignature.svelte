@@ -92,7 +92,7 @@
 		 text="Guardar"
 		 />
 	</div>
-	<FormError errorValue/>
+	<FormError bind:errorValue/>
 	{#if message}
 	<p class={firmado ? "text-green-500" : "text-red-500"}>{message}</p>
 	{/if}
