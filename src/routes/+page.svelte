@@ -150,14 +150,14 @@
 	<FormsList bind:forms bind:selectedFormIndex={selectedFormIndex} bind:showModal bind:modal on:delete={(e) => delete_form(e.detail.index)}/>
 	
 	<div class="flex w-full place-items-center justify-center">
-		<!-- Botón para añadir un formulario de prueba -->
+		<!-- Botón para añadir un formulario -->
 		<Button
 			onclick={() => {
 				selectedFormIndex = null;
 				showModal = true;
 			}}
-			text="Añadir registro"
-			class="w-min cursor-pointer rounded-lg border border-black bg-bronze text-white transition hover:bg-wine px-6 py-2"
+			text="+"
+			class="fixed bottom-10 right-6 w-16 h-16 cursor-pointer rounded-full border border-black bg-bronze text-lg text-white transition hover:bg-wine"
 		/>
 	</div>
 

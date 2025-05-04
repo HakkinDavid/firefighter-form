@@ -33,8 +33,8 @@
 </script>
 
 <!-- Tabla que muestra la lista de formularios -->
-<div class="flex h-full w-full px-8 py-3">
-	<table class="h-full w-screen border-2 border-black text-center">
+<div class="flex h-full w-full lg:px-8 py-3 text-wrap">
+	<table class="h-full w-full border-2 border-black text-center">
 		<thead class="bg-crimson">
 			<tr class="text-white">
 				<th>ID</th>
