@@ -87,7 +87,8 @@
         {/each}
     </form>
 </div>
-<div class="flex justify-end sticky bottom-0 bg-gray-100" hidden={isPreviewOnly}>
+
+<div class="flex justify-end sticky bottom-0 bg-gray-100 z-70 pb-4 pr-4" hidden={isPreviewOnly}>
     <button type="button" form="template" onclick={() => handleSubmit(false)}
         class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-wine mr-3">
         Guardar
