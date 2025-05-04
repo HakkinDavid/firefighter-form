@@ -1,7 +1,9 @@
 <script>
-    let { formData } = $props();
+	import FormRenderer from "./forms/FormRenderer.svelte";
+
+    let { formData, template } = $props();
 </script>
 
 <div>
-    {JSON.stringify(formData)};
+    <FormRenderer formData={formData} template={template} isPreviewOnly />
 </div>

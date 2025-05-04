@@ -12,7 +12,7 @@
 
     let localFormData = $state();
     let restrictions = $state({});
-    let { template, formData } = $props();
+    let { template, formData, isPreviewOnly = false } = $props();
 
     const dispatch = createEventDispatcher();
 
@@ -81,12 +81,13 @@
                 <Component {field}
                 fieldValue={localFormData.data[field.name]}
                 errorValue={restrictions[field.name]}
+                disabled={isPreviewOnly}
                 on:update={(e) => localFormData.data[field.name] = e.detail}/>
             {/if}
         {/each}
     </form>
 </div>
-<div class="flex justify-end sticky bottom-0 bg-gray-100">
+<div class="flex justify-end sticky bottom-0 bg-gray-100" hidden={isPreviewOnly}>
     <button type="button" form="template" onclick={() => handleSubmit(false)}
         class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-wine mr-3">
         Guardar

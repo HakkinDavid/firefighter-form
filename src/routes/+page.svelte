@@ -168,7 +168,7 @@
 		
 		{#snippet children()}
 			{#if !isNaN(selectedFormIndex) && forms[selectedFormIndex] && forms[selectedFormIndex].status === STATUSES.FINISHED}
-				<PdfPreview formData={forms[selectedFormIndex]}/>
+				<PdfPreview formData={forms[selectedFormIndex]} template={formulario}/>
 			{:else}
 				<FormRenderer template={formulario} bind:this={formRenderer} formData={forms[selectedFormIndex]} on:submit={(e) => save_form(e.detail)}/>
 			{/if}

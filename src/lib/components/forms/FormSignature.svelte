@@ -10,6 +10,7 @@
 	export let fieldValue = "";
 	export let firmado = false;
 	export let errorValue;
+	export let disabled = false;
 
 
     let declaracion = ""; 
@@ -26,13 +27,17 @@
 		canvas.getContext('2d').scale(ratio, ratio);
 	}
 
+	function update(str) {
+		if (disabled) return;
+		dispatch("update", str);
+	}
+
     onMount(async () => {
 		const { default: SignaturePad } = await import('signature_pad');
 		signaturePad = new SignaturePad(canvas, {
 			backgroundColor: "rgba(1,1,1,.05)", 
 			penColor: "black"
 		});
-		window.addEventListener('resize', resizeCanvas);
   		resizeCanvas();
 		if (fieldValue) {
 			signaturePad.fromDataURL(fieldValue);
@@ -41,12 +46,16 @@
 			signaturePad.off();
 		}
 		else {
-			dispatch("update", "");
+			update("");
+		}
+
+		if (disabled) {
+			signaturePad.off();
 		}
 	});
 	function borrarFirma() {
 		signaturePad.clear();
-		dispatch("update", "");
+		update("");
 		firmado = false;
 		message = "";
 		signaturePad.on();
@@ -60,7 +69,7 @@
 			fieldValue = signaturePad.toDataURL('image/png');
 			message = "Firmado.";
 			firmado = true;
-			dispatch("update", fieldValue);
+			update(fieldValue);
 			signaturePad.off() // bloquea el canvas caundo se guarda la firma
 
 		}
@@ -86,7 +95,7 @@
 	</div>
     <p class ="text-gray-700">{field.nombreLabel}</p>
 
-	<div class="flex space-x-2 mt-2">
+	<div class="flex space-x-2 mt-2" hidden={disabled}>
 		<Button 
 		class="mt-4 block cursor-pointer rounded bg-red-500 px-4 py-2 text-white transition hover:bg-red-600 mx-8"
 		 onclick={borrarFirma} 
