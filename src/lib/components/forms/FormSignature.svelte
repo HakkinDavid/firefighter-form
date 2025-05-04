@@ -14,7 +14,6 @@
     let declaracion = ""; 
     let nombreLabel = "";
 	let message = "";
-	let disabled = false;
 	let canvas;
 	let signaturePad;
 
@@ -38,7 +37,6 @@
 		dispatch("update", "");
 	});
 	function borrarFirma() {
-		if (disabled) return; // no se puede borrar si el formulario ya fue completado
 		signaturePad.clear();
 		dispatch("update", "");
 		firmado = false;
@@ -61,10 +59,6 @@
 		}
 	}
 
-	function disablePad() { // cuando se complete el formulario. 
-		disabled = true;
-		signaturePad.off()
-	}
 
 
 
