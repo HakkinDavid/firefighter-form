@@ -161,13 +161,13 @@
 		/>
 	</div>
 
-	<Modal bind:showModal allowpdf={selectedFormIndex && forms[selectedFormIndex] && forms[selectedFormIndex].status === STATUSES.FINISHED} bind:this={modal} bind:formRenderer>
+	<Modal bind:showModal allowpdf={!isNaN(selectedFormIndex) && forms[selectedFormIndex] && forms[selectedFormIndex].status === STATUSES.FINISHED} bind:this={modal} bind:formRenderer>
 		{#snippet header()}
 			<h2 class="text-charcoal-gray">Nuevo Fomulario</h2>
 		{/snippet}
 		
 		{#snippet children()}
-			{#if selectedFormIndex && forms[selectedFormIndex] && forms[selectedFormIndex].status === STATUSES.FINISHED}
+			{#if !isNaN(selectedFormIndex) && forms[selectedFormIndex] && forms[selectedFormIndex].status === STATUSES.FINISHED}
 				<PdfPreview formData={forms[selectedFormIndex]}/>
 			{:else}
 				<FormRenderer template={formulario} bind:this={formRenderer} formData={forms[selectedFormIndex]} on:submit={(e) => save_form(e.detail)}/>
