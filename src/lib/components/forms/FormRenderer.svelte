@@ -30,9 +30,6 @@
             }
             return [field.name, defaultValue];
         }))};
-        data.filler = "Bombero"
-        data.patient = "Paciente"
-        data.date = new Date();
         data.status = STATUSES.NEW;
         return data;
     }
@@ -56,6 +53,14 @@
     function handleSubmit(completed) {  
         restrictions = handleFieldRestrictions(localFormData.data, template.restrictions);
         if (Object.keys(restrictions).length === 0 ) {
+            localFormData.filler = localFormData.data.filler;
+            delete localFormData.data.filler;
+            
+            localFormData.patient = localFormData.data.patient;
+            delete localFormData.data.patient;
+
+            localFormData.date = localFormData.data.date;
+            delete localFormData.data.date;
             localFormData.status = completed ? STATUSES.FINISHED : STATUSES.DRAFT;
             dispatch('submit', localFormData);
         }
