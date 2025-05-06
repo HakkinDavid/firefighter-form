@@ -75,7 +75,7 @@
 		const dataJson = JSON.stringify(form.data);
 
 		// Si ya existe el formulario, se actualiza.
-		if (form.id) {
+		if (!isNaN(form.id)) {
 			await db.run(
 				`UPDATE forms SET date = ?, filler = ?, patient = ?, status = ?, data = ? WHERE id = ?`,
 				[form.date, form.filler, form.patient, form.status, dataJson, form.id]
@@ -150,25 +150,25 @@
 	<FormsList bind:forms bind:selectedFormIndex={selectedFormIndex} bind:showModal bind:modal on:delete={(e) => delete_form(e.detail.index)}/>
 	
 	<div class="flex w-full place-items-center justify-center">
-		<!-- Botón para añadir un formulario de prueba -->
+		<!-- Botón para añadir un formulario -->
 		<Button
 			onclick={() => {
 				selectedFormIndex = null;
 				showModal = true;
 			}}
-			text="Añadir registro"
-			class="w-min cursor-pointer rounded-lg border border-black bg-bronze text-white transition hover:bg-wine px-6 py-2"
+			text="+"
+			class="fixed bottom-10 right-6 w-16 h-16 cursor-pointer rounded-full border border-black bg-bronze text-lg text-white transition hover:bg-wine"
 		/>
 	</div>
 
-	<Modal bind:showModal allowpdf={selectedFormIndex && forms[selectedFormIndex].status == STATUSES.FINISHED} bind:this={modal} bind:formRenderer>
+	<Modal bind:showModal allowpdf={!isNaN(selectedFormIndex) && forms[selectedFormIndex] && forms[selectedFormIndex].status === STATUSES.FINISHED} bind:this={modal} bind:formRenderer>
 		{#snippet header()}
 			<h2 class="text-charcoal-gray">Nuevo Fomulario</h2>
 		{/snippet}
 		
 		{#snippet children()}
-			{#if selectedFormIndex && forms[selectedFormIndex].status == STATUSES.FINISHED}
-				<PdfPreview formData={forms[selectedFormIndex]}/>
+			{#if !isNaN(selectedFormIndex) && forms[selectedFormIndex] && forms[selectedFormIndex].status === STATUSES.FINISHED}
+				<PdfPreview formData={forms[selectedFormIndex]} template={formulario}/>
 			{:else}
 				<FormRenderer template={formulario} bind:this={formRenderer} formData={forms[selectedFormIndex]} on:submit={(e) => save_form(e.detail)}/>
 			{/if}

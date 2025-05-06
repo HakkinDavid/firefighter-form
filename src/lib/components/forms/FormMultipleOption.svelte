@@ -1,5 +1,6 @@
 <script>
     import { createEventDispatcher } from "svelte";
+	import FormError from "./FormError.svelte";
     export let field;
     export let fieldValue;
 	export let fieldIdx = "";
@@ -45,5 +46,5 @@
 			<span>{option}</span>
 		</label>
 	{/each}
-    <p class="text-red-500 whitespace-pre-line">{errorValue}</p>
+    <FormError bind:errorValue/>
 </div>

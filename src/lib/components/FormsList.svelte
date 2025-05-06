@@ -33,8 +33,8 @@
 </script>
 
 <!-- Tabla que muestra la lista de formularios -->
-<div class="flex h-full w-full px-8 py-3">
-	<table class="h-full w-screen border-2 border-black text-center">
+<div class="flex h-full w-full text-xs sm:text-sm lg:px-8 py-3 text-wrap">
+	<table class="h-full w-full border-2 border-black text-center">
 		<thead class="bg-crimson">
 			<tr class="text-white">
 				<th>ID</th>
@@ -71,7 +71,7 @@
 					{#if form.status == STATUSES.FINISHED}
 						<td
 							onclick={(event) => {
-								generatePdf(form);
+								generatePdf(index);
 								event.stopPropagation();
 							}}
 							class="place-items-center justify-center transition hover:bg-blue-300"

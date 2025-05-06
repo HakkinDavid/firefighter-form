@@ -8,6 +8,7 @@
 	import FormText from "./FormText.svelte";
 	import FormTuple from "./FormTuple.svelte";
 	import Button from "../Button.svelte";
+	import FormError from "./FormError.svelte";
     export let field;
     export let fieldValue = [];
     export let errorValue;
@@ -64,16 +65,18 @@
                 on:update={(e) => updateField(idx, subfield.name, e.detail)}/>
             {/if}
         {/each}
-        <Button 
-        class="mt-4 block cursor-pointer rounded bg-red-500 h-10 w-20 text-white transition hover:bg-red-600"
-        onclick={() => removeTuple(idx)} text="Eliminar"/>
+        {#if !disabled}
+        <div class="col-span-1 flex items-end">
+            <Button onclick={() => removeTuple(idx)} text="Eliminar"
+                class="w-full py-2 rounded-lg cursor-pointer border border-black bg-red-700 text-white transition hover:bg-red-900"/>
+        </div>
+        {/if}
     {/each}
     {#if !disabled}
-    <div>
-        <Button 
-        class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine"
-        onclick={addTuple} text="Añadir"/>
+    <div class="col-span-full sticky bottom-0 bg-white h-min">
+        <Button onclick={addTuple} text="Añadir" 
+        class="w-min px-6 py-2 rounded-lg cursor-pointer border border-black bg-bronze text-white transition hover:bg-wine"/>
     </div>
     {/if}
-    <!-- <p class="text-red-500 whitespace-pre-line">{errorValue}</p> -->
+    <!-- <FormError bind:errorValue/> -->
 </div>

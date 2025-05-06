@@ -1,6 +1,6 @@
 <script>
 	import jsPDF from 'jspdf';
-	import html2canvas from 'html2canvas';
+	import html2canvas from 'html2canvas-pro'; // Esto debería solucionar el error de oklch que mencionaba Brandon.
 	let { showModal = $bindable(), header, children, allowpdf, formRenderer = $bindable() } = $props();
 	let modalContent;
 	let hide = $state(false);
@@ -18,13 +18,19 @@
 	}
 
 	async function generatePdf() {
+
+		const overlay = document.getElementById('overlay');
+		const spinner = document.getElementById('spinner');
+
+		overlay.style.zIndex = '60';
+		spinner.style.display = 'block';
+
 		const canvas = await html2canvas(modalContent, {
 			scrollY: -window.scrollY, //captura el contenido completo sin depender del scroll
 			windowHeight: modalContent.scrollHeight //ajusta la altura para capturar todo
 		});
 
 		const imgData = canvas.toDataURL('image/png');
-		console.log(canvas.width, canvas.height);
 
 		const pdf = new jsPDF({
 			orientation: 'p', // "p" para vertical, "l" para horizontal
@@ -32,6 +38,7 @@
 			format: 'a4'
 		});
 
+		/*
 		const imgWidth = 150;
 		const imgHeight = (canvas.height * imgWidth) / canvas.width; // Mantiene proporciones
 
@@ -39,7 +46,41 @@
 		const centerX = (pageWidth - imgWidth) / 2;
 
 		pdf.addImage(imgData, 'PNG', centerX, 10, imgWidth, imgHeight);
+		*/
+
+		const imgWidth = 160;
+		const pageHeight = 297; // A4 en mm
+		const imgHeight = (canvas.height * imgWidth) / canvas.width;
+		const pageImageHeight = (canvas.width / imgWidth) * pageHeight;
+
+		const totalPages = Math.ceil(canvas.height / pageImageHeight);
+
+		for (let i = 0; i < totalPages; i++) {
+			if (i > 0) pdf.addPage();
+
+			const sourceY = i * pageImageHeight;
+			const pageCanvas = document.createElement('canvas');
+			pageCanvas.width = canvas.width;
+			pageCanvas.height = pageImageHeight;
+
+			const context = pageCanvas.getContext('2d');
+			context.drawImage(
+				canvas,
+				0, sourceY, canvas.width, pageImageHeight,
+				0, 0, canvas.width, pageImageHeight
+			);
+
+			const pageImgData = pageCanvas.toDataURL('image/png');
+			const centerX = (pdf.internal.pageSize.width - imgWidth) / 2;
+
+			pdf.addImage(pageImgData, 'PNG', centerX, 10, imgWidth, (pageImageHeight * imgWidth) / canvas.width);
+		}
 		pdf.save(`archivo.pdf`);
+
+		overlay.style.zIndex = '50';
+		spinner.style.display = 'none';
+
+
 	}
 
 	async function callPdf() {
@@ -74,18 +115,18 @@
 
 <!-- Overlay -->
 <div
-	class={`fixed inset-0 z-50 bg-black/30 ${showModal ? 'block' : 'hidden'}`}
+	id="overlay" class={`fixed inset-0 z-50 bg-black/30 ${showModal ? 'block' : 'hidden'}`}
 ></div>
 
 <!-- Loading Icon -->
-<div class={`spinner fixed top-1/2 left-1/2 z-60 ${hide ? 'block' : 'hidden'}`}></div>
+<div id="spinner" class={`spinner fixed top-1/2 left-1/2 z-60 ${hide ? 'block' : 'hidden'}`}></div>
 
 <!-- Modal con 'div' en lugar de 'dialog' por necesidad al descargar pdf desde la tabla-->
 <div
 	bind:this={modalRef}
-	class={`fixed ${hide ? 'top-9999' : ''} inset-0 z-50 h-full overflow-y-auto rounded-md bg-white p-0 shadow-lg ${showModal ? 'block' : 'hidden'}`}
+	class={`fixed ${hide ? 'top-9999' : ''} inset-0 z-50 h-full overflow-y-auto bg-white p-0 shadow-lg ${showModal ? 'block' : 'hidden'}`}
 >
-	<div class="flex justify-between ml-4">
+	<div class="flex justify-between px-4 pb-4 sticky top-0 bg-gray-100 z-70">
 		<button
 			onclick={ allowpdf ? closeModal : back}
 			class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine"
@@ -108,7 +149,6 @@
 			<div></div>
 		{/if}
 	</div>
-	<div class="w-full h-[1px] bg-gray-300 my-2 p-0"></div>
 	<div bind:this={modalContent}>
 		{#key showModal}
 			{@render children?.()}

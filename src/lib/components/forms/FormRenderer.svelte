@@ -12,7 +12,7 @@
 
     let localFormData = $state();
     let restrictions = $state({});
-    let { template, formData } = $props();
+    let { template, formData, isPreviewOnly = false } = $props();
 
     const dispatch = createEventDispatcher();
 
@@ -30,9 +30,6 @@
             }
             return [field.name, defaultValue];
         }))};
-        data.filler = "Bombero"
-        data.patient = "Paciente"
-        data.date = new Date();
         data.status = STATUSES.NEW;
         return data;
     }
@@ -41,6 +38,9 @@
         localFormData = defaultFormData(template);
     } else {
         localFormData = { ...formData };
+        localFormData.data.filler = formData.filler;
+        localFormData.data.patient = formData.patient;
+        localFormData.data.date = formData.date;
     }
 
     const fieldComponentMap = {
@@ -60,6 +60,14 @@
         }
         restrictions = handleFieldRestrictions(localFormData.data, template.restrictions);
         if (Object.keys(restrictions).length === 0 ) {
+            localFormData.filler = localFormData.data.filler;
+            delete localFormData.data.filler;
+
+            localFormData.patient = localFormData.data.patient;
+            delete localFormData.data.patient;
+
+            localFormData.date = localFormData.data.date;
+            delete localFormData.data.date;
             localFormData.status = completed ? STATUSES.FINISHED : STATUSES.DRAFT;
             dispatch('submit', localFormData);
         }
@@ -77,12 +85,14 @@
                 <Component {field}
                 fieldValue={localFormData.data[field.name]}
                 errorValue={restrictions[field.name]}
+                disabled={isPreviewOnly}
                 on:update={(e) => localFormData.data[field.name] = e.detail}/>
             {/if}
         {/each}
     </form>
 </div>
-<div class="flex justify-end sticky bottom-0 bg-gray-100">
+
+<div class="flex justify-end sticky bottom-0 bg-gray-100 z-70 pb-4 pr-4" hidden={isPreviewOnly}>
     <button type="button" form="template" onclick={() => handleSubmit(false)}
         class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-wine mr-3">
         Guardar

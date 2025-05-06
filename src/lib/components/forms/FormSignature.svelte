@@ -3,12 +3,14 @@
     import Button from "../Button.svelte";
     import FormTextarea from "$lib/components/forms/FormTextarea.svelte";
 	import { createEventDispatcher } from "svelte";
+	import FormError from "./FormError.svelte";
 
 	const dispatch = createEventDispatcher();
 	export let field;
-	export let dataURL = "";
+	export let fieldValue = "";
 	export let firmado = false;
 	export let errorValue;
+	export let disabled = false;
 
 
     let declaracion = ""; 
@@ -23,7 +25,11 @@
 		canvas.width = canvas.offsetWidth * ratio;
 		canvas.height = canvas.offsetHeight * ratio;
 		canvas.getContext('2d').scale(ratio, ratio);
-		signaturePad.clear(); // optional: clear existing content
+	}
+
+	function update(str) {
+		if (disabled) return;
+		dispatch("update", str);
 	}
 
     onMount(async () => {
@@ -32,17 +38,27 @@
 			backgroundColor: "rgba(1,1,1,.05)", 
 			penColor: "black"
 		});
-		window.addEventListener('resize', resizeCanvas);
   		resizeCanvas();
-		dispatch("update", "");
+		if (fieldValue) {
+			signaturePad.fromDataURL(fieldValue);
+			message = "Firmado."
+			firmado = true;
+			signaturePad.off();
+		}
+		else {
+			update("");
+		}
+
+		if (disabled) {
+			signaturePad.off();
+		}
 	});
 	function borrarFirma() {
 		signaturePad.clear();
-		dispatch("update", "");
+		update("");
 		firmado = false;
 		message = "";
-		signaturePad.on()
-		 
+		signaturePad.on();
 	}
 
 	function guardarFirma() {
@@ -50,10 +66,10 @@
 			message = "Es necesario firmar antes de guardar.";
 			firmado = false;
 		} else {
-			dataURL = signaturePad.toDataURL('image/png');
+			fieldValue = signaturePad.toDataURL('image/png');
 			message = "Firmado.";
 			firmado = true;
-			dispatch("update", dataURL);
+			update(fieldValue);
 			signaturePad.off() // bloquea el canvas caundo se guarda la firma
 
 		}
@@ -79,7 +95,7 @@
 	</div>
     <p class ="text-gray-700">{field.nombreLabel}</p>
 
-	<div class="flex space-x-2 mt-2">
+	<div class="flex space-x-2 mt-2" hidden={disabled}>
 		<Button 
 		class="mt-4 block cursor-pointer rounded bg-red-500 px-4 py-2 text-white transition hover:bg-red-600 mx-8"
 		 onclick={borrarFirma} 
@@ -91,7 +107,7 @@
 		 text="Guardar"
 		 />
 	</div>
-	<p class="text-red-500 whitespace-pre-line">{errorValue}</p>
+	<FormError bind:errorValue/>
 	{#if message}
 	<p class={firmado ? "text-green-500" : "text-red-500"}>{message}</p>
 	{/if}
