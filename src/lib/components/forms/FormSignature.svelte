@@ -86,7 +86,7 @@
 		 text="Borrar"
 		 />
 		 <Button 
-		class="mt-4 block cursor-pointer rounded bg-green-500 px-4 py-2 text-white transition hover:bg-green-600 mx-8"
+		class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine mx-8"
 		onclick={guardarFirma}
 		 text="Guardar"
 		 />

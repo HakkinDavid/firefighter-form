@@ -54,6 +54,10 @@
     };
 
     function handleSubmit(completed) {  
+        if (!completed){
+            localFormData.status = completed ? STATUSES.FINISHED : STATUSES.DRAFT;
+            dispatch('submit', localFormData);
+        }
         restrictions = handleFieldRestrictions(localFormData.data, template.restrictions);
         if (Object.keys(restrictions).length === 0 ) {
             localFormData.status = completed ? STATUSES.FINISHED : STATUSES.DRAFT;
@@ -66,7 +70,7 @@
 
 <div class="p-4">
     <h2><b>{template.formname}</b></h2>
-    <form class="grid grid-cols-3 gap-4" id="template" onsubmit={(e) => {e.preventDefault(); console.log(localFormData)}}>
+    <form class="grid gap-4 grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))]" id="template" onsubmit={(e) => {e.preventDefault(); console.log(localFormData)}}>
         {#each template.fields as field (field.name)}
             {#if fieldComponentMap[field.type]}
                 {@const Component = fieldComponentMap[field.type]}

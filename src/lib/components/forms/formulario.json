@@ -1,5 +1,6 @@
 {
     "formname": "Formulario de bomberos",
+    
     "fields": [
         {
             "name": "campoinput",

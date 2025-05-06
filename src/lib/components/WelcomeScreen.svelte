@@ -8,19 +8,15 @@
 
 <!-- Pantalla de bienvenida con logotipos y botón de inicio -->
 <div class="flex w-full h-full flex-col place-content-center justify-center px-4 py-8 text-center gap-8">
-    <div class="flex flex-row place-content-center justify-center gap-12">
-        <Icon type="Tijuana" />
-        <div class="flex flex-col text-lg">
-            <p>AYUNTAMIENTO DE TIJUANA, B.C.</p>
-            <p>DIRECCIÓN DE BOMBEROS TIJUANA</p>
-            <p>PARTE DE SERVICIO PREHOSPITALARIO</p>
-        </div>
-        <Icon type="Bomberos" />
-    </div>
+   
     <div class="flex mt-16 justify-center">
         <!-- Botón para iniciar sesión -->
-        <Button text="Entrar" onclick={() => {
+        <Button 
+        text="Entrar" onclick={() => {
             dispatch('login');
-        }} />
+        }} 
+        class="w-min cursor-pointer rounded-lg border border-black bg-wine text-white transition hover:bg-lightwine px-6 py-2"
+
+        />
     </div>
 </div>

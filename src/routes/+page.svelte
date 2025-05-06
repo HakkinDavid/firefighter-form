@@ -137,6 +137,7 @@
 </script>
 
 <Navbar/>
+<Header/>
 {#if !logged_in}
 	<!-- Pantalla de bienvenida que se muestra antes de iniciar sesión -->
 	<WelcomeScreen
@@ -145,7 +146,6 @@
 		}}
 	/>
 {:else}
-<Header></Header>
 	<!-- Lista de formularios cargados -->
 	<FormsList bind:forms bind:selectedFormIndex={selectedFormIndex} bind:showModal bind:modal on:delete={(e) => delete_form(e.detail.index)}/>
 	

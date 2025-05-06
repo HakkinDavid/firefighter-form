@@ -65,13 +65,13 @@
             {/if}
         {/each}
         <Button 
-        class="mt-4 block cursor-pointer rounded bg-red-500 px-4 py-2 text-white transition hover:bg-red-600 mx-8"
+        class="mt-4 block cursor-pointer rounded bg-red-500 h-10 w-20 text-white transition hover:bg-red-600"
         onclick={() => removeTuple(idx)} text="Eliminar"/>
     {/each}
     {#if !disabled}
     <div>
         <Button 
-        class="mt-4 block cursor-pointer rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600 mx-8"
+        class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine"
         onclick={addTuple} text="Añadir"/>
     </div>
     {/if}

@@ -4,7 +4,7 @@
         {
             "name": "label1",
             "type": "text",
-            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
             "text": "<h1>DATOS DEL SERVICIO</h1>"
         },
         {
@@ -12,6 +12,7 @@
             "label": "TURNO",
             "type": "input",
             "inputType": "text",
+            "className": "col-span-1",
             "options": ["Opcion1", "Opcion2"]
         },
         {
@@ -30,7 +31,7 @@
         {
             "name": "cronometria",
             "type": "text",
-            "className": "block text-gray-500 text-big font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
             "text": "<p>CRONOMETRIA (HORA)</p>"
         },
         {
@@ -78,7 +79,7 @@
         {
             "name": "servicioubi",
             "type": "text",
-            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
             "text": "<p>Ubicación del Servicio</p>"
         },
         {
@@ -127,6 +128,7 @@
             "name": "resultado",
             "label": "RESULTADO DEL DESPACHO",
             "type": "textarea",
+            "className": "col-span-2",
             "rows": 5
         },
         {
@@ -138,7 +140,7 @@
         {
             "name": "tripulacion",
             "type": "text",
-            "className": "block text-gray-500 text-big font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
             "text": "<p>TRIPULACION</p>"
         },
         {
@@ -162,13 +164,14 @@
         {
             "name": "pacienteinfo",
             "type": "text",
-            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
             "text": "<p>PACIENTE</p>"
         },
         {
             "name": "patient",
             "label": "NOMBRE DEL PACIENTE",
             "type": "input",
+            "className": "col-span-2",
             "inputType": "text"
         },
         {
@@ -189,13 +192,13 @@
         {
             "name": "serviciomedico",
             "label": "SERVICIO MEDICO",
-            "type": "input",
+            "type": "textarea",
             "inputType": "text"
         },
         {
             "name": "domiciliopaciente",
             "type": "text",
-            "className": "block text-gray-500 text-big font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
             "text": "<p>DOMICILIO DEL PACIENTE</p>"
         },
         {
@@ -244,30 +247,32 @@
             "name": "correopaciente",
             "label": "CORREO ELECTORNICO",
             "type": "input",
+            "className": "col-span-2",
             "inputType": "text"
         },
         {
             "name": "ocupacionpaciente",
             "label": "OCUPACIÓN",
-            "type": "input",
+            "type": "textarea",
             "inputType": "text"
         },
         {
             "name": "primeraeval",
             "type": "text",
-            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
             "text": "<p>EVALUACIÓN PRIMARIA</p>"
         },
         {
             "name": "motivo",
             "label": "MOTIVO DE LA ATENCIÓN",
-            "type": "input",
+            "type": "textarea",
             "inputType": "text"
         },
         {
             "name": "CONCIENCIA",
             "label": "NIVEL DE CONCIENCIA",
             "type": "input",
+            "className": "col-span-2",
             "inputType": "text"
         },
         {
@@ -334,12 +339,13 @@
             "name": "pos",
             "label": "POSICIÓN, ORIENTACIÓN (DÓNDE Y CÓMO SE ENCONTRÓ AL PACIENTE)",
             "type": "textarea",
+            "className": "col-span-2",
             "rows": 5
         },
         {
             "name": "segundaeval",
             "type": "text",
-            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
             "text": "<p>EVALUACIÓN SECUNDARIA</p>"
         },
         {
@@ -393,13 +399,14 @@
         {
             "name": "signosvitales",
             "type": "text",
-            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
             "text": "<p>SIGNOS VITALES</p>"
         },
         {
             "name": "campo",
             "label": "HISTORICO DE SIGNOS VITALES",
             "type": "tuple",
+            "className": "grid grid-cols-3 gap-3 col-span-full max-h-80 overflow-y-auto",
             "tuple": [
                 {
                     "name": "hora",
@@ -452,7 +459,7 @@
                 {
                     "name": "glasgow",
                     "type": "text",
-                    "className": "block text-gray-500 text-big font-bold mt-2 mb-2",
+                    "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
                     "text": "<p>GLASGOW</p>"
                 },
                 {
@@ -462,7 +469,7 @@
                     "inputType": "text"
                 },
                 {
-                    "name": "msignovitales",
+                    "name": "osignovitales",
                     "label": "O",
                     "type": "input",
                     "inputType": "text"
@@ -491,13 +498,14 @@
         {
             "name": "semiologia",
             "type": "text",
-            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
             "text": "<p>SEMIOLOGIA DEL DOLOR</p>"
         },
         {
             "name": "aparicion",
             "label": "APARICIÓN",
             "type": "input",
+            "className": "col-span-2",
             "inputType": "text"
         },
         {
@@ -539,7 +547,7 @@
         {
             "name": "sampler",
             "type": "text",
-            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
             "text": "<p>SAMPLER</p>"
         },
         {
@@ -587,13 +595,13 @@
         {
             "name": "tratamiento",
             "type": "text",
-            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
             "text": "<p>TRATAMIENTO</p>"
         },
         {
             "name": "manejovia",
             "type": "text",
-            "className": "block text-gray-500 text-big font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
             "text": "<p>MANEJO DE VÍA AEREA</p>"
         },
         {
@@ -620,7 +628,7 @@
         {
             "name": "intubacion",
             "type": "text",
-            "className": "block text-gray-500 text-sm font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
             "text": "<p>INTUBACIÓN</p>"
         },
         {
@@ -657,7 +665,7 @@
         {
             "name": "asistenciaventilatoria",
             "type": "text",
-            "className": "block text-gray-500 text-sm font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
             "text": "<p>ASISTENCIA VENTILATORIA</p>"
         },
         {
@@ -701,7 +709,7 @@
         {
             "name": "decompresionpleural",
             "type": "text",
-            "className": "block text-gray-500 text-sm font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
             "text": "<p>DECOMPLRESIÓN PLEURAL</p>"
         },
         {
@@ -720,7 +728,7 @@
         {
             "name": "controlhemarrogias",
             "type": "text",
-            "className": "block text-gray-500 text-sm font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
             "text": "<p>CONTROL DE HEMARRAGIAS</p>"
         },
         {
@@ -739,7 +747,7 @@
         {
             "name": "acessocirculatoria",
             "type": "text",
-            "className": "block text-gray-500 text-sm font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
             "text": "<p>ACCESO CIRCULATORIO</p>"
         },
         {
@@ -784,7 +792,7 @@
         {
             "name": "intervenciones",
             "type": "text",
-            "className": "block text-gray-500 text-sm font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
             "text": "<p>INTERVENCIONES</p>"
         },
         {
@@ -819,6 +827,7 @@
             "name": "medicamentotupla",
             "label": "MEDICAMENTOS",
             "type": "tuple",
+            "className": "grid grid-cols-3 gap-3 col-span-2 max-h-80 overflow-y-auto",
             "tuple": [
                 {
                     "name": "horameds",
@@ -827,7 +836,7 @@
                     "inputType": "time"
                 },
                 {
-                    "name": "medicamentos",
+                    "name": "medicamentostup",
                     "label": "MEDICAMENTO",
                     "type": "input",
                     "inputType": "text"
@@ -849,7 +858,7 @@
         {
             "name": "terapiaelectrica",
             "type": "text",
-            "className": "block text-gray-500 text-sm font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
             "text": "<p>TERAPIA ELÉCTRICA</p>"
         },
         {
@@ -886,13 +895,14 @@
         {
             "name": "resultados",
             "type": "text",
-            "className": "block text-gray-700 text-big font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
             "text": "<p>RESULTADOS</p>"
         },
         {
             "name": "resultadosignovitales",
             "label": "RESUMEN DE SIGNOS VITALES DE SEGUIMIENTO AL TRASLADO",
             "type": "tuple",
+            "className": "grid grid-cols-3 gap-3 col-span-full max-h-80 overflow-y-auto",
             "tuple": [
                 {
                     "name": "reshora",
@@ -945,7 +955,7 @@
                 {
                     "name": "resglasgow",
                     "type": "text",
-                    "className": "block text-gray-500 text-big font-bold mt-2 mb-2",
+                    "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
                     "text": "<p>GLASGOW</p>"
                 },
                 {
@@ -955,7 +965,7 @@
                     "inputType": "text"
                 },
                 {
-                    "name": "resmsignovitales",
+                    "name": "resosignovitales",
                     "label": "O",
                     "type": "input",
                     "inputType": "text"
@@ -977,7 +987,7 @@
         {
             "name": "resultadoemergencia",
             "type": "text",
-            "className": "block text-gray-500 text-big font-bold mt-2 mb-2",
+            "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
             "text": "<p>RESULTADO DE LA EMERGENCIA</p>"
         },
         {
@@ -1027,7 +1037,15 @@
             "nombreLabel": "Firma del paciente",
             "declaracion": "Declaró que no aceptó las recomendaciones  del personal de la ambulancia o vehículo de primer contacto de bomberos tijuana en cuanto al (tratamiento) y o traslado a un hospital, por lo que eximo a la dirección de bomberos tijuana y a dichas personas de toda responsabilidad que pudiera derivar al haberse respetado y cumplido mi decisión.",
             "type": "signature",
-            "className": "mt-6" 
+            "className": "col-span-2 mt-6" 
+        },
+        {
+            "name": "firmaBomberoAtencion",
+            "label": "",
+            "nombreLabel": "Firma del Bombero",
+            "declaracion": "", 
+            "type": "signature",
+            "className": "col-span-2 mt-6" 
         },
         {
             "name": "filler",
@@ -1036,20 +1054,12 @@
             "inputType": "text"
         },
         {
-            "name": "firmaBomberoAtencion",
-            "label": "",
-            "nombreLabel": "Firma del Bombero",
-            "declaracion": "", 
-            "type": "signature",
-            "className": "mt-6" 
-        },
-        {
             "name": "firmapacienteconcentimiento",
             "label": "CONSENTIMIENTO INFORMADO",
             "nombreLabel": "Firma del paciente",
             "declaracion": "Declaró haber recibido oportunamente información completa y adecuada sobre mi cuadro clínico y los procedimientos diagnósticos y/o terapéuticos qué se realizarán los riesgos que esto pueda presentar y las alternativas disponibles.  A si mismo. Declaró haber comprendido la información proporcionada y que he tenido la oportunidad de fórmula mis preguntas y dudas.  Las que han sido contestadas y aclaradas a mi entera satisfacción por lo anteriormente expuesto  Declaró mi consentimiento para ser sometido al tratamiento y a las acciones que el equipo  paramédico considere necesarias en caso de surgir situaciones no esperadas o complicaciones, es expresado en forma libre e informada.",
             "type": "signature",
-            "className": "mt-6" 
+            "className": "col-span-2 mt-6" 
         },
         {
             "name": "firmaBomberoConcentimiento",
@@ -1057,7 +1067,7 @@
             "nombreLabel": "Firma del Bombero",
             "declaracion": "", 
             "type": "signature",
-            "className": "mt-6" 
+            "className": "col-span-2 mt-6" 
         }
     ],
 
@@ -1083,7 +1093,8 @@
                 {"name": "maquinista", "message": "El maquinista es obligatorio"},
                 {"name": "CONCIENCIA", "message": "El nivel de conciencia es obligatorio"},                
                 {"name": "campo", "subname": "hora", "message": "La hora de los signos vitales es obligatoria"},
-                {"name": "resultadoemergenciacheckbox", "message": "El resultado de la emergencia es obligatorio"}
+                {"name": "resultadoemergenciacheckbox", "message": "El resultado de la emergencia es obligatorio"},
+                {"name": "filler", "message": "El nombre del bombero que firma es obligatorio"}
 
      
             ],
