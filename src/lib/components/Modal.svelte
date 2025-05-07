@@ -25,6 +25,7 @@
 		overlay.style.zIndex = '60';
 		spinner.style.display = 'block';
 
+
 		const canvas = await html2canvas(modalContent, {
 			scrollY: -window.scrollY, //captura el contenido completo sin depender del scroll
 			windowHeight: modalContent.scrollHeight //ajusta la altura para capturar todo

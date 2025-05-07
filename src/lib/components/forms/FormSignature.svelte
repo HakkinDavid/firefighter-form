@@ -39,11 +39,12 @@
 			penColor: "black"
 		});
   		resizeCanvas();
+		signaturePad.clear();
 		if (fieldValue) {
 			signaturePad.fromDataURL(fieldValue);
 			message = "Firmado."
 			firmado = true;
-			signaturePad.off();
+			//signaturePad.off();
 		}
 		else {
 			update("");
@@ -87,11 +88,18 @@
     <p class ="text-gray-700">{field.declaracion}</p>
 
 	<div class="border border-gray-600 rounded-md overflow-hidden canvas-wrapper">
+		{#if disabled}
+		<img src = {fieldValue} alt="Firma" class="w-full h-full" />
+		{:else}
 		<canvas
 			bind:this={canvas}
 			width="600"
 			height="200"
 		></canvas>
+
+		{/if}
+		
+		
 	</div>
     <p class ="text-gray-700">{field.nombreLabel}</p>
 
@@ -109,7 +117,7 @@
 	</div>
 	<FormError bind:errorValue/>
 	{#if message}
-	<p class={firmado ? "text-green-500" : "text-red-500"}>{message}</p>
+	<p class={firmado ? "text-green-500" : "text-red-500"}>{message} </p>
 	{/if}
 
 
