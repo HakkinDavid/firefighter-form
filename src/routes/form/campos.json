@@ -266,6 +266,7 @@
             "name": "motivo",
             "label": "MOTIVO DE LA ATENCIÓN",
             "type": "textarea",
+            "className": "col-span-2",
             "inputType": "text"
         },
         {
@@ -608,7 +609,7 @@
             "name": "aspiracion",
             "label": "ASPIRACION",
             "type": "multiple",
-            "inputType": "checkbox",
+            "inputType": "radio",
             "options": ["SI", "NO"]
         },
         {
@@ -659,7 +660,7 @@
             "name": "sri",
             "label": "SRI",
             "type": "multiple",
-            "inputType": "checkbox",
+            "inputType": "radio",
             "options": ["NO", "SI"]
         },
         {
@@ -798,29 +799,29 @@
         {
             "name": "controlcervical",
             "label": "CONTROL CERVICAL",
-            "type": "input",
-            "inputType": "text",
+            "type": "multiple",
+            "inputType": "radio",
             "options": ["NO", "SI"]
         },
         {
             "name": "inmovilizacion",
             "label": "INMOVILIZACIÓN DE EXTREMIDADES",
-            "type": "input",
-            "inputType": "text",
+            "type": "multiple",
+            "inputType": "radio",
             "options": ["NO", "SI"]
         },
         {
             "name": "empaquetamiento",
             "label": "EMPAQUETAMIENTO",
-            "type": "input",
-            "inputType": "text",
+            "type": "multiple",
+            "inputType": "radio",
             "options": ["NO", "SI"]
         },
         {
             "name": "curacion",
             "label": "CURACIÓN/VENDAJE",
-            "type": "input",
-            "inputType": "text",
+            "type": "multiple",
+            "inputType": "radio",
             "options": ["NO", "SI"]
         },
         {
@@ -994,7 +995,7 @@
             "name": "resultadoemergenciacheckbox",
             "label": "RESULTADO DE LA EMERGENCIA",
             "type": "multiple",
-            "inputType": "checkbox",
+            "inputType": "radio",
             "options": ["NO AMERITA", "TRASLADO", "SE NIEGA", "CADAVER EN EL LUGAR"]
         },
         {
@@ -1026,7 +1027,7 @@
             "name": "prioridadfinal",
             "label": "PRIORIDAD FINAL",
             "type": "multiple",
-            "inputType": "checkbox",
+            "inputType": "radio",
             "options": ["VERDE", "AMARILLA", "ROJA", "NEGRA"]
         },
 

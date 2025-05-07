@@ -57,6 +57,9 @@
         if (!completed){
             localFormData.status = completed ? STATUSES.FINISHED : STATUSES.DRAFT;
             dispatch('submit', localFormData);
+            localFormData.filler = localFormData.data.filler;
+            localFormData.patient = localFormData.data.patient;
+            localFormData.date = localFormData.data.date;
         }
         restrictions = handleFieldRestrictions(localFormData.data, template.restrictions);
         if (Object.keys(restrictions).length === 0 ) {

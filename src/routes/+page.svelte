@@ -18,7 +18,6 @@
 
 	import { CapacitorSQLite, SQLiteConnection, SQLiteDBConnection } from '@capacitor-community/sqlite';
 	import { STATUSES } from '$lib/Dictionary.svelte';
-	import Header from '$lib/components/Header.svelte';
 
 	let showModal = $state(false);
 	let forms = $state([]);
@@ -137,7 +136,6 @@
 </script>
 
 <Navbar/>
-<Header/>
 {#if !logged_in}
 	<!-- Pantalla de bienvenida que se muestra antes de iniciar sesión -->
 	<WelcomeScreen
