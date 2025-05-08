@@ -23,6 +23,13 @@
             "options": ["Central de Bomberos", "Estación 1", "Estación 2", "Estación 3", "Estación 4"]
         },
         {
+            "name": "campounidad",
+            "label": "UNIDAD",
+            "type": "input",
+            "inputType": "text",
+            "options": ["Maquina", "Ambulancia 1", "Ambulancia 2", "Ambulancia 3", "Ambulancia 4"]
+        },
+        {
             "name": "date",
             "label": "FECHA",
             "type": "input",
@@ -38,7 +45,8 @@
             "name": "camposervicio",
             "label": "TIPO DE SERVICIO",
             "type": "input",
-            "inputType": "text"
+            "inputType": "text",
+            "options": ["Servicio X", "Servicio 1", "Servicio 2", "Servicio 3"]
         },
         {
             "name": "campollamada",
@@ -192,8 +200,9 @@
         {
             "name": "serviciomedico",
             "label": "SERVICIO MEDICO",
-            "type": "textarea",
-            "inputType": "text"
+            "type": "input",
+            "inputType": "text",
+            "options": ["Opcion 1", "Opcion 2", "Opcion 3", "otro"]
         },
         {
             "name": "domiciliopaciente",
@@ -273,14 +282,16 @@
             "name": "CONCIENCIA",
             "label": "NIVEL DE CONCIENCIA",
             "type": "input",
-            "className": "col-span-2",
-            "inputType": "text"
+            "className": "col-span-1",
+            "inputType": "text",
+            "options": ["ALERTA", "DOLOR", "NINGUNO"]
         },
         {
             "name": "prioridad",
             "label": "PRIORIDAD INICIAL",
-            "type": "input",
-            "inputType": "text"
+            "type": "multiple",
+            "inputType": "radio",
+            "options": ["VERDE", "AMARILLA", "ROJA", "NEGRA"]
         },
         {
             "name": "viaaerea",
@@ -353,13 +364,15 @@
             "name": "pupilader",
             "label": "PUPILA DERECHA",
             "type": "input",
-            "inputType": "text"
+            "inputType": "text",
+            "options": ["Opcion 1", "Opcion 2", "Opcion 3"]
         },
         {
             "name": "pupilaizq",
             "label": "PUPILA IZQUIERDA",
             "type": "input",
-            "inputType": "text"
+            "inputType": "text",
+            "options": ["Opcion 1", "Opcion 2", "Opcion 3"]
         },
         {
             "name": "neurologicos",
@@ -370,14 +383,16 @@
         {
             "name": "pulmonderecho",
             "label":"AUSCULTACIÓN PULMÓN DERECHO",
-             "type": "textarea",
-            "rows": 5
+            "type": "input",
+            "inputType": "text",
+            "options": ["Ventilado", "No ventilado"]
         },
         {
             "name": "pulmonizq",
             "label":"AUSCULTACIÓN PULMÓN IZQUIERDO",
-             "type": "textarea",
-            "rows": 5
+            "type": "input",
+            "inputType": "text",
+            "options": ["Ventilado", "No ventilado"]
         },
         {
             "name": "corazon",
@@ -616,7 +631,7 @@
             "name": "manejoviaaeriacheck",
             "label": "MANEJO DE VÍA AEREA",
             "type": "multiple",
-            "inputType": "checkbox",
+            "inputType": "radio",
             "options": ["NO NECESITÓ", "MANUAL", "MECÁNICO", "TRANSTTRAQUEAL"]
         },
         {
@@ -858,40 +873,43 @@
         },
         {
             "name": "terapiaelectrica",
-            "type": "text",
-            "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
-            "text": "<p>TERAPIA ELÉCTRICA</p>"
-        },
-        {
-            "name": "terapiaelectricacheckbox",
-            "label": "TIPO DE SOLUCIÓN",
-            "type": "multiple",
-            "inputType": "checkbox",
-            "options": ["DESFIBRILACIÓN", "CARDIOVERSIÓN", "MARCAPASOS TRANSCUTANEO"]
-        },
-        {
-            "name": "descargas",
-            "label": "DESCARGAS",
-            "type": "input",
-            "inputType": "number"
-        },
-        {
-            "name": "joules",
-            "label": "JOULES",
-            "type": "input",
-            "inputType": "number"
-        },
-        {
-            "name": "ma",
-            "label": "mA",
-            "type": "input",
-            "inputType": "number"
-        },
-        {
-            "name": "frecuenciaterapiaelectrica",
-            "label": "FRECUENCIA",
-            "type": "input",
-            "inputType": "number"
+            "label": "TERAPIA ELÉCTRICA",
+            "type": "tuple",
+            "className": "grid grid-cols-3 gap-3 col-span-full max-h-80 overflow-y-auto",
+            "tuple": [
+                {
+                    "name": "terapiaelectricacheckbox",
+                    "label": "TIPO DE SOLUCIÓN",
+                    "type": "multiple",
+                    "inputType": "radio",
+                    "options": ["DESFIBRILACIÓN", "CARDIOVERSIÓN", "MARCAPASOS TRANSCUTANEO"]
+                },
+                {
+                    "name": "descargas",
+                    "label": "DESCARGAS",
+                    "type": "input",
+                    "inputType": "number"
+                },
+                {
+                    "name": "joules",
+                    "label": "JOULES",
+                    "type": "input",
+                    "inputType": "number"
+                },
+                {
+                    "name": "ma",
+                    "label": "mA",
+                    "type": "input",
+                    "inputType": "number"
+                },
+                {
+                    "name": "frecuenciaterapiaelectrica",
+                    "label": "FRECUENCIA",
+                    "type": "input",
+                    "inputType": "number"
+                }
+                
+            ]
         },
         {
             "name": "resultados",
@@ -1002,7 +1020,7 @@
             "name": "trasladomultiple",
             "label": "TRASLADO",
             "type": "multiple",
-            "inputType": "checkbox",
+            "inputType": "radio",
             "options": ["HOSPITAL", "DOMICILIO", "HELICOPTERO", "AMBULANCIA"]
         },
         {
@@ -1013,13 +1031,13 @@
         },
         {
             "name": "foliorecepcion",
-            "label": "FOLIO RECEPCIÓN",
+            "label": "FOLIO MEDICO",
             "type": "input",
             "inputType": "text"
         },
         {
             "name": "medico",
-            "label": "MÉDICO QUE RECIBE",
+            "label": "MÉDICO RESPONSABLE",
             "type": "input",
             "inputType": "text"
         },
@@ -1041,20 +1059,6 @@
             "className": "col-span-2 mt-6" 
         },
         {
-            "name": "firmaBomberoAtencion",
-            "label": "",
-            "nombreLabel": "Firma del Bombero",
-            "declaracion": "", 
-            "type": "signature",
-            "className": "col-span-2 mt-6" 
-        },
-        {
-            "name": "filler",
-            "label": "NOMBRE DEL BOMBERO",
-            "type": "input",
-            "inputType": "text"
-        },
-        {
             "name": "firmapacienteconcentimiento",
             "label": "CONSENTIMIENTO INFORMADO",
             "nombreLabel": "Firma del paciente",
@@ -1063,12 +1067,44 @@
             "className": "col-span-2 mt-6" 
         },
         {
-            "name": "firmaBomberoConcentimiento",
+            "name": "alternate",
+            "label": "NOMBRE",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "parentesco",
+            "label": "PARENTESCO",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "firmaRecibe",
             "label": "",
-            "nombreLabel": "Firma del Bombero",
+            "nombreLabel": "Firma de quien recibe",
             "declaracion": "", 
             "type": "signature",
             "className": "col-span-2 mt-6" 
+        },
+        {
+            "name": "nombreRecibe",
+            "label": "NOMBRE DE QUIEN RECIBE",
+            "type": "input",
+            "inputType": "text"
+        },
+        {
+            "name": "firmaBomberoAtencion",
+            "label": "",
+            "nombreLabel": "Firma del Responsable de la Atención",
+            "declaracion": "", 
+            "type": "signature",
+            "className": "col-span-2 mt-6" 
+        },
+        {
+            "name": "filler",
+            "label": "NOMBRE DEL RESPONSABLE DE LA ATENCIÓN",
+            "type": "input",
+            "inputType": "text"
         }
     ],
 
@@ -1078,7 +1114,7 @@
                 {"name": "firmaBomberoAtencion", "message": "La firma es obligatoria"},
                 {"name": "firmaPacienteAtencion", "message": "La firma es obligatoria"},
                 {"name": "firmapacienteconcentimiento", "message": "La firma es obligatoria"},
-                {"name": "firmaBomberoConcentimiento", "message": "La firma es obligatoria"},
+                {"name": "firmaRecibe", "message": "La firma es obligatoria"},
                 {"name": "patient", "message": "El nombre del paciente es obligatorio"},
                 {"name": "date", "message": "La fecha es obligatoria"},
                 {"name": "campoturno", "message": "El turno es obligatorio"},
