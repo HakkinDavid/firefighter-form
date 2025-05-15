@@ -14,7 +14,10 @@
             "label": "Campo Select",
             "type": "select",
             "options": ["Algo 1a", "Algo 2b"],
-            "className": "col-span-2"
+            "className": "col-span-2",
+            "display_on": {
+                "notEmpty": [{"name": "campoinput"}]
+            }
         },
         {
             "name": "campotextarea",

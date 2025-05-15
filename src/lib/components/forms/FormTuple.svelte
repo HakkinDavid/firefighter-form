@@ -9,10 +9,12 @@
 	import FormTuple from "./FormTuple.svelte";
 	import Button from "../Button.svelte";
 	import FormError from "./FormError.svelte";
+	import { handleDisplay } from "./RestrictionHandler";
     export let field;
     export let fieldValue = [];
     export let errorValue;
     export let disabled = false;
+    export let localFormData;
 
     const dispatch = createEventDispatcher();
 
@@ -52,13 +54,18 @@
         multiple: FormMultipleOption,
         text: FormText
     };
+
+    function shouldDisplay(field, idx) {
+        if (!field.display_on) return true;
+        return handleDisplay(localFormData.data, field.display_on, idx);
+    }
 </script>
 
 <div class={field.className}>
     <p class="block text-charcoal-gray text-sm font-bold mb-2 col-span-full sticky top-0 bg-white z-50 h-min">{field.label}</p>
     {#each fieldValue as tuple, idx}
         {#each field.tuple as subfield}
-            {#if fieldComponentMap[subfield.type]}
+            {#if fieldComponentMap[subfield.type] && shouldDisplay(subfield, idx)}
                 <svelte:component this={fieldComponentMap[subfield.type]} field={subfield} disabled={disabled}
                 fieldValue={tuple[subfield.name]} fieldIdx={idx}
                 errorValue={errorValue?.[idx]?.[subfield.name] || ''}

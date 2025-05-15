@@ -76,3 +76,23 @@ export function handleFieldRestrictions(data, restrictions){
     }
     return fieldErrors;
 };
+
+export function handleDisplay(data, restrictions, idx=null){
+    // Por cada restricción
+    for (const [key, items] of Object.entries(restrictions)) {
+        for (const field of items) {
+            // Sí se trata de algún campo en una tupla
+            if (field.subname && Array.isArray(data[field.name])) {
+                const fieldValue = data[field.name][idx][field.subname];
+                const passed = handleRestriction(fieldValue, data, key, field.value);
+                
+                if (!passed) return false
+                // Sí es un campo a nivel global
+            } else {
+                const passed = handleRestriction(data[field.name], data, key, field.value);
+                if (!passed) return false;
+            }
+        }
+    }
+    return true;
+};

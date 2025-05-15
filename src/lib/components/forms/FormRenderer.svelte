@@ -8,7 +8,7 @@
 	import FormTuple from "./FormTuple.svelte";
 	import { createEventDispatcher } from "svelte";
 	import { STATUSES } from "$lib/Dictionary.svelte";
-    import { handleFieldRestrictions } from "./RestrictionHandler";
+    import { handleFieldRestrictions, handleDisplay } from "./RestrictionHandler";
 
     let localFormData = $state();
     let restrictions = $state({});
@@ -16,19 +16,23 @@
 
     const dispatch = createEventDispatcher();
 
+    const fieldDataMap = (field) => {
+        let defaultValue;
+        if (field.multiple || field.type === 'tuple' || (field.type === 'multiple' && field.inputType === 'checkbox')) {
+            defaultValue = [];
+        } else if (field.inputType === 'checkbox') {
+            defaultValue = false;
+        } else {
+            defaultValue = "";
+        }
+        return defaultValue;
+    }
+
     function defaultFormData(template) {
         const data = {data: Object.fromEntries(template.fields
             .filter(field => field.type !== 'text')
             .map(field => {
-            let defaultValue;
-            if (field.multiple || field.type === 'tuple' || (field.type === 'multiple' && field.inputType === 'checkbox')) {
-                defaultValue = [];
-            } else if (field.inputType === 'checkbox') {
-                defaultValue = false;
-            } else {
-                defaultValue = "";
-            }
-            return [field.name, defaultValue];
+            return [field.name, fieldDataMap(field)];
         }))};
         data.status = STATUSES.NEW;
         return data;
@@ -75,6 +79,11 @@
             dispatch('submit', localFormData);
         }
     }
+    // Adicionalmente se debería borrar el contenido si un elemento pasa a no mostrarse.
+    function shouldDisplay(field) {
+        if (!field.display_on) return true;
+        return handleDisplay(localFormData.data, field.display_on);
+    }
 
     export { formData, localFormData };
 </script>
@@ -83,12 +92,13 @@
     <h2><b>{template.formname}</b></h2>
     <form class="grid gap-4 grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))]" id="template" onsubmit={(e) => {e.preventDefault(); console.log(localFormData)}}>
         {#each template.fields as field (field.name)}
-            {#if fieldComponentMap[field.type]}
+            {#if fieldComponentMap[field.type] && shouldDisplay(field)}
                 {@const Component = fieldComponentMap[field.type]}
                 <Component {field}
                 fieldValue={localFormData.data[field.name]}
                 errorValue={restrictions[field.name]}
                 disabled={isPreviewOnly}
+                localFormData={localFormData}
                 on:update={(e) => localFormData.data[field.name] = e.detail}/>
             {/if}
         {/each}
