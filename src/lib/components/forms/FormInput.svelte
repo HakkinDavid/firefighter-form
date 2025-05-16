@@ -7,6 +7,7 @@
     export let fieldIdx = "";
     export let errorValue;
     export let disabled = false;
+    export let options;
     let fieldName = field.name + fieldIdx;
     let suggestions = [];
     let tempValue;
@@ -16,8 +17,8 @@
 	function handleInput(event) {
         const { value, checked } = event.target;
 
-        if (field.options && value.length > 0) {
-            suggestions = field.options.filter((option) =>
+        if (options && value.length > 0) {
+            suggestions = options.filter((option) =>
                 option.toLowerCase().includes(value.toLowerCase())
             ).slice(0,5);
         } else {
@@ -55,7 +56,7 @@
 
     function toggleDropdown() {
         if (suggestions.length === 0) {
-            suggestions = field.options;
+            suggestions = options;
         } else {
             suggestions = [];
         }
@@ -71,11 +72,11 @@
         <div class="relative w-full">
             <input id={fieldName} name={fieldName} type={field.inputType} value={field.multiple ? tempValue : fieldValue}
                 on:input={handleInput} on:keydown={handleKeyDown} disabled={disabled} autocomplete="off" class="mt-1 block w-full"/>
-            {#if field.options}
+            {#if options}
                 <button type="button" class="absolute inset-y-0 right-2 flex items-center" on:click={toggleDropdown}>▼</button>
             {/if}
             <!-- Autocomplete -->
-            {#if field.options && !disabled}
+            {#if options && !disabled}
                 <ul class="absolute w-full z-10 mt-2 bg-white max-h-60 overflow-y-auto">
                 {#each suggestions as suggestion}
                     <li class="flex justify-between items-center cursor-pointer border border-gray-400">

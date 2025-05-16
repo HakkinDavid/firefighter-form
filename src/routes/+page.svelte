@@ -8,7 +8,7 @@
 	import { onMount } from 'svelte';
 	import FormRenderer from '$lib/components/forms/FormRenderer.svelte';
 	//import formulario from '../lib/components/forms/formulario.json';
-	import formulario from './form/campos.json'
+	import formulario from './form/formulario.json'
 	import Modal from '../lib/components/Modal.svelte';
 	import PdfPreview from '$lib/components/PdfPreview.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';

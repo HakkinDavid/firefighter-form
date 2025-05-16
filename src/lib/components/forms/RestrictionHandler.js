@@ -77,7 +77,7 @@ export function handleFieldRestrictions(data, restrictions){
     return fieldErrors;
 };
 
-export function handleDisplay(data, restrictions, idx=null){
+export function verifyRestrictions(data, restrictions, idx=null){
     // Por cada restricción
     for (const [key, items] of Object.entries(restrictions)) {
         for (const field of items) {

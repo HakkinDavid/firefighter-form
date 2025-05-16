@@ -9,12 +9,13 @@
 	import FormTuple from "./FormTuple.svelte";
 	import Button from "../Button.svelte";
 	import FormError from "./FormError.svelte";
-	import { handleDisplay } from "./RestrictionHandler";
+	import { verifyRestrictions } from "./RestrictionHandler";
     export let field;
     export let fieldValue = [];
     export let errorValue;
     export let disabled = false;
     export let localFormData;
+    export let options;
 
     const dispatch = createEventDispatcher();
 
@@ -57,7 +58,7 @@
 
     function shouldDisplay(field, idx) {
         if (!field.display_on) return true;
-        return handleDisplay(localFormData.data, field.display_on, idx);
+        return verifyRestrictions(localFormData.data, field.display_on, idx);
     }
 </script>
 
@@ -69,6 +70,7 @@
                 <svelte:component this={fieldComponentMap[subfield.type]} field={subfield} disabled={disabled}
                 fieldValue={tuple[subfield.name]} fieldIdx={idx}
                 errorValue={errorValue?.[idx]?.[subfield.name] || ''}
+                options={options[subfield.name]}
                 on:update={(e) => updateField(idx, subfield.name, e.detail)}/>
             {/if}
         {/each}

@@ -6,6 +6,7 @@
     export let fieldIdx = "";
     export let errorValue;
     export let disabled = false;
+    export let options = [];
     let fieldName = field.name +  fieldIdx;
     let inputClass = "mt-1 block w-full";
 
@@ -20,7 +21,7 @@
     <label class="block text-charcoal-gray text-sm font-bold mb-2 mt-auto" for={fieldName}>{field.label}</label>
     <select id={fieldName} name={fieldName} value={fieldValue} on:input={handleInput} disabled={disabled} class={inputClass}>
         <option value="">Seleccione una opción</option>
-        {#each field.options as option}
+        {#each options as option}
             <option value={option}>{option}</option>
         {/each}
     </select>

@@ -8,7 +8,8 @@
 	import FormTuple from "./FormTuple.svelte";
 	import { createEventDispatcher } from "svelte";
 	import { STATUSES } from "$lib/Dictionary.svelte";
-    import { handleFieldRestrictions, handleDisplay } from "./RestrictionHandler";
+    import { handleFieldRestrictions, verifyRestrictions } from "./RestrictionHandler";
+	import { derived } from "svelte/store";
 
     let localFormData = $state();
     let restrictions = $state({});
@@ -82,8 +83,42 @@
     // Adicionalmente se debería borrar el contenido si un elemento pasa a no mostrarse.
     function shouldDisplay(field) {
         if (!field.display_on) return true;
-        return handleDisplay(localFormData.data, field.display_on);
+        return verifyRestrictions(localFormData.data, field.display_on);
     }
+
+    // Derivar las opciones directamente de localFormData
+    // Nota: Al cambiar las opciones, no se borra el contenido si no se encuentra la opción en "options"
+    const options = $derived.by(() => {
+        const result = {};
+
+        const setOption = (name, requires, opts, fallback = null) => {
+            if (!requires) {
+                opts[name] = fallback ?? null;
+                return;
+            }
+            for (const criterion of requires) {
+                if (verifyRestrictions(localFormData.data, criterion)) {
+                    opts[name] = criterion.filter;
+                    return;
+                }
+            }
+            opts[name] = fallback ?? null;
+        };
+
+        for (const field of template.fields) {
+            if (field.type === 'tuple') {
+                result[field.name] = {};
+                for (const subfield of field.tuple ?? []) {
+                    if (subfield.options) {
+                        setOption(subfield.name, subfield.requires, result[field.name], subfield.options);
+                    }
+                }
+            } else if (field.options) {
+                setOption(field.name, field.requires, result, field.options);
+            }
+        }
+        return result;
+    });
 
     export { formData, localFormData };
 </script>
@@ -98,7 +133,8 @@
                 fieldValue={localFormData.data[field.name]}
                 errorValue={restrictions[field.name]}
                 disabled={isPreviewOnly}
-                localFormData={localFormData}
+                options={options[field.name]}
+                localFormData={field.type === "tuple" ? localFormData : null}
                 on:update={(e) => localFormData.data[field.name] = e.detail}/>
             {/if}
         {/each}
