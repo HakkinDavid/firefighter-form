@@ -10,28 +10,27 @@
 	import Button from "../Button.svelte";
 	import FormError from "./FormError.svelte";
 	import { verifyRestrictions } from "./RestrictionHandler";
-    export let field;
-    export let fieldValue = [];
-    export let errorValue;
-    export let disabled = false;
-    export let localFormData;
-    export let options;
+    let { field, fieldValue = [], errorValue, disabled = false, localFormData, options } = $props();
 
     const dispatch = createEventDispatcher();
+
+    const fieldDataMap = (field) => {
+        let defaultValue;
+        if (field.multiple || (field.type === 'multiple' && field.inputType === 'checkbox')) {
+            defaultValue = [];
+        } else if (field.inputType === 'checkbox') {
+            defaultValue = false;
+        } else {
+            defaultValue = "";
+        }
+        return defaultValue;
+    }
 
     function addTuple(){
         let formData = Object.fromEntries(field.tuple
                 .filter(field => field.type !== 'text')
                 .map(field => {
-            let defaultValue;
-            if (field.multiple || (field.type === 'multiple' && field.inputType === 'checkbox')) {
-                defaultValue = [];
-            } else if (field.inputType === 'checkbox') {
-                defaultValue = false;
-            } else {
-                defaultValue = "";
-            }
-            return [field.name, defaultValue];
+            return [field.name, fieldDataMap(field)];
         }));
         fieldValue.push(formData);
         dispatch('update', fieldValue);
@@ -60,6 +59,48 @@
         if (!field.display_on) return true;
         return verifyRestrictions(localFormData.data, field.display_on, idx);
     }
+    // Revisar esta implementación
+    $effect(() => {
+        let changed = false;
+        for (const [idx, tuple] of fieldValue.entries()) {
+            for (const subfield of field.tuple) {
+                const fieldName = subfield.name;
+                const value = fieldValue[idx][fieldName];
+                const visible = shouldDisplay(subfield, idx);
+                const opts = options[fieldName];
+
+                if (!visible) {
+                    const newValue = fieldDataMap(subfield);
+                    if (value !== newValue) {
+                        fieldValue[idx][fieldName] = newValue;
+                        changed = true;
+                    }
+                    continue;
+                }
+
+                if (!opts) continue;
+                // Inputs normales no se eliminan los datos
+                if ((subfield.type === 'input' && !subfield.multiple) || subfield.allowOwnOptions) 
+                    continue;
+                // Campos con múltiple selección se borran los datos no válidos
+                else if (subfield.multiple || (subfield.type === 'multiple' && subfield.inputType === 'checkbox')) {
+                    const filtered = value?.filter(v => opts.includes(v)) ?? [];
+                    if (JSON.stringify(filtered) !== JSON.stringify(value)) {
+                        fieldValue[idx][fieldName] = filtered;
+                        changed = true;
+                    }
+                } else {
+                    if (!opts.includes(value)) {
+                        const newValue = fieldDataMap(subfield);
+                        if (value !== newValue) {
+                            fieldValue[idx][fieldName] = newValue;
+                            changed = true;
+                        }
+                    }
+                }         
+            }
+        }
+    });
 </script>
 
 <div class={field.className}>
@@ -67,7 +108,8 @@
     {#each fieldValue as tuple, idx}
         {#each field.tuple as subfield}
             {#if fieldComponentMap[subfield.type] && shouldDisplay(subfield, idx)}
-                <svelte:component this={fieldComponentMap[subfield.type]} field={subfield} disabled={disabled}
+            {@const Component = fieldComponentMap[subfield.type]}
+                <Component field={subfield} disabled={disabled}
                 fieldValue={tuple[subfield.name]} fieldIdx={idx}
                 errorValue={errorValue?.[idx]?.[subfield.name] || ''}
                 options={options[subfield.name]}

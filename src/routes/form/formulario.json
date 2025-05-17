@@ -14,14 +14,7 @@
             "label": "Campo Select",
             "type": "select",
             "options": ["Algo 1a", "Algo 2b"],
-            "className": "col-span-2",
-            "display_on": {
-                "notEmpty": [{"name": "campoinput"}]
-            },
-            "requires": [
-                {"notEmpty": [{"name": "campotextarea"}], "filter": ["Algo 1a"]},
-                {"filter": ["Algo 2b"]}
-            ]
+            "className": "col-span-2"
         },
         {
             "name": "campotextarea",
@@ -88,7 +81,14 @@
                     "label": "Select Tupla texto demasiado grande, increiblemente grande",
                     "type": "select",
                     "options": ["Tupla 1", "Tupla 2"],
-                    "className":"col-span-1 flex flex-col"
+                    "className":"col-span-1 flex flex-col",
+                    "display_on": {
+                        "notEmpty": [{"name": "campo", "subname": "nombre_tupla"}]
+                    },
+                    "requires": [
+                        {"notEmpty": [{"name": "campotextarea"}], "filter": ["Tupla 1"]},
+                        {"filter": ["Tupla 2"]}
+                    ]
                 }
             ]
         },
@@ -104,7 +104,7 @@
         "notEmpty": [
             {"name": "campoinput", "message": "Llena este campo."}, 
             {"name": "campoautocomplete", "message":"Mensaje de error personalizado número 2."},
-            {"name": "campo", "subname": "nombre", "message": "Llena este campo."}
+            {"name": "campo", "subname": "nombre_tupla", "message": "Llena este campo."}
         ],
         "greaterThanSize": [
             {"name": "campoinput", "value": 10, "message": "Tamaño debe ser mayor a 10."},
@@ -112,7 +112,7 @@
         ],
         "lessThanSize": [
             {"name":"grupo", "value": 3, "message": "Dos campos o menos."},
-            {"name":"campo", "subname": "nombre", "value": 5, "message": "Solo valores menores a 5 letras."}
+            {"name":"campo", "subname": "nombre_tupla", "value": 5, "message": "Solo valores menores a 5 letras."}
         ],
         "greaterThanDate": [
             {"name":"campofecha", "value": 0, "message": "Fecha mayor a hoy."}

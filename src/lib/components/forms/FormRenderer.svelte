@@ -80,14 +80,52 @@
             dispatch('submit', localFormData);
         }
     }
-    // Adicionalmente se debería borrar el contenido si un elemento pasa a no mostrarse.
     function shouldDisplay(field) {
         if (!field.display_on) return true;
         return verifyRestrictions(localFormData.data, field.display_on);
     }
+    // Revisar esta implementación
+    $effect(() => {
+        let changed = false;
+        for (const field of template.fields) {
+            const fieldName = field.name;
+            const value = localFormData.data[fieldName];
+            const visible = shouldDisplay(field);
+            const opts = options[fieldName];
+
+            if (!visible) {
+                const newValue = fieldDataMap(field);
+                if (value !== newValue) {
+                    localFormData.data[fieldName] = newValue;
+                    changed = true;
+                }
+                continue;
+            }
+
+            if (!opts) continue;
+            // Inputs normales no se eliminan los datos, tuplas son manejadas distinto
+            if ((field.type === 'input' && !field.multiple) || field.type === 'tuple' || field.allowOwnOptions) 
+                continue;
+            // Campos con múltiple selección se borran los datos no válidos
+            else if (field.multiple || (field.type === 'multiple' && field.inputType === 'checkbox')) {
+                const filtered = value?.filter(v => opts.includes(v)) ?? [];
+                if (JSON.stringify(filtered) !== JSON.stringify(value)) {
+                    localFormData.data[fieldName] = filtered;
+                    changed = true;
+                }
+            } else {
+                if (!opts.includes(value)) {
+                    const newValue = fieldDataMap(field);
+                    if (value !== newValue) {
+                        localFormData.data[fieldName] = newValue;
+                        changed = true;
+                    }
+                }
+            }         
+        }
+    });
 
     // Derivar las opciones directamente de localFormData
-    // Nota: Al cambiar las opciones, no se borra el contenido si no se encuentra la opción en "options"
     const options = $derived.by(() => {
         const result = {};
 
