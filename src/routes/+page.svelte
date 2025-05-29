@@ -86,7 +86,7 @@
 		const dataJson = JSON.stringify(form.data);
 
 		// Si ya existe el formulario, se actualiza.
-		if (db.query('SELECT * FROM forms WHERE id = ?', [form.id]).values) {
+		if ((await db.query('SELECT * FROM forms WHERE id = ?', [form.id])).values.length > 0) {
 			await db.run(
 				`UPDATE forms SET date = ?, filler = ?, patient = ?, status = ?, data = ? WHERE id = ?`,
 				[form.date, form.filler, form.patient, form.status, dataJson, form.id]
@@ -99,7 +99,8 @@
 				`INSERT INTO forms (date, filler, patient, status, data) VALUES (?, ?, ?, ?, ?)`,
 				[form.date, form.filler, form.patient, form.status, dataJson]
 			);
-			await load_forms();
+			form.id = (await db.query("select seq from sqlite_sequence where name=\"forms\"")).values[0].seq;
+			forms.unshift(form);
 		}
 
 		showModal = false;
@@ -160,7 +161,7 @@
 					console.log("Guardando configuración: " + s);
 				break;
 			}
-			if (db.query('SELECT * FROM settings WHERE key = ?', [s]).values) {
+			if ((await db.query('SELECT * FROM settings WHERE key = ?', [s])).values.length > 0) {
 				await db.run(`UPDATE settings SET value = ? WHERE key = ?`, [settings[s], s]);
 			}
 			else {

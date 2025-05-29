@@ -65,7 +65,7 @@
             localFormData.status = completed ? FORM_STATUSES.FINISHED : FORM_STATUSES.DRAFT;
             localFormData.filler = localFormData.data.filler ?? "No especificado";
             localFormData.patient = localFormData.data.patient ?? "No especificado";
-            localFormData.date = localFormData.data.date ?? (new Date()).toLocaleDateString();
+            localFormData.date = localFormData.data.date ?? (new Date()).toISOString().slice(0, -1);
             dispatch('submit', localFormData);
         }
         restrictions = handleFieldRestrictions(localFormData.data, template.restrictions);
