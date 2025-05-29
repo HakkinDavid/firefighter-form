@@ -1,4 +1,6 @@
 <script>
+    import { createEventDispatcher } from "svelte";
+    const dispatch = createEventDispatcher();
     let {
         active = $bindable(false),
         close_button = $bindable(true),
@@ -9,7 +11,17 @@
     } = $props();
 
     function toggle () {
-        active = !active;
+        active ? close() : open();
+    }
+
+    function open () {
+        dispatch('open');
+        active = true;
+    }
+
+    function close () {
+        dispatch('close');
+        active = false;
     }
 </script>
 
@@ -17,7 +29,7 @@
 {#if active}
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_no_static_element_interactions -->
-    <div class="fixed inset-0 flex justify-center items-center z-[1000]" style="background-color: rgba(0,0,0,0.5)" onclick={toggle}>
+    <div class="fixed inset-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-[1000]" onclick={close}>
         <div class="bg-white rounded-xl p-6 w-11/12 max-w-md shadow-lg" onclick={e => e.stopPropagation()}>
             {#if header}
                 <h2 class="text-lg lg:text-xl font-bold mb-4">
@@ -42,7 +54,7 @@
                     {/if}
                     <button
                         class="bg-sand w-full text-white px-4 py-2 rounded hover:bg-sand cursor-pointer"
-                        onclick={toggle}
+                        onclick={close}
                         hidden={!close_button}
                     >
                         Cerrar

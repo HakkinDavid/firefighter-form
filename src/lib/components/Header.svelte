@@ -1,6 +1,11 @@
 <!-- Header.svelte -->
 <script>
     import Icon from "$lib/components/Icon.svelte";
+
+    let {
+        username = null,
+        admin_username = ""
+    } = $props();
 </script>
 
 <!-- Header -->
@@ -11,6 +16,11 @@
             <p>AYUNTAMIENTO DE TIJUANA, B.C.</p>
             <p>DIRECCIÓN DE BOMBEROS TIJUANA</p>
             <p>PARTE DE SERVICIO PREHOSPITALARIO</p>
+
+            {#if username}
+                <p>Usuario: {username}</p>
+            {/if}
+            <p>Supervisor: {admin_username}</p>
         </div>
         <Icon type="Bomberos" />
     </div>

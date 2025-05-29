@@ -7,7 +7,7 @@
     import FormSignature from "./FormSignature.svelte";
 	import FormTuple from "./FormTuple.svelte";
 	import { createEventDispatcher } from "svelte";
-	import { STATUSES } from "$lib/Dictionary.svelte";
+	import { FORM_STATUSES } from "$lib/Dictionary.svelte";
     import { handleFieldRestrictions, verifyRestrictions } from "./RestrictionHandler";
 	import { derived } from "svelte/store";
 
@@ -35,7 +35,7 @@
             .map(field => {
             return [field.name, fieldDataMap(field)];
         }))};
-        data.status = STATUSES.NEW;
+        data.status = FORM_STATUSES.NEW;
         return data;
     }
 
@@ -60,7 +60,7 @@
 
     function handleSubmit(completed) {  
         if (!completed){
-            localFormData.status = completed ? STATUSES.FINISHED : STATUSES.DRAFT;
+            localFormData.status = completed ? FORM_STATUSES.FINISHED : FORM_STATUSES.DRAFT;
             dispatch('submit', localFormData);
             localFormData.filler = localFormData.data.filler;
             localFormData.patient = localFormData.data.patient;
@@ -76,7 +76,7 @@
 
             localFormData.date = localFormData.data.date;
             delete localFormData.data.date;
-            localFormData.status = completed ? STATUSES.FINISHED : STATUSES.DRAFT;
+            localFormData.status = completed ? FORM_STATUSES.FINISHED : FORM_STATUSES.DRAFT;
             dispatch('submit', localFormData);
         }
     }

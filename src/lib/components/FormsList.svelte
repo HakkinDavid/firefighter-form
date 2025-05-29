@@ -3,7 +3,7 @@
 	import Icon from '$lib/components/Icon.svelte';
 	import { stopPropagation } from 'svelte/legacy';
 	import PDFModal from './PDFModal.svelte';
-	import { STATUSES, STATUSES_LOCALIZED } from '$lib/Dictionary.svelte';
+	import { FORM_STATUSES } from '$lib/Dictionary.svelte';
 	import { createEventDispatcher } from 'svelte';
 
 	let dispatch = createEventDispatcher();
@@ -57,10 +57,10 @@
 					<td>{form.date?.toLocaleString()}</td>
 					<td>{form.filler}</td>
 					<td>{form.patient}</td>
-					<td>{STATUSES_LOCALIZED[form.status]}</td>
+					<td>{FORM_STATUSES[form.status]}</td>
 					<!-- Iconos para acciones en cada fila -->
 					<td
-						colspan={form.status == STATUSES.DRAFT ? 2 : 1}
+						colspan={form.status == FORM_STATUSES.DRAFT ? 2 : 1}
 						onclick={(event) => {
 							deleteDoc(index);
 							event.stopPropagation();
@@ -68,7 +68,7 @@
 						class="place-items-center justify-center transition hover:bg-red-300"
 						><Icon type="Borrar" class="h-8 w-8 cursor-pointer" /></td
 					>
-					{#if form.status == STATUSES.FINISHED}
+					{#if form.status == FORM_STATUSES.FINISHED}
 						<td
 							onclick={(event) => {
 								generatePdf(index);
