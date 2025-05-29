@@ -86,7 +86,7 @@
 		const dataJson = JSON.stringify(form.data);
 
 		// Si ya existe el formulario, se actualiza.
-		if (!isNaN(form.id)) {
+		if (db.query('SELECT * FROM forms WHERE id = ?', [form.id]).values) {
 			await db.run(
 				`UPDATE forms SET date = ?, filler = ?, patient = ?, status = ?, data = ? WHERE id = ?`,
 				[form.date, form.filler, form.patient, form.status, dataJson, form.id]
@@ -95,12 +95,11 @@
 		}
 		// Si no, se crea.
 		else {
-			form.id = forms.length;
 			await db.run(
 				`INSERT INTO forms (date, filler, patient, status, data) VALUES (?, ?, ?, ?, ?)`,
 				[form.date, form.filler, form.patient, form.status, dataJson]
 			);
-			forms.unshift(form);
+			await load_forms();
 		}
 
 		showModal = false;

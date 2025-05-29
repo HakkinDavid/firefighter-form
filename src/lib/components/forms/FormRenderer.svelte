@@ -41,6 +41,8 @@
 
     if (formData === undefined) {
         localFormData = defaultFormData(template);
+        if (!isNaN(localFormData.id)) console.log("Se eliminará este extraño ID (" + localFormData.id + "), investigaremos de dónde sale.");
+        delete localFormData.id;
     } else {
         localFormData = { ...formData };
         localFormData.data.filler = formData.filler;
@@ -58,13 +60,13 @@
         text: FormText
     };
 
-    function handleSubmit(completed) {  
+    function handleSubmit(completed) {
         if (!completed){
             localFormData.status = completed ? FORM_STATUSES.FINISHED : FORM_STATUSES.DRAFT;
+            localFormData.filler = localFormData.data.filler ?? "No especificado";
+            localFormData.patient = localFormData.data.patient ?? "No especificado";
+            localFormData.date = localFormData.data.date ?? (new Date()).toLocaleDateString();
             dispatch('submit', localFormData);
-            localFormData.filler = localFormData.data.filler;
-            localFormData.patient = localFormData.data.patient;
-            localFormData.date = localFormData.data.date;
         }
         restrictions = handleFieldRestrictions(localFormData.data, template.restrictions);
         if (Object.keys(restrictions).length === 0 ) {
