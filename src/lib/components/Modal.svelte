@@ -1,208 +1,54 @@
 <script>
-	import jsPDF from 'jspdf';
-	import html2canvas from 'html2canvas-pro'; // Esto debería solucionar el error de oklch que mencionaba Brandon.
-	let { showModal = $bindable(), header, children, allowpdf, formRenderer = $bindable() } = $props();
-	let modalContent;
-	let hide = $state(false);
-	let modalRef;
+    let {
+        active = $bindable(false),
+        close_button = $bindable(true),
+        header,
+        body,
+        footer,
+        children
+    } = $props();
 
-	function openModal() {
-		showModal = true;
-	}
-
-	function closeModal() {
-		showModal = false;
-		if (modalRef) {
-			modalRef.scrollTop = 0;
-		}
-	}
-
-	async function generatePdf() {
-
-		const overlay = document.getElementById('overlay');
-		const spinner = document.getElementById('spinner');
-
-		overlay.style.zIndex = '60';
-		spinner.style.display = 'block';
-
-
-		const canvas = await html2canvas(modalContent, {
-			scrollY: -window.scrollY, //captura el contenido completo sin depender del scroll
-			windowHeight: modalContent.scrollHeight //ajusta la altura para capturar todo
-		});
-
-		const imgData = canvas.toDataURL('image/png');
-
-		const pdf = new jsPDF({
-			orientation: 'p', // "p" para vertical, "l" para horizontal
-			unit: 'mm',
-			format: 'a4'
-		});
-
-		/*
-		const imgWidth = 150;
-		const imgHeight = (canvas.height * imgWidth) / canvas.width; // Mantiene proporciones
-
-		const pageWidth = pdf.internal.pageSize.width;
-		const centerX = (pageWidth - imgWidth) / 2;
-
-		pdf.addImage(imgData, 'PNG', centerX, 10, imgWidth, imgHeight);
-		*/
-
-		const imgWidth = 160;
-		const pageHeight = 297; // A4 en mm
-		const imgHeight = (canvas.height * imgWidth) / canvas.width;
-		const pageImageHeight = (canvas.width / imgWidth) * pageHeight;
-
-		const totalPages = Math.ceil(canvas.height / pageImageHeight);
-
-		for (let i = 0; i < totalPages; i++) {
-			if (i > 0) pdf.addPage();
-
-			const sourceY = i * pageImageHeight;
-			const pageCanvas = document.createElement('canvas');
-			pageCanvas.width = canvas.width;
-			pageCanvas.height = pageImageHeight;
-
-			const context = pageCanvas.getContext('2d');
-			context.drawImage(
-				canvas,
-				0, sourceY, canvas.width, pageImageHeight,
-				0, 0, canvas.width, pageImageHeight
-			);
-
-			const pageImgData = pageCanvas.toDataURL('image/png');
-			const centerX = (pdf.internal.pageSize.width - imgWidth) / 2;
-
-			pdf.addImage(pageImgData, 'PNG', centerX, 10, imgWidth, (pageImageHeight * imgWidth) / canvas.width);
-		}
-		pdf.save(`archivo.pdf`);
-
-		overlay.style.zIndex = '50';
-		spinner.style.display = 'none';
-
-
-	}
-
-	async function callPdf() {
-		hide = true;
-		await openModal();
-		await generatePdf();
-		closeModal();
-		hide = false;
-	}
-
-	export { callPdf };
-
-	let showWarning = $state(false);
-
-	function confirm() {
-		showWarning = false;
-		closeModal();
-	}
-
-	function cancel() {
-		showWarning = false;
-	}
-
-	function back() {
-		if ( formRenderer.localFormData && formRenderer.formData && JSON.stringify($state.snapshot(formRenderer.localFormData)) !== JSON.stringify($state.snapshot(formRenderer.formData))) {
-			showWarning = true
-		} else {
-			closeModal();
-		}
-	}
+    function toggle () {
+        active = !active;
+    }
 </script>
 
-<!-- Overlay -->
-<div
-	id="overlay" class={`fixed inset-0 z-50 bg-black/30 ${showModal ? 'block' : 'hidden'}`}
-></div>
+<!-- Modal -->
+{#if active}
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="fixed inset-0 flex justify-center items-center z-[1000]" style="background-color: rgba(0,0,0,0.5)" onclick={toggle}>
+        <div class="bg-white rounded-xl p-6 w-11/12 max-w-md shadow-lg" onclick={e => e.stopPropagation()}>
+            {#if header}
+                <h2 class="text-lg lg:text-xl font-bold mb-4">
+                    {@render header()}
+                </h2>
+            {/if}
+            {#if body}
+                <p class="text-black text-sm lg:text-md text-justify space-y-">
+                    {@render body()}
+                </p>
+            {/if}
+            {#if footer}
+                <div class="mt-4 text-xs lg:text-sm text-black leading-relaxed">
+                    {@render footer()}
+                </div>
+            {/if}
 
-<!-- Loading Icon -->
-<div id="spinner" class={`spinner fixed top-1/2 left-1/2 z-60 ${hide ? 'block' : 'hidden'}`}></div>
-
-<!-- Modal con 'div' en lugar de 'dialog' por necesidad al descargar pdf desde la tabla-->
-<div
-	bind:this={modalRef}
-	class={`fixed ${hide ? 'top-9999' : ''} inset-0 z-50 h-full overflow-y-auto bg-white p-0 shadow-lg ${showModal ? 'block' : 'hidden'}`}
->
-	<div class="flex justify-between px-4 pb-4 sticky top-0 bg-gray-100 z-70">
-		<button
-			onclick={ allowpdf ? closeModal : back}
-			class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine"
-		>
-			Regresar
-		</button>
-
-		<div class="mt-4 block px-4 py-2 font-bold">
-			{@render header?.()}
-		</div>
-
-		{#if allowpdf}
-			<button
-				onclick={generatePdf}
-				class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-blue-600"
-			>
-				Descargar pdf
-			</button>
-		{:else}
-			<div></div>
-		{/if}
-	</div>
-	<div bind:this={modalContent}>
-		{#key showModal}
-			{@render children?.()}
-		{/key}
-	</div>
-</div>
-
-
-<!-- Mensaje de aviso -->
-{#if showWarning}
-  <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-    <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
-      <p class="mb-4 text-gray-800">¡Tiene cambios sin guardar!</p>
-      <div class="flex justify-end gap-2">
-        <button onclick={cancel} class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancelar</button>
-        <button onclick={confirm} class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Salir</button>
-      </div>
+            {#if close_button || children}
+                <div class="mt-6 flex flex-col gap-2 flex-grow place-content-end">
+                    {#if children}
+                        {@render children()}
+                    {/if}
+                    <button
+                        class="bg-sand w-full text-white px-4 py-2 rounded hover:bg-sand cursor-pointer"
+                        onclick={toggle}
+                        hidden={!close_button}
+                    >
+                        Cerrar
+                    </button>
+                </div>
+            {/if}
+        </div>
     </div>
-  </div>
 {/if}
-
-<style>
-	@keyframes zoom {
-		from {
-			transform: scale(0.95);
-		}
-		to {
-			transform: scale(1);
-		}
-	}
-
-	.modal {
-		animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-		max-height: 90%;
-		overflow-y: auto;
-	}
-
-	.spinner {
-		border: 4px solid #f3f3f3;
-		border-top: 4px solid #3498db;
-		border-radius: 50%;
-		width: 30px;
-		height: 30px;
-		animation: spin 1s linear infinite;
-		margin: auto;
-	}
-
-	@keyframes spin {
-		0% {
-			transform: rotate(0deg);
-		}
-		100% {
-			transform: rotate(360deg);
-		}
-	}
-</style>

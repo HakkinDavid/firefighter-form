@@ -9,7 +9,7 @@
 	import FormRenderer from '$lib/components/forms/FormRenderer.svelte';
 	//import formulario from '../lib/components/forms/formulario.json';
 	import formulario from './form/formulario.json'
-	import Modal from '../lib/components/Modal.svelte';
+	import PDFModal from '../lib/components/PDFModal.svelte';
 	import PdfPreview from '$lib/components/PdfPreview.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
@@ -23,7 +23,7 @@
 	let forms = $state([]);
 	let selectedFormIndex = $state(null);
 	let logged_in = $state(false);
-	let modal = $state(undefined);
+	let pdfModal = $state(undefined);
 	let formRenderer = $state(undefined);
 	
 	const almacenamiento_formularios = 'firefighter_forms_db';
@@ -145,7 +145,7 @@
 	/>
 {:else}
 	<!-- Lista de formularios cargados -->
-	<FormsList bind:forms bind:selectedFormIndex={selectedFormIndex} bind:showModal bind:modal on:delete={(e) => delete_form(e.detail.index)}/>
+	<FormsList bind:forms bind:selectedFormIndex={selectedFormIndex} bind:showModal bind:pdfModal on:delete={(e) => delete_form(e.detail.index)}/>
 	
 	<div class="flex w-full place-items-center justify-center">
 		<!-- Botón para añadir un formulario -->
@@ -159,7 +159,7 @@
 		/>
 	</div>
 
-	<Modal bind:showModal allowpdf={!isNaN(selectedFormIndex) && forms[selectedFormIndex] && forms[selectedFormIndex].status === STATUSES.FINISHED} bind:this={modal} bind:formRenderer>
+	<PDFModal bind:showModal allowpdf={!isNaN(selectedFormIndex) && forms[selectedFormIndex] && forms[selectedFormIndex].status === STATUSES.FINISHED} bind:this={pdfModal} bind:formRenderer>
 		{#snippet header()}
 			<h2 class="text-charcoal-gray">Nuevo Fomulario</h2>
 		{/snippet}
@@ -171,7 +171,7 @@
 				<FormRenderer template={formulario} bind:this={formRenderer} formData={forms[selectedFormIndex]} on:submit={(e) => save_form(e.detail)}/>
 			{/if}
 		{/snippet}
-	</Modal>
+	</PDFModal>
 {/if}
 <Footer/>
 

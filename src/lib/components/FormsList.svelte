@@ -2,7 +2,7 @@
 <script>
 	import Icon from '$lib/components/Icon.svelte';
 	import { stopPropagation } from 'svelte/legacy';
-	import Modal from './Modal.svelte';
+	import PDFModal from './PDFModal.svelte';
 	import { STATUSES, STATUSES_LOCALIZED } from '$lib/Dictionary.svelte';
 	import { createEventDispatcher } from 'svelte';
 
@@ -12,7 +12,7 @@
 		forms = $bindable([]), // Lista de formularios vinculada al estado
 		selectedFormIndex = $bindable(null),
 		showModal = $bindable(false),
-		modal
+		pdfModal
 	} = $props();
 
 	function deleteDoc(index) {
@@ -27,7 +27,7 @@
 
 	function generatePdf(index) {
 		selectedFormIndex = index;
-		modal.callPdf();
+		pdfModal.callPdf();
 	}
 
 </script>
