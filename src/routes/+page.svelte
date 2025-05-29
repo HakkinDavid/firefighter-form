@@ -161,7 +161,12 @@
 					console.log("Guardando configuración: " + s);
 				break;
 			}
-			await db.run(`UPDATE settings SET value = ? WHERE key = ?`, [settings[s], s]);
+			if (db.query('SELECT * FROM settings WHERE key = ?', [s]).values) {
+				await db.run(`UPDATE settings SET value = ? WHERE key = ?`, [settings[s], s]);
+			}
+			else {
+				await db.run(`INSERT INTO settings (key, value) VALUES (?, ?)`, [s, settings[s]]);
+			}
 		}
 	}
 
