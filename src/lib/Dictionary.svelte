@@ -35,7 +35,7 @@
         BAD_CREDENTIALS: new Definition("Credenciales incorrectas o insuficientes."),
         AUTHORIZED: new Definition("Ha recibido autorización."),
         CANNOT_AUTH: new Definition("Por el momento no se puede autorizar esta acción. Esto probablemente es un error."),
-        SIGN_ADMIN_UP: new Definition("Llama a tu supervisor para activar la aplicación.")
+        SIGN_ADMIN_UP: new Definition("Llame a su supervisor para activar la aplicación.")
     });
 
     const NOTICE_TYPES = new Dictionary({

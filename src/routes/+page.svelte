@@ -108,7 +108,7 @@
 
 	// Cargar los formularios desde memoria
 	async function load_forms() {
-		const res = await db.query('SELECT * FROM forms ORDER BY date DESC');
+		const res = await db.query('SELECT * FROM forms ORDER BY id DESC');
 		forms = res.values.map(f => ({
 			id: f.id,
 			date: f.date,
