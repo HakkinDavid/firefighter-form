@@ -19,7 +19,7 @@
 	import { App } from '@capacitor/app';
 
 	import { CapacitorSQLite, SQLiteConnection, SQLiteDBConnection } from '@capacitor-community/sqlite';
-	import { FORM_STATUSES } from '$lib/Dictionary.svelte';
+	import { FORM_STATUSES, NOTICE_TYPES, ACTION_STATUSES } from '$lib/Dictionary.svelte';
 
 	let showModal = $state(false);
 	let forms = $state([]);

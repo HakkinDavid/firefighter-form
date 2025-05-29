@@ -67,7 +67,7 @@
     }
 
     export function open (n_type, a_status) {
-        if (n_type) notice_type = n_type;
+        if (!isNaN(n_type)) notice_type = n_type;
         if (a_status) status = a_status;
         active = true;
         dispatch('open');
