@@ -25,7 +25,7 @@
 	let forms = $state([]);
 	let selectedFormIndex = $state(null);
 	let logged_in = $state(false);
-	let admin_modal_active = $state(false);
+	let admin_modal;
 	let admin_modal_reject = $state(() => {});
 	let admin_modal_authorize = $state(() => {});
 	let pdfModal = $state(undefined);
@@ -121,9 +121,12 @@
 
 	// Eliminar formulario seleccionado
 	async function delete_form(index) {
-		await db.run('DELETE FROM forms WHERE id = ?', [forms[index].id])
-		forms = forms.toSpliced(index, 1);
-		selectedFormIndex = null;
+		admin_modal_authorize = async () => {
+			await db.run('DELETE FROM forms WHERE id = ?', [forms[index].id])
+			forms = forms.toSpliced(index, 1);
+			selectedFormIndex = null;
+		}
+		admin_modal.open();
 	}
 
 	async function load_settings() {
@@ -190,10 +193,6 @@
 		return JSON.parse((await Preferences.get({ key: k })).value);
 	}
 
-	function open_admin_modal () {
-		admin_modal_active = true;
-	}
-
 	function reset_admin_modal () {
 		admin_modal_reject = () => {
 			console.warn("Se negó la autorización del supervisor sin algún comportamiento definido.");
@@ -208,6 +207,7 @@
 		db = await connect_db();
 		await init_db();
 		await load_settings();
+		reset_admin_modal();
 
 		if (settings && (!settings.admin_username || !settings.admin_password)) {
 			was_admin_registered = false;
@@ -219,7 +219,7 @@
 				}
 				App.exitApp();
 			}
-			open_admin_modal();
+			admin_modal.open(NOTICE_TYPES.INFORMATION, ACTION_STATUSES.SIGN_ADMIN_UP);
 		}
 
 		await load_forms();
@@ -272,7 +272,7 @@
 </div>
 {/if}
 
-<AdminModal bind:active={admin_modal_active} bind:settings on:registered={attempt_admin_register} on:authorized={admin_modal_authorize} on:cancel={admin_modal_reject} on:close={reset_admin_modal}/>
+<AdminModal bind:this={admin_modal} bind:settings on:registered={attempt_admin_register} on:authorized={admin_modal_authorize} on:cancel={admin_modal_reject} on:close={reset_admin_modal}/>
 
 <svelte:head>
 	<title>

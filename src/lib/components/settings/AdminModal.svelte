@@ -25,7 +25,7 @@
     } = $props();
 
     async function authorize () {
-          if (!admin_username || !admin_password || !is_input_valid) {
+          if (!admin_username || !admin_password) {
             notice_type = NOTICE_TYPES.ERROR;
             status = ACTION_STATUSES.REQUIRED;
           }
@@ -34,6 +34,7 @@
             status = ACTION_STATUSES.AUTHORIZED;
             dispatch('authorized');
             close(true);
+            console.log("Autorización concedida.");
           }
           else {
             notice_type = NOTICE_TYPES.ERROR;
@@ -62,11 +63,22 @@
         settings.admin_password = await bcrypt.hash(admin_password, 10);
         dispatch('registered');
         close(true);
+        console.log("Supervisor registrado.");
     }
 
-    function close (successfully = false) {
+    export function open (n_type, a_status) {
+        if (n_type) notice_type = n_type;
+        if (a_status) status = a_status;
+        active = true;
+        dispatch('open');
+    }
+
+    export function close (successfully = false) {
         active = false;
-        if (successfully !== true) dispatch('cancel');
+        if (successfully !== true) {
+            console.log("Autorización negada.");
+            dispatch('cancel');
+        }
         dispatch('close');
         reset();
     }
@@ -81,13 +93,6 @@
 
     let settings_is_undefined = $derived(!settings);
     let first_time_setup = $derived(settings && (!settings.admin_username || !settings.admin_password));
-
-    onMount(async () => {
-        if (first_time_setup) {
-            notice_type = NOTICE_TYPES.INFORMATION;
-            status = ACTION_STATUSES.SIGN_ADMIN_UP;
-        }
-    });
 </script>
 
 {#if settings_is_undefined}
