@@ -54,7 +54,7 @@
 					onclick={() => selectDoc(index)}
 				>
 					<td>{form.id}</td>
-					<td>{form.date.split("-").reverse().join("/")}</td>
+					<td>{form.date?.split("-").reverse().join("/")}</td>
 					<td>{form.filler}</td>
 					<td>{form.patient}</td>
 					<td>{FORM_STATUSES[form.status]}</td>

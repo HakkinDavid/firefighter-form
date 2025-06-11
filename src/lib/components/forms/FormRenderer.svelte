@@ -10,10 +10,16 @@
 	import { FORM_STATUSES } from "$lib/Dictionary.svelte";
     import { handleFieldRestrictions, verifyRestrictions } from "./RestrictionHandler";
 	import { derived } from "svelte/store";
+	import SectionSelector from "./SectionSelector.svelte";
 
     let localFormData = $state();
     let restrictions = $state({});
     let { template, formData, isPreviewOnly = false } = $props();
+
+    let section = $state("");
+    // Obtener todos los campos del objeto en un arreglo aplanado
+    const allFields = Object.values(template.fields).flat();
+    const fieldsToDisplay = $derived(template.fields[section] ?? allFields);
 
     const dispatch = createEventDispatcher();
 
@@ -30,7 +36,7 @@
     }
 
     function defaultFormData(template) {
-        const data = {data: Object.fromEntries(template.fields
+        const data = {data: Object.fromEntries(allFields
             .filter(field => field.type !== 'text')
             .map(field => {
             return [field.name, fieldDataMap(field)];
@@ -89,7 +95,7 @@
     // Revisar esta implementación
     $effect(() => {
         let changed = false;
-        for (const field of template.fields) {
+        for (const field of allFields) {
             const fieldName = field.name;
             const value = localFormData.data[fieldName];
             const visible = shouldDisplay(field);
@@ -145,7 +151,7 @@
             opts[name] = fallback ?? null;
         };
 
-        for (const field of template.fields) {
+        for (const field of allFields) {
             if (field.type === 'tuple') {
                 result[field.name] = {};
                 for (const subfield of field.tuple ?? []) {
@@ -163,10 +169,11 @@
     export { formData, localFormData };
 </script>
 
+<SectionSelector sections={Object.keys(template.fields)} bind:selected={section}/>
 <div class="p-4">
     <h2><b>{template.formname}</b></h2>
     <form class="grid gap-4 grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))]" id="template" onsubmit={(e) => {e.preventDefault(); console.log(localFormData)}}>
-        {#each template.fields as field (field.name)}
+        {#each fieldsToDisplay as field (field.name)}
             {#if fieldComponentMap[field.type] && shouldDisplay(field)}
                 {@const Component = fieldComponentMap[field.type]}
                 <Component {field}
@@ -181,7 +188,8 @@
     </form>
 </div>
 
-<div class="flex justify-end sticky bottom-0 bg-gray-100 z-70 pb-4 pr-4" hidden={isPreviewOnly}>
+<div class="h-16"></div>
+<div class="fixed bottom-0 left-0 w-full bg-gray-100 z-70 pb-4 pr-4 flex justify-end" hidden={isPreviewOnly}>
     <button type="button" form="template" onclick={() => handleSubmit(false)}
         class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-wine mr-3">
         Guardar

@@ -1,105 +1,103 @@
 {
-    "formname": "Formulario de bomberos",
-    
-    "fields": [
-        {
-            "name": "campoinput",
-            "label": "Campo Input",
-            "type": "input",
-            "inputType": "text",
-            "className":"col-span-1"
-        },
-        {
-            "name": "camposelect",
-            "label": "Campo Select",
-            "type": "select",
-            "options": ["Algo 1a", "Algo 2b"],
-            "className": "col-span-2"
-        },
-        {
-            "name": "campotextarea",
-            "label": "Campo Text area",
-            "type": "textarea",
-            "rows": 5,
-            "className":"col-span-2"
-        },
-        {
-            "name": "campodetexto",
-            "type": "text",
-            "className": "col-span-3",
-            "text": "<p>Campos tipo Autocomplete</p>"
-        },
-        {
-            "name": "campoautocomplete",
-            "label": "Campo Autocomplete",
-            "type": "input",
-            "inputType": "text",
-            "options": ["Opcion1", "Opcion2"],
-            "className":"col-span-1 flex flex-col"
-        },
-        {
-            "name": "campomultipleautocomplete",
-            "label": "Campo Autocomplete múltiple",
-            "type": "input",
-            "inputType": "text",
-            "multiple": true,
-            "options": ["Yes", "No", "Maybe"],
-            "allowOwnOptions": true,
-            "className":"col-span-1 flex flex-col"
-        },
-        {
-            "name": "grupo",
-            "label": "Opcion Multiple",
-            "type": "multiple",
-            "inputType": "checkbox",
-            "options": ["Opcion1", "Opcion2", "Opcion3"],
-            "className":"col-span-1 flex flex-col"
-        },
-        {
-            "name": "firma",
-            "label": "Firma",
-            "nombreLabel": "Firma del bombero/paciente",
-            "declaracion": "Declaracion",
-            "type": "signature",
-            "className": "col-span-2" 
-        },
-        {
-            "name": "campo",
-            "label": "Tupla",
-            "type": "tuple",
-            "className": "grid grid-cols-3 gap-3 col-span-2 max-h-80 overflow-y-auto",
-            "tuple": [
-                {
-                    "name": "nombre_tupla",
-                    "label": "Campo Input",
-                    "type": "input",
-                    "inputType": "text",
-                    "className":"col-span-1 flex flex-col"
-                },
-                {
-                    "name": "select_tupla",
-                    "label": "Select Tupla texto demasiado grande, increiblemente grande",
-                    "type": "select",
-                    "options": ["Tupla 1", "Tupla 2"],
-                    "className":"col-span-1 flex flex-col",
-                    "display_on": {
-                        "notEmpty": [{"name": "campo", "subname": "nombre_tupla"}]
+    "formname": "Formulario de pruebas",
+    "fields": {
+        "Campos básicos": [
+            {
+                "name": "campoinput",
+                "label": "Campo Input",
+                "type": "input",
+                "inputType": "text",
+                "className":"col-span-1"
+            },
+            {
+                "name": "camposelect",
+                "label": "Campo Select",
+                "type": "select",
+                "options": ["Algo 1a", "Algo 2b"],
+                "className": "col-span-2"
+            },
+            {
+                "name": "campotextarea",
+                "label": "Campo Text area",
+                "type": "textarea",
+                "rows": 5,
+                "className":"col-span-2"
+            },
+            {
+                "name": "grupo",
+                "label": "Opcion Multiple",
+                "type": "multiple",
+                "inputType": "checkbox",
+                "options": ["Opcion1", "Opcion2", "Opcion3"],
+                "className":"col-span-1 flex flex-col"
+            }
+        ],
+        "Campos Autocomplete": [
+            {
+                "name": "campodetexto",
+                "type": "text",
+                "className": "col-span-3",
+                "text": "<p>Campos tipo Autocomplete</p>"
+            },
+            {
+                "name": "campoautocomplete",
+                "label": "Campo Autocomplete",
+                "type": "input",
+                "inputType": "text",
+                "options": ["Opcion1", "Opcion2"],
+                "className":"col-span-1 flex flex-col"
+            },
+            {
+                "name": "campomultipleautocomplete",
+                "label": "Campo Autocomplete múltiple",
+                "type": "input",
+                "inputType": "text",
+                "multiple": true,
+                "options": ["Yes", "No", "Maybe"],
+                "allowOwnOptions": true,
+                "className":"col-span-1 flex flex-col"
+            }
+        ],
+        "Campos Especiales": [
+            {
+                "name": "firma",
+                "label": "Firma",
+                "nombreLabel": "Firma del bombero/paciente",
+                "declaracion": "Declaracion",
+                "type": "signature",
+                "className": "col-span-2" 
+            },
+            {
+                "name": "campo",
+                "label": "Tupla",
+                "type": "tuple",
+                "className": "grid grid-cols-3 gap-3 col-span-2 max-h-80 overflow-y-auto",
+                "tuple": [
+                    {
+                        "name": "nombre_tupla",
+                        "label": "Campo Input",
+                        "type": "input",
+                        "inputType": "text",
+                        "className":"col-span-1 flex flex-col"
                     },
-                    "requires": [
-                        {"notEmpty": [{"name": "campotextarea"}], "filter": ["Tupla 1"]},
-                        {"filter": ["Tupla 2"]}
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "campofecha",
-            "label": "Fecha",
-            "type": "input",
-            "inputType": "date",
-            "className":"col-span-1"
-        }
-    ],
+                    {
+                        "name": "select_tupla",
+                        "label": "Select Tupla texto demasiado grande, increiblemente grande",
+                        "type": "select",
+                        "options": ["Tupla 1", "Tupla 2"],
+                        "className":"col-span-1 flex flex-col",
+                        "display_on": {
+                            "notEmpty": [{"name": "campo", "subname": "nombre_tupla"}]
+                        },
+                        "requires": [
+                            {"notEmpty": [{"name": "campotextarea"}], "filter": ["Tupla 1"]},
+                            {"filter": ["Tupla 2"]}
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
     "restrictions": {
         "notEmpty": [
             {"name": "campoinput", "message": "Llena este campo."}, 
@@ -113,9 +111,6 @@
         "lessThanSize": [
             {"name":"grupo", "value": 3, "message": "Dos campos o menos."},
             {"name":"campo", "subname": "nombre_tupla", "value": 5, "message": "Solo valores menores a 5 letras."}
-        ],
-        "greaterThanDate": [
-            {"name":"campofecha", "value": 0, "message": "Fecha mayor a hoy."}
         ]
     }
 }

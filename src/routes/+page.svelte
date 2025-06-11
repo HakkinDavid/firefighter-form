@@ -7,7 +7,6 @@
 	import { Preferences } from '@capacitor/preferences';
 	import { onMount } from 'svelte';
 	import FormRenderer from '$lib/components/forms/FormRenderer.svelte';
-	//import formulario from '../lib/components/forms/formulario.json';
 	import formulario from './form/formulario.json'
 	import PDFModal from '../lib/components/PDFModal.svelte';
 	import AdminModal from '$lib/components/settings/AdminModal.svelte';
