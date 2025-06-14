@@ -1,6 +1,7 @@
 {
     "formname": "Formato de Registro de Atención Prehospitalaria",
-    "fields": [
+    "fields": {
+        "DATOS DEL SERVICIO":[
         {
             "name": "label1",
             "type": "text",
@@ -13,21 +14,22 @@
             "type": "input",
             "inputType": "text",
             "className": "col-span-1",
-            "options": ["Opcion1", "Opcion2"]
+            "options": ["TURNO 1", "TURNO 2", "TURNO 3"]
         },
         {
             "name": "campoestacion",
             "label": "ESTACION",
             "type": "input",
             "inputType": "text",
-            "options": ["Central de Bomberos", "Estación 1", "Estación 2", "Estación 3", "Estación 4"]
+            "options": ["CENTRAL DE BOMBEROS", "ESTACIÓN 1", "ESTACIÓN 2", "ESTACIÓN 3", "ESTACIÓN 4", "ESTACIÓN 5", "ESTACIÓN 6", "ESTACIÓN 7", "ESTACIÓN 8", "ESTACIÓN 9", "ESTACIÓN 10", "ESTACIÓN 11", "ESTACIÓN 12", "ESTACIÓN 13", "ESTACIÓN 14", "ESTACIÓN 15", "ESTACIÓN 16", "ESTACIÓN 17", "ESTACIÓN 18"]
         },
+
         {
             "name": "campounidad",
             "label": "UNIDAD",
             "type": "input",
             "inputType": "text",
-            "options": ["Maquina", "Ambulancia 1", "Ambulancia 2", "Ambulancia 3", "Ambulancia 4"]
+            "options": ["MAQUINA", "AMBULANCIA 1", "AMBULANCIA 2", "AMBULANCIA 3", "AMBULANCIA 4"]
         },
         {
             "name": "date",
@@ -46,7 +48,7 @@
             "label": "TIPO DE SERVICIO",
             "type": "input",
             "inputType": "text",
-            "options": ["Servicio X", "Servicio 1", "Servicio 2", "Servicio 3"]
+            "options": ["Trauma", "Enfermo", "Gineco Obstetrico"]
         },
         {
             "name": "campollamada",
@@ -168,7 +170,9 @@
             "label": "AUXILIARES",
             "type": "textarea",
             "rows": 5
-        },
+        }
+    ],
+    "DATOS DEL PACIENTE":[
         {
             "name": "pacienteinfo",
             "type": "text",
@@ -202,7 +206,8 @@
             "label": "SERVICIO MEDICO",
             "type": "input",
             "inputType": "text",
-            "options": ["Opcion 1", "Opcion 2", "Opcion 3", "otro"]
+            "options": ["ISSSTE", "ISSSTECALI", "HGR 1", "HGR 20", "HGR 7", "HG Tijuana", "HG Rosarito", "HG Tecate"],
+            "allowOwnOptions": true
         },
         {
             "name": "domiciliopaciente",
@@ -264,7 +269,9 @@
             "label": "OCUPACIÓN",
             "type": "textarea",
             "inputType": "text"
-        },
+        }
+    ],
+    "EVALUACIÓN PRIMARIA": [
         {
             "name": "primeraeval",
             "type": "text",
@@ -284,7 +291,7 @@
             "type": "input",
             "className": "col-span-1",
             "inputType": "text",
-            "options": ["ALERTA", "DOLOR", "NINGUNO"]
+            "options": ["ALERTA", "VERBAL", "DOLOR", "INCONSCIENTE"]
         },
         {
             "name": "prioridad",
@@ -297,55 +304,43 @@
             "name": "viaaerea",
             "label": "VÍA AÉREA",
             "type": "input",
-            "inputType": "text"
+            "inputType": "text",
+            "options": ["PERMEABLE", "COMPROMETIDA"]
         },
         {
             "name": "ventilacion",
             "label": "VENTILACION",
             "type": "input",
-            "inputType": "text"
-        },
-        {
-            "name": "calidadventilacion",
-            "label": "CALIDAD",
-            "type": "input",
-            "inputType": "text"
+            "inputType": "text",
+            "options": ["REGULAR", "IRREGULAR", "RAPIDA", "SUPERFICIAL", "APNEA"]
         },
         {
             "name": "pulsos",
             "label": "PULSOS",
             "type": "input",
-            "inputType": "text"
+            "inputType": "text",
+            "options": ["AUSENTE", "RADIAL", "CARDIACO"]
         },
         {
             "name": "calidadpulsos",
             "label": "CALIDAD",
             "type": "input",
-            "inputType": "text"
+            "inputType": "text",
+            "options": ["RAPIDO", "LENTO", "RITMICO", "ARRITMICO"]
         },
         {
-            "name": "ritmo",
-            "label": "RITMO",
+            "name": "piel",
+            "label": "PIEL",
             "type": "input",
-            "inputType": "text"
+            "inputType": "text",
+            "options": ["NORMAL", "PALIDA", "CIANOTICA"]
         },
         {
-            "name": "coloracion",
-            "label": "COLORACIÓN",
+            "name": "caracteristicaspiel",
+            "label": "CARACTERISTICAS",
             "type": "input",
-            "inputType": "text"
-        },
-        {
-            "name": "temp",
-            "label": "TEMPERATURA",
-            "type": "input",
-            "inputType": "text"
-        },
-        {
-            "name": "condicion",
-            "label": "CONDICION",
-            "type": "input",
-            "inputType": "text"
+            "inputType": "text",
+            "options": ["CALIENTE", "FRIA", "DIAFORESIS"]
         },
         {
             "name": "pos",
@@ -353,7 +348,9 @@
             "type": "textarea",
             "className": "col-span-2",
             "rows": 5
-        },
+        }
+    ],
+    "EVALUACIÓN SECUNDARIA": [
         {
             "name": "segundaeval",
             "type": "text",
@@ -365,34 +362,35 @@
             "label": "PUPILA DERECHA",
             "type": "input",
             "inputType": "text",
-            "options": ["Opcion 1", "Opcion 2", "Opcion 3"]
+            "options": ["ISOCORICA", "MIOTICA", "MIDRIATICA"]
         },
         {
             "name": "pupilaizq",
             "label": "PUPILA IZQUIERDA",
             "type": "input",
             "inputType": "text",
-            "options": ["Opcion 1", "Opcion 2", "Opcion 3"]
+            "options": ["ISOCORICA", "MIOTICA", "MIDRIATICA"]
         },
         {
-            "name": "neurologicos",
-            "label": "SIGNOS NEUROLÓGICOS",
-            "type": "textarea",
-            "rows": 5
+            "name": "glasgowmeasure",
+            "label": "GLASGOW",
+            "type": "input",
+            "inputType": "text",
+            "options": ["3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"]
         },
         {
             "name": "pulmonderecho",
             "label":"AUSCULTACIÓN PULMÓN DERECHO",
             "type": "input",
             "inputType": "text",
-            "options": ["Ventilado", "No ventilado"]
+            "options": ["NORMALES", "DISMINUIDOS", "AUSENTES"]
         },
         {
             "name": "pulmonizq",
             "label":"AUSCULTACIÓN PULMÓN IZQUIERDO",
             "type": "input",
             "inputType": "text",
-            "options": ["Ventilado", "No ventilado"]
+            "options": ["NORMALES", "DISMINUIDOS", "AUSENTES"]
         },
         {
             "name": "corazon",
@@ -509,7 +507,7 @@
             "label": "HALLAZGOS FISICOS",
             "type": "multiple",
             "inputType": "checkbox",
-            "options": ["DEFORMIDADES", "CONTUSIONES", "ABRASIONES", "PENETRACIONES", "QUEMADURAS", "LACERACIONES", "ABULSIONES/AMPUTACIONES", "EDEMA", "CREPITACIÓN", "ENFISEMA SUBCUTÁNEO", "DOLOR/HIPERSTESIA", "PARESTESIA", "ALTERACION A LA MOVILIDAD", "PARÁLISIS", "MOVIMIENTO PARADÓJICO"]
+            "options": ["DEFORMIDADES (D)", "CONTUSIONES (CO)", "ABRASIONES (A)", "PENETRACIONES (P)", "QUEMADURAS (Q)", "LACERACIONES (L)", "ABULSIONES/AMPUTACIONES (AB)", "EDEMA (E)", "CREPITACIÓN (CR)", "ENFISEMA SUBCUTÁNEO (ES)", "DOLOR/HIPERSTESIA (H)", "PARESTESIA (PT)", "ALTERACION A LA MOVILIDAD (AM)", "PARÁLISIS (AM)", "MOVIMIENTO PARADÓJICO (MP)"]
         },
         {
             "name": "semiologia",
@@ -573,17 +571,18 @@
             "rows": 5
         },
         {
-            "name": "medicamentos",
-            "label":"MEDICAMENTOS",
-             "type": "textarea",
-            "rows": 5
-        },
-        {
             "name": "alergias",
             "label":"ALERGIAS",
              "type": "textarea",
             "rows": 5
         },
+        {
+            "name": "medicamentos",
+            "label":"MEDICAMENTOS",
+             "type": "textarea",
+            "rows": 5
+        },
+        
         {
             "name": "padecimientos",
             "label":"PADECIMIENTOS",
@@ -607,7 +606,155 @@
             "label":"FACTORES DE RIESGO",
              "type": "textarea",
             "rows": 5
+        }
+    ],
+    "GINECOLÓGICO": [
+        {
+            "name": "gineco",
+            "type": "text",
+            "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
+            "text": "<p>GINECOLÓGICO</p>"
         },
+        {
+            "name": "gestas",
+            "label": "GESTA",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "para",
+            "label": "PARA",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "cesareas",
+            "label": "CESÁREAS",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "abortos",
+            "label": "ABORTOS",
+            "type": "input",
+            "inputType": "number"
+        }, 
+        {
+            "name": "semanasgestacion",
+            "label": "SEMANAS DE GESTACIÓN",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "fechaparto",
+            "label":"FECHA PROBABLE DE PARTO",
+             "type": "input",
+             "inputType": "date"
+        },
+        {
+            "name": "controlprenatal",
+            "label": "CONTROL PRENATAL",
+            "type": "multiple",
+            "inputType": "radio",
+            "options": ["SI", "NO"]
+        },
+        {
+            "name": "riesgo",
+            "label": " EMBARAZO ALTO RIESGO",
+            "type": "multiple",
+            "inputType": "radio",
+            "options": ["SI", "NO"]
+        },
+        {
+            "name": "horainiciocontracciones",
+            "label": "HORA DE INICIO DE CONTRACCIONES",
+            "type": "input",
+            "inputType": "time"
+        },
+        {
+            "name": "frecuenciacontracciones",
+            "label": "FRECUENCIA DE CONTRACCIONES (MINUTOS)",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "datospos",
+            "type": "text",
+            "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
+            "text": "<p>DATOS POSPARTO</p>"
+        },
+        {
+            "name": "horanacimiento",
+            "label": "HORA DE NACIMIENTO",
+            "type": "input",
+            "inputType": "time"
+        },
+        {
+            "name": "placenta",
+            "label": "PLACENTA EXPULSADA",
+            "type": "multiple",
+            "inputType": "radio",
+            "options": ["SI", "NO"]
+        },
+        {
+            "name": "datosproducto",
+            "label": "DATOS DEL PRODUCTO",
+            "type": "text",
+            "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
+            "text": "<p>DATOS DEL PRODUCTO</p>"
+        },
+        {
+            "name": "prodstatus",
+            "label": "PRODUCTO",
+            "type": "input",
+            "inputType": "text",
+            "options": ["VIVO", "MUERTO"]
+        },
+        {
+            "name": "prodsexo",
+            "label": "SEXO",
+            "type": "input",
+            "inputType": "text",
+            "options": ["FEMENINO", "MASCULINO"]
+        },
+        {
+            "name": "apgar",
+            "type": "text",
+            "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
+            "text": "<p>APGAR</p>"
+        },
+        {
+            "name": "apgar1",
+            "label": "1 MINUTO",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "apgar5",
+            "label": "5 MINUTOS",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "apgar10",
+            "label": "10 MINUTOS",
+            "type": "input",
+            "inputType": "number"
+        },
+        {
+            "name": "silverman",
+            "type": "text",
+            "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
+            "text": "<p>SILVERMAN</p>"
+        },
+        {
+            "name":"silv10",
+            "label": "10 MINUTOS",
+            "type": "input",
+            "inputType": "number"
+        }
+    ],
+    "TRATAMIENTO": [
         {
             "name": "tratamiento",
             "type": "text",
@@ -714,7 +861,7 @@
             "label": "OXIGENOTERAPIA",
             "type": "input",
             "inputType": "text",
-            "options": ["NO NECESITÓ", "PUNTAS NASALES", "MASCARILLA SIMPLE", "MASCARILLA CON RESERVORIO", "MICRONEBULIZADOR"]
+            "options": ["PUNTAS NASALES", "MASCARILLA SIMPLE", "MASCARILLA CON RESERVORIO", "NEBULIZADOR", "CPAP"]
         },
         {
             "name": "lpm",
@@ -727,6 +874,12 @@
             "type": "text",
             "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
             "text": "<p>DECOMPLRESIÓN PLEURAL</p>"
+        },
+        {
+            "name": "dp",            
+            "type": "multiple",
+            "inputType": "radio",
+            "options": ["NO", "SI"]
         },
         {
             "name": "hemitorax",
@@ -752,7 +905,7 @@
             "label": "CONTROL DE HEMARRAGIAS",
             "type": "input",
             "inputType": "text",
-            "options": ["NO NECESITÓ", "PRESIÓN DIRECTA", "PRESIÓN INDIRECTA","AGENTE COAGULANTE", "TORNIQUETE"]
+            "options": ["NO NECESITÓ", "PRESIÓN DIRECTA", "VENDAJE COMPRESIVO","AGENTE COAGULANTE", "EMPAQUE DE HERIDA", "TORNIQUETE", "AGENTE HEMOSTÁTICO"]
         },
         {
             "name": "horacolocacionhemarragias",
@@ -778,7 +931,7 @@
             "label": "ZONA DE COLOCACIÓN",
             "type": "input",
             "inputType": "text",
-            "options": ["MANO", "ANTERCOBITAL", "YUGULAR EXTERNO", "OTROS", "TIBIA", "HÚMERO", "ESTERNON"]
+            "options": ["MANO", "ANTERCOBITAL", "YUGULAR EXTERNO", "TIBIA PROXIMAL", "TIBIA DISTAL", "HÚMERO", "ESTERNON", "OTRO"]
         },
         {
             "name": "colocacionacessocirculatorio",
@@ -910,7 +1063,9 @@
                 }
                 
             ]
-        },
+        }
+    ],
+    "RESULTADOS": [
         {
             "name": "resultados",
             "type": "text",
@@ -1067,6 +1222,12 @@
             "className": "col-span-2 mt-6" 
         },
         {
+            "name": "testigotitulo",
+            "type": "text",
+            "className": "col-span-2 block text-gray-500 text-big font-bold mt-2 mb-2",
+            "text": "<p>TESTIGO</p>"
+        },
+        {
             "name": "alternate",
             "label": "NOMBRE",
             "type": "input",
@@ -1079,9 +1240,9 @@
             "inputType": "text"
         },
         {
-            "name": "firmaRecibe",
+            "name": "firmaTestigo",
             "label": "",
-            "nombreLabel": "Firma de quien recibe",
+            "nombreLabel": "Firma del testigo",
             "declaracion": "", 
             "type": "signature",
             "className": "col-span-2 mt-6" 
@@ -1093,9 +1254,9 @@
             "inputType": "text"
         },
         {
-            "name": "firmaBomberoAtencion",
+            "name": "firmaRecibe",
             "label": "",
-            "nombreLabel": "Firma del Responsable de la Atención",
+            "nombreLabel": "Firma de quien recibe",
             "declaracion": "", 
             "type": "signature",
             "className": "col-span-2 mt-6" 
@@ -1105,8 +1266,17 @@
             "label": "NOMBRE DEL RESPONSABLE DE LA ATENCIÓN",
             "type": "input",
             "inputType": "text"
+        },
+        {
+            "name": "firmaBomberoAtencion",
+            "label": "",
+            "nombreLabel": "Firma del Responsable de la Atención",
+            "declaracion": "", 
+            "type": "signature",
+            "className": "col-span-2 mt-6" 
         }
-    ],
+    ]
+},
 
     
         "restrictions": {
