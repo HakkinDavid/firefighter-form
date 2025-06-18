@@ -33,7 +33,7 @@
 	}
 </script>
 
-<div class={field.className}>
+<div class={`${field.className} overflow-x-scroll`}>
     <p class="block text-charcoal-gray text-sm font-bold mb-2">{field.label}</p>
 
     {#each options as option}

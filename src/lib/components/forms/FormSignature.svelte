@@ -33,12 +33,12 @@
 	}
 
     onMount(async () => {
+		resizeCanvas();
 		const { default: SignaturePad } = await import('signature_pad');
 		signaturePad = new SignaturePad(canvas, {
 			backgroundColor: "rgba(1,1,1,.05)", 
 			penColor: "black"
 		});
-  		resizeCanvas();
 		signaturePad.clear();
 		if (fieldValue) {
 			signaturePad.fromDataURL(fieldValue);
@@ -75,31 +75,22 @@
 
 		}
 	}
-
-
-
-
 </script>
 
 <div class={field.className}>
 	<p class="block text-gray-700 text-sm font-bold mb-2">{field.label}
 		<span class="text-red-500">*</span>
 	</p>
-    <p class ="text-gray-700">{field.declaracion}</p>
+    <p class="text-gray-700 overflow-auto">{field.declaracion}</p>
 
 	<div class="border border-gray-600 rounded-md overflow-hidden canvas-wrapper">
 		{#if disabled}
-		<img src = {fieldValue} alt="Firma" class="w-full h-full" />
+			<img src = {fieldValue} alt="Firma" class="w-full h-full" />
 		{:else}
-		<canvas
-			bind:this={canvas}
-			width="600"
-			height="200"
-		></canvas>
-
+			<canvas
+				bind:this={canvas}
+			></canvas>
 		{/if}
-		
-		
 	</div>
     <p class ="text-gray-700">{field.nombreLabel}</p>
 

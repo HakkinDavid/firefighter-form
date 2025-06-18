@@ -104,7 +104,7 @@
 </script>
 
 <div class={field.className}>
-    <p class="block text-charcoal-gray text-sm font-bold mb-2 col-span-full sticky top-0 bg-white z-50 h-min">{field.label}</p>
+    <p class="block text-charcoal-gray text-sm font-bold mb-2 col-span-full top-0 bg-white h-min">{field.label}</p>
     {#each fieldValue as tuple, idx}
         {#each field.tuple as subfield}
             {#if fieldComponentMap[subfield.type] && shouldDisplay(subfield, idx)}
