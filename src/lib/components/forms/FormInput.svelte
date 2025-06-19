@@ -75,7 +75,7 @@
             {#if options}
                 <button type="button" class="absolute inset-y-0 right-2 flex items-center" on:click={toggleDropdown}>▼</button>
             {/if}
-            {#if field.multiple && field.allowOwnOptions}
+            {#if !disabled && field.multiple && field.allowOwnOptions}
                 <button type="button" class="w-full border border-black bg-bronze text-white transition hover:bg-wine cursor-pointer" 
                     on:click={() => handleKeyDown({key: "Enter"})}>
                     +
@@ -108,5 +108,5 @@
         {/each}
         </ul>
     {/if}
-    <FormError bind:errorValue/>
+    <FormError errorValue={errorValue}/>
 </div>

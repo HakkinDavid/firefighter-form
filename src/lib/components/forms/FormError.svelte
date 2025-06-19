@@ -1,6 +1,6 @@
 <script>
     let {
-        errorValue = $bindable()
+        errorValue = ""
     } = $props();
 </script>
 {#if errorValue}
