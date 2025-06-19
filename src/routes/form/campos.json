@@ -916,7 +916,7 @@
         },
         {
             "name": "dispositivoav",
-            "label": "DISPOSITIVO",
+            "label": "Dispositivo",
             "type": "select",
             "options": ["Bolsa Válvula Mascarilla", "CPAP", "Ventilador mecánico"],
             "className":"col-span-1 col-start-1"
@@ -941,7 +941,7 @@
         },
         {
             "name": "oxigenoterapia",
-            "label": "OXIGENOTERAPIA",
+            "label": "Oxigenoterapia",
             "type": "input",
             "inputType": "text",
             "options": ["Puntas nasales", "Mascarilla simple", "Mascarilla con reservorio", "Nebulizador", "CPAP"]

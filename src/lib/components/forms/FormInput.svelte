@@ -33,7 +33,7 @@
 
     function handleKeyDown(event) {
         if (event.key === 'Enter' && field.multiple && field.allowOwnOptions) {
-            event.preventDefault();
+            if (event.preventDefault) event.preventDefault();
             fieldValue.push(tempValue);
             dispatch('update', fieldValue);
         }
@@ -71,10 +71,15 @@
     {:else}
         <div class="relative w-full">
             <input id={fieldName} name={fieldName} type={field.inputType} value={field.multiple ? tempValue : fieldValue} 
-                placeholder={field.allowOwnOptions ? "Presiona enter para añadir..." : ""}
                 on:input={handleInput} on:keydown={handleKeyDown} disabled={disabled} autocomplete="off" class="mt-1 block w-full"/>
             {#if options}
                 <button type="button" class="absolute inset-y-0 right-2 flex items-center" on:click={toggleDropdown}>▼</button>
+            {/if}
+            {#if field.multiple && field.allowOwnOptions}
+                <button type="button" class="w-full border border-black bg-bronze text-white transition hover:bg-wine cursor-pointer" 
+                    on:click={() => handleKeyDown({key: "Enter"})}>
+                    +
+                </button>
             {/if}
             <!-- Autocomplete -->
             {#if options && !disabled}
