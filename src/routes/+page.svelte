@@ -98,7 +98,7 @@
 				`INSERT INTO forms (date, filler, patient, status, data) VALUES (?, ?, ?, ?, ?)`,
 				[form.date, form.filler, form.patient, form.status, dataJson]
 			);
-			form.id = (await db.query("select seq from sqlite_sequence where name=\"forms\"")).values[0].seq;
+			// form.id = (await db.query("select seq from sqlite_sequence where name=\"forms\"")).values[0].seq;
 			forms.unshift(form);
 		}
 

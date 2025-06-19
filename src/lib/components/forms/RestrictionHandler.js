@@ -5,6 +5,10 @@ function handleRestriction(fieldValue, data, restriction, value){
     switch (restriction) {
         case "notEmpty":
             return fieldValue !== "" && fieldValue !== null && fieldValue !== undefined;
+        case "equalTo":
+            return fieldValue === value;
+        case "includes":
+            return Array.isArray(fieldValue) && fieldValue.includes(value);
         case "lessThan":
             return fieldValue < value;
         case "greaterThan":

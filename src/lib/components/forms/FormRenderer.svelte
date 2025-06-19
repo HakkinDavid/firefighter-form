@@ -92,6 +92,10 @@
         if (!field.display_on) return true;
         return verifyRestrictions(localFormData.data, field.display_on);
     }
+    // Útil para arreglos y objetos con distintas referencias a memoria.
+    function deepEqual(a, b) {
+        return JSON.stringify(a) === JSON.stringify(b);
+    }
     // Revisar esta implementación
     $effect(() => {
         let changed = false;
@@ -103,7 +107,7 @@
 
             if (!visible) {
                 const newValue = fieldDataMap(field);
-                if (value !== newValue) {
+                if (!deepEqual(value, newValue)) {
                     localFormData.data[fieldName] = newValue;
                     changed = true;
                 }
@@ -117,7 +121,7 @@
             // Campos con múltiple selección se borran los datos no válidos
             else if (field.multiple || (field.type === 'multiple' && field.inputType === 'checkbox')) {
                 const filtered = value?.filter(v => opts.includes(v)) ?? [];
-                if (JSON.stringify(filtered) !== JSON.stringify(value)) {
+                if (!deepEqual(filtered, value)) {
                     localFormData.data[fieldName] = filtered;
                     changed = true;
                 }

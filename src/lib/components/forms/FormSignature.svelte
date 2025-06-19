@@ -67,7 +67,7 @@
 			message = "Es necesario firmar antes de guardar.";
 			firmado = false;
 		} else {
-			fieldValue = signaturePad.toDataURL('image/png');
+			fieldValue = signaturePad.toDataURL('image/jpg');
 			message = "Firmado.";
 			firmado = true;
 			update(fieldValue);

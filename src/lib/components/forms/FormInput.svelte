@@ -70,14 +70,15 @@
             on:input={handleInput} disabled={disabled} autocomplete="off"/>
     {:else}
         <div class="relative w-full">
-            <input id={fieldName} name={fieldName} type={field.inputType} value={field.multiple ? tempValue : fieldValue}
+            <input id={fieldName} name={fieldName} type={field.inputType} value={field.multiple ? tempValue : fieldValue} 
+                placeholder={field.allowOwnOptions ? "Presiona enter para añadir..." : ""}
                 on:input={handleInput} on:keydown={handleKeyDown} disabled={disabled} autocomplete="off" class="mt-1 block w-full"/>
             {#if options}
                 <button type="button" class="absolute inset-y-0 right-2 flex items-center" on:click={toggleDropdown}>▼</button>
             {/if}
             <!-- Autocomplete -->
             {#if options && !disabled}
-                <ul class="absolute w-full z-10 mt-2 bg-white max-h-60 overflow-y-auto">
+                <ul class="absolute w-full z-10 bg-white max-h-60 overflow-y-auto">
                 {#each suggestions as suggestion}
                     <li class="flex justify-between items-center cursor-pointer border border-gray-400">
                         <Button onclick={() => handleSuggestion(suggestion)} text={suggestion} 
