@@ -3,8 +3,12 @@
 // Pueden añadir más restricciones aquí.
 function handleRestriction(fieldValue, data, restriction, value){
     switch (restriction) {
-        case "notEmpty":
-            return fieldValue !== "" && fieldValue !== null && fieldValue !== undefined;
+        case "notEmpty": {
+            if (value && data[value]) return true;
+            else return fieldValue !== "" && fieldValue !== null && fieldValue !== undefined;
+        }
+        case "isEmpty":
+            return fieldValue === "" || fieldValue === null || fieldValue === undefined;
         case "equalTo":
             return fieldValue === value;
         case "includes":

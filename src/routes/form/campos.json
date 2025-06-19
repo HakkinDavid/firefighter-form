@@ -1216,6 +1216,17 @@
             "inputType": "radio",
             "options": ["Verde", "Amarilla", "Roja", "Negra"],
             "className":"col-span-1"
+        },
+        {
+            "name": "firmaConsentimiento",
+            "label": "Consentimiento informado",
+            "nombreLabel": "Firma del paciente",
+            "declaracion": "Declaró haber recibido oportunamente información completa y adecuada sobre mi cuadro clínico y los procedimientos diagnósticos y/o terapéuticos qué se realizarán los riesgos que esto pueda presentar y las alternativas disponibles. A si mismo. Declaró haber comprendido la información proporcionada y que he tenido la oportunidad de fórmula mis preguntas y dudas. Las que han sido contestadas y aclaradas a mi entera satisfacción por lo anteriormente expuesto. Declaró mi consentimiento para ser sometido al tratamiento y a las acciones que el equipo TUM/TAMP considere necesarias en caso de surgir situaciones no esperadas o complicaciones, es expresado en forma libre e informada.",
+            "type": "signature",
+            "className": "col-span-full max-w-[600px] w-full mx-auto",
+            "display_on": {
+                "isEmpty": [{"name": "firmaPacienteAtencion"}]
+            }
         },        
         {
             "name": "firmaPacienteAtencion",
@@ -1223,15 +1234,10 @@
             "nombreLabel": "Firma del paciente",
             "declaracion": "Declaró que no aceptó las recomendaciones del personal de la ambulancia o vehículo de primer contacto de bomberos tijuana en cuanto al (tratamiento) y o traslado a un hospital, por lo que eximo a la dirección de bomberos tijuana y a dichas personas de toda responsabilidad que pudiera derivar al haberse respetado y cumplido mi decisión.",
             "type": "signature",
-            "className": "col-span-full max-w-[600px] w-full mx-auto"
-        },
-        {
-            "name": "firmapacienteconcentimiento",
-            "label": "Consentimiento informado",
-            "nombreLabel": "Firma del paciente",
-            "declaracion": "Declaró haber recibido oportunamente información completa y adecuada sobre mi cuadro clínico y los procedimientos diagnósticos y/o terapéuticos qué se realizarán los riesgos que esto pueda presentar y las alternativas disponibles. A si mismo. Declaró haber comprendido la información proporcionada y que he tenido la oportunidad de fórmula mis preguntas y dudas. Las que han sido contestadas y aclaradas a mi entera satisfacción por lo anteriormente expuesto  Declaró mi consentimiento para ser sometido al tratamiento y a las acciones que el equipo paramédico considere necesarias en caso de surgir situaciones no esperadas o complicaciones, es expresado en forma libre e informada.",
-            "type": "signature",
-            "className": "col-span-full max-w-[600px] w-full mx-auto"
+            "className": "col-span-full max-w-[600px] w-full mx-auto",
+            "display_on": {
+                "isEmpty": [{"name": "firmaConsentimiento"}]
+            }
         },
         {
             "name": "testigotitulo",
@@ -1265,15 +1271,21 @@
             "label": "Nombre de quien recibe",
             "type": "input",
             "inputType": "text",
-            "className": "col-span-1 col-start-1"
+            "className": "col-span-1 col-start-1",
+            "display_on": {
+                "isEmpty": [{"name": "firmaPacienteAtencion"}]
+            }
         },
         {
             "name": "firmaRecibe",
             "label": "",
-            "nombreLabel": "Firma de quien recibe",
+            "nombreLabel": "Firma de Médico / Enfermero / Responsable que recibe",
             "declaracion": "", 
             "type": "signature",
-            "className": "col-span-full max-w-[600px] w-full mx-auto"
+            "className": "col-span-full max-w-[600px] w-full mx-auto",
+            "display_on": {
+                "isEmpty": [{"name": "firmaPacienteAtencion"}]
+            }
         },
         {
             "name": "filler",
@@ -1297,9 +1309,9 @@
         "restrictions": {
             "notEmpty": [
                 {"name": "firmaBomberoAtencion", "message": "La firma es obligatoria"},
-                {"name": "firmaPacienteAtencion", "message": "La firma es obligatoria"},
-                {"name": "firmapacienteconcentimiento", "message": "La firma es obligatoria"},
-                {"name": "firmaRecibe", "message": "La firma es obligatoria"},
+                {"name": "firmaPacienteAtencion", "value": "firmaConsentimiento", "message": "La firma es obligatoria"},
+                {"name": "firmaConsentimiento", "value": "firmaPacienteAtencion", "message": "La firma es obligatoria"},
+                {"name": "firmaRecibe", "value": "firmaPacienteAtencion", "message": "La firma es obligatoria"},
                 {"name": "patient", "message": "El nombre del paciente es obligatorio"},
                 {"name": "date", "message": "La fecha es obligatoria"},
                 {"name": "campoturno", "message": "El turno es obligatorio"},
