@@ -88,6 +88,8 @@ export function handleFieldRestrictions(data, restrictions){
 export function verifyRestrictions(data, restrictions, idx=null){
     // Por cada restricción
     for (const [key, items] of Object.entries(restrictions)) {
+        // Filter es una palabra reservada, no cuenta como restricción.
+        if (key === 'filter') return true;
         for (const field of items) {
             // Sí se trata de algún campo en una tupla
             if (field.subname && Array.isArray(data[field.name])) {

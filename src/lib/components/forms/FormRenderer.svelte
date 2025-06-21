@@ -164,11 +164,11 @@
                 result[field.name] = {};
                 for (const subfield of field.tuple ?? []) {
                     if (subfield.options) {
-                        setOption(subfield.name, subfield.requires, result[field.name], subfield.options);
+                        await setOption(subfield.name, subfield.requires, result[field.name], subfield.options);
                     }
                 }
             } else if (field.options) {
-                setOption(field.name, field.requires, result, field.options);
+                await setOption(field.name, field.requires, result, field.options);
             }
         }
         return result;
@@ -193,7 +193,7 @@
     const fetchDebouncedOptions = debounce(async () => {
         const newOptions = await derivedOptions;
         Object.assign(options, newOptions);
-    }, 1000);
+    }, 500);
 
     $effect(() => {
         // Importante para activar la reactividad
