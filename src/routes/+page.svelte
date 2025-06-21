@@ -17,8 +17,8 @@
 	import { Capacitor } from '@capacitor/core';
 	import { App } from '@capacitor/app';
 
-	import { CapacitorSQLite, SQLiteConnection, SQLiteDBConnection } from '@capacitor-community/sqlite';
 	import { FORM_STATUSES, NOTICE_TYPES, ACTION_STATUSES } from '$lib/Dictionary.svelte';
+	import { connect_db, get_db, init_db } from '$lib/db/sqliteConfig';
 
 	let showModal = $state(false);
 	let forms = $state([]);
@@ -32,53 +32,8 @@
 	let settings = $state({});
 	let was_admin_registered = $state(true);
 	
-	const almacenamiento_formularios = 'firefighter_forms_db';
 	const CURRENT_PLATFORM = Capacitor.getPlatform();
-
 	let db;
-
-	async function connect_db() {
-		// En el navegador web carecemos de almacenamiento persistente, entonces simplemente nos hacemos a la idea de que funciona...
-		if (CURRENT_PLATFORM === 'web') {
-			return {
-				execute: async function (s) {
-					console.log("Ignorando instrucción DDL en el navegador...\n" + s);
-				},
-				run: async function (s, d) {
-					console.log("Ignorando instrucción DML en el navegador...\n\t" + s + (d ? "\nCon los datos...\n\t" + d.join(", ") : ""));
-				},
-				query: async function (s, d) {
-					console.log("Ignorando búsqueda DML en el navegador...\n\t" + s + (d ? "\nCon los datos...\n\t" + d.join(", ") : ""));
-					return {values: []};
-				}
-			}
-		}
-		// En iOS y Android, esto funciona bien.
-		else {
-			const sqlite = new SQLiteConnection(CapacitorSQLite);
-			const db_func = await sqlite.createConnection(almacenamiento_formularios, false, 'no-encryption', 1);
-			await db_func.open();
-			return db_func;
-		}
-	}
-
-	// Inicializar la base de datos
-	async function init_db() {
-		await db.execute(`
-			CREATE TABLE IF NOT EXISTS forms (
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				date TEXT NOT NULL,
-				filler TEXT NOT NULL,
-				patient TEXT NOT NULL,
-				status INTEGER NOT NULL,
-				data TEXT NOT NULL
-			);
-			CREATE TABLE IF NOT EXISTS settings (
-				key TEXT PRIMARY KEY NOT NULL,
-				value TEXT
-			);
-		`);
-	}
 
 	// Guardar formulario en la base de datos local
 	async function save_form(form) {
@@ -208,7 +163,8 @@
 
 	// Se ejecuta al montar el componente, recuperando los formularios guardados
 	onMount(async () => {
-		db = await connect_db();
+		await connect_db(CURRENT_PLATFORM);
+		db = get_db();
 		await init_db();
 		await load_settings();
 		reset_admin_modal();
