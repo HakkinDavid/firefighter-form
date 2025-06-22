@@ -13,7 +13,11 @@
             "label": "Turno",
             "type": "select",
             "className": "col-span-1 col-start-1",
-            "options": ["Turno 1", "Turno 2", "Turno 3"]
+            "options": {
+                "source": "general_options",
+                "filter": {"category": "turno"},
+                "column": "name"
+            }
         },
         {
             "name": "campoestacion",

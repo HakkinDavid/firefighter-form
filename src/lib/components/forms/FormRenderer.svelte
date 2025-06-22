@@ -11,6 +11,8 @@
     import { handleFieldRestrictions, verifyRestrictions } from "./RestrictionHandler";
 	import { derived } from "svelte/store";
 	import SectionSelector from "./SectionSelector.svelte";
+	import { fetchOptions } from "./FormOptions";
+	import { get_db } from "$lib/db/sqliteConfig";
 
     let localFormData = $state();
     let restrictions = $state({});
@@ -137,22 +139,24 @@
         }
     });
 
-    // Derivar las opciones directamente de localFormData
-    const options = $derived.by(() => {
+    // Para el caso de $derived.by asíncrono, el resultado es una promesa, no el resultado
+    // de obtener las opciones, no activa reactividad.
+    const derivedOptions = $derived.by(async () => {
         const result = {};
+        const db = get_db();
 
-        const setOption = (name, requires, opts, fallback = null) => {
+        const setOption = async (name, requires, opts, fallback = null) => {
             if (!requires) {
-                opts[name] = fallback ?? null;
+                opts[name] = await fetchOptions(db, fallback);
                 return;
             }
             for (const criterion of requires) {
                 if (verifyRestrictions(localFormData.data, criterion)) {
-                    opts[name] = criterion.filter;
+                    opts[name] = await fetchOptions(db, criterion.filter);
                     return;
                 }
             }
-            opts[name] = fallback ?? null;
+            opts[name] = await fetchOptions(db, fallback);
         };
 
         for (const field of allFields) {
@@ -160,14 +164,41 @@
                 result[field.name] = {};
                 for (const subfield of field.tuple ?? []) {
                     if (subfield.options) {
-                        setOption(subfield.name, subfield.requires, result[field.name], subfield.options);
+                        await setOption(subfield.name, subfield.requires, result[field.name], subfield.options);
                     }
                 }
             } else if (field.options) {
-                setOption(field.name, field.requires, result, field.options);
+                await setOption(field.name, field.requires, result, field.options);
             }
         }
         return result;
+    });
+    // Opciones es un estado que almacena el resultado de la promesa derivedOptions
+    let options = $state({});
+
+    // El debounce evita muchas llamadas al derived.by asíncrono
+    function debounce(fn, delay = 300) {
+        let timeout;
+        return (...args) => {
+            clearTimeout(timeout);
+            return new Promise((resolve) => {
+                timeout = setTimeout(async () => {
+                    resolve(await fn(...args));
+                }, delay);
+            });
+        };
+    }
+
+    // Función auxiliar para aplicar el debounce y resolver la promesa
+    const fetchDebouncedOptions = debounce(async () => {
+        const newOptions = await derivedOptions;
+        Object.assign(options, newOptions);
+    }, 500);
+
+    $effect(() => {
+        // Importante para activar la reactividad
+        const key = JSON.stringify(localFormData.data);
+        fetchDebouncedOptions();
     });
 
     export { formData, localFormData };
