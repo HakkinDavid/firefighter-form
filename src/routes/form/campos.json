@@ -628,6 +628,7 @@
             "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
             "text": "<p>Ginecológico</p>",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -638,6 +639,7 @@
             "inputType": "number",
             "className":"col-span-1 col-start-1",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -647,6 +649,7 @@
             "type": "input",
             "inputType": "number",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -656,6 +659,7 @@
             "type": "input",
             "inputType": "number",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -665,6 +669,7 @@
             "type": "input",
             "inputType": "number",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         }, 
@@ -674,6 +679,7 @@
             "type": "input",
             "inputType": "number",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -683,6 +689,7 @@
              "type": "input",
              "inputType": "date",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -693,6 +700,7 @@
             "inputType": "radio",
             "options": ["Si", "No"],
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -703,6 +711,7 @@
             "inputType": "radio",
             "options": ["Si", "No"],
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -712,6 +721,7 @@
             "type": "input",
             "inputType": "time",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -721,6 +731,7 @@
             "type": "input",
             "inputType": "number",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -730,6 +741,7 @@
             "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
             "text": "<p>Datos posparto</p>",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -740,6 +752,7 @@
             "inputType": "time",
             "className":"col-span-1 col-start-1",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -750,6 +763,7 @@
             "inputType": "radio",
             "options": ["Si", "No"],
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -760,6 +774,7 @@
             "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
             "text": "<p>Datos del producto</p>",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -770,6 +785,7 @@
             "options": ["Vivo", "Muerto"],
             "className":"col-span-1 col-start-1",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -779,6 +795,7 @@
             "type": "select",
             "options": ["Femenino", "Masculino"],
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -788,6 +805,7 @@
             "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
             "text": "<p>Apgar</p>",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -798,6 +816,7 @@
             "inputType": "number",
             "className":"col-span-1 col-start-1",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -807,6 +826,7 @@
             "type": "input",
             "inputType": "number",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -816,6 +836,7 @@
             "type": "input",
             "inputType": "number",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -825,6 +846,7 @@
             "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
             "text": "<p>Silverman</p>",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         },
@@ -835,6 +857,7 @@
             "inputType": "number",
             "className":"col-span-1 col-start-1",
             "display_on": {
+                "notEmpty": [{"name": "camposervicio"}],
                 "equalTo": [{"name": "camposervicio", "value": "Gineco Obstétrico"}]
             }
         }
