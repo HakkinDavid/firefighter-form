@@ -2,6 +2,8 @@ import pdfMake from "pdfmake/build/pdfmake";
 import "pdfmake/build/vfs_fonts";
 import { Capacitor } from "@capacitor/core";
 import { Directory, Encoding, Filesystem } from "@capacitor/filesystem";
+import { Share } from "@capacitor/share";
+import { LeftLogo, RightLogo } from "./PDFImage";
 
 function isBase64Image(str) {
     const regex = /^data:image\/(png|jpeg|jpg|gif|bmp|webp);base64,[A-Za-z0-9+/=]+$/;
@@ -14,6 +16,7 @@ function removeHtmlTags(input) {
 
 export async function generateFormPDF(template, form_data, ignoreEmptyFields = false) {
     let documentDefinition = {
+        pageSize: 'LETTER',
         content: [
             {
                 columns: [
@@ -39,9 +42,8 @@ export async function generateFormPDF(template, form_data, ignoreEmptyFields = f
             }
         },
         images: {
-            left_logo: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII',
-            right_logo: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII',
-            empty: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII'
+            left_logo: LeftLogo,
+            right_logo: RightLogo
         }
     };
 
@@ -119,7 +121,7 @@ export async function generateFormPDF(template, form_data, ignoreEmptyFields = f
                 
                 for (const tuple of value) {
                     for (const subfield of field.tuple) {
-                        if (tupleCounter >= numTuples) resetTupleRow();
+                        if (tupleCounter > numTuples) resetTupleRow();
                         tupleCounter++;
                         const subvalue = tuple[subfield.name];
                         if (!allowedTupleTypes.includes(subfield.type)) 
@@ -158,14 +160,26 @@ export async function generateFormPDF(template, form_data, ignoreEmptyFields = f
     } else {
         document.getBase64(async (base64Data) => {
             try {
+                const filename = `Folio_.pdf`;
                 await Filesystem.writeFile({
-                    path: `Folio_${form_data.id}.pdf`,
+                    path: filename,
                     data: base64Data,
                     directory: Directory.External,
                 });
-                alert("Se ha descargado el archivo en la carpeta de la aplicación.");
+
+                const fileUri = await Filesystem.getUri({
+                    path: filename,
+                    directory: Directory.External,
+                });
+
+                await Share.share({
+                    title: filename,
+                    text: 'Open or save PDF',
+                    url: fileUri.uri,
+                    dialogTitle: 'Open with...'
+                });
             } catch (e) {
-                alert("No se pudo descargar su archivo.");
+                alert("No se pudo abrir el archivo.");
             }
         });
     }

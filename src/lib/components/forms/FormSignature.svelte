@@ -33,6 +33,7 @@
 	}
 
     onMount(async () => {
+		if (disabled) return;
 		resizeCanvas();
 		const { default: SignaturePad } = await import('signature_pad');
 		signaturePad = new SignaturePad(canvas, {
@@ -48,10 +49,6 @@
 		}
 		else {
 			update("");
-		}
-
-		if (disabled) {
-			signaturePad.off();
 		}
 	});
 	function borrarFirma() {

@@ -2,26 +2,33 @@
 
 // Pueden añadir más restricciones aquí.
 function handleRestriction(fieldValue, data, restriction, value){
+    const isEmpty = (val) => val === "" || val === null || val === undefined;
+
+    // La condición sólo se aplica si existe un valor para aplicarla
+    // De esta forma se pueden dejar campos vacíos a menos que se use notEmpty
+    const validateOnValue = (condition) => {
+        return isEmpty(fieldValue) || condition;
+    }
     switch (restriction) {
-        case "notEmpty": {
-            if (value && data[value]) return true;
-            else return fieldValue !== "" && fieldValue !== null && fieldValue !== undefined;
-        }
+        case "notEmpty":
+            if (value && data?.[value]) return true;
+			return !isEmpty(fieldValue);
         case "isEmpty":
-            return fieldValue === "" || fieldValue === null || fieldValue === undefined;
+            return isEmpty(fieldValue);
         case "equalTo":
-            return fieldValue === value;
+            return validateOnValue(fieldValue === value);
         case "includes":
-            return Array.isArray(fieldValue) && fieldValue.includes(value);
+            return validateOnValue(Array.isArray(fieldValue) && fieldValue.includes(value));
         case "lessThan":
-            return fieldValue < value;
+            return validateOnValue(fieldValue < value);
         case "greaterThan":
-            return fieldValue > value;
+            return validateOnValue(fieldValue > value);
         case "lessThanSize":
-            return fieldValue.length < value;
+            return validateOnValue(fieldValue.length < value);
         case "greaterThanSize":
-            return fieldValue.length > value;
+            return validateOnValue(fieldValue.length > value);
         case "lessThanDate": {
+            if (isEmpty(fieldValue)) return true;
             const today = new Date();
             const selectedDate = new Date(fieldValue + "T00:00:00");
             if (typeof value === "number" && Number.isInteger(value)) {
@@ -33,6 +40,7 @@ function handleRestriction(fieldValue, data, restriction, value){
             }
         }
         case "greaterThanDate": {
+            if (isEmpty(fieldValue)) return true;
             const today = new Date();
             const selectedDate = new Date(fieldValue + "T00:00:00");
             if (typeof value === "number" && Number.isInteger(value)) {
