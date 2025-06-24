@@ -67,7 +67,7 @@
                 const fieldName = subfield.name;
                 const value = fieldValue[idx][fieldName];
                 const visible = shouldDisplay(subfield, idx);
-                const opts = options[fieldName];
+                const opts = options?.[fieldName];
 
                 if (!visible) {
                     const newValue = fieldDataMap(subfield);
@@ -112,7 +112,7 @@
                 <Component field={subfield} disabled={disabled}
                 fieldValue={tuple[subfield.name]} fieldIdx={idx}
                 errorValue={errorValue?.[idx]?.[subfield.name] || ''}
-                options={options[subfield.name]}
+                options={options?.[subfield.name]}
                 on:update={(e) => updateField(idx, subfield.name, e.detail)}/>
             {/if}
         {/each}

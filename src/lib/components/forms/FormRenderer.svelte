@@ -46,16 +46,20 @@
         data.status = FORM_STATUSES.NEW;
         return data;
     }
-
     if (formData === undefined) {
         localFormData = defaultFormData(template);
         if (!isNaN(localFormData.id)) console.log("Se eliminará este extraño ID (" + localFormData.id + "), investigaremos de dónde sale.");
         delete localFormData.id;
     } else {
-        localFormData = { ...formData };
-        localFormData.data.filler = formData.filler;
-        localFormData.data.patient = formData.patient;
-        localFormData.data.date = formData.date;
+        localFormData = {
+            ...formData,
+            data: {
+                ...formData.data,
+                filler: formData.filler,
+                patient: formData.patient,
+                date: formData.date
+            }
+        };
     }
 
     const fieldComponentMap = {
@@ -75,6 +79,7 @@
             localFormData.patient = localFormData.data.patient ?? "No especificado";
             localFormData.date = localFormData.data.date ?? (new Date()).toISOString().split("T")[0];
             dispatch('submit', localFormData);
+            return;
         }
         restrictions = handleFieldRestrictions(localFormData.data, template.restrictions);
         if (Object.keys(restrictions).length === 0 ) {
@@ -201,7 +206,7 @@
         fetchDebouncedOptions();
     });
 
-    export { formData, localFormData };
+    export { formData, localFormData, template };
 </script>
 
 {#if !isPreviewOnly}

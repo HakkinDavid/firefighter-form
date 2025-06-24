@@ -1,6 +1,7 @@
 <script>
 	import jsPDF from 'jspdf';
 	import html2canvas from 'html2canvas-pro'; // Esto debería solucionar el error de oklch que mencionaba Brandon.
+	import { generateFormPDF } from './forms/PDFMaker';
 	let { showModal = $bindable(), header, children, allowpdf, formRenderer = $bindable() } = $props();
 	let modalContent;
 	let hide = $state(false);
@@ -18,70 +19,16 @@
 	}
 
 	async function generatePdf() {
-
 		const overlay = document.getElementById('overlay');
 		const spinner = document.getElementById('spinner');
 
 		overlay.style.zIndex = '60';
 		spinner.style.display = 'block';
 
-
-		const canvas = await html2canvas(modalContent, {
-			scrollY: -window.scrollY, //captura el contenido completo sin depender del scroll
-			windowHeight: modalContent.scrollHeight //ajusta la altura para capturar todo
-		});
-
-		const imgData = canvas.toDataURL('image/png');
-
-		const pdf = new jsPDF({
-			orientation: 'p', // "p" para vertical, "l" para horizontal
-			unit: 'mm',
-			format: 'a4'
-		});
-
-		/*
-		const imgWidth = 150;
-		const imgHeight = (canvas.height * imgWidth) / canvas.width; // Mantiene proporciones
-
-		const pageWidth = pdf.internal.pageSize.width;
-		const centerX = (pageWidth - imgWidth) / 2;
-
-		pdf.addImage(imgData, 'PNG', centerX, 10, imgWidth, imgHeight);
-		*/
-
-		const imgWidth = 160;
-		const pageHeight = 297; // A4 en mm
-		const imgHeight = (canvas.height * imgWidth) / canvas.width;
-		const pageImageHeight = (canvas.width / imgWidth) * pageHeight;
-
-		const totalPages = Math.ceil(canvas.height / pageImageHeight);
-
-		for (let i = 0; i < totalPages; i++) {
-			if (i > 0) pdf.addPage();
-
-			const sourceY = i * pageImageHeight;
-			const pageCanvas = document.createElement('canvas');
-			pageCanvas.width = canvas.width;
-			pageCanvas.height = pageImageHeight;
-
-			const context = pageCanvas.getContext('2d');
-			context.drawImage(
-				canvas,
-				0, sourceY, canvas.width, pageImageHeight,
-				0, 0, canvas.width, pageImageHeight
-			);
-
-			const pageImgData = pageCanvas.toDataURL('image/png');
-			const centerX = (pdf.internal.pageSize.width - imgWidth) / 2;
-
-			pdf.addImage(pageImgData, 'PNG', centerX, 10, imgWidth, (pageImageHeight * imgWidth) / canvas.width);
-		}
-		pdf.save(`archivo.pdf`);
+		await generateFormPDF(formRenderer.template, $state.snapshot(formRenderer.formData), false);
 
 		overlay.style.zIndex = '50';
 		spinner.style.display = 'none';
-
-
 	}
 
 	async function callPdf() {
@@ -144,7 +91,7 @@
 				onclick={generatePdf}
 				class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-blue-600"
 			>
-				Descargar pdf
+				Descargar
 			</button>
 		{:else}
 			<div></div>

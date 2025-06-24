@@ -217,11 +217,8 @@
 			{/snippet}
 			
 			{#snippet children()}
-				{#if !isNaN(selectedFormIndex) && forms[selectedFormIndex] && forms[selectedFormIndex].status === FORM_STATUSES.FINISHED}
-					<PdfPreview formData={forms[selectedFormIndex]} template={formulario}/>
-				{:else}
-					<FormRenderer template={formulario} bind:this={formRenderer} formData={forms[selectedFormIndex]} on:submit={(e) => save_form(e.detail)}/>
-				{/if}
+				<FormRenderer bind:this={formRenderer} template={formulario} formData={forms[selectedFormIndex]} on:submit={(e) => save_form(e.detail)}
+					isPreviewOnly={!isNaN(selectedFormIndex) && forms[selectedFormIndex] && forms[selectedFormIndex].status === FORM_STATUSES.FINISHED}/>
 			{/snippet}
 		</PDFModal>
 	{/if}
