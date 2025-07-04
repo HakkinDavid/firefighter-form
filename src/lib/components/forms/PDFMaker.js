@@ -2,8 +2,8 @@ import pdfMake from "pdfmake/build/pdfmake";
 import "pdfmake/build/vfs_fonts";
 import { Capacitor } from "@capacitor/core";
 import { Directory, Encoding, Filesystem } from "@capacitor/filesystem";
-import { Share } from "@capacitor/share";
 import { LeftLogo, RightLogo } from "./PDFImage";
+import { FileViewer } from "@capacitor/file-viewer";
 
 function isBase64Image(str) {
     const regex = /^data:image\/(png|jpeg|jpg|gif|bmp|webp);base64,[A-Za-z0-9+/=]+$/;
@@ -172,11 +172,8 @@ export async function generateFormPDF(template, form_data, ignoreEmptyFields = f
                     directory: Directory.External,
                 });
 
-                await Share.share({
-                    title: filename,
-                    text: 'Open or save PDF',
-                    url: fileUri.uri,
-                    dialogTitle: 'Open with...'
+                await FileViewer.openDocumentFromLocalPath({
+                    path: fileUri.uri
                 });
             } catch (e) {
                 alert("No se pudo abrir el archivo.");

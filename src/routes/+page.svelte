@@ -53,7 +53,7 @@
 				`INSERT INTO forms (date, filler, patient, status, data) VALUES (?, ?, ?, ?, ?)`,
 				[form.date, form.filler, form.patient, form.status, dataJson]
 			);
-			form.id = (await db.query("select seq from sqlite_sequence where name=\"forms\"")).values[0].seq;
+			form.id = (await db.query("select seq from sqlite_sequence where name=\"forms\"")).values[0]?.seq;
 			forms.unshift(form);
 		}
 
@@ -207,7 +207,8 @@
 					showModal = true;
 				}}
 				text="+"
-				class="fixed bottom-10 right-6 w-16 h-16 cursor-pointer rounded-full border border-black bg-bronze text-lg text-white transition hover:bg-wine"
+				class="fixed bottom-10 right-6 w-16 h-16 cursor-pointer rounded-full border border-black 
+				bg-bronze text-lg text-white transition hover:bg-wine active:bg-wine"
 			/>
 		</div>
 

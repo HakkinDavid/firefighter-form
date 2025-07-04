@@ -120,20 +120,20 @@
         {#snippet children()}
             {#if first_time_setup}
                 <button
-                    class="bg-green-500 w-full text-white px-4 py-2 rounded hover:bg-green-400 cursor-pointer"
+                    class="bg-green-500 w-full text-white px-4 py-2 rounded hover:bg-green-400 active:bg-green-400 cursor-pointer"
                     onclick={register}
                 >
                     Registrar
                 </button>
                 <button
-                    class="bg-red-500 w-full text-white px-4 py-2 rounded hover:bg-red-400 cursor-pointer"
+                    class="bg-red-500 w-full text-white px-4 py-2 rounded hover:bg-red-400 active:bg-red-400 cursor-pointer"
                     onclick={close}
                 >
                     Salir del app
                 </button>
             {:else}
                 <button
-                    class="bg-wine w-full text-white px-4 py-2 rounded hover:bg-lightwine cursor-pointer"
+                    class="bg-wine w-full text-white px-4 py-2 rounded hover:bg-lightwine active:bg-lightwine cursor-pointer"
                     onclick={authorize}
                 >
                     Autorizar

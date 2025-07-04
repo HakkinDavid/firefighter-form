@@ -233,11 +233,11 @@
 <div class="h-16"></div>
 <div class="fixed bottom-0 left-0 w-full bg-gray-100 z-70 pb-4 pr-4 flex justify-end" hidden={isPreviewOnly}>
     <button type="button" form="template" onclick={() => handleSubmit(false)}
-        class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-wine mr-3">
+        class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-wine active:bg-wine mr-3">
         Guardar
     </button>
     <button type="button" form="template" onclick={() => handleSubmit(true)} 
-        class="mt-4 block cursor-pointer rounded bg-wine px-4 py-2 text-white transition hover:bg-lightwine">
+        class="mt-4 block cursor-pointer rounded bg-wine px-4 py-2 text-white transition hover:bg-lightwine active:bg-lightwine">
         Finalizar
     </button>
 </div>

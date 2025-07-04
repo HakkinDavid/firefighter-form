@@ -119,14 +119,16 @@
         {#if !disabled}
         <div class="col-span-1 flex items-end">
             <Button onclick={() => removeTuple(idx)} text="Eliminar"
-                class="w-full py-2 rounded-lg cursor-pointer border border-black bg-red-700 text-white transition hover:bg-red-900"/>
+                class="w-full py-2 rounded-lg cursor-pointer border border-black 
+                bg-red-700 text-white transition hover:bg-red-900 active:bg-red-900"/>
         </div>
         {/if}
     {/each}
     {#if !disabled}
     <div class="col-span-full sticky bottom-0 bg-white h-min">
         <Button onclick={addTuple} text="Añadir" 
-        class="w-min px-6 py-2 rounded-lg cursor-pointer border border-black bg-bronze text-white transition hover:bg-wine"/>
+            class="w-min px-6 py-2 rounded-lg cursor-pointer border border-black 
+            bg-bronze text-white transition hover:bg-wine active:bg-wine"/>
     </div>
     {/if}
     <!-- <FormError bind:errorValue/> -->

@@ -50,7 +50,7 @@
 			{#each forms as form, index}
 				{#if form}
 				<tr
-					class="text-charcoal-gray cursor-pointer place-items-center justify-center border border-black transition hover:bg-gray-200"
+					class="text-charcoal-gray cursor-pointer place-items-center justify-center border border-black transition hover:bg-gray-200 active:bg-gray-200"
 					onclick={() => selectDoc(index)}
 				>
 					<td>{form.id}</td>
@@ -65,7 +65,7 @@
 							deleteDoc(index);
 							event.stopPropagation();
 						}}
-						class="place-items-center justify-center transition hover:bg-red-300"
+						class="place-items-center justify-center transition hover:bg-red-300 active:bg-red-300"
 						><Icon type="Borrar" class="h-8 w-8 cursor-pointer" /></td
 					>
 					{#if form.status == FORM_STATUSES.FINISHED}
@@ -74,7 +74,7 @@
 								generatePdf(index);
 								event.stopPropagation();
 							}}
-							class="place-items-center justify-center transition hover:bg-blue-300"
+							class="place-items-center justify-center transition hover:bg-blue-300 active:bg-blue-300"
 							><Icon type="PDF" class="h-8 w-8 cursor-pointer" /></td
 						>
 					{/if}

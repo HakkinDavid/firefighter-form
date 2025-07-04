@@ -15,7 +15,7 @@
         text="Entrar" onclick={() => {
             dispatch('login');
         }} 
-        class="w-min cursor-pointer rounded-lg border border-black bg-wine text-white transition hover:bg-lightwine px-6 py-2"
+        class="w-min cursor-pointer rounded-lg border border-black bg-wine text-white transition hover:bg-lightwine active:bg-lightwine px-6 py-2"
 
         />
     </div>
