@@ -209,9 +209,7 @@
     export { formData, localFormData, template };
 </script>
 
-{#if !isPreviewOnly}
-    <SectionSelector sections={Object.keys(template.fields)} bind:selected={section}/>
-{/if}
+<SectionSelector sections={Object.keys(template.fields)} bind:selected={section}/>
 <div class="p-4">
     <h2><b>{template.formname}</b></h2>
     <form class="grid gap-4 grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))]" id="template" onsubmit={(e) => {e.preventDefault(); console.log(localFormData)}}>

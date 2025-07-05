@@ -1,6 +1,4 @@
 <script>
-	import jsPDF from 'jspdf';
-	import html2canvas from 'html2canvas-pro'; // Esto debería solucionar el error de oklch que mencionaba Brandon.
 	import { generateFormPDF } from './forms/PDFMaker';
 	let { showModal = $bindable(), header, children, allowpdf, formRenderer = $bindable() } = $props();
 	let modalContent;
@@ -74,7 +72,7 @@
 	bind:this={modalRef}
 	class={`fixed ${hide ? 'top-9999' : ''} inset-0 z-50 h-full overflow-y-auto bg-white p-0 shadow-lg ${showModal ? 'block' : 'hidden'}`}
 >
-	<div class="flex justify-between px-4 pb-4 sticky top-0 bg-gray-100 z-70">
+	<div class="flex justify-between px-4 pb-4 sticky top-0 bg-gray-100 z-70 h-18">
 		<button
 			onclick={ allowpdf ? closeModal : back}
 			class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine active:bg-wine"
