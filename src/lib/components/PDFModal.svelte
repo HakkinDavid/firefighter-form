@@ -1,6 +1,4 @@
 <script>
-	import jsPDF from 'jspdf';
-	import html2canvas from 'html2canvas-pro'; // Esto debería solucionar el error de oklch que mencionaba Brandon.
 	import { generateFormPDF } from './forms/PDFMaker';
 	let { showModal = $bindable(), header, children, allowpdf, formRenderer = $bindable() } = $props();
 	let modalContent;
@@ -53,7 +51,7 @@
 	}
 
 	function back() {
-		if ( formRenderer.localFormData && formRenderer.formData && JSON.stringify($state.snapshot(formRenderer.localFormData)) !== JSON.stringify($state.snapshot(formRenderer.formData))) {
+		if ( !formRenderer.formData || (formRenderer.localFormData && JSON.stringify($state.snapshot(formRenderer.localFormData)) !== JSON.stringify($state.snapshot(formRenderer.formData)))) {
 			showWarning = true
 		} else {
 			closeModal();
@@ -74,10 +72,10 @@
 	bind:this={modalRef}
 	class={`fixed ${hide ? 'top-9999' : ''} inset-0 z-50 h-full overflow-y-auto bg-white p-0 shadow-lg ${showModal ? 'block' : 'hidden'}`}
 >
-	<div class="flex justify-between px-4 pb-4 sticky top-0 bg-gray-100 z-70">
+	<div class="flex justify-between px-4 pb-4 sticky top-0 bg-gray-100 z-70 h-18">
 		<button
 			onclick={ allowpdf ? closeModal : back}
-			class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine"
+			class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine active:bg-wine"
 		>
 			Regresar
 		</button>
@@ -89,7 +87,7 @@
 		{#if allowpdf}
 			<button
 				onclick={generatePdf}
-				class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-blue-600"
+				class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-blue-600 active:bg-blue-600"
 			>
 				Descargar
 			</button>
@@ -111,8 +109,8 @@
     <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
       <p class="mb-4 text-gray-800">¡Tiene cambios sin guardar!</p>
       <div class="flex justify-end gap-2">
-        <button onclick={cancel} class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancelar</button>
-        <button onclick={confirm} class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Salir</button>
+        <button onclick={cancel} class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 active:bg-gray-400">Cancelar</button>
+        <button onclick={confirm} class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 active:bg-blue-600">Salir</button>
       </div>
     </div>
   </div>

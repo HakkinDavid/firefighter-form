@@ -93,12 +93,12 @@
 
 	<div class="flex space-x-2 mt-2" hidden={disabled}>
 		<Button 
-		class="mt-4 block cursor-pointer rounded bg-red-500 px-4 py-2 text-white transition hover:bg-red-600 mx-8"
+		class="mt-4 block cursor-pointer rounded bg-red-500 px-4 py-2 text-white transition hover:bg-red-600 active:bg-red-600 mx-8"
 		 onclick={borrarFirma} 
 		 text="Borrar"
 		 />
 		 <Button 
-		class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine mx-8"
+		class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine active:bg-wine mx-8"
 		onclick={guardarFirma}
 		 text="Guardar"
 		 />

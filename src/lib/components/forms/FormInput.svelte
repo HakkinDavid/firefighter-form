@@ -76,7 +76,7 @@
                 <button type="button" class="absolute inset-y-0 right-2 flex items-center" on:click={toggleDropdown}>▼</button>
             {/if}
             {#if !disabled && field.multiple && field.allowOwnOptions}
-                <button type="button" class="w-full border border-black bg-bronze text-white transition hover:bg-wine cursor-pointer" 
+                <button type="button" class="w-full border border-black bg-bronze text-white transition hover:bg-wine active:bg-wine cursor-pointer" 
                     on:click={() => handleKeyDown({key: "Enter"})}>
                     +
                 </button>
@@ -87,7 +87,7 @@
                 {#each suggestions as suggestion}
                     <li class="flex justify-between items-center cursor-pointer border border-gray-400">
                         <Button onclick={() => handleSuggestion(suggestion)} text={suggestion} 
-                            class="w-full text-left px-4 py-2 text-wine transition hover:text-bronze hover:bg-gray-50"/>
+                            class="w-full text-left px-4 py-2 text-wine transition hover:text-bronze hover:bg-gray-50 active:text-bronze active:bg-gray-50"/>
                     </li>
                 {/each}
                 </ul>
@@ -102,7 +102,7 @@
                 {value}
                 {#if !disabled}
                 <Button onclick={() => removeOption(idx)} text="-"
-                    class="px-4 py-2 border border-black rounded bg-red-700 text-white transition hover:bg-red-900"/>
+                    class="px-4 py-2 border border-black rounded bg-red-700 text-white transition hover:bg-red-900 active:bg-red-900"/>
                 {/if}
             </li>
         {/each}

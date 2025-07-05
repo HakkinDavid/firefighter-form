@@ -207,7 +207,8 @@
 					showModal = true;
 				}}
 				text="+"
-				class="fixed bottom-10 right-6 w-16 h-16 cursor-pointer rounded-full border border-black bg-bronze text-lg text-white transition hover:bg-wine"
+				class="fixed bottom-10 right-6 w-16 h-16 cursor-pointer rounded-full border border-black 
+				bg-bronze text-lg text-white transition hover:bg-wine active:bg-wine"
 			/>
 		</div>
 

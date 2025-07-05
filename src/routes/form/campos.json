@@ -1328,6 +1328,13 @@
             "declaracion": "", 
             "type": "signature",
             "className": "col-span-full max-w-[600px] w-full mx-auto"
+        },
+        {
+            "name": "observacionesFinales",
+            "label": "Resúmen / Observaciones finales",
+            "type": "textarea",
+            "rows": 5,
+            "className": "col-span-full col-start-1"
         }
     ]
 },
