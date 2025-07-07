@@ -80,10 +80,19 @@
             {
                 "name": "firma",
                 "label": "Firma",
-                "nombreLabel": "Firma del bombero/paciente",
-                "declaracion": "Declaracion",
-                "type": "signature",
+                "secondaryLabel": "Firma del bombero/paciente",
+                "text": "Declaracion",
+                "type": "drawingboard",
                 "className": "col-span-2" 
+            },
+            {
+                "name": "diagram",
+                "label": "Dibujo",
+                "secondaryLabel": "Diagrama del ser humano",
+                "type": "drawingboard",
+                "background": "body_diagram",
+                "aspect_ratio": 1.2,
+                "className": "col-span-2"
             },
             {
                 "name": "campo",

@@ -4,7 +4,7 @@
 	import FormTextarea from "$lib/components/forms/FormTextarea.svelte";
 	import FormMultipleOption from "./FormMultipleOption.svelte";
 	import FormText from "./FormText.svelte";
-    import FormSignature from "./FormSignature.svelte";
+    import FormDrawingBoard from "./FormDrawingBoard.svelte";
 	import FormTuple from "./FormTuple.svelte";
 	import { createEventDispatcher } from "svelte";
 	import { FORM_STATUSES } from "$lib/Dictionary.svelte";
@@ -13,10 +13,14 @@
 	import SectionSelector from "./SectionSelector.svelte";
 	import { fetchOptions } from "./FormOptions";
 	import { get_db } from "$lib/db/sqliteConfig";
+	import { debounce } from "$lib/debounce";
+	import ModalDialog from "../ModalDialog.svelte";
 
     let localFormData = $state();
     let restrictions = $state({});
     let { template, formData, isPreviewOnly = false } = $props();
+
+    let showConfirmation = $state(false);
 
     let section = $state("");
     // Obtener todos los campos del objeto en un arreglo aplanado
@@ -67,7 +71,7 @@
         select: FormSelect,
         textarea: FormTextarea,
         multiple: FormMultipleOption,
-        signature: FormSignature,    
+        drawingboard: FormDrawingBoard, 
         tuple: FormTuple,
         text: FormText
     };
@@ -82,7 +86,7 @@
             return;
         }
         restrictions = handleFieldRestrictions(localFormData.data, template.restrictions);
-        if (Object.keys(restrictions).length === 0 ) {
+        if (Object.keys(restrictions).length === 0 && showConfirmation == true ) { 
             localFormData.filler = localFormData.data.filler;
             delete localFormData.data.filler;
 
@@ -93,6 +97,9 @@
             delete localFormData.data.date;
             localFormData.status = completed ? FORM_STATUSES.FINISHED : FORM_STATUSES.DRAFT;
             dispatch('submit', localFormData);
+            showConfirmation = false; // Quitamos confirmacion
+        } else if (Object.keys(restrictions).length === 0 && showConfirmation == false) { // Si se cumple con las restricciones aun no esta el dialogo de confirmacion
+            showConfirmation = true; // Se muestra el dialogo de confirmacion
         }
     }
     function shouldDisplay(field) {
@@ -182,18 +189,6 @@
     let options = $state({});
 
     // El debounce evita muchas llamadas al derived.by asíncrono
-    function debounce(fn, delay = 300) {
-        let timeout;
-        return (...args) => {
-            clearTimeout(timeout);
-            return new Promise((resolve) => {
-                timeout = setTimeout(async () => {
-                    resolve(await fn(...args));
-                }, delay);
-            });
-        };
-    }
-
     // Función auxiliar para aplicar el debounce y resolver la promesa
     const fetchDebouncedOptions = debounce(async () => {
         const newOptions = await derivedOptions;
@@ -239,3 +234,11 @@
         Finalizar
     </button>
 </div>
+
+<!-- Mensaje de confirmacion -->
+<ModalDialog 
+    message="¿Desea finalizar? Ya no podrá realizar cambios."
+    Accept={() => handleSubmit(true)}
+    AcceptLabel="Finalizar"
+    bind:showDialog={showConfirmation}
+/>
