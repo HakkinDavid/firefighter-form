@@ -74,7 +74,7 @@ export async function generateFormPDF(template, form_data, ignoreEmptyFields = f
     for (const field of allFields) {
         // Cuando se sobrepasa el número de columnas se sigue a la siguiente fila
         if (counter >= numColumns) resetRow();
-        const value = form_data?.data?.[field.name] ?? null;
+        const value = form_data?.data?.[field.name] ?? form_data?.[field.name] ?? null;
         if (ignoreEmptyFields && field.type !== 'text' && (!value || value.length < 1)) continue;
         counter++;
         // Cada campo puede tener una distribución distinta en el pdf

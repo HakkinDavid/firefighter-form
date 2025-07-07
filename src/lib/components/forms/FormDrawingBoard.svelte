@@ -21,14 +21,18 @@
 
 	function resizeCanvas() {
 		if (!canvas) return;
-		const content = signaturePad ? signaturePad.toDataURL(): null;
+		// Si el signaturePad tiene contenido se debe guardar y volver a imprimir.
+		// Cuando no se ha dibujado en el canvas, se utiliza el fondo.
+		const content = (signaturePad && !signaturePad.isEmpty()) ? signaturePad.toDataURL(): background;
 		const ratio = window.devicePixelRatio || 1;
 		canvas.width = canvas.offsetWidth * ratio;
 		canvas.height = canvas.offsetHeight * ratio;
 		canvas.getContext('2d').scale(ratio, ratio);
-		if (signaturePad && isBase64Image(content)) {
-			signaturePad.clear()
-			signaturePad.fromDataURL(content);
+		if (signaturePad) {
+			signaturePad.clear();
+			// Sí no hay fondo (undefined), esta línea no se ejecuta.
+			if (isBase64Image(content)) 
+				signaturePad.fromDataURL(content);
 		}
 	}
 	const debouncedResizeFunction = debounce(resizeCanvas, 300);
