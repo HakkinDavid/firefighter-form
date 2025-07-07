@@ -2,10 +2,10 @@ import pdfMake from "pdfmake/build/pdfmake";
 import "pdfmake/build/vfs_fonts";
 import { Capacitor } from "@capacitor/core";
 import { Directory, Encoding, Filesystem } from "@capacitor/filesystem";
-import { LeftLogo, RightLogo } from "./PDFImage";
+import { PDFImages } from "./FormImages";
 import { FileViewer } from "@capacitor/file-viewer";
 
-function isBase64Image(str) {
+export function isBase64Image(str) {
     const regex = /^data:image\/(png|jpeg|jpg|gif|bmp|webp);base64,[A-Za-z0-9+/=]+$/;
     return typeof str === 'string' && regex.test(str);
 }
@@ -41,10 +41,7 @@ export async function generateFormPDF(template, form_data, ignoreEmptyFields = f
                 fontSize: 10
             }
         },
-        images: {
-            left_logo: LeftLogo,
-            right_logo: RightLogo
-        }
+        images: PDFImages
     };
 
     const allFields = Object.values(template.fields).flat();
@@ -135,13 +132,13 @@ export async function generateFormPDF(template, form_data, ignoreEmptyFields = f
                 if (tupleCounter > 0) resetTupleRow();
                 documentDefinition.content.push(tableDef);
                 break;
-            case 'signature':
+            case 'drawingboard':
                 resetRow();
                 documentDefinition.content.push({
                     stack: [
                         { text: field.label, bold: true },
-                        { text: field.nombreLabel },
-                        { text: field.declaracion, style: 'smallText', alignment: 'justify' },
+                        { text: field.secondaryLabel },
+                        { text: field.text, style: 'smallText', alignment: 'justify' },
                         isBase64Image(value) ? 
                             { image: value, width: 200, alignment: 'center' } : 
                             {text: "—", alignment: 'center'},

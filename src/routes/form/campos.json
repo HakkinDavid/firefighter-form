@@ -524,6 +524,14 @@
             "options": ["Deformidades (D)", "Contusiones (CO)", "Abrasiones (A)", "Penetraciones (P)", "Quemaduras (Q)", "Laceraciones (L)", "Abulsiones / Amputaciones (AB)", "Edema (E)", "Crepitación (CR)", "Enfisema subcutáneo (ES)", "Dolor / Hiperstesia (H)", "Parestesia (PT)", "Alteración a la movilidad (AM)", "Parálisis (AM)", "Movimiento paradójico (MP)"]
         },
         {
+            "name": "zona_lesion",
+            "label": "Zona de lesión",
+            "type": "drawingboard",
+            "background": "body_diagram",
+            "aspect_ratio": 1.2,
+            "className": "col-span-1 md:col-span-2 lg:col-span-3 max-w-[400px] w-full mx-auto"
+        },
+        {
             "name": "semiologia",
             "type": "text",
             "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
@@ -1247,9 +1255,9 @@
         {
             "name": "firmaConsentimiento",
             "label": "Consentimiento informado",
-            "nombreLabel": "Firma del paciente",
-            "declaracion": "Declaró haber recibido oportunamente información completa y adecuada sobre mi cuadro clínico y los procedimientos diagnósticos y/o terapéuticos qué se realizarán los riesgos que esto pueda presentar y las alternativas disponibles. A si mismo. Declaró haber comprendido la información proporcionada y que he tenido la oportunidad de fórmula mis preguntas y dudas. Las que han sido contestadas y aclaradas a mi entera satisfacción por lo anteriormente expuesto. Declaró mi consentimiento para ser sometido al tratamiento y a las acciones que el equipo TUM/TAMP considere necesarias en caso de surgir situaciones no esperadas o complicaciones, es expresado en forma libre e informada.",
-            "type": "signature",
+            "secondaryLabel": "Firma del paciente",
+            "text": "Declaró haber recibido oportunamente información completa y adecuada sobre mi cuadro clínico y los procedimientos diagnósticos y/o terapéuticos qué se realizarán los riesgos que esto pueda presentar y las alternativas disponibles. A si mismo. Declaró haber comprendido la información proporcionada y que he tenido la oportunidad de fórmula mis preguntas y dudas. Las que han sido contestadas y aclaradas a mi entera satisfacción por lo anteriormente expuesto. Declaró mi consentimiento para ser sometido al tratamiento y a las acciones que el equipo TUM/TAMP considere necesarias en caso de surgir situaciones no esperadas o complicaciones, es expresado en forma libre e informada.",
+            "type": "drawingboard",
             "className": "col-span-full max-w-[600px] w-full mx-auto",
             "display_on": {
                 "isEmpty": [{"name": "firmaPacienteAtencion"}]
@@ -1258,9 +1266,9 @@
         {
             "name": "firmaPacienteAtencion",
             "label": "Negativa a recibir atención / Ser trasladado eximiente de responsabilidad",
-            "nombreLabel": "Firma del paciente",
-            "declaracion": "Declaró que no aceptó las recomendaciones del personal de la ambulancia o vehículo de primer contacto de bomberos tijuana en cuanto al (tratamiento) y o traslado a un hospital, por lo que eximo a la dirección de bomberos tijuana y a dichas personas de toda responsabilidad que pudiera derivar al haberse respetado y cumplido mi decisión.",
-            "type": "signature",
+            "secondaryLabel": "Firma del paciente",
+            "text": "Declaró que no aceptó las recomendaciones del personal de la ambulancia o vehículo de primer contacto de bomberos tijuana en cuanto al (tratamiento) y o traslado a un hospital, por lo que eximo a la dirección de bomberos tijuana y a dichas personas de toda responsabilidad que pudiera derivar al haberse respetado y cumplido mi decisión.",
+            "type": "drawingboard",
             "className": "col-span-full max-w-[600px] w-full mx-auto",
             "display_on": {
                 "isEmpty": [{"name": "firmaConsentimiento"}]
@@ -1288,9 +1296,9 @@
         {
             "name": "firmaTestigo",
             "label": "",
-            "nombreLabel": "Firma del testigo",
-            "declaracion": "", 
-            "type": "signature",
+            "secondaryLabel": "Firma del testigo",
+            "text": "", 
+            "type": "drawingboard",
             "className": "col-span-full max-w-[600px] w-full mx-auto"
         },
         {
@@ -1306,9 +1314,9 @@
         {
             "name": "firmaRecibe",
             "label": "",
-            "nombreLabel": "Firma de Médico / Enfermero / Responsable que recibe",
-            "declaracion": "", 
-            "type": "signature",
+            "secondaryLabel": "Firma de Médico / Enfermero / Responsable que recibe",
+            "text": "", 
+            "type": "drawingboard",
             "className": "col-span-full max-w-[600px] w-full mx-auto",
             "display_on": {
                 "isEmpty": [{"name": "firmaPacienteAtencion"}]
@@ -1324,9 +1332,9 @@
         {
             "name": "firmaBomberoAtencion",
             "label": "",
-            "nombreLabel": "Firma del Responsable de la Atención",
-            "declaracion": "", 
-            "type": "signature",
+            "secondaryLabel": "Firma del Responsable de la Atención",
+            "text": "", 
+            "type": "drawingboard",
             "className": "col-span-full max-w-[600px] w-full mx-auto"
         },
         {

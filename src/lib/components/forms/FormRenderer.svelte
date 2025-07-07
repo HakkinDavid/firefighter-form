@@ -4,7 +4,7 @@
 	import FormTextarea from "$lib/components/forms/FormTextarea.svelte";
 	import FormMultipleOption from "./FormMultipleOption.svelte";
 	import FormText from "./FormText.svelte";
-    import FormSignature from "./FormSignature.svelte";
+    import FormDrawingBoard from "./FormDrawingBoard.svelte";
 	import FormTuple from "./FormTuple.svelte";
 	import { createEventDispatcher } from "svelte";
 	import { FORM_STATUSES } from "$lib/Dictionary.svelte";
@@ -13,6 +13,7 @@
 	import SectionSelector from "./SectionSelector.svelte";
 	import { fetchOptions } from "./FormOptions";
 	import { get_db } from "$lib/db/sqliteConfig";
+	import { debounce } from "$lib/debounce";
 
     let localFormData = $state();
     let restrictions = $state({});
@@ -67,7 +68,7 @@
         select: FormSelect,
         textarea: FormTextarea,
         multiple: FormMultipleOption,
-        signature: FormSignature,    
+        drawingboard: FormDrawingBoard, 
         tuple: FormTuple,
         text: FormText
     };
@@ -182,18 +183,6 @@
     let options = $state({});
 
     // El debounce evita muchas llamadas al derived.by asíncrono
-    function debounce(fn, delay = 300) {
-        let timeout;
-        return (...args) => {
-            clearTimeout(timeout);
-            return new Promise((resolve) => {
-                timeout = setTimeout(async () => {
-                    resolve(await fn(...args));
-                }, delay);
-            });
-        };
-    }
-
     // Función auxiliar para aplicar el debounce y resolver la promesa
     const fetchDebouncedOptions = debounce(async () => {
         const newOptions = await derivedOptions;
