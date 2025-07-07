@@ -95,7 +95,7 @@
 	<div class="border border-gray-600 rounded-md overflow-hidden canvas-wrapper" 
 		style={`aspect-ratio: ${field.aspect_ratio ?? 3}`}>
 		{#if disabled}
-			<img src = {fieldValue} alt="Firma" class="w-full h-full" />
+			<img src = {fieldValue} alt={fieldValue ? "Dibujo o firma." : "No se guardó el contenido."} class="w-full h-full" />
 		{:else}
 			<canvas
 				bind:this={canvas}

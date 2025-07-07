@@ -1,5 +1,6 @@
 <script>
 	import { generateFormPDF } from './forms/PDFMaker';
+	import ModalDialog from './ModalDialog.svelte';
 	let { showModal = $bindable(), header, children, allowpdf, formRenderer = $bindable() } = $props();
 	let modalContent;
 	let hide = $state(false);
@@ -102,19 +103,14 @@
 	</div>
 </div>
 
-
 <!-- Mensaje de aviso -->
-{#if showWarning}
-  <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-    <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
-      <p class="mb-4 text-gray-800">¡Tiene cambios sin guardar!</p>
-      <div class="flex justify-end gap-2">
-        <button onclick={cancel} class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 active:bg-gray-400 hover:cursor-pointer">Cancelar</button>
-        <button onclick={confirm} class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 active:bg-blue-600 hover:cursor-pointer">Salir</button>
-      </div>
-    </div>
-  </div>
-{/if}
+ <ModalDialog
+    message="¡Tiene cambios sin guardar!"
+    Accept={confirm}
+    Cancel={cancel}
+    AcceptLabel="Salir"
+    bind:showDialog={showWarning}
+/>
 
 <style>
 	@keyframes zoom {
