@@ -109,8 +109,8 @@
     <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
       <p class="mb-4 text-gray-800">¡Tiene cambios sin guardar!</p>
       <div class="flex justify-end gap-2">
-        <button onclick={cancel} class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 active:bg-gray-400">Cancelar</button>
-        <button onclick={confirm} class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 active:bg-blue-600">Salir</button>
+        <button onclick={cancel} class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 active:bg-gray-400 hover:cursor-pointer">Cancelar</button>
+        <button onclick={confirm} class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 active:bg-blue-600 hover:cursor-pointer">Salir</button>
       </div>
     </div>
   </div>
