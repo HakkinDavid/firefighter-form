@@ -1,5 +1,6 @@
 <script>
 	import Modal from "$lib/components/Modal.svelte";
+    import { adminDialog } from "$lib/stores/adminDialogStore.svelte.js";
     import { ACTION_STATUSES, NOTICE_TYPES } from "$lib/Dictionary.svelte";
 	import Notice from "$lib/components/Notice.svelte";
     import { createEventDispatcher, onMount } from "svelte";
@@ -32,7 +33,7 @@
           else if (settings.admin_username === admin_username && (await bcrypt.compare(admin_password, settings.admin_password))) {
             notice_type = NOTICE_TYPES.SUCESS;
             status = ACTION_STATUSES.AUTHORIZED;
-            dispatch('authorized');
+            adminDialog.Authorize();
             close(true);
             console.log("Autorización concedida.");
           }
@@ -66,20 +67,18 @@
         console.log("Supervisor registrado.");
     }
 
-    export function open (n_type, a_status) {
+    function open (n_type, a_status) {
         if (!isNaN(n_type)) notice_type = n_type;
         if (a_status) status = a_status;
         active = true;
-        dispatch('open');
     }
 
-    export function close (successfully = false) {
+    function close (successfully = false) {
         active = false;
         if (successfully !== true) {
             console.log("Autorización negada.");
-            dispatch('cancel');
+            adminDialog.Reject();
         }
-        dispatch('close');
         reset();
     }
 
@@ -93,6 +92,10 @@
 
     let settings_is_undefined = $derived(!settings);
     let first_time_setup = $derived(settings && (!settings.admin_username || !settings.admin_password));
+
+    onMount(() => {
+        adminDialog.onOpen = open;
+    })
 </script>
 
 {#if settings_is_undefined}

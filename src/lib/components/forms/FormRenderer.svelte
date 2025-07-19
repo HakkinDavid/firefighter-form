@@ -14,13 +14,12 @@
 	import { fetchOptions } from "./FormOptions";
 	import { get_db } from "$lib/db/sqliteConfig";
 	import { debounce } from "$lib/debounce";
-	import ModalDialog from "../ModalDialog.svelte";
+    import { dialog } from "$lib/stores/dialogStore.svelte.js"
+	import { adminDialog } from "$lib/stores/adminDialogStore.svelte";
 
     let localFormData = $state();
     let restrictions = $state({});
     let { template, formData, isPreviewOnly = false } = $props();
-
-    let showConfirmation = $state(false);
 
     let section = $state("");
     // Obtener todos los campos del objeto en un arreglo aplanado
@@ -86,22 +85,31 @@
             return;
         }
         restrictions = handleFieldRestrictions(localFormData.data, template.restrictions);
-        if (Object.keys(restrictions).length === 0 && showConfirmation == true ) { 
-            localFormData.filler = localFormData.data.filler;
-            delete localFormData.data.filler;
+        if (Object.keys(restrictions).length === 0) {
+            dialog.open({
+                message: "¿Desea finalizar? Ya no podrá realizar cambios.",
+                AcceptLabel: "Finalizar",
+                Accept: () => {
+                    localFormData.filler = localFormData.data.filler;
+                    delete localFormData.data.filler;
 
-            localFormData.patient = localFormData.data.patient;
-            delete localFormData.data.patient;
+                    localFormData.patient = localFormData.data.patient;
+                    delete localFormData.data.patient;
 
-            localFormData.date = localFormData.data.date;
-            delete localFormData.data.date;
-            localFormData.status = completed ? FORM_STATUSES.FINISHED : FORM_STATUSES.DRAFT;
-            dispatch('submit', localFormData);
-            showConfirmation = false; // Quitamos confirmacion
-        } else if (Object.keys(restrictions).length === 0 && showConfirmation == false) { // Si se cumple con las restricciones aun no esta el dialogo de confirmacion
-            showConfirmation = true; // Se muestra el dialogo de confirmacion
+                    localFormData.date = localFormData.data.date;
+                    delete localFormData.data.date;
+                    localFormData.status = completed ? FORM_STATUSES.FINISHED : FORM_STATUSES.DRAFT;
+                    dispatch('submit', localFormData);
+                }
+            });
         }
     }
+
+    function requestEditPermissions() {
+        adminDialog.onAuthorize = () => {isPreviewOnly = false}
+        adminDialog.open();
+    }
+
     function shouldDisplay(field) {
         if (!field.display_on) return true;
         return verifyRestrictions(localFormData.data, field.display_on);
@@ -224,21 +232,19 @@
 </div>
 
 <div class="h-16"></div>
-<div class="fixed bottom-0 left-0 w-full bg-gray-100 z-70 pb-4 pr-4 flex justify-end" hidden={isPreviewOnly}>
+<div class="fixed bottom-0 left-0 w-full bg-gray-100 z-70 pb-4 pr-4 flex justify-end">
+    {#if !isPreviewOnly}
     <button type="button" form="template" onclick={() => handleSubmit(false)}
         class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-wine active:bg-wine mr-3">
         Guardar
     </button>
-    <button type="button" form="template" onclick={() => handleSubmit(true)} 
+    {/if}
+    <button type="button" form="template" onclick={() => {
+            if (isPreviewOnly) requestEditPermissions();
+            else handleSubmit(true);
+            }
+        }
         class="mt-4 block cursor-pointer rounded bg-wine px-4 py-2 text-white transition hover:bg-lightwine active:bg-lightwine">
-        Finalizar
+        {isPreviewOnly ? "Editar": "Finalizar"}
     </button>
 </div>
-
-<!-- Mensaje de confirmacion -->
-<ModalDialog 
-    message="¿Desea finalizar? Ya no podrá realizar cambios."
-    Accept={() => handleSubmit(true)}
-    AcceptLabel="Finalizar"
-    bind:showDialog={showConfirmation}
-/>

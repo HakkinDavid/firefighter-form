@@ -1,6 +1,6 @@
 <script>
 	import { generateFormPDF } from './forms/PDFMaker';
-	import ModalDialog from './ModalDialog.svelte';
+	import { dialog } from '$lib/stores/dialogStore.svelte.js'
 	let { showModal = $bindable(), header, children, allowpdf, formRenderer = $bindable() } = $props();
 	let modalContent;
 	let hide = $state(false);
@@ -40,20 +40,18 @@
 
 	export { callPdf };
 
-	let showWarning = $state(false);
 
 	function confirm() {
-		showWarning = false;
 		closeModal();
-	}
-
-	function cancel() {
-		showWarning = false;
 	}
 
 	function back() {
 		if ( !formRenderer.formData || (formRenderer.localFormData && JSON.stringify($state.snapshot(formRenderer.localFormData)) !== JSON.stringify($state.snapshot(formRenderer.formData)))) {
-			showWarning = true
+			dialog.open({
+				message: "¡Tiene cambios sin guardar!",
+				Accept: confirm,
+				AcceptLabel: "Salir"
+			});
 		} else {
 			closeModal();
 		}
@@ -102,15 +100,6 @@
 		{/key}
 	</div>
 </div>
-
-<!-- Mensaje de aviso -->
- <ModalDialog
-    message="¡Tiene cambios sin guardar!"
-    Accept={confirm}
-    Cancel={cancel}
-    AcceptLabel="Salir"
-    bind:showDialog={showWarning}
-/>
 
 <style>
 	@keyframes zoom {

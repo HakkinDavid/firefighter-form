@@ -10,9 +10,10 @@
 	import formulario from './form/campos.json'
 	import PDFModal from '../lib/components/PDFModal.svelte';
 	import AdminModal from '$lib/components/settings/AdminModal.svelte';
-	import PdfPreview from '$lib/components/PdfPreview.svelte';
+	import { adminDialog } from '$lib/stores/adminDialogStore.svelte.js';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import ModalDialog from '$lib/components/ModalDialog.svelte';
 
 	import { Capacitor } from '@capacitor/core';
 	import { App } from '@capacitor/app';
@@ -25,8 +26,6 @@
 	let selectedFormIndex = $state(null);
 	let logged_in = $state(false);
 	let admin_modal;
-	let admin_modal_reject = $state(() => {});
-	let admin_modal_authorize = $state(() => {});
 	let pdfModal = $state(undefined);
 	let formRenderer = $state(undefined);
 	let settings = $state({});
@@ -75,12 +74,12 @@
 
 	// Eliminar formulario seleccionado
 	async function delete_form(index) {
-		admin_modal_authorize = async () => {
+		adminDialog.onAuthorize = async () => {
 			await db.run('DELETE FROM forms WHERE id = ?', [forms[index].id])
 			forms = forms.toSpliced(index, 1);
 			selectedFormIndex = null;
 		}
-		admin_modal.open();
+		adminDialog.open();
 	}
 
 	async function load_settings() {
@@ -153,10 +152,10 @@
 	}
 
 	function reset_admin_modal () {
-		admin_modal_reject = () => {
+		adminDialog.onReject = () => {
 			console.warn("Se negó la autorización del supervisor sin algún comportamiento definido.");
 		}
-		admin_modal_authorize = () => {
+		adminDialog.onAuthorize = () => {
 			console.warn("Se concedió la autorización del supervisor sin algún comportamiento definido.");
 		}
 	}
@@ -172,14 +171,14 @@
 		if (settings && (!settings.admin_username || !settings.admin_password)) {
 			was_admin_registered = false;
 			console.log("No hay datos de administrador establecidos. Solicitando.");
-			admin_modal_reject = () => {
+			adminDialog.onReject = () => {
 				if (CURRENT_PLATFORM === 'web') {
 					console.error("Simulando cierre...");
 					window.location.reload();
 				}
 				App.exitApp();
 			}
-			admin_modal.open(NOTICE_TYPES.INFORMATION, ACTION_STATUSES.SIGN_ADMIN_UP);
+			adminDialog.open(NOTICE_TYPES.INFORMATION, ACTION_STATUSES.SIGN_ADMIN_UP);
 		}
 
 		await load_forms();
@@ -212,7 +211,7 @@
 			/>
 		</div>
 
-		<PDFModal bind:showModal allowpdf={!isNaN(selectedFormIndex) && forms[selectedFormIndex] && forms[selectedFormIndex].status === FORM_STATUSES.FINISHED} bind:this={pdfModal} bind:formRenderer>
+		<PDFModal bind:this={pdfModal} bind:showModal bind:formRenderer allowpdf={!isNaN(selectedFormIndex) && forms[selectedFormIndex] && forms[selectedFormIndex].status === FORM_STATUSES.FINISHED}>
 			{#snippet header()}
 				<h2 class="text-charcoal-gray">Nuevo Fomulario</h2>
 			{/snippet}
@@ -230,7 +229,11 @@
 </div>
 {/if}
 
-<AdminModal bind:this={admin_modal} bind:settings on:registered={attempt_admin_register} on:authorized={admin_modal_authorize} on:cancel={admin_modal_reject} on:close={reset_admin_modal}/>
+<AdminModal bind:this={admin_modal} 
+	bind:settings 
+	on:registered={attempt_admin_register} 
+/>
+<ModalDialog/>
 
 <svelte:head>
 	<title>
