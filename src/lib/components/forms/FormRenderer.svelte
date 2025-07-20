@@ -47,8 +47,10 @@
         data.status = FORM_STATUSES.NEW;
         return data;
     }
+
+    const defaultData = defaultFormData(template);
     if (formData === undefined) {
-        localFormData = defaultFormData(template);
+        localFormData = defaultData;
         if (!isNaN(localFormData.id)) console.log("Se eliminará este extraño ID (" + localFormData.id + "), investigaremos de dónde sale.");
         delete localFormData.id;
     } else {
@@ -56,11 +58,20 @@
             ...formData,
             data: {
                 ...formData.data,
-                filler: formData.filler,
-                patient: formData.patient,
-                date: formData.date
             }
         };
+        // Esto arregla los formularios antiguos si el template cambia posteriormente.
+        for (const key of Object.keys(defaultData.data)) {
+            const defaultValue = defaultData.data[key];
+            const currentValue = formData.data?.[key];
+
+            const typesMatch = Object.prototype.toString.call(defaultValue) === Object.prototype.toString.call(currentValue);
+            const keyExists = Object.prototype.hasOwnProperty.call(formData.data, key);
+
+            if (!keyExists || !typesMatch) {
+                localFormData.data[key] = defaultValue;
+            }
+        }
     }
 
     const fieldComponentMap = {
@@ -74,31 +85,25 @@
     };
 
     function handleSubmit(completed) {
-        if (!completed){
+        const completeSubmission = () => {
             localFormData.status = completed ? FORM_STATUSES.FINISHED : FORM_STATUSES.DRAFT;
-            localFormData.filler = localFormData.data.filler ?? "No especificado";
-            localFormData.patient = localFormData.data.patient ?? "No especificado";
-            localFormData.date = localFormData.data.date ?? (new Date()).toISOString().split("T")[0];
+            localFormData.filler = localFormData.data.filler || "No especificado";
+            localFormData.patient = localFormData.data.patient || "No especificado";
+            localFormData.date = localFormData.data.date || (new Date()).toISOString().split("T")[0];
             dispatch('submit', localFormData);
+        };
+
+        if (!completed){
+            completeSubmission();
             return;
         }
+
         restrictions = handleFieldRestrictions(localFormData.data, template.restrictions);
         if (Object.keys(restrictions).length === 0) {
             dialog.open({
                 message: "¿Desea finalizar? Ya no podrá realizar cambios.",
                 AcceptLabel: "Finalizar",
-                Accept: () => {
-                    localFormData.filler = localFormData.data.filler;
-                    delete localFormData.data.filler;
-
-                    localFormData.patient = localFormData.data.patient;
-                    delete localFormData.data.patient;
-
-                    localFormData.date = localFormData.data.date;
-                    delete localFormData.data.date;
-                    localFormData.status = completed ? FORM_STATUSES.FINISHED : FORM_STATUSES.DRAFT;
-                    dispatch('submit', localFormData);
-                }
+                Accept: completeSubmission
             });
         }
     }

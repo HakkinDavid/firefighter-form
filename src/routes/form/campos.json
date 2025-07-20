@@ -1345,45 +1345,37 @@
             "className": "col-span-full col-start-1"
         }
     ]
-},
-
-    
-        "restrictions": {
-            "notEmpty": [
-                {"name": "firmaBomberoAtencion", "message": "La firma es obligatoria"},
-                {"name": "firmaPacienteAtencion", "value": "firmaConsentimiento", "message": "La firma es obligatoria"},
-                {"name": "firmaConsentimiento", "value": "firmaPacienteAtencion", "message": "La firma es obligatoria"},
-                {"name": "firmaRecibe", "value": "firmaPacienteAtencion", "message": "La firma es obligatoria"},
-                {"name": "patient", "message": "El nombre del paciente es obligatorio"},
-                {"name": "date", "message": "La fecha es obligatoria"},
-                {"name": "campoturno", "message": "El turno es obligatorio"},
-                {"name": "campoestacion", "message": "La estación es obligatoria"},
-                {"name": "camposervicio", "message": "El tipo de servicio es obligatorio"},
-                {"name": "campollamada", "message": "La hora de llamada es obligatoria"},
-                {"name": "salida", "message": "La hora de salida es obligatoria"},
-                {"name": "llegada", "message": "La hora de llegada es obligatoria"},
-                {"name": "calle", "message": "La ubicación es obligatoria"},
-                {"name": "colonia", "message": "La colonia es obligatoria"},
-                {"name": "municipio", "message": "El municipio es obligatorio"},
-                {"name": "jefe", "message": "El jefe de servicio es obligatorio"},
-                {"name": "maquinista", "message": "El maquinista es obligatorio"},
-                {"name": "CONCIENCIA", "message": "El nivel de conciencia es obligatorio"},                
-                {"name": "historico_sv", "subname": "hora", "message": "La hora de los signos vitales es obligatoria"},
-                {"name": "resultadoemergenciacheckbox", "message": "El resultado de la emergencia es obligatorio"},
-                {"name": "filler", "message": "El nombre del bombero que firma es obligatorio"}
-            ],
-            "lessThan": [
-                {"name": "glasgowmeasure", "value": 16, "message": "Valor máximo válido es 15."}
-            ],
-            "greaterThan": [
-                {"name": "glasgowmeasure", "value": 2, "message": "Valor mínimo válido es 3."},
-                {"name": "edad", "value": 0, "message": "La edad debe ser mayor a 0"}
-            ],
-            "greaterThanDate": [
-                {"name": "date", "value": -1, "message": "La fecha no puede ser anterior a hoy"}
-            ],
-            "lessThanDate": [
-                {"name": "date", "value": 1, "message": "La fecha no puede ser posterior a mañana"}
-            ]
-        }
+    },
+    "restrictions": {
+        "notEmpty": [
+            {"name": "firmaBomberoAtencion", "message": "La firma es obligatoria"},
+            {"name": "firmaPacienteAtencion", "value": "firmaConsentimiento", "message": "La firma es obligatoria"},
+            {"name": "firmaConsentimiento", "value": "firmaPacienteAtencion", "message": "La firma es obligatoria"},
+            {"name": "firmaRecibe", "value": "firmaPacienteAtencion", "message": "La firma es obligatoria"},
+            {"name": "patient", "message": "El nombre del paciente es obligatorio"},
+            {"name": "date", "message": "La fecha es obligatoria"},
+            {"name": "campoturno", "message": "El turno es obligatorio"},
+            {"name": "campoestacion", "message": "La estación es obligatoria"},
+            {"name": "camposervicio", "message": "El tipo de servicio es obligatorio"},
+            {"name": "campollamada", "message": "La hora de llamada es obligatoria"},
+            {"name": "salida", "message": "La hora de salida es obligatoria"},
+            {"name": "llegada", "message": "La hora de llegada es obligatoria"},
+            {"name": "calle", "message": "La ubicación es obligatoria"},
+            {"name": "colonia", "message": "La colonia es obligatoria"},
+            {"name": "municipio", "message": "El municipio es obligatorio"},
+            {"name": "jefe", "message": "El jefe de servicio es obligatorio"},
+            {"name": "maquinista", "message": "El maquinista es obligatorio"},
+            {"name": "CONCIENCIA", "message": "El nivel de conciencia es obligatorio"},                
+            {"name": "historico_sv", "subname": "hora", "message": "La hora de los signos vitales es obligatoria"},
+            {"name": "resultadoemergenciacheckbox", "message": "El resultado de la emergencia es obligatorio"},
+            {"name": "filler", "message": "El nombre del bombero que firma es obligatorio"}
+        ],
+        "lessThan": [
+            {"name": "glasgowmeasure", "value": 16, "message": "Valor máximo válido es 15."}
+        ],
+        "greaterThan": [
+            {"name": "glasgowmeasure", "value": 2, "message": "Valor mínimo válido es 3."},
+            {"name": "edad", "value": 0, "message": "La edad debe ser mayor a 0"}
+        ]
+    }
 }
