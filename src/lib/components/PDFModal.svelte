@@ -1,9 +1,11 @@
 <script>
 	import { generateFormPDF } from './forms/PDFMaker';
 	import { dialog } from '$lib/stores/dialogStore.svelte.js'
-	let { showModal = $bindable(), header, children, allowpdf, formRenderer = $bindable() } = $props();
+	import { adminDialog } from '$lib/stores/adminDialogStore.svelte';
+	let { showModal = $bindable(), isPreviewOnly = $bindable(), formRenderer = $bindable(), header, children } = $props();
 	let modalContent;
 	let hide = $state(false);
+	let isDropdownOpen = $state(false);
 	let modalRef;
 
 	function openModal() {
@@ -17,9 +19,15 @@
 		}
 	}
 
+	const handleDropdownFocusLoss = ({ relatedTarget, currentTarget }) => {
+    	if (relatedTarget instanceof HTMLElement && currentTarget.contains(relatedTarget)) return 
+		isDropdownOpen = false
+	}
+
 	async function generatePdf() {
 		const overlay = document.getElementById('overlay');
 		const spinner = document.getElementById('spinner');
+		isDropdownOpen = false;
 
 		overlay.style.zIndex = '60';
 		spinner.style.display = 'block';
@@ -56,6 +64,12 @@
 			closeModal();
 		}
 	}
+
+	function requestEditPermissions() {
+		isDropdownOpen = false;
+        adminDialog.onAuthorize = () => { isPreviewOnly = false };
+        adminDialog.open();
+    }
 </script>
 
 <!-- Overlay -->
@@ -73,7 +87,7 @@
 >
 	<div class="flex justify-between px-4 pb-4 sticky top-0 bg-gray-100 z-70 h-18">
 		<button
-			onclick={ allowpdf ? closeModal : back}
+			onclick={ isPreviewOnly ? closeModal : back}
 			class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine active:bg-wine"
 		>
 			Regresar
@@ -83,13 +97,22 @@
 			{@render header?.()}
 		</div>
 
-		{#if allowpdf}
-			<button
-				onclick={generatePdf}
-				class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-blue-600 active:bg-blue-600"
-			>
-				Descargar
-			</button>
+		{#if isPreviewOnly}
+			<div class="relative" onfocusout={handleDropdownFocusLoss}>
+				<button onclick={() => isDropdownOpen = !isDropdownOpen}
+					class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine active:bg-wine"
+				>
+					Opciones
+				</button>
+				{#if isDropdownOpen}
+					<ul class="absolute right-0 w-40 bg-white border border-gray-300 rounded shadow-lg">
+						<li><button class="block w-full text-left px-4 py-2 text-wine transition hover:text-bronze hover:bg-gray-50 active:text-bronze active:bg-gray-50" 
+							onclick={generatePdf}>Descargar</button></li>
+						<li><button class="block w-full text-left px-4 py-2 text-wine transition hover:text-bronze hover:bg-gray-50 active:text-bronze active:bg-gray-50"
+							onclick={requestEditPermissions}>Editar</button></li>
+					</ul>
+				{/if}
+			</div>
 		{:else}
 			<div></div>
 		{/if}

@@ -12,6 +12,7 @@
 		forms = $bindable([]), // Lista de formularios vinculada al estado
 		selectedFormIndex = $bindable(null),
 		showModal = $bindable(false),
+		isPreviewOnly = $bindable(false),
 		pdfModal
 	} = $props();
 
@@ -21,6 +22,7 @@
 
 	function selectDoc(index) {
 		selectedFormIndex = index;
+		isPreviewOnly = !isNaN(selectedFormIndex) && forms[selectedFormIndex] && forms[selectedFormIndex].status === FORM_STATUSES.FINISHED;
 		showModal = true;
 	}
 

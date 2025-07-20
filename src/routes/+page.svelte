@@ -30,6 +30,7 @@
 	let formRenderer = $state(undefined);
 	let settings = $state({});
 	let was_admin_registered = $state(true);
+	let isPreview = $state(false);
 	
 	const CURRENT_PLATFORM = Capacitor.getPlatform();
 	let db;
@@ -196,12 +197,15 @@
 		/>
 	{:else}
 		<!-- Lista de formularios cargados -->
-		<FormsList bind:forms bind:selectedFormIndex={selectedFormIndex} bind:showModal bind:pdfModal on:delete={(e) => delete_form(e.detail.index)}/>
+		<FormsList bind:forms bind:selectedFormIndex={selectedFormIndex} 
+			bind:showModal bind:pdfModal bind:isPreviewOnly={isPreview}
+			on:delete={(e) => delete_form(e.detail.index)}/>
 		
 		<div class="flex w-full place-items-center justify-center">
 			<!-- Botón para añadir un formulario -->
 			<Button
 				onclick={() => {
+					isPreview = false;
 					selectedFormIndex = null;
 					showModal = true;
 				}}
@@ -211,14 +215,14 @@
 			/>
 		</div>
 
-		<PDFModal bind:this={pdfModal} bind:showModal bind:formRenderer allowpdf={!isNaN(selectedFormIndex) && forms[selectedFormIndex] && forms[selectedFormIndex].status === FORM_STATUSES.FINISHED}>
+		<PDFModal bind:this={pdfModal} bind:showModal bind:formRenderer bind:isPreviewOnly={isPreview}>
 			{#snippet header()}
-				<h2 class="text-charcoal-gray">Nuevo Fomulario</h2>
+				<h2 class="text-charcoal-gray text-sm md:text-base">Nuevo Fomulario</h2>
 			{/snippet}
 			
 			{#snippet children()}
-				<FormRenderer bind:this={formRenderer} template={formulario} formData={forms[selectedFormIndex]} on:submit={(e) => save_form(e.detail)}
-					isPreviewOnly={!isNaN(selectedFormIndex) && forms[selectedFormIndex] && forms[selectedFormIndex].status === FORM_STATUSES.FINISHED}/>
+				<FormRenderer bind:this={formRenderer} template={formulario} formData={forms[selectedFormIndex]}
+					bind:isPreviewOnly={isPreview} on:submit={(e) => save_form(e.detail)}/>
 			{/snippet}
 		</PDFModal>
 	{/if}

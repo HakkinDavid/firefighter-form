@@ -9,13 +9,11 @@
 	import { createEventDispatcher } from "svelte";
 	import { FORM_STATUSES } from "$lib/Dictionary.svelte";
     import { handleFieldRestrictions, verifyRestrictions } from "./RestrictionHandler";
-	import { derived } from "svelte/store";
 	import SectionSelector from "./SectionSelector.svelte";
 	import { fetchOptions } from "./FormOptions";
 	import { get_db } from "$lib/db/sqliteConfig";
 	import { debounce } from "$lib/debounce";
-    import { dialog } from "$lib/stores/dialogStore.svelte.js"
-	import { adminDialog } from "$lib/stores/adminDialogStore.svelte";
+    import { dialog } from "$lib/stores/dialogStore.svelte.js";
 
     let localFormData = $state();
     let restrictions = $state({});
@@ -103,11 +101,6 @@
                 }
             });
         }
-    }
-
-    function requestEditPermissions() {
-        adminDialog.onAuthorize = () => {isPreviewOnly = false}
-        adminDialog.open();
     }
 
     function shouldDisplay(field) {
@@ -232,19 +225,13 @@
 </div>
 
 <div class="h-16"></div>
-<div class="fixed bottom-0 left-0 w-full bg-gray-100 z-70 pb-4 pr-4 flex justify-end">
-    {#if !isPreviewOnly}
+<div class="fixed bottom-0 left-0 w-full bg-gray-100 z-70 pb-4 pr-4 flex justify-end" hidden={isPreviewOnly}>
     <button type="button" form="template" onclick={() => handleSubmit(false)}
         class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-wine active:bg-wine mr-3">
         Guardar
     </button>
-    {/if}
-    <button type="button" form="template" onclick={() => {
-            if (isPreviewOnly) requestEditPermissions();
-            else handleSubmit(true);
-            }
-        }
+    <button type="button" form="template" onclick={() => handleSubmit(true)}
         class="mt-4 block cursor-pointer rounded bg-wine px-4 py-2 text-white transition hover:bg-lightwine active:bg-lightwine">
-        {isPreviewOnly ? "Editar": "Finalizar"}
+        Finalizar
     </button>
 </div>
