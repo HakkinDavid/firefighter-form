@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class Home extends StatefulWidget {
+  const Home({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -12,13 +12,13 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
+  //final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Home> createState() => _HomeState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeState extends State<Home> {
   int _counter = 0;
 
   void _incrementCounter() {
@@ -46,9 +46,9 @@ class _MyHomePageState extends State<MyHomePage> {
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
         backgroundColor: CupertinoTheme.of(context).primaryContrastingColor,
-        // Here we take the value from the MyHomePage object that was created by
+        // Here we take the value from the Home object that was created by
         // the App.build method, and use it to set our appbar title.
-        middle: Text(widget.title),
+        middle: Text("Aplicación de Atención Prehospitalaria y Servicios Digitales para Bomberos"),
         trailing: CupertinoButton(onPressed: _incrementCounter, child: Icon(CupertinoIcons.add)),
       ),
       child: Center(
