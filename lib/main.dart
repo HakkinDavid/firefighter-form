@@ -31,7 +31,13 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         primaryColor: CupertinoColors.systemPurple
       ),
-      home: const MyHomePage(title: 'Aplicación de Atención Prehospitalaria y Servicios Digitales para Bomberos Home Page'),
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          default:
+            const MyHomePage(title: 'Aplicación de Atención Prehospitalaria y Servicios Digitales para Bomberos Home Page');
+          break;
+        }
+      },
     );
   }
 }
