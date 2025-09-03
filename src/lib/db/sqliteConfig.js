@@ -69,3 +69,15 @@ export async function init_db() {
        await db.run(insertQuery, [id, name, category]);
     }
 }
+
+// Resetear la aplicación
+export async function drop_db() {
+    await db.execute(`
+        DROP TABLE IF EXISTS forms;
+        DROP TABLE IF EXISTS settings;
+        DROP TABLE IF EXISTS general_options;`);
+}
+
+export async function drop_settings() {
+    await db.execute(`DROP TABLE IF EXISTS settings;`)
+}

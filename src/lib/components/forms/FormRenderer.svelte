@@ -19,7 +19,7 @@
     let restrictions = $state({});
     let { template, formData, isPreviewOnly = false } = $props();
 
-    let section = $state("");
+    let section = $state(Object.keys(template.fields)[0] ?? "");
     // Obtener todos los campos del objeto en un arreglo aplanado
     const allFields = Object.values(template.fields).flat();
     const fieldsToDisplay = $derived(template.fields[section] ?? allFields);
@@ -98,7 +98,7 @@
             return;
         }
 
-        restrictions = handleFieldRestrictions(localFormData.data, template.restrictions);
+        restrictions = {}//handleFieldRestrictions(localFormData.data, template.restrictions);
         if (Object.keys(restrictions).length === 0) {
             dialog.open({
                 message: "¿Desea finalizar? Ya no podrá realizar cambios.",

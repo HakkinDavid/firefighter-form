@@ -20,6 +20,7 @@
 
 	import { FORM_STATUSES, NOTICE_TYPES, ACTION_STATUSES } from '$lib/Dictionary.svelte';
 	import { connect_db, get_db, init_db } from '$lib/db/sqliteConfig';
+	import Icon from '$lib/components/Icon.svelte';
 
 	let showModal = $state(false);
 	let forms = $state([]);
@@ -53,7 +54,7 @@
 				`INSERT INTO forms (date, filler, patient, status, data) VALUES (?, ?, ?, ?, ?)`,
 				[form.date, form.filler, form.patient, form.status, dataJson]
 			);
-			form.id = (await db.query("select seq from sqlite_sequence where name=\"forms\"")).values[0].seq;
+			// form.id = (await db.query("select seq from sqlite_sequence where name=\"forms\"")).values[0].seq;
 			forms.unshift(form);
 		}
 
@@ -203,16 +204,17 @@
 		
 		<div class="flex w-full place-items-center justify-center">
 			<!-- Botón para añadir un formulario -->
-			<Button
+			<button
 				onclick={() => {
 					isPreview = false;
 					selectedFormIndex = null;
 					showModal = true;
 				}}
-				text="+"
 				class="fixed bottom-10 right-6 w-16 h-16 cursor-pointer rounded-full border border-black 
-				bg-bronze text-lg text-white transition hover:bg-wine active:bg-wine"
-			/>
+				bg-bronze text-white transition hover:bg-wine active:bg-wine"
+			>
+				<Icon type="Plus" class="h-8"/>
+			</button>
 		</div>
 
 		<PDFModal bind:this={pdfModal} bind:showModal bind:formRenderer bind:isPreviewOnly={isPreview}>

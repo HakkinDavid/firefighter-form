@@ -1227,6 +1227,18 @@
             "options": ["Hospital", "Domicilio", "Helicóptero", "Ambulancia"]
         },
         {
+            "name": "hospitaltraslado",
+            "label": "Hospital de traslado",
+            "type": "input",
+            "inputType": "text",
+            "options": ["ISSSTE", "ISSSTECALI", "HGR 1", "HGR 20", "HGR 7", "HG Tijuana", "HG Rosarito", "HG Tecate"],
+            "allowOwnOptions": true,
+            "display_on": {
+                "notEmpty": [{"name": "trasladomultiple"}],
+                "equalTo": [{"name": "trasladomultiple", "value": "Hospital"}]
+            }
+        },
+        {
             "name": "denominacion",
             "label": "Denominación / Matrícula",
             "type": "input",

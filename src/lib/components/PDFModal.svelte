@@ -2,6 +2,7 @@
 	import { generateFormPDF } from './forms/PDFMaker';
 	import { dialog } from '$lib/stores/dialogStore.svelte.js'
 	import { adminDialog } from '$lib/stores/adminDialogStore.svelte';
+	import Icon from './Icon.svelte';
 	let { showModal = $bindable(), isPreviewOnly = $bindable(), formRenderer = $bindable(), header, children } = $props();
 	let modalContent;
 	let hide = $state(false);
@@ -102,7 +103,7 @@
 				<button onclick={() => isDropdownOpen = !isDropdownOpen}
 					class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine active:bg-wine"
 				>
-					Opciones
+					<Icon type="Barras" class="h-6"/>
 				</button>
 				{#if isDropdownOpen}
 					<ul class="absolute right-0 w-40 bg-white border border-gray-300 rounded shadow-lg">

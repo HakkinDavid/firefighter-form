@@ -1,11 +1,13 @@
 <!-- Header.svelte -->
 <script>
     import Icon from "$lib/components/Icon.svelte";
+	import SettingsModal from "./settings/SettingsModal.svelte";
 
     let {
         username = null,
         admin_username = ""
     } = $props();
+    let activeSM = $state(false);
 </script>
 
 <!-- Header -->
@@ -20,8 +22,15 @@
             {#if username}
                 <p>Usuario: {username}</p>
             {/if}
-            <p>Supervisor: {admin_username}</p>
+            <div class="flex items-center justify-center gap-2">
+                <p>Supervisor: {admin_username}</p>
+                <button onclick={() => activeSM = true}>
+                    <Icon type="Engranaje" class="h-6 w-6 hover:text-gray-400 active:text-gray-400"/>
+                </button>
+            </div>
         </div>
         <Icon type="Bomberos" />
     </div>
 </div>
+
+<SettingsModal bind:active={activeSM}/>
