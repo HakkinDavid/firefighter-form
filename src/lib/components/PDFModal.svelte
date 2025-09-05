@@ -57,7 +57,7 @@
 	function back() {
 		if ( !formRenderer.formData || (formRenderer.localFormData && JSON.stringify($state.snapshot(formRenderer.localFormData)) !== JSON.stringify($state.snapshot(formRenderer.formData)))) {
 			dialog.open({
-				message: "¡Tiene cambios sin guardar!",
+				title: "¡Tiene cambios sin guardar!",
 				Accept: confirm,
 				AcceptLabel: "Salir"
 			});

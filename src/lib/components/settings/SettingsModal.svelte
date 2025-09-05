@@ -6,6 +6,7 @@
 	import { Preferences } from "@capacitor/preferences";
 	import Modal from "../Modal.svelte";
 	import { Capacitor } from "@capacitor/core";
+	import { appFunctions } from "$lib/stores/appStore.svelte";
 
     let {
         active = $bindable(false),
@@ -18,7 +19,7 @@
             } else {
                 await drop_settings();
             }
-            window.location.reload();
+            appFunctions.softReset();
         };
         adminDialog.onReject = () => {active = true};
         active = false;
@@ -29,11 +30,12 @@
         const resetAndExit = async () => {
             await drop_db();
             await Preferences.clear();
-            window.location.reload();
+            appFunctions.softReset();
         };
         active = false;
         dialog.open({
-            message: "¿Está seguro que desea resetear la aplicación? Se borrarán todos los datos.",
+            title: "¿Está seguro que desea resetear la aplicación?⚠️",
+            message: "Esta acción eliminará de forma permanente todos los datos guardados incluyendo registros y credenciales.",
 			Accept: resetAndExit,
             AcceptLabel: "Estoy seguro",
             Cancel: () => {active = true},

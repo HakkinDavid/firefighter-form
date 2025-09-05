@@ -98,10 +98,11 @@
             return;
         }
 
-        restrictions = {}//handleFieldRestrictions(localFormData.data, template.restrictions);
+        restrictions = handleFieldRestrictions(localFormData.data, template.restrictions);
         if (Object.keys(restrictions).length === 0) {
             dialog.open({
-                message: "¿Desea finalizar? Ya no podrá realizar cambios.",
+                title: "¿Desea finalizar?",
+                message: "Ya no podrá realizar cambios.",
                 AcceptLabel: "Finalizar",
                 Accept: completeSubmission
             });

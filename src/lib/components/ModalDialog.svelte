@@ -5,6 +5,7 @@
 {#if dialog.content}
   <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-100">
     <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
+      <p class="font-bold">{dialog.content.title}</p>
       <p class="mb-4 text-gray-800">{dialog.content.message}</p>
       <div class="flex justify-end gap-2">
         <button onclick={() => { dialog.content.Cancel?.(); dialog.close(); }} 
