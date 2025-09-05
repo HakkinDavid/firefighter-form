@@ -33,7 +33,7 @@
             params.push(sbValues.sdate ? sbValues.sdate : getToday());
             params.push(sbValues.edate ? sbValues.edate : getToday());
         }
-        sql += ' ORDER BY date LIMIT 50;';
+        sql += ' ORDER BY date DESC LIMIT 50;';
         queryFunc(sql, params);
     }
 </script>
