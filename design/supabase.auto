@@ -1,0 +1,24 @@
+digraph Backend {
+  rankdir=LR;
+  label="Vista Lógica del Backend — Supabase";
+  fontsize=12;
+
+  node [shape=component, style=filled, fillcolor="#FFFFFF"];
+  Supabase [label="Supabase\n(Auth, DB, Storage, Realtime)"];
+  Reports [label="Estadísticas y Reportes"];
+  Padrones [label="Gestión de Padrones"];
+  Inventario [label="Gestión de Inventario"];
+  Overrides [label="Edición Administrativa"];
+  Portal [shape=folder, label="Portal Administrativo en el App"];
+  Ext1 [shape=note, label="Secretaría de Salud"];
+  Ext2 [shape=note, label="Ayuntamiento"];
+
+  // Conexiones
+  Portal -> Supabase;
+  Supabase -> Reports;
+  Supabase -> Padrones;
+  Supabase -> Inventario;
+  Supabase -> Overrides;
+  Supabase -> Ext1;
+  Supabase -> Ext2;
+}

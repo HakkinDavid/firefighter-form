@@ -1,0 +1,25 @@
+digraph Estados {
+  rankdir=LR;
+  label="Estados del Formulario";
+  fontsize=12;
+
+  node [shape=oval, style=filled, fillcolor="#F0F0F0"];
+  Draft [label="Borrador (editable)"];
+  Queued [label="En Cola (sincronización pendiente)"];
+  Synced [label="Sincronizado (servidor)"];
+  Finalized [label="Finalizado (firmado y bloqueado)"];
+
+  Draft -> Queued [label="offline"];
+  Queued -> Synced [label="sync exitoso"];
+  Draft -> Finalized [label="firma"];
+  Finalized -> Synced [label="sincronización"];
+  
+  // Políticas
+  Folio [shape=note, label="Política de Folio único"];
+  Block [shape=note, label="Bloqueo tras firma"];
+  Override [shape=note, label="Override por Admin"];
+
+  Folio -> Draft [style=dotted];
+  Block -> Finalized [style=dotted];
+  Override -> Finalized [style=dotted];
+}

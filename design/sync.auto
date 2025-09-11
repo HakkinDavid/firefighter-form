@@ -1,0 +1,18 @@
+digraph Sync {
+  rankdir=LR;
+  label="Sincronización y Almacenamiento";
+  fontsize=12;
+
+  node [shape=box, style=filled, fillcolor="#FFFFFF"];
+  Local [label="Almacenamiento Local (.json / SQLite)"];
+  Sync [label="Gestor de Sincronización"];
+  Offline [label="Modo Offline"];
+  Supabase [shape=component, label="Supabase Backend"];
+
+  // Flujo
+  Offline -> Local [label="guardar datos"];
+  Local -> Sync [label="cola de sincronización"];
+  Sync -> Supabase [label="subida de datos"];
+  Supabase -> Sync [label="actualizaciones / padrones"];
+  Sync -> Local [label="descarga/actualización"];
+}
