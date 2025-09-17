@@ -9,20 +9,17 @@
 	import { createEventDispatcher } from "svelte";
 	import { FORM_STATUSES } from "$lib/Dictionary.svelte";
     import { handleFieldRestrictions, verifyRestrictions } from "./RestrictionHandler";
-	import { derived } from "svelte/store";
 	import SectionSelector from "./SectionSelector.svelte";
 	import { fetchOptions } from "./FormOptions";
 	import { get_db } from "$lib/db/sqliteConfig";
 	import { debounce } from "$lib/debounce";
-	import ModalDialog from "../ModalDialog.svelte";
+    import { dialog } from "$lib/stores/dialogStore.svelte.js";
 
     let localFormData = $state();
     let restrictions = $state({});
     let { template, formData, isPreviewOnly = false } = $props();
 
-    let showConfirmation = $state(false);
-
-    let section = $state("");
+    let section = $state(Object.keys(template.fields)[0] ?? "");
     // Obtener todos los campos del objeto en un arreglo aplanado
     const allFields = Object.values(template.fields).flat();
     const fieldsToDisplay = $derived(template.fields[section] ?? allFields);
@@ -50,8 +47,10 @@
         data.status = FORM_STATUSES.NEW;
         return data;
     }
+
+    const defaultData = defaultFormData(template);
     if (formData === undefined) {
-        localFormData = defaultFormData(template);
+        localFormData = defaultData;
         if (!isNaN(localFormData.id)) console.log("Se eliminará este extraño ID (" + localFormData.id + "), investigaremos de dónde sale.");
         delete localFormData.id;
     } else {
@@ -59,11 +58,20 @@
             ...formData,
             data: {
                 ...formData.data,
-                filler: formData.filler,
-                patient: formData.patient,
-                date: formData.date
             }
         };
+        // Esto arregla los formularios antiguos si el template cambia posteriormente.
+        for (const key of Object.keys(defaultData.data)) {
+            const defaultValue = defaultData.data[key];
+            const currentValue = formData.data?.[key];
+
+            const typesMatch = Object.prototype.toString.call(defaultValue) === Object.prototype.toString.call(currentValue);
+            const keyExists = Object.prototype.hasOwnProperty.call(formData.data, key);
+
+            if (!keyExists || !typesMatch) {
+                localFormData.data[key] = defaultValue;
+            }
+        }
     }
 
     const fieldComponentMap = {
@@ -77,31 +85,30 @@
     };
 
     function handleSubmit(completed) {
-        if (!completed){
+        const completeSubmission = () => {
             localFormData.status = completed ? FORM_STATUSES.FINISHED : FORM_STATUSES.DRAFT;
-            localFormData.filler = localFormData.data.filler ?? "No especificado";
-            localFormData.patient = localFormData.data.patient ?? "No especificado";
-            localFormData.date = localFormData.data.date ?? (new Date()).toISOString().split("T")[0];
+            localFormData.filler = localFormData.data.filler || "No especificado";
+            localFormData.patient = localFormData.data.patient || "No especificado";
+            localFormData.date = localFormData.data.date || (new Date()).toISOString().split("T")[0];
             dispatch('submit', localFormData);
+        };
+
+        if (!completed){
+            completeSubmission();
             return;
         }
+
         restrictions = handleFieldRestrictions(localFormData.data, template.restrictions);
-        if (Object.keys(restrictions).length === 0 && showConfirmation == true ) { 
-            localFormData.filler = localFormData.data.filler;
-            delete localFormData.data.filler;
-
-            localFormData.patient = localFormData.data.patient;
-            delete localFormData.data.patient;
-
-            localFormData.date = localFormData.data.date;
-            delete localFormData.data.date;
-            localFormData.status = completed ? FORM_STATUSES.FINISHED : FORM_STATUSES.DRAFT;
-            dispatch('submit', localFormData);
-            showConfirmation = false; // Quitamos confirmacion
-        } else if (Object.keys(restrictions).length === 0 && showConfirmation == false) { // Si se cumple con las restricciones aun no esta el dialogo de confirmacion
-            showConfirmation = true; // Se muestra el dialogo de confirmacion
+        if (Object.keys(restrictions).length === 0) {
+            dialog.open({
+                title: "¿Desea finalizar?",
+                message: "Ya no podrá realizar cambios.",
+                AcceptLabel: "Finalizar",
+                Accept: completeSubmission
+            });
         }
     }
+
     function shouldDisplay(field) {
         if (!field.display_on) return true;
         return verifyRestrictions(localFormData.data, field.display_on);
@@ -229,16 +236,8 @@
         class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-wine active:bg-wine mr-3">
         Guardar
     </button>
-    <button type="button" form="template" onclick={() => handleSubmit(true)} 
+    <button type="button" form="template" onclick={() => handleSubmit(true)}
         class="mt-4 block cursor-pointer rounded bg-wine px-4 py-2 text-white transition hover:bg-lightwine active:bg-lightwine">
         Finalizar
     </button>
 </div>
-
-<!-- Mensaje de confirmacion -->
-<ModalDialog 
-    message="¿Desea finalizar? Ya no podrá realizar cambios."
-    Accept={() => handleSubmit(true)}
-    AcceptLabel="Finalizar"
-    bind:showDialog={showConfirmation}
-/>

@@ -1,9 +1,12 @@
 <script>
 	import { generateFormPDF } from './forms/PDFMaker';
-	import ModalDialog from './ModalDialog.svelte';
-	let { showModal = $bindable(), header, children, allowpdf, formRenderer = $bindable() } = $props();
+	import { dialog } from '$lib/stores/dialogStore.svelte.js'
+	import { adminDialog } from '$lib/stores/adminDialogStore.svelte';
+	import Icon from './Icon.svelte';
+	let { showModal = $bindable(), isPreviewOnly = $bindable(), formRenderer = $bindable(), header, children } = $props();
 	let modalContent;
 	let hide = $state(false);
+	let isDropdownOpen = $state(false);
 	let modalRef;
 
 	function openModal() {
@@ -17,9 +20,15 @@
 		}
 	}
 
+	const handleDropdownFocusLoss = ({ relatedTarget, currentTarget }) => {
+    	if (relatedTarget instanceof HTMLElement && currentTarget.contains(relatedTarget)) return 
+		isDropdownOpen = false
+	}
+
 	async function generatePdf() {
 		const overlay = document.getElementById('overlay');
 		const spinner = document.getElementById('spinner');
+		isDropdownOpen = false;
 
 		overlay.style.zIndex = '60';
 		spinner.style.display = 'block';
@@ -40,24 +49,28 @@
 
 	export { callPdf };
 
-	let showWarning = $state(false);
 
 	function confirm() {
-		showWarning = false;
 		closeModal();
-	}
-
-	function cancel() {
-		showWarning = false;
 	}
 
 	function back() {
 		if ( !formRenderer.formData || (formRenderer.localFormData && JSON.stringify($state.snapshot(formRenderer.localFormData)) !== JSON.stringify($state.snapshot(formRenderer.formData)))) {
-			showWarning = true
+			dialog.open({
+				title: "¡Tiene cambios sin guardar!",
+				Accept: confirm,
+				AcceptLabel: "Salir"
+			});
 		} else {
 			closeModal();
 		}
 	}
+
+	function requestEditPermissions() {
+		isDropdownOpen = false;
+        adminDialog.onAuthorize = () => { isPreviewOnly = false };
+        adminDialog.open();
+    }
 </script>
 
 <!-- Overlay -->
@@ -75,7 +88,7 @@
 >
 	<div class="flex justify-between px-4 pb-4 sticky top-0 bg-gray-100 z-70 h-18">
 		<button
-			onclick={ allowpdf ? closeModal : back}
+			onclick={ isPreviewOnly ? closeModal : back}
 			class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine active:bg-wine"
 		>
 			Regresar
@@ -85,13 +98,22 @@
 			{@render header?.()}
 		</div>
 
-		{#if allowpdf}
-			<button
-				onclick={generatePdf}
-				class="mt-4 block cursor-pointer rounded bg-bronze px-4 py-2 text-white transition hover:bg-blue-600 active:bg-blue-600"
-			>
-				Descargar
-			</button>
+		{#if isPreviewOnly}
+			<div class="relative" onfocusout={handleDropdownFocusLoss}>
+				<button onclick={() => isDropdownOpen = !isDropdownOpen}
+					class="mt-4 block cursor-pointer rounded px-4 py-2 bg-bronze text-white transition hover:bg-wine active:bg-wine"
+				>
+					<Icon type="Barras" class="h-6"/>
+				</button>
+				{#if isDropdownOpen}
+					<ul class="absolute right-0 w-40 bg-white border border-gray-300 rounded shadow-lg">
+						<li><button class="block w-full text-left px-4 py-2 text-wine transition hover:text-bronze hover:bg-gray-50 active:text-bronze active:bg-gray-50" 
+							onclick={generatePdf}>Descargar</button></li>
+						<li><button class="block w-full text-left px-4 py-2 text-wine transition hover:text-bronze hover:bg-gray-50 active:text-bronze active:bg-gray-50"
+							onclick={requestEditPermissions}>Editar</button></li>
+					</ul>
+				{/if}
+			</div>
 		{:else}
 			<div></div>
 		{/if}
@@ -102,15 +124,6 @@
 		{/key}
 	</div>
 </div>
-
-<!-- Mensaje de aviso -->
- <ModalDialog
-    message="¡Tiene cambios sin guardar!"
-    Accept={confirm}
-    Cancel={cancel}
-    AcceptLabel="Salir"
-    bind:showDialog={showWarning}
-/>
 
 <style>
 	@keyframes zoom {

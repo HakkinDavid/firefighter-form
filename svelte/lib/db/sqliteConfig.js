@@ -3,6 +3,7 @@ import { CapacitorSQLite, SQLiteConnection, SQLiteDBConnection } from '@capacito
 const almacenamiento_formularios = 'firefighter_forms_db';
 
 let db;
+let sqlite;
 
 // Crear la conexión
 export async function connect_db(CURRENT_PLATFORM) {
@@ -23,13 +24,25 @@ export async function connect_db(CURRENT_PLATFORM) {
     }
     // En iOS y Android, esto funciona bien.
     else {
-        const sqlite = new SQLiteConnection(CapacitorSQLite);
-        const db_func = await sqlite.createConnection(almacenamiento_formularios, false, 'no-encryption', 1);
-        await db_func.open();
-        db = db_func;
+        if (!sqlite) {
+            sqlite = new SQLiteConnection(CapacitorSQLite);
+        }
+        const isConn = (await sqlite.isConnection(almacenamiento_formularios));
+
+        if (isConn.result) {
+            db = await sqlite.retrieveConnection(almacenamiento_formularios);
+        } else {
+            const db_func = await sqlite.createConnection(almacenamiento_formularios, false, 'no-encryption', 1);
+            await db_func.open();
+            db = db_func;
+        }
     }
 }
 
+export async function disconnect_db() {
+    if (!sqlite) return;
+    await sqlite.closeConnection(almacenamiento_formularios);
+}
 // Obtener la conexión
 export function get_db() {
     return db;
@@ -68,4 +81,16 @@ export async function init_db() {
     for (const [id, name, category] of values) {
        await db.run(insertQuery, [id, name, category]);
     }
+}
+
+// Resetear la aplicación
+export async function drop_db() {
+    await db.execute(`
+        DROP TABLE IF EXISTS forms;
+        DROP TABLE IF EXISTS settings;
+        DROP TABLE IF EXISTS general_options;`);
+}
+
+export async function drop_settings() {
+    await db.execute(`DROP TABLE IF EXISTS settings;`)
 }

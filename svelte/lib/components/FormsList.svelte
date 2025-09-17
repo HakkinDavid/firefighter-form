@@ -12,6 +12,7 @@
 		forms = $bindable([]), // Lista de formularios vinculada al estado
 		selectedFormIndex = $bindable(null),
 		showModal = $bindable(false),
+		isPreviewOnly = $bindable(false),
 		pdfModal
 	} = $props();
 
@@ -21,6 +22,7 @@
 
 	function selectDoc(index) {
 		selectedFormIndex = index;
+		isPreviewOnly = !isNaN(selectedFormIndex) && forms[selectedFormIndex] && forms[selectedFormIndex].status === FORM_STATUSES.FINISHED;
 		showModal = true;
 	}
 
@@ -66,7 +68,7 @@
 							event.stopPropagation();
 						}}
 						class="place-items-center justify-center transition hover:bg-red-300 active:bg-red-300"
-						><Icon type="Borrar" class="h-8 w-8 cursor-pointer" /></td
+						><Icon type="Borrar" class="h-6 w-6 cursor-pointer" /></td
 					>
 					{#if form.status == FORM_STATUSES.FINISHED}
 						<td

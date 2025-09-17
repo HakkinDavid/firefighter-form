@@ -13,11 +13,6 @@
 
 <nav class="sticky top-18 z-50 w-full h-min bg-slate-100 shadow-md border border-gray-200 overflow-x-auto">
   <div class="flex justify-center items-center h-full min-w-max px-4 space-x-2 mx-auto">
-    <button 
-        class={`text-white rounded px-4 py-2 flex-shrink-0 border ${selected === "" ? "border-2 border-black" : "border-gray-300"} bg-gray-500`}
-        onclick={() => { selected = ""; }}>
-        Todos los campos
-    </button>
     {#each sections as section, idx}
     {@const color = colors[idx % colors.length]}
     {@const isSelected = selected === section}
