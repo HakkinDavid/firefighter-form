@@ -36,11 +36,12 @@ class MyApp extends StatelessWidget {
         return CupertinoPageRoute(
               builder: (context) {
                 switch (settings.name) {
-                  case '/':
+                  case '/home':
                     return const Home();
+                  case '/':
                   case '/welcome':
                   default:
-                    return const Welcome();   
+                    return const Welcome();
                 }
               },
               settings: settings,

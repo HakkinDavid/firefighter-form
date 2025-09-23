@@ -1,3 +1,5 @@
+import 'package:bomberos/models/settings.dart';
+import 'package:bomberos/viewmodels/header.dart';
 import 'package:flutter/cupertino.dart';
 
 class Welcome extends StatefulWidget {
@@ -10,6 +12,10 @@ class Welcome extends StatefulWidget {
 class _WelcomeState extends State<Welcome> {
   @override
   Widget build(BuildContext context) {
-    return CupertinoActivityIndicator();
+    return CupertinoPageScaffold(
+      navigationBar: Header(),
+      backgroundColor: Settings().colors.primary,
+      child: CupertinoActivityIndicator(),
+    );
   }
 }
