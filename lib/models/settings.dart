@@ -1,15 +1,19 @@
 import 'package:flutter/cupertino.dart';
 
+class ColorsSettings {
+  final Color primary = Color.fromRGBO(98, 19, 51, 1.0);
+  final Color background = CupertinoColors.white;
+  final Color primaryContrast = Color.fromRGBO(231, 210, 149, 1.0);
+}
+
 class Settings {
   static final Settings _instance = Settings._internal();
-  
+
   Settings._internal();
 
   factory Settings() {
     return _instance;
   }
 
-  Map<String, Color> colors = {
-    "primary": Color.from(red: 98/255, green: 19/255, blue: 51/255, alpha: 1.0)
-  };
+  final ColorsSettings colors = ColorsSettings();
 }

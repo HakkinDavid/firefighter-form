@@ -1,3 +1,4 @@
+import 'package:bomberos/models/settings.dart';
 import 'package:flutter/cupertino.dart';
 
 class Home extends StatefulWidget {
@@ -45,7 +46,7 @@ class _HomeState extends State<Home> {
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
-        backgroundColor: CupertinoTheme.of(context).primaryContrastingColor,
+        backgroundColor: Settings().colors.primary,
         // Here we take the value from the Home object that was created by
         // the App.build method, and use it to set our appbar title.
         middle: Text("Aplicación de Atención Prehospitalaria y Servicios Digitales para Bomberos"),
