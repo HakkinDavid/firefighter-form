@@ -1,4 +1,5 @@
 import 'package:bomberos/routes/home.dart';
+import 'package:bomberos/routes/welcome.dart';
 import 'package:flutter/cupertino.dart';
 
 void main() {
@@ -35,8 +36,11 @@ class MyApp extends StatelessWidget {
         return CupertinoPageRoute(
               builder: (context) {
                 switch (settings.name) {
+                  case '/':
+                    return const Home();
+                  case '/welcome':
                   default:
-                    return const Home();   
+                    return const Welcome();   
                 }
               },
               settings: settings,
