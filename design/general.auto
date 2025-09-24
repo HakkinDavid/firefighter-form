@@ -5,7 +5,7 @@ digraph Contexto {
 
   node [shape=ellipse, style=filled, fillcolor="#F6F6F6"];
   Bombero [label="Bombero / Usuario"];
-  Administrador [label="Administrador"];
+  Supervisor [label="Supervisor"];
   Despachador [label="Despachador"];
   Paciente [label="Paciente"];
   Testigo [label="Testigo/Tutor"];
@@ -22,7 +22,7 @@ digraph Contexto {
   Paciente -> App;
   Testigo -> App;
   Despachador -> App;
-  Administrador -> Portal;
+  Supervisor -> Portal;
   App -> Supabase;
   Portal -> Supabase;
   Supabase -> Ext1;
