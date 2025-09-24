@@ -1,0 +1,1932 @@
+{
+    "formname": "Formato de Registro de Atención Prehospitalaria",
+    "fields": {
+        "Servicio": [
+            {
+                "name": "label1",
+                "type": "text",
+                "className": "col-span-full block text-gray-700 font-bold mt-2 mb-2",
+                "text": "<h1>Datos del servicio</h1>"
+            },
+            {
+                "name": "campoturno",
+                "label": "Turno",
+                "type": "select",
+                "className": "col-span-1 col-start-1",
+                "options": [
+                    "Turno 1",
+                    "Turno 2",
+                    "Turno 3"
+                ]
+            },
+            {
+                "name": "campoestacion",
+                "label": "Estación",
+                "type": "select",
+                "className": "col-span-1",
+                "options": [
+                    "Central de bomberos",
+                    "Estación 1",
+                    "Estación 2",
+                    "Estación 3",
+                    "Estación 4",
+                    "Estación 5",
+                    "Estación 6",
+                    "Estación 7",
+                    "Estación 8",
+                    "Estación 9",
+                    "Estación 10",
+                    "Estación 11",
+                    "Estación 12",
+                    "Estación 13",
+                    "Estación 14",
+                    "Estación 15",
+                    "Estación 16",
+                    "Estación 17",
+                    "Estación 18"
+                ]
+            },
+            {
+                "name": "campounidad",
+                "label": "Unidad",
+                "type": "select",
+                "className": "col-span-1",
+                "options": [
+                    "Máquina",
+                    "Ambulancia 1",
+                    "Ambulancia 2",
+                    "Ambulancia 3",
+                    "Ambulancia 4"
+                ]
+            },
+            {
+                "name": "date",
+                "label": "Fecha",
+                "type": "input",
+                "inputType": "date",
+                "className": "col-span-1"
+            },
+            {
+                "name": "cronometria",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
+                "text": "Cronometría (Hora)"
+            },
+            {
+                "name": "camposervicio",
+                "label": "Tipo de Servicio",
+                "type": "select",
+                "options": [
+                    "Trauma",
+                    "Enfermo",
+                    "Gineco Obstétrico"
+                ],
+                "className": "col-span-1 col-start-1"
+            },
+            {
+                "name": "campollamada",
+                "label": "Hora de llamada",
+                "type": "input",
+                "inputType": "time",
+                "className": "col-span-1"
+            },
+            {
+                "name": "salida",
+                "label": "Hora de salida",
+                "type": "input",
+                "inputType": "time",
+                "className": "col-span-1"
+            },
+            {
+                "name": "llegada",
+                "label": "Hora de llegada",
+                "type": "input",
+                "inputType": "time",
+                "className": "col-span-1"
+            },
+            {
+                "name": "traslado",
+                "label": "Hora de traslado",
+                "type": "input",
+                "inputType": "time",
+                "className": "col-span-1"
+            },
+            {
+                "name": "hospital",
+                "label": "Hora de hospital",
+                "type": "input",
+                "inputType": "time",
+                "className": "col-span-1"
+            },
+            {
+                "name": "disponible",
+                "label": "Hora de disponible",
+                "type": "input",
+                "inputType": "time",
+                "className": "col-span-1"
+            },
+            {
+                "name": "servicioubi",
+                "type": "text",
+                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
+                "text": "Ubicación del Servicio"
+            },
+            {
+                "name": "calle",
+                "label": "Calle",
+                "type": "textarea",
+                "rows": 5,
+                "className": "col-span-1 col-start-1"
+            },
+            {
+                "name": "esquina",
+                "label": "Avenidas colindantes",
+                "type": "textarea",
+                "rows": 5,
+                "className": "col-span-1"
+            },
+            {
+                "name": "colonia",
+                "label": "Colonia / Comunidad",
+                "type": "input",
+                "inputType": "text",
+                "className": "col-span-1"
+            },
+            {
+                "name": "codigopostal",
+                "label": "Código Postal",
+                "type": "input",
+                "inputType": "text",
+                "className": "col-span-1"
+            },
+            {
+                "name": "municipio",
+                "label": "Municipio",
+                "type": "input",
+                "inputType": "text",
+                "className": "col-span-1"
+            },
+            {
+                "name": "estado",
+                "label": "Estado",
+                "type": "input",
+                "inputType": "text",
+                "className": "col-span-1"
+            },
+            {
+                "name": "ocurrencia",
+                "label": "Lugar de ocurrencia",
+                "type": "textarea",
+                "rows": 5,
+                "className": "col-span-1"
+            },
+            {
+                "name": "resultado",
+                "label": "Resultado del despacho",
+                "type": "textarea",
+                "className": "col-span-full",
+                "rows": 5
+            },
+            {
+                "name": "telefono",
+                "label": "Teléfono",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "tripulacion",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
+                "text": "Tripulación"
+            },
+            {
+                "name": "jefe",
+                "label": "Jefe del servicio",
+                "type": "input",
+                "inputType": "text",
+                "className": "col-span-1 col-start-1"
+            },
+            {
+                "name": "maquinista",
+                "label": "Maquinista",
+                "type": "input",
+                "inputType": "text",
+                "className": "col-span-1"
+            },
+            {
+                "name": "auxiliares",
+                "label": "Auxiliares",
+                "type": "input",
+                "inputType": "text",
+                "multiple": true,
+                "allowOwnOptions": true,
+                "className": "col-span-1"
+            }
+        ],
+        "Paciente": [
+            {
+                "name": "pacienteinfo",
+                "type": "text",
+                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
+                "text": "Paciente"
+            },
+            {
+                "name": "patient",
+                "label": "Nombre del paciente",
+                "type": "input",
+                "className": "col-span-1 md:col-span-2 col-start-1",
+                "inputType": "text"
+            },
+            {
+                "name": "genero",
+                "label": "Género",
+                "type": "input",
+                "inputType": "text",
+                "multiple": false,
+                "options": [
+                    "Mujer",
+                    "Hombre"
+                ],
+                "allowOwnOptions": true,
+                "className": "col-span-1 col-start-1"
+            },
+            {
+                "name": "edad",
+                "label": "Edad",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "serviciomedico",
+                "label": "Servicio médico",
+                "type": "input",
+                "inputType": "text",
+                "options": [
+                    "ISSSTE",
+                    "ISSSTECALI",
+                    "HGR 1",
+                    "HGR 20",
+                    "HGR 7",
+                    "HG Tijuana",
+                    "HG Rosarito",
+                    "HG Tecate"
+                ],
+                "allowOwnOptions": true
+            },
+            {
+                "name": "domiciliopaciente",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
+                "text": "Domicilio del paciente"
+            },
+            {
+                "name": "callepaciente",
+                "label": "Calle",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "esquinapaciente",
+                "label": "Avenidas colindantes",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "coloniapaciente",
+                "label": "Colonia / Comunidad",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "codigopostalpaciente",
+                "label": "Código Postal",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "municipiopaciente",
+                "label": "Municipio",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "estadopaciente",
+                "label": "Estado",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "telefonopaciente",
+                "label": "Teléfono",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "correopaciente",
+                "label": "Correo electrónico",
+                "type": "input",
+                "className": "col-span-1 md:col-span-2",
+                "inputType": "text"
+            },
+            {
+                "name": "ocupacionpaciente",
+                "label": "Ocupación",
+                "type": "textarea",
+                "inputType": "text"
+            }
+        ],
+        "Primaria": [
+            {
+                "name": "primeraeval",
+                "type": "text",
+                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
+                "text": "Evaluación primaria"
+            },
+            {
+                "name": "motivo",
+                "label": "Motivo de la atención",
+                "type": "textarea",
+                "className": "col-span-1 md:col-span-2 col-start-1",
+                "inputType": "text"
+            },
+            {
+                "name": "CONCIENCIA",
+                "label": "Nivel de conciencia",
+                "type": "select",
+                "className": "col-span-1",
+                "options": [
+                    "Alerta",
+                    "Verbal",
+                    "Dolor",
+                    "Inconsciente"
+                ]
+            },
+            {
+                "name": "prioridad",
+                "label": "Prioridad inicial",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "Verde",
+                    "Amarilla",
+                    "Roja",
+                    "Negra"
+                ],
+                "className": "col-span-1"
+            },
+            {
+                "name": "viaaerea",
+                "label": "Vía aérea",
+                "type": "select",
+                "options": [
+                    "Permeable",
+                    "Comprometida"
+                ]
+            },
+            {
+                "name": "ventilacion",
+                "label": "Ventilación",
+                "type": "select",
+                "options": [
+                    "Regular",
+                    "Irregular",
+                    "Rápida",
+                    "Superficial",
+                    "Apnea"
+                ]
+            },
+            {
+                "name": "pulsos",
+                "label": "Pulsos",
+                "type": "select",
+                "options": [
+                    "Ausente",
+                    "Radial",
+                    "Cardiaco"
+                ]
+            },
+            {
+                "name": "calidadpulsos",
+                "label": "Calidad",
+                "type": "select",
+                "options": [
+                    "Rápido",
+                    "Lento",
+                    "Rítmico",
+                    "Arrítmico"
+                ]
+            },
+            {
+                "name": "piel",
+                "label": "Piel",
+                "type": "select",
+                "options": [
+                    "Normal",
+                    "Pálida",
+                    "Cianótica"
+                ]
+            },
+            {
+                "name": "caracteristicaspiel",
+                "label": "Características",
+                "type": "select",
+                "options": [
+                    "Caliente",
+                    "Fría",
+                    "Diaforesis"
+                ]
+            },
+            {
+                "name": "pos",
+                "label": "Posición, orientación (Dónde y cómo se encontró al paciente)",
+                "type": "textarea",
+                "className": "col-span-1 md:col-span-2 col-start-1",
+                "rows": 5
+            }
+        ],
+        "Secundaria": [
+            {
+                "name": "segundaeval",
+                "type": "text",
+                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
+                "text": "Evaluación secundaria"
+            },
+            {
+                "name": "pupilader",
+                "label": "Pupila derecha",
+                "type": "select",
+                "options": [
+                    "Isocórica",
+                    "Miótica",
+                    "Midriática"
+                ],
+                "className": "col-span-1 col-start-1"
+            },
+            {
+                "name": "pupilaizq",
+                "label": "Pupila izquierda",
+                "type": "select",
+                "options": [
+                    "Isocórica",
+                    "Miótica",
+                    "Midriática"
+                ]
+            },
+            {
+                "name": "glasgowmeasure",
+                "label": "Glasgow",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "pulmonderecho",
+                "label": "Auscultación pulmón derecho",
+                "type": "select",
+                "options": [
+                    "Normales",
+                    "Disminuidos",
+                    "Ausentes"
+                ]
+            },
+            {
+                "name": "pulmonizq",
+                "label": "Auscultación pulmón izquierdo",
+                "type": "select",
+                "options": [
+                    "Normales",
+                    "Disminuidos",
+                    "Ausentes"
+                ]
+            },
+            {
+                "name": "corazon",
+                "label": "Auscultación corazón",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "ritmosegeval",
+                "label": "Ritmo",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "diagnosticoelectrografico",
+                "label": "Diagnóstico electrográfico",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "signosvitales",
+                "type": "text",
+                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
+                "text": "Signos vitales"
+            },
+            {
+                "name": "historico_sv",
+                "label": "Histórico de signos vitales",
+                "type": "tuple",
+                "className": "grid grid-cols-3 gap-3 col-span-full col-start-1 max-h-80 overflow-y-auto",
+                "tuple": [
+                    {
+                        "name": "hora",
+                        "label": "Hora",
+                        "type": "input",
+                        "inputType": "time",
+                        "className": "col-span-1 col-start-1"
+                    },
+                    {
+                        "name": "fcsignovitales",
+                        "label": "FC",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "frsignovitales",
+                        "label": "FR",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "tassignovitales",
+                        "label": "TAS",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "tadsignovitales",
+                        "label": "TAD",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "sa02ignovitales",
+                        "label": "Sa02",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "tempsignovitales",
+                        "label": "Temp",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "glucosasignovitales",
+                        "label": "Glucosa",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "glasgow",
+                        "type": "text",
+                        "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
+                        "text": "Glasgow"
+                    },
+                    {
+                        "name": "msignovitales",
+                        "label": "M",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "osignovitales",
+                        "label": "O",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "vsignovitales",
+                        "label": "V",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "totalsignovitales",
+                        "label": "Total",
+                        "type": "input",
+                        "inputType": "text"
+                    }
+                ]
+            },
+            {
+                "name": "hallazgosmultiple",
+                "label": "Hallazgos físicos",
+                "type": "multiple",
+                "inputType": "checkbox",
+                "options": [
+                    "Deformidades (D)",
+                    "Contusiones (CO)",
+                    "Abrasiones (A)",
+                    "Penetraciones (P)",
+                    "Quemaduras (Q)",
+                    "Laceraciones (L)",
+                    "Abulsiones / Amputaciones (AB)",
+                    "Edema (E)",
+                    "Crepitación (CR)",
+                    "Enfisema subcutáneo (ES)",
+                    "Dolor / Hiperstesia (H)",
+                    "Parestesia (PT)",
+                    "Alteración a la movilidad (AM)",
+                    "Parálisis (AM)",
+                    "Movimiento paradójico (MP)"
+                ]
+            },
+            {
+                "name": "zona_lesion",
+                "label": "Zona de lesión",
+                "type": "drawingboard",
+                "background": "body_diagram",
+                "aspect_ratio": 1.2,
+                "className": "col-span-1 md:col-span-2 lg:col-span-3 max-w-[400px] w-full mx-auto"
+            },
+            {
+                "name": "semiologia",
+                "type": "text",
+                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
+                "text": "Semiología del dolor"
+            },
+            {
+                "name": "aparicion",
+                "label": "Aparición",
+                "type": "input",
+                "className": "col-span-1 md:col-span-2 col-start-1",
+                "inputType": "text"
+            },
+            {
+                "name": "iniciodolor",
+                "label": "Hora de inicio",
+                "type": "input",
+                "inputType": "time"
+            },
+            {
+                "name": "localizaciondolor",
+                "label": "Localización",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "irradiaciondolor",
+                "label": "Irradiación",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "cardolor",
+                "label": "Características",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "intensidaddolor",
+                "label": "Intensidad (EVA)",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "alivio",
+                "label": "Alivio",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "sampler",
+                "type": "text",
+                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
+                "text": "Sampler"
+            },
+            {
+                "name": "signos",
+                "label": "Signos",
+                "type": "textarea",
+                "rows": 5,
+                "className": "col-span-1 col-start-1"
+            },
+            {
+                "name": "alergias",
+                "label": "Alergias",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "medicamentos",
+                "label": "Medicamentos",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "padecimientos",
+                "label": "Padecimientos",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "ultimacomida",
+                "label": "Última comida",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "eventos relacionados",
+                "label": "Eventos relacionados",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "factoresriesgo",
+                "label": "Factores de riesgo",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "gineco",
+                "type": "text",
+                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
+                "text": "Ginecológico",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "gestas",
+                "label": "Gesta",
+                "type": "input",
+                "inputType": "number",
+                "className": "col-span-1 col-start-1",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "para",
+                "label": "Para",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "cesareas",
+                "label": "Cesáreas",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "abortos",
+                "label": "Abortos",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "semanasgestacion",
+                "label": "Semanas de gestación",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "fechaparto",
+                "label": "Fecha probable de parto",
+                "type": "input",
+                "inputType": "date",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "controlprenatal",
+                "label": "Control prenatal",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "Si",
+                    "No"
+                ],
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "riesgo",
+                "label": "Embarazo de alto riesgo",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "Si",
+                    "No"
+                ],
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "horainiciocontracciones",
+                "label": "Hora de inicio de contracciones",
+                "type": "input",
+                "inputType": "time",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "frecuenciacontracciones",
+                "label": "Frecuencia de contracciones (Minutos)",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "datospos",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
+                "text": "Datos posparto",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "horanacimiento",
+                "label": "Hora de nacimiento",
+                "type": "input",
+                "inputType": "time",
+                "className": "col-span-1 col-start-1",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "placenta",
+                "label": "Placenta expulsada",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "Si",
+                    "No"
+                ],
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "datosproducto",
+                "label": "Datos del producto",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
+                "text": "Datos del producto",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "prodstatus",
+                "label": "Producto",
+                "type": "select",
+                "options": [
+                    "Vivo",
+                    "Muerto"
+                ],
+                "className": "col-span-1 col-start-1",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "prodsexo",
+                "label": "Sexo",
+                "type": "select",
+                "options": [
+                    "Femenino",
+                    "Masculino"
+                ],
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "apgar",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
+                "text": "Apgar",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "apgar1",
+                "label": "1 Minuto",
+                "type": "input",
+                "inputType": "number",
+                "className": "col-span-1 col-start-1",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "apgar5",
+                "label": "5 Minutos",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "apgar10",
+                "label": "10 Minutos",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "silverman",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
+                "text": "Silverman",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "silv10",
+                "label": "10 Minutos",
+                "type": "input",
+                "inputType": "number",
+                "className": "col-span-1 col-start-1",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            }
+        ],
+        "Tratamiento": [
+            {
+                "name": "tratamiento",
+                "type": "text",
+                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
+                "text": "Tratamiento"
+            },
+            {
+                "name": "manejovia",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
+                "text": "Manejo de vía aérea"
+            },
+            {
+                "name": "aspiracion",
+                "label": "Aspiración",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "Sí",
+                    "No"
+                ],
+                "className": "col-span-1 col-start-1"
+            },
+            {
+                "name": "manejoviaaeriacheck",
+                "label": "Manejo de vía aérea",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No necesitó",
+                    "Manual",
+                    "Mecánico",
+                    "Transtraqueal"
+                ]
+            },
+            {
+                "name": "dispositivoapertura",
+                "label": "Dispositivo de apertura",
+                "type": "input",
+                "inputType": "text",
+                "options": [
+                    "No aplica",
+                    "Cánula nasofaríngea",
+                    "Cánula orofaríngea",
+                    "Disp. Supraglótico",
+                    "Tubo endotraqueal",
+                    "VTP / Cánula traqueos"
+                ]
+            },
+            {
+                "name": "intubacion",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
+                "text": "Intubación"
+            },
+            {
+                "name": "horaintubacion",
+                "label": "Hora del procedimiento",
+                "type": "input",
+                "inputType": "time",
+                "className": "col-span-1 col-start-1"
+            },
+            {
+                "name": "diametrointubacion",
+                "label": "Diámetro interno del tubo",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "insercionintubacion",
+                "label": "Profundidad de inserción (cm)",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "intentosintubacion",
+                "label": "Número de intentos",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "sri",
+                "label": "SRI",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No",
+                    "Sí"
+                ]
+            },
+            {
+                "name": "asistenciaventilatoria",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
+                "text": "Asistencia ventilatoria"
+            },
+            {
+                "name": "dispositivoav",
+                "label": "Dispositivo",
+                "type": "select",
+                "options": [
+                    "Bolsa Válvula Mascarilla",
+                    "CPAP",
+                    "Ventilador mecánico"
+                ],
+                "className": "col-span-1 col-start-1"
+            },
+            {
+                "name": "frecuenciaav",
+                "label": "Frecuencia",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "volumenav",
+                "label": "Volúmen",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "modalidadventilatoria",
+                "label": "Modalidad ventilatoria",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "oxigenoterapia",
+                "label": "Oxigenoterapia",
+                "type": "input",
+                "inputType": "text",
+                "options": [
+                    "Puntas nasales",
+                    "Mascarilla simple",
+                    "Mascarilla con reservorio",
+                    "Nebulizador",
+                    "CPAP"
+                ]
+            },
+            {
+                "name": "lpm",
+                "label": "Litros por minuto",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "decompresionpleural",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
+                "text": "Decompresión Pleural"
+            },
+            {
+                "name": "dp",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No",
+                    "Sí"
+                ],
+                "className": "col-span-1 col-start-1"
+            },
+            {
+                "name": "hemitorax",
+                "label": "Hemitorax",
+                "type": "select",
+                "options": [
+                    "No necesitó",
+                    "Derecho",
+                    "Izquierdo"
+                ]
+            },
+            {
+                "name": "calibre",
+                "label": "Calibre",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "controlhemorrogias",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
+                "text": "Control de hemorragias"
+            },
+            {
+                "name": "controldehemorragiasselect",
+                "label": "Control de hemorragias",
+                "type": "input",
+                "inputType": "text",
+                "options": [
+                    "No necesitó",
+                    "Presión directa",
+                    "Vendaje compresivo",
+                    "Agente coagulante",
+                    "Empaque de herida",
+                    "Torniquete",
+                    "Agente hemostático"
+                ],
+                "className": "col-span-1 col-start-1"
+            },
+            {
+                "name": "horacolocacionhemorragias",
+                "label": "Hora de colocación",
+                "type": "input",
+                "inputType": "time"
+            },
+            {
+                "name": "acessocirculatoria",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
+                "text": "Acceso circulatorio"
+            },
+            {
+                "name": "viadeaccesoselect",
+                "label": "Vía de acceso",
+                "type": "select",
+                "options": [
+                    "No necesitó",
+                    "Intravascular periférico",
+                    "Intranoseo"
+                ],
+                "className": "col-span-1 col-start-1"
+            },
+            {
+                "name": "zonacolocacion",
+                "label": "Zona de colocación",
+                "type": "input",
+                "inputType": "text",
+                "options": [
+                    "Mano",
+                    "Antercobital",
+                    "Yugular externo",
+                    "Tibia proximal",
+                    "Tibia distal",
+                    "Húmero",
+                    "Esternon"
+                ],
+                "allowOwnOptions": true
+            },
+            {
+                "name": "colocacionacessocirculatorio",
+                "label": "Hora de colocación",
+                "type": "input",
+                "inputType": "time"
+            },
+            {
+                "name": "calibreaccesocirculatorio",
+                "label": "Calibre",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "volumeninfundido",
+                "label": "Volúmen infundido",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "tiposolucion",
+                "label": "Tipo de solución",
+                "type": "multiple",
+                "inputType": "checkbox",
+                "options": [
+                    "HARTMANN",
+                    "NaCl 0.9%",
+                    "Glucosa 5%",
+                    "Mixta",
+                    "Otras"
+                ]
+            },
+            {
+                "name": "tiposolucionextra",
+                "label": "Especifique: ",
+                "type": "input",
+                "inputType": "text",
+                "multiple": true,
+                "allowOwnOptions": true,
+                "display_on": {
+                    "includes": [
+                        {
+                            "name": "tiposolucion",
+                            "value": "Otras"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "intervenciones",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
+                "text": "Intervenciones"
+            },
+            {
+                "name": "controlcervical",
+                "label": "Control cervical",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No",
+                    "Sí"
+                ],
+                "className": "col-span-1 col-start-1"
+            },
+            {
+                "name": "inmovilizacion",
+                "label": "Inmovilización de extremidades",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No",
+                    "Sí"
+                ]
+            },
+            {
+                "name": "empaquetamiento",
+                "label": "Empaquetamiento",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No",
+                    "Sí"
+                ]
+            },
+            {
+                "name": "curacion",
+                "label": "Curación / Vendaje",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No",
+                    "Sí"
+                ]
+            },
+            {
+                "name": "medicamentotupla",
+                "label": "Medicamentos",
+                "type": "tuple",
+                "className": "grid grid-cols-3 gap-3 col-span-full col-start-1 max-h-80 overflow-y-auto",
+                "tuple": [
+                    {
+                        "name": "horameds",
+                        "label": "Hora",
+                        "type": "input",
+                        "inputType": "time",
+                        "className": "col-span-1 col-start-1"
+                    },
+                    {
+                        "name": "medicamentostup",
+                        "label": "Medicamento",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "dosismeds",
+                        "label": "Dósis",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "viaadministracion",
+                        "label": "Vía de administración",
+                        "type": "input",
+                        "inputType": "text"
+                    }
+                ]
+            },
+            {
+                "name": "terapiaelectrica",
+                "label": "Terapia eléctrica",
+                "type": "tuple",
+                "className": "grid grid-cols-3 gap-3 col-span-full col-start-1 max-h-80 overflow-y-auto",
+                "tuple": [
+                    {
+                        "name": "terapiaelectricacheckbox",
+                        "label": "Tipo de solución",
+                        "type": "multiple",
+                        "inputType": "radio",
+                        "options": [
+                            "Desfribilación",
+                            "Cardioversión",
+                            "Marcapasos transcutáneo"
+                        ],
+                        "className": "col-span-1 col-start-1"
+                    },
+                    {
+                        "name": "descargas",
+                        "label": "Descargas",
+                        "type": "input",
+                        "inputType": "number"
+                    },
+                    {
+                        "name": "joules",
+                        "label": "Joules",
+                        "type": "input",
+                        "inputType": "number"
+                    },
+                    {
+                        "name": "ma",
+                        "label": "Miliamperios (mA)",
+                        "type": "input",
+                        "inputType": "number"
+                    },
+                    {
+                        "name": "frecuenciaterapiaelectrica",
+                        "label": "Frecuencia",
+                        "type": "input",
+                        "inputType": "number"
+                    }
+                ]
+            }
+        ],
+        "Resultados": [
+            {
+                "name": "resultados",
+                "type": "text",
+                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
+                "text": "Resultados"
+            },
+            {
+                "name": "resultadoemergencia",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
+                "text": "Resultado de la emergencia"
+            },
+            {
+                "name": "resultadoemergenciacheckbox",
+                "label": "Resultado de la emergencia",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No amerita",
+                    "Traslado",
+                    "Se niega",
+                    "Cadáver en el lugar"
+                ]
+            },
+            {
+                "name": "trasladomultiple",
+                "label": "Traslado",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "Hospital",
+                    "Domicilio",
+                    "Helicóptero",
+                    "Ambulancia"
+                ]
+            },
+            {
+                "name": "hospitaltraslado",
+                "label": "Hospital de traslado",
+                "type": "input",
+                "inputType": "text",
+                "options": [
+                    "ISSSTE",
+                    "ISSSTECALI",
+                    "HGR 1",
+                    "HGR 20",
+                    "HGR 7",
+                    "HG Tijuana",
+                    "HG Rosarito",
+                    "HG Tecate"
+                ],
+                "allowOwnOptions": true,
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "trasladomultiple"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "trasladomultiple",
+                            "value": "Hospital"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "denominacion",
+                "label": "Denominación / Matrícula",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "foliorecepcion",
+                "label": "Folio médico",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "medico",
+                "label": "Médico responsable",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "prioridadfinal",
+                "label": "Prioridad final",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "Verde",
+                    "Amarilla",
+                    "Roja",
+                    "Negra"
+                ],
+                "className": "col-span-1"
+            },
+            {
+                "name": "firmaConsentimiento",
+                "label": "Consentimiento informado",
+                "secondaryLabel": "Firma del paciente",
+                "text": "Declaró haber recibido oportunamente información completa y adecuada sobre mi cuadro clínico y los procedimientos diagnósticos y/o terapéuticos qué se realizarán los riesgos que esto pueda presentar y las alternativas disponibles. A si mismo. Declaró haber comprendido la información proporcionada y que he tenido la oportunidad de fórmula mis preguntas y dudas. Las que han sido contestadas y aclaradas a mi entera satisfacción por lo anteriormente expuesto. Declaró mi consentimiento para ser sometido al tratamiento y a las acciones que el equipo TUM/TAMP considere necesarias en caso de surgir situaciones no esperadas o complicaciones, es expresado en forma libre e informada.",
+                "type": "drawingboard",
+                "className": "col-span-full max-w-[600px] w-full mx-auto",
+                "display_on": {
+                    "isEmpty": [
+                        {
+                            "name": "firmaPacienteAtencion"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "firmaPacienteAtencion",
+                "label": "Negativa a recibir atención / Ser trasladado eximiente de responsabilidad",
+                "secondaryLabel": "Firma del paciente",
+                "text": "Declaró que no aceptó las recomendaciones del personal de la ambulancia o vehículo de primer contacto de bomberos tijuana en cuanto al (tratamiento) y o traslado a un hospital, por lo que eximo a la dirección de bomberos tijuana y a dichas personas de toda responsabilidad que pudiera derivar al haberse respetado y cumplido mi decisión.",
+                "type": "drawingboard",
+                "className": "col-span-full max-w-[600px] w-full mx-auto",
+                "display_on": {
+                    "isEmpty": [
+                        {
+                            "name": "firmaConsentimiento"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "testigotitulo",
+                "type": "text",
+                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
+                "text": "Testigo"
+            },
+            {
+                "name": "alternate",
+                "label": "Nombre del testigo",
+                "type": "input",
+                "inputType": "text",
+                "className": "col-span-1 col-start-1"
+            },
+            {
+                "name": "parentesco",
+                "label": "Parentesco",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "firmaTestigo",
+                "label": "",
+                "secondaryLabel": "Firma del testigo",
+                "text": "",
+                "type": "drawingboard",
+                "className": "col-span-full max-w-[600px] w-full mx-auto"
+            },
+            {
+                "name": "nombreRecibe",
+                "label": "Nombre de quien recibe",
+                "type": "input",
+                "inputType": "text",
+                "className": "col-span-1 col-start-1",
+                "display_on": {
+                    "isEmpty": [
+                        {
+                            "name": "firmaPacienteAtencion"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "firmaRecibe",
+                "label": "",
+                "secondaryLabel": "Firma de Médico / Enfermero / Responsable que recibe",
+                "text": "",
+                "type": "drawingboard",
+                "className": "col-span-full max-w-[600px] w-full mx-auto",
+                "display_on": {
+                    "isEmpty": [
+                        {
+                            "name": "firmaPacienteAtencion"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "filler",
+                "label": "Nombre del responsable de la atención",
+                "type": "input",
+                "inputType": "text",
+                "className": "col-span-1 col-start-1"
+            },
+            {
+                "name": "firmaBomberoAtencion",
+                "label": "",
+                "secondaryLabel": "Firma del Responsable de la Atención",
+                "text": "",
+                "type": "drawingboard",
+                "className": "col-span-full max-w-[600px] w-full mx-auto"
+            },
+            {
+                "name": "observacionesFinales",
+                "label": "Resúmen / Observaciones finales",
+                "type": "textarea",
+                "rows": 5,
+                "className": "col-span-full col-start-1"
+            }
+        ]
+    },
+    "restrictions": {
+        "notEmpty": [
+            {
+                "name": "firmaBomberoAtencion",
+                "message": "La firma es obligatoria"
+            },
+            {
+                "name": "firmaPacienteAtencion",
+                "value": "firmaConsentimiento",
+                "message": "La firma es obligatoria"
+            },
+            {
+                "name": "firmaConsentimiento",
+                "value": "firmaPacienteAtencion",
+                "message": "La firma es obligatoria"
+            },
+            {
+                "name": "firmaRecibe",
+                "value": "firmaPacienteAtencion",
+                "message": "La firma es obligatoria"
+            },
+            {
+                "name": "patient",
+                "message": "El nombre del paciente es obligatorio"
+            },
+            {
+                "name": "date",
+                "message": "La fecha es obligatoria"
+            },
+            {
+                "name": "campoturno",
+                "message": "El turno es obligatorio"
+            },
+            {
+                "name": "campoestacion",
+                "message": "La estación es obligatoria"
+            },
+            {
+                "name": "camposervicio",
+                "message": "El tipo de servicio es obligatorio"
+            },
+            {
+                "name": "campollamada",
+                "message": "La hora de llamada es obligatoria"
+            },
+            {
+                "name": "salida",
+                "message": "La hora de salida es obligatoria"
+            },
+            {
+                "name": "llegada",
+                "message": "La hora de llegada es obligatoria"
+            },
+            {
+                "name": "calle",
+                "message": "La ubicación es obligatoria"
+            },
+            {
+                "name": "colonia",
+                "message": "La colonia es obligatoria"
+            },
+            {
+                "name": "municipio",
+                "message": "El municipio es obligatorio"
+            },
+            {
+                "name": "jefe",
+                "message": "El jefe de servicio es obligatorio"
+            },
+            {
+                "name": "maquinista",
+                "message": "El maquinista es obligatorio"
+            },
+            {
+                "name": "CONCIENCIA",
+                "message": "El nivel de conciencia es obligatorio"
+            },
+            {
+                "name": "historico_sv",
+                "subname": "hora",
+                "message": "La hora de los signos vitales es obligatoria"
+            },
+            {
+                "name": "resultadoemergenciacheckbox",
+                "message": "El resultado de la emergencia es obligatorio"
+            },
+            {
+                "name": "filler",
+                "message": "El nombre del bombero que firma es obligatorio"
+            }
+        ],
+        "lessThan": [
+            {
+                "name": "glasgowmeasure",
+                "value": 16,
+                "message": "Valor máximo válido es 15."
+            }
+        ],
+        "greaterThan": [
+            {
+                "name": "glasgowmeasure",
+                "value": 2,
+                "message": "Valor mínimo válido es 3."
+            },
+            {
+                "name": "edad",
+                "value": 0,
+                "message": "La edad debe ser mayor a 0"
+            }
+        ]
+    }
+}
