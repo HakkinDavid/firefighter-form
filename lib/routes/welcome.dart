@@ -13,9 +13,25 @@ class _WelcomeState extends State<Welcome> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: Header(),
+      navigationBar: null,
       backgroundColor: Settings().colors.primary,
-      child: CupertinoActivityIndicator(),
+      child: SafeArea(
+        child: Column(
+          children: [
+            Header(username: "Blaner", adminUsername: "Villegas"),
+            Expanded(
+              child: Center(
+                child: CupertinoButton(
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, "/home"),
+                  color: Settings().colors.primaryContrast,
+                  child: Text("Entrar"),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
