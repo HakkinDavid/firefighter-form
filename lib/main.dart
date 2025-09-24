@@ -1,3 +1,5 @@
+import 'package:bomberos/models/settings.dart';
+import 'package:bomberos/routes/form.dart';
 import 'package:bomberos/routes/home.dart';
 import 'package:bomberos/routes/welcome.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,12 +32,14 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        primaryColor: CupertinoColors.systemPurple
+        primaryColor: Settings().colors.primary
       ),
       onGenerateRoute: (settings) {
         return CupertinoPageRoute(
               builder: (context) {
                 switch (settings.name) {
+                  case '/form':
+                    return DynamicFormPage();
                   case '/home':
                     return const Home();
                   case '/':
