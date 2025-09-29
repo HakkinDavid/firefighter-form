@@ -15,7 +15,6 @@ create table user_role (
 );
 
 create table user_hierarchy (
-  id uuid references auth.users(id) on delete cascade,
-  watched_by uuid references auth.users(id) on delete cascade,
-  primary key (id, watched_by)
+  id uuid primary key references auth.users(id) on delete cascade,
+  watched_by uuid references auth.users(id) on delete cascade
 );
