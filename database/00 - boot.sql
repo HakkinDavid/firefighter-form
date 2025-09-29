@@ -6,4 +6,4 @@ CREATE TABLE dict_roles (
     name        text        UNIQUE NOT NULL
 );
 
-INSERT INTO diccionario_tipo_usuario (id, name) VALUES (0, 'bombero'), (1, 'supervisor'), (2, 'administrador');
+INSERT INTO dict_roles (id, name) VALUES (0, 'bombero'), (1, 'supervisor'), (2, 'administrador');
