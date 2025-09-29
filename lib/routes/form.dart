@@ -142,7 +142,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                       context: context,
                       builder: (_) => SafeArea(
                         child: Container(
-                          color: Settings().colors.primaryContrast,
+                          color: Settings.instance.colors.primaryContrast,
                           height: 300,
                           child: Column(
                             children: [
@@ -211,7 +211,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                       context: context,
                       builder: (_) => SafeArea(
                         child: Container(
-                          color: Settings().colors.primaryContrast,
+                          color: Settings.instance.colors.primaryContrast,
                           height: 300,
                           child: Column(
                             children: [
@@ -328,7 +328,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                         context: context,
                         builder: (_) => SafeArea(
                           child: Container(
-                            color: Settings().colors.primaryContrast,
+                            color: Settings.instance.colors.primaryContrast,
                             height: 250,
                             child: Column(
                               children: [
@@ -420,7 +420,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                       context: context,
                       builder: (_) => SafeArea(
                         child: Container(
-                          color: Settings().colors.primaryContrast,
+                          color: Settings.instance.colors.primaryContrast,
                           height: 250,
                           child: Column(
                             children: [
@@ -635,7 +635,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                     context: context,
                                     builder: (_) => SafeArea(
                                       child: Container(
-                                        color: Settings().colors.primaryContrast,
+                                        color: Settings.instance.colors.primaryContrast,
                                         height: 300,
                                         child: Column(
                                           children: [

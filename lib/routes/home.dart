@@ -29,20 +29,23 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: null,
-      backgroundColor: Settings().colors.primaryContrast,
+      backgroundColor: Settings.instance.colors.primaryContrast,
       child: SafeArea(
         child: Column(
           children: [
-            Header(username: "Blaner", adminUsername: "Villegas"),
+            Header(
+              username: Settings.instance.self?.fullName,
+              adminUsername: Settings.instance.watcher?.fullName,
+            ),
             Expanded(
               child: Container(
-                color: Settings().colors.background,
+                color: Settings.instance.colors.background,
                 child: Center(
                   child: CupertinoButton(
                     onPressed: _createForm,
-                    color: Settings().colors.primaryContrast,
+                    color: Settings.instance.colors.primaryContrast,
                     borderRadius: BorderRadius.circular(48),
-                    child: Icon(CupertinoIcons.add, color: Settings().colors.primary, size: 36,),
+                    child: Icon(CupertinoIcons.add, color: Settings.instance.colors.primary, size: 36,),
                   ),
                 ),
               ),

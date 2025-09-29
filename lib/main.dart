@@ -20,7 +20,7 @@ class BomberosApp extends StatelessWidget {
     return CupertinoApp(
       title: 'Servicios Digitales para Bomberos',
       theme: CupertinoThemeData(
-        primaryColor: Settings().colors.primary
+        primaryColor: Settings.instance.colors.primary
       ),
       onGenerateRoute: (settings) {
         return CupertinoPageRoute(

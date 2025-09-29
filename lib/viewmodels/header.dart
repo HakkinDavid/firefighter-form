@@ -20,7 +20,7 @@ class _HeaderState extends State<Header> {
             ? constraints.maxWidth
             : maxContentWidth;
         return Container(
-          color: Settings().colors.primary,
+          color: Settings.instance.colors.primary,
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
           child: Center(
@@ -48,7 +48,7 @@ class _HeaderState extends State<Header> {
                         Text(
                           "AYUNTAMIENTO DE TIJUANA, B.C.",
                           style: TextStyle(
-                            color: Settings().colors.textOverPrimary,
+                            color: Settings.instance.colors.textOverPrimary,
                             fontSize: 18,
                           ),
                           textAlign: TextAlign.center,
@@ -56,7 +56,7 @@ class _HeaderState extends State<Header> {
                         Text(
                           "DIRECCIÓN DE BOMBEROS TIJUANA",
                           style: TextStyle(
-                            color: Settings().colors.textOverPrimary,
+                            color: Settings.instance.colors.textOverPrimary,
                             fontSize: 16,
                           ),
                           textAlign: TextAlign.center,
@@ -64,7 +64,7 @@ class _HeaderState extends State<Header> {
                         Text(
                           "PARTE DE SERVICIO PREHOSPITALARIO",
                           style: TextStyle(
-                            color: Settings().colors.textOverPrimary,
+                            color: Settings.instance.colors.textOverPrimary,
                             fontSize: 16,
                           ),
                           textAlign: TextAlign.center,
@@ -73,7 +73,7 @@ class _HeaderState extends State<Header> {
                           Text(
                             "Usuario: ${widget.username}",
                             style: TextStyle(
-                              color: Settings().colors.textOverPrimary,
+                              color: Settings.instance.colors.textOverPrimary,
                               fontSize: 15,
                             ),
                           ),
@@ -81,7 +81,7 @@ class _HeaderState extends State<Header> {
                           Text(
                             "Supervisor: ${widget.adminUsername}",
                             style: TextStyle(
-                              color: Settings().colors.textOverPrimary,
+                              color: Settings.instance.colors.textOverPrimary,
                               fontSize: 15,
                             ),
                           ),
