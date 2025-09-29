@@ -13,16 +13,22 @@ class Welcome extends StatefulWidget {
 class _WelcomeState extends State<Welcome> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final _givenController = TextEditingController();
+  final _surname1Controller = TextEditingController();
+  final _surname2Controller = TextEditingController();
   bool _isLoading = false;
+  bool _isRegistering = false;
   String _errorMessage = '';
-
-  // Get Supabase client
-  final SupabaseClient _supabase = Supabase.instance.client;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _givenController.dispose();
+    _surname1Controller.dispose();
+    _surname2Controller.dispose();
     super.dispose();
   }
 
@@ -34,21 +40,67 @@ class _WelcomeState extends State<Welcome> {
       return;
     }
 
+    if (_isRegistering) {
+      if (_confirmPasswordController.text.isEmpty ||
+          _givenController.text.isEmpty ||
+          _surname1Controller.text.isEmpty ||
+          _surname2Controller.text.isEmpty) {
+        setState(() {
+          _errorMessage = 'Por favor, completa todos los campos';
+        });
+        return;
+      }
+      if (_passwordController.text != _confirmPasswordController.text) {
+        setState(() {
+          _errorMessage = 'Las contraseñas no coinciden';
+        });
+        return;
+      }
+    }
+
     setState(() {
       _isLoading = true;
       _errorMessage = '';
     });
 
     try {
-      final response = await _supabase.auth.signInWithPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-      );
+      if (!_isRegistering) {
+        final response = await Supabase.instance.client.auth.signInWithPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
 
-      if (response.user != null) {
-        // Login successful - navigate to home
-        if (mounted) {
-          Navigator.pushReplacementNamed(context, "/home");
+        if (response.user != null) {
+          Settings.instance.userId =
+              Supabase.instance.client.auth.currentUser!.id;
+          await Settings.instance.getUser();
+          if (mounted) {
+            Navigator.pushReplacementNamed(context, "/home");
+          }
+        }
+      } else {
+        final response = await Supabase.instance.client.auth.signUp(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
+
+        if (response.user != null) {
+          await Supabase.instance.client.rpc(
+            'register_user',
+            params: {
+              'p_given_name': _givenController.text.trim(),
+              'p_surname1': _surname1Controller.text.trim(),
+              'p_surname2': _surname2Controller.text.trim(),
+            },
+          );
+
+          Settings.instance.userId =
+              Supabase.instance.client.auth.currentUser!.id;
+
+          await Settings.instance.getUser();
+          if (mounted) {
+            Navigator.pushReplacementNamed(context, "/home");
+          }
         }
       }
     } on AuthException catch (error) {
@@ -82,11 +134,14 @@ class _WelcomeState extends State<Welcome> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: null,
-      backgroundColor: Settings().colors.primary,
+      backgroundColor: Settings.instance.colors.primary,
       child: SafeArea(
         child: Column(
           children: [
-            Header(username: "Blaner", adminUsername: "Villegas"),
+            Header(
+              username: Settings.instance.self?.fullName,
+              adminUsername: Settings.instance.watcher?.fullName,
+            ),
             Expanded(
               child: Center(
                 child: Container(
@@ -102,89 +157,215 @@ class _WelcomeState extends State<Welcome> {
                       ),
                     ],
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Title
-                      Text(
-                        'Iniciar Sesión',
-                        style: CupertinoTheme.of(context)
-                            .textTheme
-                            .navLargeTitleTextStyle
-                            .copyWith(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: CupertinoColors.label
-                            ),
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Email Field
-                      CupertinoTextField(
-                        controller: _emailController,
-                        placeholder: 'Correo electrónico',
-                        prefix: const Icon(CupertinoIcons.mail, size: 18),
-                        padding: const EdgeInsets.all(12),
-                        keyboardType: TextInputType.emailAddress,
-                        autocorrect: false,
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Password Field
-                      CupertinoTextField(
-                        controller: _passwordController,
-                        placeholder: 'Contraseña',
-                        prefix: const Icon(CupertinoIcons.lock, size: 18),
-                        padding: const EdgeInsets.all(12),
-                        obscureText: true,
-                        autocorrect: false,
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Error Message
-                      if (_errorMessage.isNotEmpty)
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: CupertinoColors.systemRed.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
+                  child: Supabase.instance.client.auth.currentUser != null
+                      ? SizedBox(
+                          width: double.infinity,
+                          child: CupertinoButton(
+                            onPressed: () async {
+                              Settings.instance.userId =
+                                  Supabase.instance.client.auth.currentUser!.id;
+                              await Settings.instance.getUser();
+                              if (context.mounted) {
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  "/home",
+                                );
+                              }
+                            },
+                            color: Settings().colors.primaryContrast,
+                            child: _isLoading
+                                ? const CupertinoActivityIndicator()
+                                : const Text('Entrar'),
                           ),
-                          child: Row(
+                        )
+                      : SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(
-                                CupertinoIcons.exclamationmark_triangle,
-                                color: CupertinoColors.systemRed,
-                                size: 16,
+                              // Title
+                              Text(
+                                'Iniciar Sesión',
+                                style: CupertinoTheme.of(context)
+                                    .textTheme
+                                    .navLargeTitleTextStyle
+                                    .copyWith(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: CupertinoColors.label,
+                                    ),
                               ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  _errorMessage,
-                                  style: const TextStyle(
-                                    color: CupertinoColors.systemRed,
-                                    fontSize: 14,
+                              const SizedBox(height: 24),
+
+                              // Email Field
+                              CupertinoTextField(
+                                controller: _emailController,
+                                placeholder: 'Correo electrónico',
+                                prefix: const Icon(
+                                  CupertinoIcons.mail,
+                                  size: 18,
+                                ),
+                                padding: const EdgeInsets.all(12),
+                                keyboardType: TextInputType.emailAddress,
+                                autocorrect: false,
+                              ),
+                              const SizedBox(height: 16),
+
+                              // Password Field
+                              CupertinoTextField(
+                                controller: _passwordController,
+                                placeholder: 'Contraseña',
+                                prefix: const Icon(
+                                  CupertinoIcons.lock,
+                                  size: 18,
+                                ),
+                                padding: const EdgeInsets.all(12),
+                                obscureText: true,
+                                autocorrect: false,
+                              ),
+                              const SizedBox(height: 16),
+
+                              if (_isRegistering) ...[
+                                // Confirm Password Field
+                                CupertinoTextField(
+                                  controller: _confirmPasswordController,
+                                  placeholder: 'Confirmar contraseña',
+                                  prefix: const Icon(
+                                    CupertinoIcons.lock,
+                                    size: 18,
+                                  ),
+                                  padding: const EdgeInsets.all(12),
+                                  obscureText: true,
+                                  autocorrect: false,
+                                ),
+                                const SizedBox(height: 16),
+
+                                // Given Name Field
+                                CupertinoTextField(
+                                  controller: _givenController,
+                                  placeholder: 'Nombre',
+                                  prefix: const Icon(
+                                    CupertinoIcons.person,
+                                    size: 18,
+                                  ),
+                                  padding: const EdgeInsets.all(12),
+                                  autocorrect: false,
+                                ),
+                                const SizedBox(height: 16),
+
+                                // Surname1 Field
+                                CupertinoTextField(
+                                  controller: _surname1Controller,
+                                  placeholder: 'Apellido paterno',
+                                  prefix: const Icon(
+                                    CupertinoIcons.person,
+                                    size: 18,
+                                  ),
+                                  padding: const EdgeInsets.all(12),
+                                  autocorrect: false,
+                                ),
+                                const SizedBox(height: 16),
+
+                                // Surname2 Field
+                                CupertinoTextField(
+                                  controller: _surname2Controller,
+                                  placeholder: 'Apellido materno',
+                                  prefix: const Icon(
+                                    CupertinoIcons.person,
+                                    size: 18,
+                                  ),
+                                  padding: const EdgeInsets.all(12),
+                                  autocorrect: false,
+                                ),
+                                const SizedBox(height: 20),
+                              ] else
+                                const SizedBox(height: 20),
+
+                              // Error Message
+                              if (_errorMessage.isNotEmpty)
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: CupertinoColors.systemRed
+                                        .withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        CupertinoIcons.exclamationmark_triangle,
+                                        color: CupertinoColors.systemRed,
+                                        size: 16,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          _errorMessage,
+                                          style: const TextStyle(
+                                            color: CupertinoColors.systemRed,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
+
+                              if (_errorMessage.isNotEmpty)
+                                const SizedBox(height: 16),
+
+                              // Buttons
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: CupertinoButton(
+                                      onPressed: _isLoading
+                                          ? null
+                                          : _handleLogin,
+                                      color: Settings
+                                          .instance
+                                          .colors
+                                          .primaryContrast,
+                                      child: _isLoading
+                                          ? const CupertinoActivityIndicator()
+                                          : const Text('Entrar'),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  if (!_isRegistering)
+                                    Expanded(
+                                      child: CupertinoButton(
+                                        onPressed: _isLoading
+                                            ? null
+                                            : () {
+                                                setState(() {
+                                                  _isRegistering = true;
+                                                  _errorMessage = '';
+                                                });
+                                              },
+                                        color: CupertinoColors.systemGrey,
+                                        child: const Text('Registrar'),
+                                      ),
+                                    )
+                                  else
+                                    Expanded(
+                                      child: CupertinoButton(
+                                        onPressed: _isLoading
+                                            ? null
+                                            : () {
+                                                setState(() {
+                                                  _isRegistering = false;
+                                                  _errorMessage = '';
+                                                });
+                                              },
+                                        color: CupertinoColors.systemGrey,
+                                        child: const Text('Cancelar'),
+                                      ),
+                                    ),
+                                ],
                               ),
                             ],
                           ),
                         ),
-
-                      if (_errorMessage.isNotEmpty) const SizedBox(height: 16),
-
-                      // Login Button
-                      SizedBox(
-                        width: double.infinity,
-                        child: CupertinoButton(
-                          onPressed: _isLoading ? null : _handleLogin,
-                          color: Settings().colors.primaryContrast,
-                          child: _isLoading
-                              ? const CupertinoActivityIndicator()
-                              : const Text('Entrar'),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ),
             ),
