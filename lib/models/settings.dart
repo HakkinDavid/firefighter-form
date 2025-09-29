@@ -1,5 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:bomberos/models/user.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ColorsSettings {
@@ -28,6 +31,15 @@ class Settings {
 
   FirefighterUser? get self => userCache[userId];
   FirefighterUser? get watcher => userCache[self?.watchedByUserId ?? ""];
+
+  Future<void> setUser() async {
+    setUserId();
+    await getUser();
+  }
+
+  void setUserId() {
+    userId = Supabase.instance.client.auth.currentUser!.id;
+  }
 
   Future<FirefighterUser> getUser({String? pUserId}) async {
     pUserId ??= userId!;
@@ -75,6 +87,44 @@ class Settings {
 
     userCache[pUserId] = user;
 
+    await saveToDisk();
+
     return user;
+  }
+
+  Future<void> saveToDisk() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/settings.json');
+
+      Map<String, dynamic> jsonMap = {
+        'userId': userId,
+        'userCache': userCache.map((key, value) => MapEntry(key, value.toJson())),
+      };
+
+      final jsonString = jsonEncode(jsonMap);
+      await file.writeAsString(jsonString);
+    } catch (e) {
+      // Handle errors if needed
+    }
+  }
+
+  Future<void> loadFromDisk() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/settings.json');
+
+      if (await file.exists()) {
+        final jsonString = await file.readAsString();
+        final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
+
+        userId = jsonMap['userId'];
+
+        Map<String, dynamic> cacheMap = Map<String, dynamic>.from(jsonMap['userCache']);
+        userCache = cacheMap.map((key, value) => MapEntry(key, FirefighterUser.fromJson(value)));
+      }
+    } catch (e) {
+      // Handle errors if needed
+    }
   }
 }
