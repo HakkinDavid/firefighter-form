@@ -1,4 +1,4 @@
-create or replace function register_user(
+create or replace function register_user (
   p_given_name varchar, p_surname1 varchar, p_surname2 varchar
 ) returns void as $$
 declare
