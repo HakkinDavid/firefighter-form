@@ -3,3 +3,6 @@
 alter table user_name enable row level security;
 alter table user_role enable row level security;
 alter table user_hierarchy enable row level security;
+
+-- 03
+alter table filled_in enable row level security;
