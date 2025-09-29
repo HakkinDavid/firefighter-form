@@ -9,7 +9,6 @@ grant usage on schema public to authenticated;
 -- Otorgar solo select y execute sobre funciones a authenticated
 grant execute on function register_user(varchar, varchar, varchar) to authenticated;
 
-grant execute on function is_role() to authenticated;
 grant execute on function is_firefighter() to authenticated;
 grant execute on function is_supervisor() to authenticated;
 grant execute on function is_admin() to authenticated;

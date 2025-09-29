@@ -16,7 +16,7 @@ create table template (
 
 create table filled_in (
     id uuid primary key,
-    template_id uuid not null references template(id)
+    template_id uuid not null references template(id),
     filler uuid not null references auth.users(id),
     status smallint not null references dict_form_status(id),
     content jsonb not null,
