@@ -24,11 +24,12 @@ class BomberosApp extends StatelessWidget {
         primaryColor: Settings.instance.colors.primary
       ),
       onGenerateRoute: (settings) {
+        final arguments = settings.arguments as Map?;
         return CupertinoPageRoute(
               builder: (context) {
                 switch (settings.name) {
                   case '/form':
-                    return DynamicFormPage();
+                    return DynamicFormPage(draftData: arguments?['draftData'] ?? {}, templateId: arguments?['templateId']);
                   case '/home':
                     return const Home();
                   case '/':
