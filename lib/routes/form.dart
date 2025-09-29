@@ -709,7 +709,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
       fieldWidget = Padding(
         padding: EdgeInsets.symmetric(vertical: 8),
         child: Text(
-          field['text']?.replaceAll(RegExp(r'<[^>]*>'), '') ?? '',
+          field['text'] ?? '',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       );
