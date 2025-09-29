@@ -19,7 +19,11 @@ class Settings {
 
   final ColorsSettings colors = ColorsSettings();
 
-  User? user;
+  String? userId;
 
-  bool get isLoggedIn => user != null;
+  Map<String, User> userCache = {};
+
+  bool get isLoggedIn => userId != null && userCache.containsKey(userId);
+
+  User? get self => userCache[userId];
 }
