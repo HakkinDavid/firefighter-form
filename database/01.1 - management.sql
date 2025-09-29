@@ -118,3 +118,22 @@ BEGIN
   RETURN false;
 END;
 $function$;
+
+CREATE OR REPLACE FUNCTION is_watching_me(p_user_id uuid)
+RETURNS boolean
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $function$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM public.user_hierarchy
+    WHERE id = auth.uid()
+      AND watched_by = p_user_id
+  ) THEN
+    RETURN true;
+  END IF;
+  RETURN false;
+END;
+$function$;
