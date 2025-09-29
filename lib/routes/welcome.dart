@@ -98,7 +98,7 @@ class _WelcomeState extends State<Welcome> {
                     boxShadow: [
                       BoxShadow(
                         blurRadius: 10,
-                        color: CupertinoColors.black.withOpacity(0.1),
+                        color: CupertinoColors.black.withValues(alpha: 0.1),
                       ),
                     ],
                   ),
