@@ -1,17 +1,21 @@
-class User {
+class FirefighterUser {
   String id;
-  String name;
-  String lastName;
+  String givenName;
+  String firstSurname;
+  String secondSurname;
   int role;
   String? watchedByUserId;
   Set<String> watchesUsersId = {};
 
-  User({
+  FirefighterUser({
     required this.id,
-    required this.name,
-    required this.lastName,
+    required this.givenName,
+    required this.firstSurname,
+    required this.secondSurname,
     required this.role,
     this.watchedByUserId,
     this.watchesUsersId = const {}
   });
+
+  String get fullName => "$givenName $firstSurname $secondSurname";
 }
