@@ -7,7 +7,7 @@ begin
   if uid is null then raise exception 'Debe estar autenticado.'; end if;
 
   insert into user_name values (uid, p_given_name, p_surname1, p_surname2);
-  insert into user_role values (uid, 0, false); -- Todos empiezan como bombero base, un administrador (e.g. Villegas) debe promoverlo dentro del app.
+  insert into user_role values (uid, 0); -- Todos empiezan como bombero base, un administrador (e.g. Villegas) debe promoverlo dentro del app.
 exception
   when others then
     raise;
