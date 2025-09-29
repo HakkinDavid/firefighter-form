@@ -1,3 +1,4 @@
+import 'package:bomberos/models/user.dart';
 import 'package:flutter/cupertino.dart';
 
 class ColorsSettings {
@@ -17,4 +18,8 @@ class Settings {
   }
 
   final ColorsSettings colors = ColorsSettings();
+
+  User? user;
+
+  bool get isLoggedIn => user != null;
 }
