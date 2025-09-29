@@ -1,71 +1,34 @@
 import 'dart:convert';
+import 'package:bomberos/models/form.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/material.dart' show Colors, Card;
 import 'package:bomberos/models/settings.dart';
+import 'package:flutter/services.dart';
 
 class DynamicFormPage extends StatefulWidget {
-  const DynamicFormPage({super.key});
+  final Map<String, dynamic> draftData;
+  final String? templateId;
+
+  const DynamicFormPage({super.key, required this.draftData, required this.templateId});
 
   @override
   State<DynamicFormPage> createState() => _DynamicFormPageState();
 }
 
 class _DynamicFormPageState extends State<DynamicFormPage> {
-  Map<String, dynamic>? formJson;
-  Map<String, dynamic> formData = {};
-  List<String> sectionKeys = [];
-  Map<String, List<String>> fieldErrors = {};
+  ServiceForm? form;
 
   @override
   void initState() {
     super.initState();
-    loadFormJson();
+    loadForm();
   }
 
-  Future<void> loadFormJson() async {
-    final jsonStr = await rootBundle.loadString('assets/frap.json');
-    final loadedJson = json.decode(jsonStr);
-    final sections = loadedJson['fields'] as Map<String, dynamic>;
+  Future<void> loadForm () async {
+    final Map<String, dynamic> loadedTemplate = widget.templateId != null ? {'id': widget.templateId} : json.decode(await rootBundle.loadString('assets/frap.json'));
     setState(() {
-      formJson = loadedJson;
-      sectionKeys = sections.keys.toList();
-      formData = {};
-      for (var section in sectionKeys) {
-        for (var field in sections[section]) {
-          formData[field['name']] = getDefaultValue(field);
-        }
-      }
+      form = ServiceForm(data: widget.draftData, template: loadedTemplate);
     });
-  }
-
-  dynamic getDefaultValue(Map<String, dynamic> field) {
-    if (field['type'] == 'multiple' && field['inputType'] == 'checkbox') {
-      return <String>[];
-    }
-    if (field['type'] == 'multiple' && field['inputType'] == 'radio') {
-      return '';
-    }
-    if (field['type'] == 'select') {
-      return '';
-    }
-    if (field['type'] == 'textarea') {
-      return '';
-    }
-    if (field['type'] == 'drawingboard') {
-      return null; // Canvas data
-    }
-    if (field['type'] == 'tuple') {
-      return <Map<String, dynamic>>[];
-    }
-    if (field['type'] == 'input') {
-      if (field['multiple'] == true) return <String>[];
-      if (field['inputType'] == 'number') return '';
-      if (field['inputType'] == 'date') return '';
-      if (field['inputType'] == 'time') return '';
-      return '';
-    }
-    return '';
   }
 
   void _saveForm() {
@@ -73,48 +36,12 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     Navigator.pop(context);
   }
 
-  // Restriction handler (minimal Dart port)
-  Map<String, List<String>> handleFieldRestrictions(Map<String, dynamic> data, Map<String, dynamic>? restrictions) {
-    if (restrictions == null) return {};
-    final fieldErrors = <String, List<String>>{};
-    restrictions.forEach((key, items) {
-      for (final field in items) {
-        final fieldName = field['name'];
-        final value = data[fieldName];
-        bool passed = true;
-        switch (key) {
-          case 'notEmpty':
-            passed = value != null && value.toString().trim().isNotEmpty;
-            break;
-          case 'lessThan':
-            passed = value != null && value != '' && double.tryParse(value.toString()) != null
-              ? double.parse(value.toString()) < field['value']
-              : true;
-            break;
-          case 'greaterThan':
-            passed = value != null && value != '' && double.tryParse(value.toString()) != null
-              ? double.parse(value.toString()) > field['value']
-              : true;
-            break;
-          // ...add more cases as needed...
-          default:
-            passed = true;
-        }
-        if (!passed) {
-          final msg = field['message'] ?? 'Campo inválido';
-          fieldErrors[fieldName] = (fieldErrors[fieldName] ?? [])..add(msg);
-        }
-      }
-    });
-    return fieldErrors;
-  }
-
   Widget buildField(Map<String, dynamic> field) {
     final type = field['type'];
     final label = field['label'] ?? '';
-    final value = formData[field['name']];
+    final value = form!.data[field['name']];
     final options = field['options'] as List<dynamic>?;
-    final errors = fieldErrors[field['name']] ?? [];
+    final errors = form!.errors[field['name']] ?? [];
     final isRequired = errors.isNotEmpty;
 
     Widget fieldWidget;
@@ -161,7 +88,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                 child: Text('Confirmar'),
                                 onPressed: () {
                                   setState(() {
-                                    formData[field['name']] = pickedDate.toIso8601String().split('T')[0];
+                                    form!.data[field['name']] = pickedDate.toIso8601String().split('T')[0];
                                   });
                                   Navigator.of(context).pop();
                                 },
@@ -179,7 +106,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                     child: Icon(CupertinoIcons.clear, size: 20),
                     onPressed: () {
                       setState(() {
-                        formData[field['name']] = '';
+                        form!.data[field['name']] = '';
                       });
                     },
                   ),
@@ -228,7 +155,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                 child: Text('Confirmar'),
                                 onPressed: () {
                                   setState(() {
-                                    formData[field['name']] =
+                                    form!.data[field['name']] =
                                       "${pickedDuration.inHours.toString().padLeft(2, '0')}:${(pickedDuration.inMinutes % 60).toString().padLeft(2, '0')}";
                                   });
                                   Navigator.of(context).pop();
@@ -247,7 +174,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                     child: Icon(CupertinoIcons.clear, size: 20),
                     onPressed: () {
                       setState(() {
-                        formData[field['name']] = '';
+                        form!.data[field['name']] = '';
                       });
                     },
                   ),
@@ -306,7 +233,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
               keyboardType: TextInputType.number,
               onChanged: (val) {
                 setState(() {
-                  formData[field['name']] = val;
+                  form!.data[field['name']] = val;
                 });
               },
             ),
@@ -346,7 +273,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                   child: Text('Confirmar'),
                                   onPressed: () {
                                     setState(() {
-                                      formData[field['name']] = options[pickedIndex];
+                                      form!.data[field['name']] = options[pickedIndex];
                                     });
                                     Navigator.of(context).pop();
                                   },
@@ -378,7 +305,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                     child: Icon(CupertinoIcons.clear, size: 20),
                     onPressed: () {
                       setState(() {
-                        formData[field['name']] = '';
+                        form!.data[field['name']] = '';
                       });
                     },
                   ),
@@ -397,7 +324,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                 ..selection = TextSelection.collapsed(offset: value.length),
               onChanged: (val) {
                 setState(() {
-                  formData[field['name']] = val;
+                  form!.data[field['name']] = val;
                 });
               },
             ),
@@ -430,7 +357,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                   scrollController: FixedExtentScrollController(initialItem: selected),
                                   onSelectedItemChanged: (i) {
                                     setState(() {
-                                      formData[field['name']] = options[i];
+                                      form!.data[field['name']] = options[i];
                                     });
                                   },
                                   children: options!.map((o) => Text(o.toString())).toList(),
@@ -469,7 +396,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                   child: Icon(CupertinoIcons.clear, size: 20),
                   onPressed: () {
                     setState(() {
-                      formData[field['name']] = '';
+                      form!.data[field['name']] = '';
                     });
                   },
                 ),
@@ -490,7 +417,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
             maxLines: field['rows'] ?? 3,
             onChanged: (val) {
               setState(() {
-                formData[field['name']] = val;
+                form!.data[field['name']] = val;
               });
             },
           ),
@@ -534,7 +461,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
               (opt) => GestureDetector(
                 onTap: () {
                   setState(() {
-                    formData[field['name']] = opt;
+                    form!.data[field['name']] = opt;
                   });
                 },
                 child: Row(
@@ -559,7 +486,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                 child: Icon(CupertinoIcons.clear, size: 20),
                 onPressed: () {
                   setState(() {
-                    formData[field['name']] = '';
+                    form!.data[field['name']] = '';
                   });
                 },
               ),
@@ -590,7 +517,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
               child: Icon(CupertinoIcons.clear, size: 20),
               onPressed: () {
                 setState(() {
-                  formData[field['name']] = null;
+                  form!.data[field['name']] = null;
                 });
               },
             ),
@@ -739,7 +666,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (formJson == null) {
+    if (form == null) {
       return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text('Cargando...'),
@@ -747,16 +674,16 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
         child: Center(child: CupertinoActivityIndicator()),
       );
     }
-    final formname = formJson!['formname'] ?? 'Formulario';
-    final sections = formJson!['fields'] as Map<String, dynamic>;
+    final formname = form!.template['formname'] ?? 'Formulario';
+    final sections = form!.template['fields'] as Map<String, dynamic>;
 
     // Aplica restricciones en cada build
-    fieldErrors = handleFieldRestrictions(formData, formJson!['restrictions']);
+    form!.handleFieldRestrictions();
 
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         items: [
-          for (final section in sectionKeys)
+          for (final section in form!.sectionKeys)
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.square_list),
               label: section,
@@ -764,7 +691,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
         ],
       ),
       tabBuilder: (context, index) {
-        final currentSection = sectionKeys[index];
+        final currentSection = form!.sectionKeys[index];
         final fields = sections[currentSection] as List<dynamic>;
         return CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
