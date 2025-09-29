@@ -1,7 +1,6 @@
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/viewmodels/header.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
