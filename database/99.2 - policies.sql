@@ -10,3 +10,8 @@ for select using (auth.uid() = id or is_under_my_watch(id));
 DROP POLICY IF EXISTS user_hierarchy_select ON user_hierarchy;
 create policy user_hierarchy_select on user_hierarchy
 for select using (auth.uid() = id or is_under_my_watch(id));
+
+-- 03
+DROP POLICY IF EXISTS filled_in_select ON filled_in;
+create policy filled_in_select on filled_in
+for select using (auth.uid() = filler or is_under_my_watch(filler));
