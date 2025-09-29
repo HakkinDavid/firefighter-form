@@ -8,7 +8,7 @@ class DynamicFormPage extends StatefulWidget {
   const DynamicFormPage({super.key});
 
   @override
-  _DynamicFormPageState createState() => _DynamicFormPageState();
+  State<DynamicFormPage> createState() => _DynamicFormPageState();
 }
 
 class _DynamicFormPageState extends State<DynamicFormPage> {
@@ -264,7 +264,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
               children: [
                 Expanded(
                   child: CupertinoTextField(
-                    placeholder: "${label} ${i + 1}",
+                    placeholder: "$label ${i + 1}",
                     controller: TextEditingController(text: value[i] ?? ''),
                     onChanged: (val) {
                       setState(() {
@@ -339,14 +339,14 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                     onSelectedItemChanged: (i) {
                                       pickedIndex = i;
                                     },
-                                    children: options!.map((o) => Text(o.toString())).toList(),
+                                    children: options.map((o) => Text(o.toString())).toList(),
                                   ),
                                 ),
                                 CupertinoButton(
                                   child: Text('Confirmar'),
                                   onPressed: () {
                                     setState(() {
-                                      formData[field['name']] = options![pickedIndex];
+                                      formData[field['name']] = options[pickedIndex];
                                     });
                                     Navigator.of(context).pop();
                                   },
@@ -416,7 +416,6 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                 child: GestureDetector(
                   onTap: () async {
                     int selected = options?.indexOf(value) ?? 0;
-                    int pickedIndex = selected;
                     await showCupertinoModalPopup(
                       context: context,
                       builder: (_) => SafeArea(
@@ -681,7 +680,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                           ),
                       ],
                     );
-                  }).toList(),
+                  }),
                   CupertinoButton(
                     padding: EdgeInsets.zero,
                     child: Icon(CupertinoIcons.delete, size: 20),
