@@ -5,14 +5,12 @@
             {
                 "name": "label1",
                 "type": "text",
-                "className": "col-span-full block text-gray-700 font-bold mt-2 mb-2",
-                "text": "<h1>Datos del servicio</h1>"
+                "text": "Datos del servicio"
             },
             {
                 "name": "campoturno",
                 "label": "Turno",
                 "type": "select",
-                "className": "col-span-1 col-start-1",
                 "options": [
                     "Turno 1",
                     "Turno 2",
@@ -23,7 +21,6 @@
                 "name": "campoestacion",
                 "label": "Estación",
                 "type": "select",
-                "className": "col-span-1",
                 "options": [
                     "Central de bomberos",
                     "Estación 1",
@@ -50,7 +47,6 @@
                 "name": "campounidad",
                 "label": "Unidad",
                 "type": "select",
-                "className": "col-span-1",
                 "options": [
                     "Máquina",
                     "Ambulancia 1",
@@ -63,13 +59,11 @@
                 "name": "date",
                 "label": "Fecha",
                 "type": "input",
-                "inputType": "date",
-                "className": "col-span-1"
+                "inputType": "date"
             },
             {
                 "name": "cronometria",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
                 "text": "Cronometría (Hora)"
             },
             {
@@ -80,111 +74,95 @@
                     "Trauma",
                     "Enfermo",
                     "Gineco Obstétrico"
-                ],
-                "className": "col-span-1 col-start-1"
+                ]
             },
             {
                 "name": "campollamada",
                 "label": "Hora de llamada",
                 "type": "input",
-                "inputType": "time",
-                "className": "col-span-1"
+                "inputType": "time"
             },
             {
                 "name": "salida",
                 "label": "Hora de salida",
                 "type": "input",
-                "inputType": "time",
-                "className": "col-span-1"
+                "inputType": "time"
             },
             {
                 "name": "llegada",
                 "label": "Hora de llegada",
                 "type": "input",
-                "inputType": "time",
-                "className": "col-span-1"
+                "inputType": "time"
             },
             {
                 "name": "traslado",
                 "label": "Hora de traslado",
                 "type": "input",
-                "inputType": "time",
-                "className": "col-span-1"
+                "inputType": "time"
             },
             {
                 "name": "hospital",
                 "label": "Hora de hospital",
                 "type": "input",
-                "inputType": "time",
-                "className": "col-span-1"
+                "inputType": "time"
             },
             {
                 "name": "disponible",
                 "label": "Hora de disponible",
                 "type": "input",
-                "inputType": "time",
-                "className": "col-span-1"
+                "inputType": "time"
             },
             {
                 "name": "servicioubi",
                 "type": "text",
-                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
                 "text": "Ubicación del Servicio"
             },
             {
                 "name": "calle",
                 "label": "Calle",
                 "type": "textarea",
-                "rows": 5,
-                "className": "col-span-1 col-start-1"
+                "rows": 5
             },
             {
                 "name": "esquina",
                 "label": "Avenidas colindantes",
                 "type": "textarea",
-                "rows": 5,
-                "className": "col-span-1"
+                "rows": 5
             },
             {
                 "name": "colonia",
                 "label": "Colonia / Comunidad",
                 "type": "input",
-                "inputType": "text",
-                "className": "col-span-1"
+                "inputType": "text"
             },
             {
                 "name": "codigopostal",
                 "label": "Código Postal",
                 "type": "input",
-                "inputType": "text",
-                "className": "col-span-1"
+                "inputType": "text"
             },
             {
                 "name": "municipio",
                 "label": "Municipio",
                 "type": "input",
-                "inputType": "text",
-                "className": "col-span-1"
+                "inputType": "text"
             },
             {
                 "name": "estado",
                 "label": "Estado",
                 "type": "input",
-                "inputType": "text",
-                "className": "col-span-1"
+                "inputType": "text"
             },
             {
                 "name": "ocurrencia",
                 "label": "Lugar de ocurrencia",
                 "type": "textarea",
-                "rows": 5,
-                "className": "col-span-1"
+                "rows": 5
             },
             {
                 "name": "resultado",
                 "label": "Resultado del despacho",
                 "type": "textarea",
-                "className": "col-span-full",
                 "rows": 5
             },
             {
@@ -196,22 +174,19 @@
             {
                 "name": "tripulacion",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
                 "text": "Tripulación"
             },
             {
                 "name": "jefe",
                 "label": "Jefe del servicio",
                 "type": "input",
-                "inputType": "text",
-                "className": "col-span-1 col-start-1"
+                "inputType": "text"
             },
             {
                 "name": "maquinista",
                 "label": "Maquinista",
                 "type": "input",
-                "inputType": "text",
-                "className": "col-span-1"
+                "inputType": "text"
             },
             {
                 "name": "auxiliares",
@@ -219,22 +194,19 @@
                 "type": "input",
                 "inputType": "text",
                 "multiple": true,
-                "allowOwnOptions": true,
-                "className": "col-span-1"
+                "allowOwnOptions": true
             }
         ],
         "Paciente": [
             {
                 "name": "pacienteinfo",
                 "type": "text",
-                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
                 "text": "Paciente"
             },
             {
                 "name": "patient",
                 "label": "Nombre del paciente",
                 "type": "input",
-                "className": "col-span-1 md:col-span-2 col-start-1",
                 "inputType": "text"
             },
             {
@@ -247,8 +219,7 @@
                     "Mujer",
                     "Hombre"
                 ],
-                "allowOwnOptions": true,
-                "className": "col-span-1 col-start-1"
+                "allowOwnOptions": true
             },
             {
                 "name": "edad",
@@ -276,7 +247,6 @@
             {
                 "name": "domiciliopaciente",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
                 "text": "Domicilio del paciente"
             },
             {
@@ -325,7 +295,6 @@
                 "name": "correopaciente",
                 "label": "Correo electrónico",
                 "type": "input",
-                "className": "col-span-1 md:col-span-2",
                 "inputType": "text"
             },
             {
@@ -339,21 +308,18 @@
             {
                 "name": "primeraeval",
                 "type": "text",
-                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
                 "text": "Evaluación primaria"
             },
             {
                 "name": "motivo",
                 "label": "Motivo de la atención",
                 "type": "textarea",
-                "className": "col-span-1 md:col-span-2 col-start-1",
                 "inputType": "text"
             },
             {
                 "name": "CONCIENCIA",
                 "label": "Nivel de conciencia",
                 "type": "select",
-                "className": "col-span-1",
                 "options": [
                     "Alerta",
                     "Verbal",
@@ -371,8 +337,7 @@
                     "Amarilla",
                     "Roja",
                     "Negra"
-                ],
-                "className": "col-span-1"
+                ]
             },
             {
                 "name": "viaaerea",
@@ -440,7 +405,6 @@
                 "name": "pos",
                 "label": "Posición, orientación (Dónde y cómo se encontró al paciente)",
                 "type": "textarea",
-                "className": "col-span-1 md:col-span-2 col-start-1",
                 "rows": 5
             }
         ],
@@ -448,7 +412,6 @@
             {
                 "name": "segundaeval",
                 "type": "text",
-                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
                 "text": "Evaluación secundaria"
             },
             {
@@ -459,8 +422,7 @@
                     "Isocórica",
                     "Miótica",
                     "Midriática"
-                ],
-                "className": "col-span-1 col-start-1"
+                ]
             },
             {
                 "name": "pupilaizq",
@@ -519,21 +481,18 @@
             {
                 "name": "signosvitales",
                 "type": "text",
-                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
                 "text": "Signos vitales"
             },
             {
                 "name": "historico_sv",
                 "label": "Histórico de signos vitales",
                 "type": "tuple",
-                "className": "grid grid-cols-3 gap-3 col-span-full col-start-1 max-h-80 overflow-y-auto",
                 "tuple": [
                     {
                         "name": "hora",
                         "label": "Hora",
                         "type": "input",
-                        "inputType": "time",
-                        "className": "col-span-1 col-start-1"
+                        "inputType": "time"
                     },
                     {
                         "name": "fcsignovitales",
@@ -580,7 +539,6 @@
                     {
                         "name": "glasgow",
                         "type": "text",
-                        "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
                         "text": "Glasgow"
                     },
                     {
@@ -637,20 +595,17 @@
                 "label": "Zona de lesión",
                 "type": "drawingboard",
                 "background": "body_diagram",
-                "aspect_ratio": 1.2,
-                "className": "col-span-1 md:col-span-2 lg:col-span-3 max-w-[400px] w-full mx-auto"
+                "aspect_ratio": 1.2
             },
             {
                 "name": "semiologia",
                 "type": "text",
-                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
                 "text": "Semiología del dolor"
             },
             {
                 "name": "aparicion",
                 "label": "Aparición",
                 "type": "input",
-                "className": "col-span-1 md:col-span-2 col-start-1",
                 "inputType": "text"
             },
             {
@@ -692,15 +647,13 @@
             {
                 "name": "sampler",
                 "type": "text",
-                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
                 "text": "Sampler"
             },
             {
                 "name": "signos",
                 "label": "Signos",
                 "type": "textarea",
-                "rows": 5,
-                "className": "col-span-1 col-start-1"
+                "rows": 5
             },
             {
                 "name": "alergias",
@@ -741,7 +694,6 @@
             {
                 "name": "gineco",
                 "type": "text",
-                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
                 "text": "Ginecológico",
                 "display_on": {
                     "notEmpty": [
@@ -762,7 +714,6 @@
                 "label": "Gesta",
                 "type": "input",
                 "inputType": "number",
-                "className": "col-span-1 col-start-1",
                 "display_on": {
                     "notEmpty": [
                         {
@@ -959,7 +910,6 @@
             {
                 "name": "datospos",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
                 "text": "Datos posparto",
                 "display_on": {
                     "notEmpty": [
@@ -980,7 +930,6 @@
                 "label": "Hora de nacimiento",
                 "type": "input",
                 "inputType": "time",
-                "className": "col-span-1 col-start-1",
                 "display_on": {
                     "notEmpty": [
                         {
@@ -1022,7 +971,6 @@
                 "name": "datosproducto",
                 "label": "Datos del producto",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
                 "text": "Datos del producto",
                 "display_on": {
                     "notEmpty": [
@@ -1046,7 +994,6 @@
                     "Vivo",
                     "Muerto"
                 ],
-                "className": "col-span-1 col-start-1",
                 "display_on": {
                     "notEmpty": [
                         {
@@ -1086,7 +1033,6 @@
             {
                 "name": "apgar",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
                 "text": "Apgar",
                 "display_on": {
                     "notEmpty": [
@@ -1107,7 +1053,6 @@
                 "label": "1 Minuto",
                 "type": "input",
                 "inputType": "number",
-                "className": "col-span-1 col-start-1",
                 "display_on": {
                     "notEmpty": [
                         {
@@ -1163,7 +1108,6 @@
             {
                 "name": "silverman",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
                 "text": "Silverman",
                 "display_on": {
                     "notEmpty": [
@@ -1184,7 +1128,6 @@
                 "label": "10 Minutos",
                 "type": "input",
                 "inputType": "number",
-                "className": "col-span-1 col-start-1",
                 "display_on": {
                     "notEmpty": [
                         {
@@ -1204,13 +1147,11 @@
             {
                 "name": "tratamiento",
                 "type": "text",
-                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
                 "text": "Tratamiento"
             },
             {
                 "name": "manejovia",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
                 "text": "Manejo de vía aérea"
             },
             {
@@ -1221,8 +1162,7 @@
                 "options": [
                     "Sí",
                     "No"
-                ],
-                "className": "col-span-1 col-start-1"
+                ]
             },
             {
                 "name": "manejoviaaeriacheck",
@@ -1253,15 +1193,13 @@
             {
                 "name": "intubacion",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
                 "text": "Intubación"
             },
             {
                 "name": "horaintubacion",
                 "label": "Hora del procedimiento",
                 "type": "input",
-                "inputType": "time",
-                "className": "col-span-1 col-start-1"
+                "inputType": "time"
             },
             {
                 "name": "diametrointubacion",
@@ -1294,7 +1232,6 @@
             {
                 "name": "asistenciaventilatoria",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
                 "text": "Asistencia ventilatoria"
             },
             {
@@ -1305,8 +1242,7 @@
                     "Bolsa Válvula Mascarilla",
                     "CPAP",
                     "Ventilador mecánico"
-                ],
-                "className": "col-span-1 col-start-1"
+                ]
             },
             {
                 "name": "frecuenciaav",
@@ -1348,7 +1284,6 @@
             {
                 "name": "decompresionpleural",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
                 "text": "Decompresión Pleural"
             },
             {
@@ -1358,8 +1293,7 @@
                 "options": [
                     "No",
                     "Sí"
-                ],
-                "className": "col-span-1 col-start-1"
+                ]
             },
             {
                 "name": "hemitorax",
@@ -1380,7 +1314,6 @@
             {
                 "name": "controlhemorrogias",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
                 "text": "Control de hemorragias"
             },
             {
@@ -1396,8 +1329,7 @@
                     "Empaque de herida",
                     "Torniquete",
                     "Agente hemostático"
-                ],
-                "className": "col-span-1 col-start-1"
+                ]
             },
             {
                 "name": "horacolocacionhemorragias",
@@ -1408,7 +1340,6 @@
             {
                 "name": "acessocirculatoria",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
                 "text": "Acceso circulatorio"
             },
             {
@@ -1419,8 +1350,7 @@
                     "No necesitó",
                     "Intravascular periférico",
                     "Intranoseo"
-                ],
-                "className": "col-span-1 col-start-1"
+                ]
             },
             {
                 "name": "zonacolocacion",
@@ -1488,7 +1418,6 @@
             {
                 "name": "intervenciones",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-sm font-bold mt-2 mb-2",
                 "text": "Intervenciones"
             },
             {
@@ -1499,8 +1428,7 @@
                 "options": [
                     "No",
                     "Sí"
-                ],
-                "className": "col-span-1 col-start-1"
+                ]
             },
             {
                 "name": "inmovilizacion",
@@ -1536,14 +1464,12 @@
                 "name": "medicamentotupla",
                 "label": "Medicamentos",
                 "type": "tuple",
-                "className": "grid grid-cols-3 gap-3 col-span-full col-start-1 max-h-80 overflow-y-auto",
                 "tuple": [
                     {
                         "name": "horameds",
                         "label": "Hora",
                         "type": "input",
-                        "inputType": "time",
-                        "className": "col-span-1 col-start-1"
+                        "inputType": "time"
                     },
                     {
                         "name": "medicamentostup",
@@ -1569,7 +1495,6 @@
                 "name": "terapiaelectrica",
                 "label": "Terapia eléctrica",
                 "type": "tuple",
-                "className": "grid grid-cols-3 gap-3 col-span-full col-start-1 max-h-80 overflow-y-auto",
                 "tuple": [
                     {
                         "name": "terapiaelectricacheckbox",
@@ -1580,8 +1505,7 @@
                             "Desfribilación",
                             "Cardioversión",
                             "Marcapasos transcutáneo"
-                        ],
-                        "className": "col-span-1 col-start-1"
+                        ]
                     },
                     {
                         "name": "descargas",
@@ -1614,13 +1538,11 @@
             {
                 "name": "resultados",
                 "type": "text",
-                "className": "col-span-full block text-gray-700 text-big font-bold mt-2 mb-2",
                 "text": "Resultados"
             },
             {
                 "name": "resultadoemergencia",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
                 "text": "Resultado de la emergencia"
             },
             {
@@ -1705,8 +1627,7 @@
                     "Amarilla",
                     "Roja",
                     "Negra"
-                ],
-                "className": "col-span-1"
+                ]
             },
             {
                 "name": "firmaConsentimiento",
@@ -1714,7 +1635,6 @@
                 "secondaryLabel": "Firma del paciente",
                 "text": "Declaró haber recibido oportunamente información completa y adecuada sobre mi cuadro clínico y los procedimientos diagnósticos y/o terapéuticos qué se realizarán los riesgos que esto pueda presentar y las alternativas disponibles. A si mismo. Declaró haber comprendido la información proporcionada y que he tenido la oportunidad de fórmula mis preguntas y dudas. Las que han sido contestadas y aclaradas a mi entera satisfacción por lo anteriormente expuesto. Declaró mi consentimiento para ser sometido al tratamiento y a las acciones que el equipo TUM/TAMP considere necesarias en caso de surgir situaciones no esperadas o complicaciones, es expresado en forma libre e informada.",
                 "type": "drawingboard",
-                "className": "col-span-full max-w-[600px] w-full mx-auto",
                 "display_on": {
                     "isEmpty": [
                         {
@@ -1729,7 +1649,6 @@
                 "secondaryLabel": "Firma del paciente",
                 "text": "Declaró que no aceptó las recomendaciones del personal de la ambulancia o vehículo de primer contacto de bomberos tijuana en cuanto al (tratamiento) y o traslado a un hospital, por lo que eximo a la dirección de bomberos tijuana y a dichas personas de toda responsabilidad que pudiera derivar al haberse respetado y cumplido mi decisión.",
                 "type": "drawingboard",
-                "className": "col-span-full max-w-[600px] w-full mx-auto",
                 "display_on": {
                     "isEmpty": [
                         {
@@ -1741,15 +1660,13 @@
             {
                 "name": "testigotitulo",
                 "type": "text",
-                "className": "col-span-full block text-gray-500 text-big font-bold mt-2 mb-2",
                 "text": "Testigo"
             },
             {
                 "name": "alternate",
                 "label": "Nombre del testigo",
                 "type": "input",
-                "inputType": "text",
-                "className": "col-span-1 col-start-1"
+                "inputType": "text"
             },
             {
                 "name": "parentesco",
@@ -1762,15 +1679,13 @@
                 "label": "",
                 "secondaryLabel": "Firma del testigo",
                 "text": "",
-                "type": "drawingboard",
-                "className": "col-span-full max-w-[600px] w-full mx-auto"
+                "type": "drawingboard"
             },
             {
                 "name": "nombreRecibe",
                 "label": "Nombre de quien recibe",
                 "type": "input",
                 "inputType": "text",
-                "className": "col-span-1 col-start-1",
                 "display_on": {
                     "isEmpty": [
                         {
@@ -1785,7 +1700,6 @@
                 "secondaryLabel": "Firma de Médico / Enfermero / Responsable que recibe",
                 "text": "",
                 "type": "drawingboard",
-                "className": "col-span-full max-w-[600px] w-full mx-auto",
                 "display_on": {
                     "isEmpty": [
                         {
@@ -1798,23 +1712,20 @@
                 "name": "filler",
                 "label": "Nombre del responsable de la atención",
                 "type": "input",
-                "inputType": "text",
-                "className": "col-span-1 col-start-1"
+                "inputType": "text"
             },
             {
                 "name": "firmaBomberoAtencion",
                 "label": "",
                 "secondaryLabel": "Firma del Responsable de la Atención",
                 "text": "",
-                "type": "drawingboard",
-                "className": "col-span-full max-w-[600px] w-full mx-auto"
+                "type": "drawingboard"
             },
             {
                 "name": "observacionesFinales",
                 "label": "Resúmen / Observaciones finales",
                 "type": "textarea",
-                "rows": 5,
-                "className": "col-span-full col-start-1"
+                "rows": 5
             }
         ]
     },
