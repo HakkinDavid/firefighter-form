@@ -71,9 +71,7 @@ class _WelcomeState extends State<Welcome> {
         );
 
         if (response.user != null) {
-          Settings.instance.userId =
-              Supabase.instance.client.auth.currentUser!.id;
-          await Settings.instance.getUser();
+          await Settings.instance.setUser();
           if (mounted) {
             Navigator.pushReplacementNamed(context, "/home");
           }
@@ -94,10 +92,7 @@ class _WelcomeState extends State<Welcome> {
             },
           );
 
-          Settings.instance.userId =
-              Supabase.instance.client.auth.currentUser!.id;
-
-          await Settings.instance.getUser();
+          await Settings.instance.setUser();
           if (mounted) {
             Navigator.pushReplacementNamed(context, "/home");
           }
@@ -162,9 +157,7 @@ class _WelcomeState extends State<Welcome> {
                           width: double.infinity,
                           child: CupertinoButton(
                             onPressed: () async {
-                              Settings.instance.userId =
-                                  Supabase.instance.client.auth.currentUser!.id;
-                              await Settings.instance.getUser();
+                              await Settings.instance.setUser();
                               if (context.mounted) {
                                 Navigator.pushReplacementNamed(
                                   context,
