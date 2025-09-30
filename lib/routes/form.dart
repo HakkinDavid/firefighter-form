@@ -526,7 +526,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     }
     else if (type == 'tuple') {
       final tupleFields = field['tuple'] as List<dynamic>? ?? [];
-      final tupleList = value as List<dynamic>;
+      final tupleList = value as List<Map<String, dynamic>>;
       fieldWidget = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -625,7 +625,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
             child: Text('Agregar'),
             onPressed: () {
               setState(() {
-                tupleList.add({for (var sub in tupleFields) sub['name']: ''});
+                tupleList.add({for (var sub in tupleFields) sub['name'].toString(): ''});
               });
             },
           ),
