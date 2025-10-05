@@ -193,9 +193,12 @@ class _WelcomeState extends State<Welcome> {
                               CupertinoTextField(
                                 controller: _emailController,
                                 placeholder: 'Correo electrónico',
-                                prefix: const Icon(
-                                  CupertinoIcons.mail,
-                                  size: 18,
+                                prefix: Padding(
+                                  padding: const EdgeInsets.only(left: 12),
+                                  child: const Icon(
+                                    CupertinoIcons.mail,
+                                    size: 18,
+                                  ),
                                 ),
                                 padding: const EdgeInsets.all(12),
                                 keyboardType: TextInputType.emailAddress,
@@ -207,9 +210,12 @@ class _WelcomeState extends State<Welcome> {
                               CupertinoTextField(
                                 controller: _passwordController,
                                 placeholder: 'Contraseña',
-                                prefix: const Icon(
-                                  CupertinoIcons.lock,
-                                  size: 18,
+                                prefix: Padding(
+                                  padding: const EdgeInsets.only(left: 12),
+                                  child: const Icon(
+                                    CupertinoIcons.lock,
+                                    size: 18,
+                                  ),
                                 ),
                                 padding: const EdgeInsets.all(12),
                                 obscureText: true,
@@ -222,9 +228,12 @@ class _WelcomeState extends State<Welcome> {
                                 CupertinoTextField(
                                   controller: _confirmPasswordController,
                                   placeholder: 'Confirmar contraseña',
-                                  prefix: const Icon(
-                                    CupertinoIcons.lock,
-                                    size: 18,
+                                  prefix: Padding(
+                                    padding: const EdgeInsets.only(left: 12),
+                                    child: const Icon(
+                                      CupertinoIcons.lock,
+                                      size: 18,
+                                    ),
                                   ),
                                   padding: const EdgeInsets.all(12),
                                   obscureText: true,
@@ -236,9 +245,12 @@ class _WelcomeState extends State<Welcome> {
                                 CupertinoTextField(
                                   controller: _givenController,
                                   placeholder: 'Nombre',
-                                  prefix: const Icon(
-                                    CupertinoIcons.person,
-                                    size: 18,
+                                  prefix: Padding(
+                                    padding: const EdgeInsets.only(left: 12),
+                                    child: const Icon(
+                                      CupertinoIcons.person,
+                                      size: 18,
+                                    ),
                                   ),
                                   padding: const EdgeInsets.all(12),
                                   autocorrect: false,
@@ -249,9 +261,12 @@ class _WelcomeState extends State<Welcome> {
                                 CupertinoTextField(
                                   controller: _surname1Controller,
                                   placeholder: 'Apellido paterno',
-                                  prefix: const Icon(
-                                    CupertinoIcons.person,
-                                    size: 18,
+                                  prefix: Padding(
+                                    padding: const EdgeInsets.only(left: 12),
+                                    child: const Icon(
+                                      CupertinoIcons.person,
+                                      size: 18,
+                                    ),
                                   ),
                                   padding: const EdgeInsets.all(12),
                                   autocorrect: false,
@@ -262,9 +277,12 @@ class _WelcomeState extends State<Welcome> {
                                 CupertinoTextField(
                                   controller: _surname2Controller,
                                   placeholder: 'Apellido materno',
-                                  prefix: const Icon(
-                                    CupertinoIcons.person,
-                                    size: 18,
+                                  prefix: Padding(
+                                    padding: const EdgeInsets.only(left: 12),
+                                    child: const Icon(
+                                      CupertinoIcons.person,
+                                      size: 18,
+                                    ),
                                   ),
                                   padding: const EdgeInsets.all(12),
                                   autocorrect: false,
