@@ -1,4 +1,5 @@
 import 'package:bomberos/models/settings.dart';
+import 'package:bomberos/viewmodels/overlay_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,46 @@ class Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<Header> {
+  final GlobalKey _buttonKey = GlobalKey();
+
+  void _showUserMenu(BuildContext context, double contentWidth) {
+    final RenderBox button = _buttonKey.currentContext!.findRenderObject() as RenderBox;
+    final position = button.localToGlobal(Offset.zero);
+    final buttonSize = button.size;
+    final double overlayWidth = (contentWidth/2) < 300 ? (contentWidth/2) : 300;
+
+    OverlayService.showOverlay(
+      context: context,
+      position: position,
+      buttonSize: buttonSize,
+      overlayWidth: overlayWidth,
+      overlayContent: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              "Usuario: ${widget.username}",
+              style: TextStyle(
+                color: Settings.instance.colors.textOverPrimary,
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            if (widget.adminUsername != null)
+              Text(
+                "Supervisor: ${widget.adminUsername}",
+                style: TextStyle(
+                  color: Settings.instance.colors.textOverPrimary,
+                  fontSize: 14,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -31,32 +72,35 @@ class _HeaderState extends State<Header> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "AYUNTAMIENTO DE TIJUANA, B.C.",
-                        style: TextStyle(
-                          color: Settings.instance.colors.textOverPrimary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.8,
+                  // The 600 could be a macro in settings. Something like WIDESCREEN
+                  if (contentWidth < 600) ...[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "AYUNTAMIENTO DE TIJUANA, B.C.",
+                          style: TextStyle(
+                            color: Settings.instance.colors.textOverPrimary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.8,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        "DIRECCIÓN DE BOMBEROS TIJUANA",
-                        style: TextStyle(
-                          color: Settings.instance.colors.textOverPrimary,
-                          fontSize: 14,
-                          letterSpacing: 0.5,
+                        Text(
+                          "DIRECCIÓN DE BOMBEROS TIJUANA",
+                          style: TextStyle(
+                            color: Settings.instance.colors.textOverPrimary,
+                            fontSize: 14,
+                            letterSpacing: 0.5,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                  ],
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -73,9 +117,31 @@ class _HeaderState extends State<Header> {
                       Expanded(
                         flex: 3,
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            if (contentWidth >= 600) ...[
+                              Text(
+                                "AYUNTAMIENTO DE TIJUANA, B.C.",
+                                style: TextStyle(
+                                  color: Settings.instance.colors.textOverPrimary,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.8,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                "DIRECCIÓN DE BOMBEROS TIJUANA",
+                                style: TextStyle(
+                                  color: Settings.instance.colors.textOverPrimary,
+                                  fontSize: 14,
+                                  letterSpacing: 0.5,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 10),
+                            ],
                             Text(
                               "PARTE DE SERVICIO PREHOSPITALARIO",
                               style: TextStyle(
@@ -91,12 +157,13 @@ class _HeaderState extends State<Header> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   IconButton(
+                                    key: _buttonKey,
                                     icon: const Icon(
                                       CupertinoIcons.person_crop_circle,
                                       size: 30,),
                                     padding: EdgeInsets.zero,
                                     color: Settings().colors.primaryContrast,
-                                    onPressed: () {},
+                                    onPressed: () => _showUserMenu(context, contentWidth),
                                   ),
                                   const SizedBox(width: 12),
                                   IconButton(
@@ -110,22 +177,6 @@ class _HeaderState extends State<Header> {
                                   ),
                                 ],
                               ),
-                              //   Text(
-                              //     "Usuario: ${widget.username}",
-                              //     style: TextStyle(
-                              //       color: Settings.instance.colors.textOverPrimary,
-                              //       fontSize: 15,
-                              //     ),
-                              //     textAlign: TextAlign.center,
-                              //   ),
-                              // if (widget.adminUsername != null)
-                              //   Text(
-                              //     "Supervisor: ${widget.adminUsername}",
-                              //     style: TextStyle(
-                              //       color: Settings.instance.colors.textOverPrimary,
-                              //       fontSize: 15,
-                              //     ),
-                              //   ),
                           ],
                         ),
                       ),
