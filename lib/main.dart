@@ -1,6 +1,7 @@
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/routes/form.dart';
 import 'package:bomberos/routes/home.dart';
+import 'package:bomberos/routes/search.dart';
 import 'package:bomberos/routes/welcome.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -32,6 +33,8 @@ class BomberosApp extends StatelessWidget {
                     return DynamicFormPage(draftData: arguments?['draftData'] ?? {}, templateId: arguments?['templateId']);
                   case '/home':
                     return const Home();
+                  case '/search':
+                    return const Search();
                   case '/':
                   case '/welcome':
                   default:

@@ -15,6 +15,10 @@ class Header extends StatefulWidget {
 class _HeaderState extends State<Header> {
   final GlobalKey _buttonKey = GlobalKey();
 
+  void _goToSearch() {
+    Navigator.pushNamed(context, '/search');
+  }
+
   void _showUserMenu(BuildContext context, double contentWidth) {
     final RenderBox button = _buttonKey.currentContext!.findRenderObject() as RenderBox;
     final position = button.localToGlobal(Offset.zero);
@@ -165,16 +169,18 @@ class _HeaderState extends State<Header> {
                                     color: Settings().colors.primaryContrast,
                                     onPressed: () => _showUserMenu(context, contentWidth),
                                   ),
-                                  const SizedBox(width: 12),
-                                  IconButton(
-                                    icon: const Icon(
-                                      CupertinoIcons.search,
-                                      size: 30,
+                                  if(ModalRoute.of(context)?.settings.name == '/home') ...[
+                                    const SizedBox(width: 12),
+                                    IconButton(
+                                      icon: const Icon(
+                                        CupertinoIcons.search,
+                                        size: 30,
+                                      ),
+                                      padding: EdgeInsets.zero,
+                                      color: Settings().colors.primaryContrast,
+                                      onPressed: _goToSearch,
                                     ),
-                                    padding: EdgeInsets.zero,
-                                    color: Settings().colors.primaryContrast,
-                                    onPressed: () {},
-                                  ),
+                                  ],
                                 ],
                               ),
                           ],
