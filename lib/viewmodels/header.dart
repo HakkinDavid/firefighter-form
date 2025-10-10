@@ -18,6 +18,9 @@ class _HeaderState extends State<Header> {
   void _goToSearch() {
     Navigator.pushNamed(context, '/search');
   }
+  void _goBack() {
+    Navigator.pop(context);
+  }
 
   void _showUserMenu(BuildContext context, double contentWidth) {
     final RenderBox button = _buttonKey.currentContext!.findRenderObject() as RenderBox;
@@ -50,6 +53,7 @@ class _HeaderState extends State<Header> {
                   color: Settings.instance.colors.textOverPrimary,
                   fontSize: 14,
                 ),
+                textAlign: TextAlign.center,
               ),
           ],
         ),
@@ -59,6 +63,8 @@ class _HeaderState extends State<Header> {
 
   @override
   Widget build(BuildContext context) {
+    final String? currentRoute = ModalRoute.of(context)?.settings.name;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final double maxContentWidth = 900;
@@ -169,18 +175,20 @@ class _HeaderState extends State<Header> {
                                     color: Settings().colors.primaryContrast,
                                     onPressed: () => _showUserMenu(context, contentWidth),
                                   ),
-                                  if(ModalRoute.of(context)?.settings.name == '/home') ...[
-                                    const SizedBox(width: 12),
-                                    IconButton(
-                                      icon: const Icon(
-                                        CupertinoIcons.search,
-                                        size: 30,
-                                      ),
-                                      padding: EdgeInsets.zero,
-                                      color: Settings().colors.primaryContrast,
-                                      onPressed: _goToSearch,
+                                  const SizedBox(width: 12),
+                                  IconButton(
+                                    icon: Icon(
+                                      (currentRoute == '/home')
+                                          ? CupertinoIcons.search
+                                          : CupertinoIcons.arrow_left_circle,
+                                      size: 30,
                                     ),
-                                  ],
+                                    padding: EdgeInsets.zero,
+                                    color: Settings().colors.primaryContrast,
+                                    onPressed: (currentRoute == '/home')
+                                        ? _goToSearch
+                                        : _goBack,
+                                  ),
                                 ],
                               ),
                           ],

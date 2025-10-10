@@ -56,6 +56,8 @@ class Settings {
         .eq('id', pUserId)
         .maybeSingle();
 
+    if (nameRecord == null || roleRecord == null) throw Error();
+
     final watchedByRecord = await Supabase.instance.client
         .from('user_hierarchy')
         .select('id, watched_by')
@@ -68,12 +70,9 @@ class Settings {
         .eq('watched_by', pUserId);
 
     Set<String> watchesUsersId = {};
-
     for (var w in watchesRecord) {
       watchesUsersId.add(w['id']);
     }
-
-    if (nameRecord == null || roleRecord == null) throw Error();
 
     final user = FirefighterUser(
       id: pUserId,
@@ -84,11 +83,58 @@ class Settings {
       watchedByUserId: watchedByRecord?['watched_by'],
       watchesUsersId: watchesUsersId,
     );
-
     userCache[pUserId] = user;
 
-    await saveToDisk();
+    // Watcher User logic
+    if (watchedByRecord != null) {
+      final watcherId = watchedByRecord['watched_by'];
 
+      final watcherNameRecord = await Supabase.instance.client
+          .from('user_name')
+          .select('id, given, surname1, surname2')
+          .eq('id', watcherId)
+          .maybeSingle();
+
+      if (watcherNameRecord != null) { // If tables are correct
+        final watcherUser = FirefighterUser(
+          id: watcherId,
+          givenName: watcherNameRecord['given'],
+          firstSurname: watcherNameRecord['surname1'],
+          secondSurname: watcherNameRecord['surname2'],
+          role: roleRecord['value'] + 1, // obviously wrong, check later
+        );
+        userCache[watcherId] = watcherUser;
+      }
+    }
+
+    // Subordinate Users logic
+    for (var wId in watchesUsersId) {
+      var underWatchNameRecord = await Supabase.instance.client
+          .from('user_name')
+          .select('id, given, surname1, surname2')
+          .eq('id', wId)
+          .maybeSingle();
+
+      var underWatchRoleRecord = await Supabase.instance.client
+          .from('user_role')
+          .select('id, value')
+          .eq('id', wId)
+          .maybeSingle();
+
+      if (underWatchNameRecord != null && underWatchRoleRecord != null) { // If tables are correct
+        FirefighterUser underWatchUser = FirefighterUser(
+          id: wId,
+          givenName: underWatchNameRecord['given'],
+          firstSurname: underWatchNameRecord['surname1'],
+          secondSurname: underWatchNameRecord['surname2'],
+          role: underWatchRoleRecord['value'],
+          watchedByUserId: pUserId,
+        );
+        userCache[wId] = underWatchUser;
+      }
+    }
+
+    await saveToDisk();
     return user;
   }
 
