@@ -36,7 +36,8 @@ class Settings {
   FirefighterUser? get self => userCache[userId];
   FirefighterUser? get watcher => userCache[self?.watchedByUserId ?? ""];
 
-  List<ServiceForm> get formsList => _formsQueue + _formsList;
+  List<ServiceForm> get formsList => _formsQueue + (_formsList
+    ..retainWhere((fl) => _formsQueue.indexWhere((fq) => fq.id == fl.id) == -1));
 
   Future<void> setUser() async {
     setUserId();
@@ -49,7 +50,11 @@ class Settings {
     final formRecords = await Supabase.instance.client
         .from('filled_in')
         .select('*');
-    _formsList = formRecords.asMap().map((key, value) => MapEntry(key, ServiceForm.fromJson(value))).values.toList();
+    _formsList = formRecords
+        .asMap()
+        .map((key, value) => MapEntry(key, ServiceForm.fromJson(value)))
+        .values
+        .toList();
   }
 
   void setUserId() {
@@ -278,8 +283,7 @@ class Settings {
 
       final jsonString = jsonEncode(jsonMap);
       await file.writeAsString(jsonString);
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   Future<void> loadFromDisk() async {
@@ -306,11 +310,11 @@ class Settings {
         userCache = cacheMap.map(
           (key, value) => MapEntry(key, FirefighterUser.fromJson(value)),
         );
-        _formsQueue = queueMap.map(
-          (key, value) => MapEntry(key, ServiceForm.fromJson(value)),
-        ).values.toList();
+        _formsQueue = queueMap
+            .map((key, value) => MapEntry(key, ServiceForm.fromJson(value)))
+            .values
+            .toList();
       }
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 }
