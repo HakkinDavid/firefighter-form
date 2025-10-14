@@ -33,9 +33,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
   Future<void> _loadForm() async {
     try {
       await widget.form.load();
-      setState(() {
-        widget.form.isLoaded = true;
-      });
+      setState(() {});
     } catch (exception) {
       setState(() {
         loadError = !exception.toString().contains("Postgrest")

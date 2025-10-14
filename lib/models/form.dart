@@ -30,7 +30,9 @@ class ServiceForm {
 
   bool get edited => _edited;
 
-  bool isLoaded = false;
+  bool _isLoaded = false;
+
+  bool get isLoaded => _isLoaded;
 
   ServiceForm(
     this._id,
@@ -52,7 +54,7 @@ class ServiceForm {
         _content[field['name']] ??= getDefaultValue(field);
       }
     }
-    isLoaded = true;
+    _isLoaded = true;
   }
 
   void set(String fieldName, dynamic newValue) {
