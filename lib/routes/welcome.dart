@@ -17,6 +17,13 @@ class _WelcomeState extends State<Welcome> {
   final _givenController = TextEditingController();
   final _surname1Controller = TextEditingController();
   final _surname2Controller = TextEditingController();
+  // Recovery state and controllers
+  bool _isRecovering = false;
+  bool _isRecoveringStep2 = false;
+  final _recoveryEmailController = TextEditingController();
+  final _otpController = TextEditingController();
+  final _newPasswordController = TextEditingController();
+  String _recoveryMessage = '';
   bool _isLoading = false;
   bool _isRegistering = false;
   String _errorMessage = '';
@@ -29,6 +36,9 @@ class _WelcomeState extends State<Welcome> {
     _givenController.dispose();
     _surname1Controller.dispose();
     _surname2Controller.dispose();
+    _recoveryEmailController.dispose();
+    _otpController.dispose();
+    _newPasswordController.dispose();
     super.dispose();
   }
 
@@ -177,7 +187,11 @@ class _WelcomeState extends State<Welcome> {
                             children: [
                               // Title
                               Text(
-                                'Iniciar Sesión',
+                                _isRegistering
+                                    ? 'Registrarse'
+                                    : _isRecovering
+                                    ? 'Recuperar contraseña'
+                                    : 'Iniciar Sesión',
                                 style: CupertinoTheme.of(context)
                                     .textTheme
                                     .navLargeTitleTextStyle
@@ -204,30 +218,13 @@ class _WelcomeState extends State<Welcome> {
                                 keyboardType: TextInputType.emailAddress,
                                 autocorrect: false,
                               ),
-                              const SizedBox(height: 16),
 
-                              // Password Field
-                              CupertinoTextField(
-                                controller: _passwordController,
-                                placeholder: 'Contraseña',
-                                prefix: Padding(
-                                  padding: const EdgeInsets.only(left: 12),
-                                  child: const Icon(
-                                    CupertinoIcons.lock,
-                                    size: 18,
-                                  ),
-                                ),
-                                padding: const EdgeInsets.all(12),
-                                obscureText: true,
-                                autocorrect: false,
-                              ),
-                              const SizedBox(height: 16),
-
-                              if (_isRegistering) ...[
-                                // Confirm Password Field
+                              if (!_isRecovering) ...[
+                                const SizedBox(height: 16),
+                                // Password Field
                                 CupertinoTextField(
-                                  controller: _confirmPasswordController,
-                                  placeholder: 'Confirmar contraseña',
+                                  controller: _passwordController,
+                                  placeholder: 'Contraseña',
                                   prefix: Padding(
                                     padding: const EdgeInsets.only(left: 12),
                                     child: const Icon(
@@ -241,55 +238,74 @@ class _WelcomeState extends State<Welcome> {
                                 ),
                                 const SizedBox(height: 16),
 
-                                // Given Name Field
-                                CupertinoTextField(
-                                  controller: _givenController,
-                                  placeholder: 'Nombre',
-                                  prefix: Padding(
-                                    padding: const EdgeInsets.only(left: 12),
-                                    child: const Icon(
-                                      CupertinoIcons.person,
-                                      size: 18,
+                                if (_isRegistering) ...[
+                                  // Confirm Password Field
+                                  CupertinoTextField(
+                                    controller: _confirmPasswordController,
+                                    placeholder: 'Confirmar contraseña',
+                                    prefix: Padding(
+                                      padding: const EdgeInsets.only(left: 12),
+                                      child: const Icon(
+                                        CupertinoIcons.lock,
+                                        size: 18,
+                                      ),
                                     ),
+                                    padding: const EdgeInsets.all(12),
+                                    obscureText: true,
+                                    autocorrect: false,
                                   ),
-                                  padding: const EdgeInsets.all(12),
-                                  autocorrect: false,
-                                ),
-                                const SizedBox(height: 16),
+                                  const SizedBox(height: 16),
 
-                                // Surname1 Field
-                                CupertinoTextField(
-                                  controller: _surname1Controller,
-                                  placeholder: 'Apellido paterno',
-                                  prefix: Padding(
-                                    padding: const EdgeInsets.only(left: 12),
-                                    child: const Icon(
-                                      CupertinoIcons.person,
-                                      size: 18,
+                                  // Given Name Field
+                                  CupertinoTextField(
+                                    controller: _givenController,
+                                    placeholder: 'Nombre',
+                                    prefix: Padding(
+                                      padding: const EdgeInsets.only(left: 12),
+                                      child: const Icon(
+                                        CupertinoIcons.person,
+                                        size: 18,
+                                      ),
                                     ),
+                                    padding: const EdgeInsets.all(12),
+                                    autocorrect: false,
                                   ),
-                                  padding: const EdgeInsets.all(12),
-                                  autocorrect: false,
-                                ),
-                                const SizedBox(height: 16),
+                                  const SizedBox(height: 16),
 
-                                // Surname2 Field
-                                CupertinoTextField(
-                                  controller: _surname2Controller,
-                                  placeholder: 'Apellido materno',
-                                  prefix: Padding(
-                                    padding: const EdgeInsets.only(left: 12),
-                                    child: const Icon(
-                                      CupertinoIcons.person,
-                                      size: 18,
+                                  // Surname1 Field
+                                  CupertinoTextField(
+                                    controller: _surname1Controller,
+                                    placeholder: 'Apellido paterno',
+                                    prefix: Padding(
+                                      padding: const EdgeInsets.only(left: 12),
+                                      child: const Icon(
+                                        CupertinoIcons.person,
+                                        size: 18,
+                                      ),
                                     ),
+                                    padding: const EdgeInsets.all(12),
+                                    autocorrect: false,
                                   ),
-                                  padding: const EdgeInsets.all(12),
-                                  autocorrect: false,
-                                ),
-                                const SizedBox(height: 20),
-                              ] else
-                                const SizedBox(height: 20),
+                                  const SizedBox(height: 16),
+
+                                  // Surname2 Field
+                                  CupertinoTextField(
+                                    controller: _surname2Controller,
+                                    placeholder: 'Apellido materno',
+                                    prefix: Padding(
+                                      padding: const EdgeInsets.only(left: 12),
+                                      child: const Icon(
+                                        CupertinoIcons.person,
+                                        size: 18,
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                    autocorrect: false,
+                                  ),
+                                  const SizedBox(height: 20),
+                                ] else
+                                  const SizedBox(height: 20),
+                              ],
 
                               // Error Message
                               if (_errorMessage.isNotEmpty)
@@ -324,56 +340,239 @@ class _WelcomeState extends State<Welcome> {
                               if (_errorMessage.isNotEmpty)
                                 const SizedBox(height: 16),
 
-                              // Buttons
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: CupertinoButton(
-                                      onPressed: _isLoading
-                                          ? null
-                                          : _handleLogin,
-                                      color: Settings
-                                          .instance
-                                          .colors
-                                          .primaryContrast,
-                                      child: _isLoading
-                                          ? const CupertinoActivityIndicator()
-                                          : const Text('Entrar'),
+                              // Buttons & Recovery Flow
+                              if (_isRecovering) ...[
+                                if (_isRecoveringStep2) ...[
+                                  CupertinoTextField(
+                                    controller: _otpController,
+                                    placeholder: 'Código recibido por correo',
+                                    keyboardType: TextInputType.number,
+                                    prefix: const Padding(
+                                      padding: EdgeInsets.only(left: 12),
+                                      child: Icon(
+                                        CupertinoIcons.number,
+                                        size: 18,
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(width: 12),
-                                  if (!_isRegistering)
-                                    Expanded(
-                                      child: CupertinoButton(
-                                        onPressed: _isLoading
-                                            ? null
-                                            : () {
-                                                setState(() {
-                                                  _isRegistering = true;
-                                                  _errorMessage = '';
-                                                });
-                                              },
-                                        color: CupertinoColors.systemGrey,
-                                        child: const Text('Registrar'),
+                                  const SizedBox(height: 16),
+                                  CupertinoTextField(
+                                    controller: _newPasswordController,
+                                    placeholder: 'Nueva contraseña',
+                                    obscureText: true,
+                                    prefix: const Padding(
+                                      padding: EdgeInsets.only(left: 12),
+                                      child: Icon(
+                                        CupertinoIcons.lock,
+                                        size: 18,
                                       ),
-                                    )
-                                  else
+                                    ),
+                                  ),
+                                ],
+                                const SizedBox(height: 20),
+                                if (_recoveryMessage.isNotEmpty)
+                                  Text(
+                                    _recoveryMessage,
+                                    style: TextStyle(
+                                      color:
+                                          _recoveryMessage.contains('enviado')
+                                          ? CupertinoColors.activeGreen
+                                          : CupertinoColors.systemRed,
+                                    ),
+                                  ),
+                                const SizedBox(height: 16),
+                                Row(
+                                  children: [
                                     Expanded(
                                       child: CupertinoButton(
+                                        color: Settings
+                                            .instance
+                                            .colors
+                                            .primaryContrast,
+                                        onPressed: _isLoading
+                                            ? null
+                                            : () async {
+                                                if (!_isRecoveringStep2) {
+                                                  setState(() {
+                                                    _recoveryMessage = '';
+                                                  });
+                                                  try {
+                                                    await Supabase
+                                                        .instance
+                                                        .client
+                                                        .auth
+                                                        .resetPasswordForEmail(
+                                                          _recoveryEmailController
+                                                              .text
+                                                              .trim(),
+                                                        );
+                                                    setState(() {
+                                                      _isRecoveringStep2 = true;
+                                                      _recoveryMessage =
+                                                          'Enlace enviado. Revisa tu correo.';
+                                                    });
+                                                  } catch (e) {
+                                                    setState(() {
+                                                      _recoveryMessage =
+                                                          'No se pudo enviar el enlace. Intenta nuevamente.';
+                                                    });
+                                                  }
+                                                } else {
+                                                  setState(() {
+                                                    _recoveryMessage = '';
+                                                  });
+                                                  try {
+                                                    await Supabase
+                                                        .instance
+                                                        .client
+                                                        .auth
+                                                        .verifyOTP(
+                                                          token: _otpController
+                                                              .text
+                                                              .trim(),
+                                                          type:
+                                                              OtpType.recovery,
+                                                          email:
+                                                              _recoveryEmailController
+                                                                  .text
+                                                                  .trim(),
+                                                        );
+                                                    await Supabase
+                                                        .instance
+                                                        .client
+                                                        .auth
+                                                        .updateUser(
+                                                          UserAttributes(
+                                                            password:
+                                                                _newPasswordController
+                                                                    .text
+                                                                    .trim(),
+                                                          ),
+                                                        );
+                                                    setState(() {
+                                                      _isRecovering = false;
+                                                      _isRecoveringStep2 =
+                                                          false;
+                                                      _recoveryMessage = '';
+                                                      _recoveryEmailController
+                                                          .clear();
+                                                      _otpController.clear();
+                                                      _newPasswordController
+                                                          .clear();
+                                                    });
+                                                  } catch (e) {
+                                                    setState(() {
+                                                      _recoveryMessage =
+                                                          'Código inválido o expirado. Intenta nuevamente.';
+                                                    });
+                                                  }
+                                                }
+                                              },
+                                        child: Text(
+                                          !_isRecoveringStep2
+                                              ? 'Enviar enlace'
+                                              : 'Confirmar',
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: CupertinoButton(
+                                        color: CupertinoColors.systemGrey,
                                         onPressed: _isLoading
                                             ? null
                                             : () {
                                                 setState(() {
-                                                  _isRegistering = false;
-                                                  _errorMessage = '';
+                                                  _isRecovering = false;
+                                                  _isRecoveringStep2 = false;
+                                                  _recoveryMessage = '';
+                                                  _recoveryEmailController
+                                                      .clear();
+                                                  _otpController.clear();
+                                                  _newPasswordController
+                                                      .clear();
                                                 });
                                               },
-                                        color: CupertinoColors.systemGrey,
                                         child: const Text('Cancelar'),
                                       ),
                                     ),
-                                ],
-                              ),
+                                  ],
+                                ),
+                              ] else ...[
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: CupertinoButton(
+                                        onPressed: _isLoading
+                                            ? null
+                                            : _handleLogin,
+                                        color: Settings
+                                            .instance
+                                            .colors
+                                            .primaryContrast,
+                                        child: _isLoading
+                                            ? const CupertinoActivityIndicator()
+                                            : const Text('Entrar'),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    if (!_isRegistering)
+                                      Expanded(
+                                        child: CupertinoButton(
+                                          onPressed: _isLoading
+                                              ? null
+                                              : () {
+                                                  setState(() {
+                                                    _isRegistering = true;
+                                                    _errorMessage = '';
+                                                  });
+                                                },
+                                          color: CupertinoColors.systemGrey,
+                                          child: const Text('Registrar'),
+                                        ),
+                                      )
+                                    else
+                                      Expanded(
+                                        child: CupertinoButton(
+                                          onPressed: _isLoading
+                                              ? null
+                                              : () {
+                                                  setState(() {
+                                                    _isRegistering = false;
+                                                    _errorMessage = '';
+                                                  });
+                                                },
+                                          color: CupertinoColors.systemGrey,
+                                          child: const Text('Cancelar'),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                CupertinoButton(
+                                  padding: EdgeInsets.zero,
+                                  onPressed: _isLoading
+                                      ? null
+                                      : () {
+                                          setState(() {
+                                            _isRecovering = true;
+                                            _isRecoveringStep2 = false;
+                                            _recoveryMessage = '';
+                                            _recoveryEmailController.clear();
+                                            _otpController.clear();
+                                            _newPasswordController.clear();
+                                          });
+                                        },
+                                  child: const Text(
+                                    '¿Olvidaste tu contraseña?',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: CupertinoColors.systemGrey,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ],
                           ),
                         ),
