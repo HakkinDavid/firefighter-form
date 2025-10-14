@@ -151,14 +151,17 @@ class Settings {
       final directory = Directory(
         '${(await getApplicationDocumentsDirectory()).path}/frap',
       );
-      int largest = 0;
+      int? largest;
 
       if (await directory.exists()) {
         await for (var t in directory.list()) {
           String name = t.path.split('/').last.split('.').first;
           int? tId = int.tryParse(name);
-          if (tId != null && tId > largest) largest = tId;
+          if (tId != null && tId > (largest ?? 0)) largest = tId;
         }
+      }
+      else {
+        await updateTemplates();
       }
 
       return largest;
