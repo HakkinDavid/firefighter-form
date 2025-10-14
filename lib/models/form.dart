@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 class ServiceForm {
   Map<String, dynamic> _template = const {};
   List<String> _sectionKeys = const [];
-  final Map<String, List<String>> _errors = {};
+  final Map<String, Set<String>> _errors = {};
 
   final String? _id;
   final int _templateId;
@@ -28,7 +28,7 @@ class ServiceForm {
   String? get id => _id;
   int get templateId => _templateId;
 
-  bool get isLoaded => _template['formname'] != null;
+  bool isLoaded = false;
 
   ServiceForm(
     this._id,
@@ -37,11 +37,9 @@ class ServiceForm {
     this._filledAt,
     this._content,
     this._status,
-  ) {
-    load();
-  }
+  );
 
-  void load() async {
+  Future<void> load() async {
     _template = json.decode(
       await File(
         '${(await getApplicationDocumentsDirectory()).path}/frap/$_templateId.json',
@@ -54,6 +52,7 @@ class ServiceForm {
         _content[field['name']] ??= getDefaultValue(field);
       }
     }
+    isLoaded = true;
   }
 
   void set(String fieldName, dynamic newValue) {
@@ -124,7 +123,7 @@ class ServiceForm {
         }
         if (!passed) {
           final msg = field['message'] ?? 'Campo inválido';
-          _errors[fieldName] = msg;
+          _errors[fieldName] = (_errors[fieldName] ?? <String>{})..add(msg);
         }
       }
     });
