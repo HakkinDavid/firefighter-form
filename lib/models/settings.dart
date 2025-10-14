@@ -239,6 +239,11 @@ class Settings {
     return;
   }
 
+  Future<void> enqueueForm(ServiceForm form) async {
+    formQueue[form.id] = form;
+    await saveToDisk();
+  }
+
   Future<void> saveToDisk() async {
     try {
       final file = File(
