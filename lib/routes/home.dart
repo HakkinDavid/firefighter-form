@@ -12,14 +12,17 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   @override
   void initState() {
     super.initState();
     _loadSavedForms();
   }
 
-  void _loadSavedForms() {
+  Future<void> _loadSavedForms() async {
+    try {
+      await Settings.instance.setForms();
+      setState(() {});
+    } catch (e) {}
   }
 
   void _createForm() async {
@@ -39,11 +42,7 @@ class _HomeState extends State<Home> {
   }
 
   void _onFormTap(ServiceForm form) {
-    Navigator.pushReplacementNamed(
-      context,
-      '/form',
-      arguments: form.toJson(),
-    );
+    Navigator.pushReplacementNamed(context, '/form', arguments: form.toJson());
   }
 
   void _onPdfTap(ServiceForm form) {
