@@ -50,9 +50,11 @@ class _HomeState extends State<Home> {
     // Load the forms that we have stored
   }
 
-  void _createForm() {
+  void _createForm() async {
+    int? latestTemplate = await Settings.instance.getNewestSavedTemplate();
+    if (!mounted) return;
     Navigator.pushNamed(context, '/form', arguments: {
-      'template_id': 1,
+      'template_id': latestTemplate,
       'filler': Settings.instance.userId,
       'filled_at': DateTime.now(),
       'content': <String, dynamic>{},
