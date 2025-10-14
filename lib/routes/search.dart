@@ -1,6 +1,7 @@
+import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/viewmodels/header.dart';
-import 'package:bomberos/viewmodels/formList.dart'; // Import the FormList component
+import 'package:bomberos/viewmodels/form_list.dart'; // Import the FormList component
 import 'package:flutter/cupertino.dart';
 
 class Search extends StatefulWidget {
@@ -12,50 +13,6 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   final _searchController = TextEditingController();
-  
-  // Dummy data for the forms list (same as in home.dart)
-  final List<Map<String, dynamic>> _formsList = [
-    {
-      'id': '1',
-      'title': 'Formulario dummy',
-      'date': '2024-01-15',
-      'status': 'Completado',
-      'user': 'Mauricio Alcántar',
-      'supervisor': 'S',
-    },
-    {
-      'id': '2', 
-      'title': 'Formlulario Stupid',
-      'date': '2024-02-26',
-      'status': 'Pendiente',
-      'user': 'Espárrago Gazpacho',
-      'supervisor': 'T',
-    },
-    {
-      'id': '3',
-      'title': 'Formulario Tontín',
-      'date': '2024-03-37',
-      'status': 'Completado',
-      'user': 'Telurio Fuzetinio',
-      'supervisor': 'A',
-    },
-    {
-      'id': '4',
-      'title': 'Formulario  de   Dunce',
-      'date': '2024-04-48',
-      'status': 'Borrador',
-      'user': 'David Emmanuel',
-      'supervisor': 'C',
-    },
-    {
-      'id': '5',
-      'title': 'Roberto de Arimotonga',
-      'date': '2024-05-59r',
-      'status': 'Borrador',
-      'user': 'Santana Romero',
-      'supervisor': 'K',
-    },
-  ];
 
   @override
   void dispose() {
@@ -64,13 +21,13 @@ class _SearchState extends State<Search> {
   }
 
   // Empty callback functions for the FormList
-  void _onFormTap(Map<String, dynamic> form) {
+  void _onFormTap(ServiceForm form) {
   }
 
-  void _onPdfTap(Map<String, dynamic> form) {
+  void _onPdfTap(ServiceForm form) {
   }
 
-  void _onDeleteTap(Map<String, dynamic> form) {
+  void _onDeleteTap(ServiceForm form) {
   // Show a message that deletion is not available from search
   showCupertinoDialog(
     context: context,
@@ -132,7 +89,7 @@ class _SearchState extends State<Search> {
                     // Add the FormList component here
                     Expanded(
                       child: FormList(
-                        formsList: _formsList,
+                        formsList: Settings.instance.formsList,
                         onFormTap: _onFormTap,
                         onPdfTap: _onPdfTap,
                         onDeleteTap: _onDeleteTap,

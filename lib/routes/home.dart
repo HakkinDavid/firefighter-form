@@ -1,6 +1,7 @@
+import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/viewmodels/header.dart';
-import 'package:bomberos/viewmodels/formList.dart';
+import 'package:bomberos/viewmodels/form_list.dart';
 import 'package:flutter/cupertino.dart';
 
 class Home extends StatefulWidget {
@@ -11,41 +12,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // Dummy data
-  final List<Map<String, dynamic>> _formsList = [
-    {
-      'id': 'foliodeejemplo1',
-      'template_id': 1,
-      'filler': Settings.instance.userId,
-      'status': 0,
-      'content': <String, dynamic>{},
-      'filled_at': DateTime.now(),
-    },
-    {
-      'id': 'foliodeejemplo2',
-      'template_id': 1,
-      'filler': Settings.instance.userId,
-      'status': 1,
-      'content': <String, dynamic>{},
-      'filled_at': DateTime.now(),
-    },
-    {
-      'id': 'foliodeejemplo3',
-      'template_id': 1,
-      'filler': Settings.instance.userId,
-      'status': 2,
-      'content': <String, dynamic>{},
-      'filled_at': DateTime.now(),
-    },
-    {
-      'id': 'estonofunciona',
-      'template_id': 2,
-      'filler': Settings.instance.userId,
-      'status': 2,
-      'content': <String, dynamic>{},
-      'filled_at': DateTime.now(),
-    },
-  ];
 
   @override
   void initState() {
@@ -54,38 +20,37 @@ class _HomeState extends State<Home> {
   }
 
   void _loadSavedForms() {
-    // Load the forms that we have stored
   }
 
   void _createForm() async {
     int? latestTemplate = await Settings.instance.getNewestSavedTemplate();
     if (!mounted) return;
-    Navigator.pushNamed(
+    Navigator.pushReplacementNamed(
       context,
       '/form',
       arguments: {
         'template_id': latestTemplate,
         'filler': Settings.instance.userId,
-        'filled_at': DateTime.now(),
+        'filled_at': DateTime.now().toIso8601String(),
         'content': <String, dynamic>{},
         'status': 0,
       },
     );
   }
 
-  void _onFormTap(Map<String, dynamic> form) {
-    Navigator.pushNamed(
+  void _onFormTap(ServiceForm form) {
+    Navigator.pushReplacementNamed(
       context,
       '/form',
-      arguments: form,
+      arguments: form.toJson(),
     );
   }
 
-  void _onPdfTap(Map<String, dynamic> form) {
+  void _onPdfTap(ServiceForm form) {
     // Future PDF export implementation
   }
 
-  void _onDeleteTap(Map<String, dynamic> form) {
+  void _onDeleteTap(ServiceForm form) {
     // Implement form deletion soon...
 
     showCupertinoModalPopup(
@@ -93,7 +58,7 @@ class _HomeState extends State<Home> {
       builder: (context) => CupertinoActionSheet(
         title: Text('Eliminar formulario'),
         message: Text(
-          '¿Estás seguro de que quieres eliminar el folio "${form['id']}"? Esta acción no se puede deshacer.',
+          '¿Estás seguro de que quieres eliminar el folio "${form.id}"? Esta acción no se puede deshacer.',
         ),
         actions: [
           CupertinoActionSheetAction(
@@ -113,9 +78,9 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void _deleteForm(Map<String, dynamic> form) {
+  void _deleteForm(ServiceForm form) {
     setState(() {
-      _formsList.removeWhere((item) => item['id'] == form['id']);
+      Settings.instance.formsList.remove(form);
     });
     // Delete from storage eventually
   }
@@ -164,7 +129,7 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                               Text(
-                                '${_formsList.length} elementos',
+                                '${Settings.instance.formsList.length} elementos',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: CupertinoColors.secondaryLabel,
@@ -177,7 +142,7 @@ class _HomeState extends State<Home> {
                         Expanded(
                           // ← NESTED EXPANDED FOR THE FORM LIST
                           child: FormList(
-                            formsList: _formsList,
+                            formsList: Settings.instance.formsList,
                             onFormTap: _onFormTap,
                             onPdfTap: _onPdfTap,
                             onDeleteTap: _onDeleteTap,

@@ -21,8 +21,10 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     _loadForm();
   }
 
-  void _saveForm() {
-    Navigator.pop(context);
+  void _saveForm() async {
+    await Settings.instance.enqueueForm(widget.form);
+    if (!mounted) return;
+    Navigator.pushReplacementNamed(context, '/home');
   }
 
   Future<void> _loadForm() async {

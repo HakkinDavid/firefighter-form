@@ -1,11 +1,12 @@
+import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/settings.dart';
 import 'package:flutter/cupertino.dart';
 
 class FormList extends StatefulWidget {
-  final List<Map<String, dynamic>> formsList;
-  final Function(Map<String, dynamic>) onFormTap;
-  final Function(Map<String, dynamic>) onPdfTap;
-  final Function(Map<String, dynamic>) onDeleteTap;
+  final List<ServiceForm> formsList;
+  final Function(ServiceForm) onFormTap;
+  final Function(ServiceForm) onPdfTap;
+  final Function(ServiceForm) onDeleteTap;
 
   const FormList({
     super.key,
@@ -20,7 +21,7 @@ class FormList extends StatefulWidget {
 }
 
 class _FormListState extends State<FormList> {
-  Widget _buildFormListItem(Map<String, dynamic> form) {
+  Widget _buildFormListItem(ServiceForm form) {
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -40,11 +41,11 @@ class _FormListState extends State<FormList> {
                   width: 32,
                   height: 32,
                   decoration: BoxDecoration(
-                    color: _getStatusColor(form['status']),
+                    color: _getStatusColor(form.status),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    _getStatusIcon(form['status']),
+                    _getStatusIcon(form.status),
                     color: Settings.instance.colors.textOverPrimary,
                     size: 16,
                   ),
@@ -56,7 +57,7 @@ class _FormListState extends State<FormList> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Folio: ${form['id']}',
+                        'Folio: ${form.id}',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -67,14 +68,14 @@ class _FormListState extends State<FormList> {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        'Llenado: ${form['filled_at']}',
+                        'Llenado: ${form.filledAt}',
                         style: TextStyle(
                           fontSize: 12,
                           color: CupertinoColors.secondaryLabel,
                         ),
                       ),
                       Text(
-                        'Plantilla: v${form['template_id']}.0',
+                        'Plantilla: v${form.templateId}.0',
                         style: TextStyle(
                           fontSize: 12,
                           color: CupertinoColors.secondaryLabel,
@@ -98,7 +99,7 @@ class _FormListState extends State<FormList> {
                         color: Settings.instance.colors.primary,
                       ),
                     ),
-                    if (_canDeleteForm(form['status']))
+                    if (_canDeleteForm(form.status))
                       // Delete button
                       CupertinoButton(
                         onPressed: () => widget.onDeleteTap(form),
@@ -134,7 +135,7 @@ class _FormListState extends State<FormList> {
                       SizedBox(height: 2),
                       Text(
                         Settings.instance
-                            .getUserOrFail(pUserId: form['filler'])
+                            .getUserOrFail(pUserId: form.filler)
                             .fullName,
                         style: TextStyle(
                           fontSize: 13,
@@ -150,15 +151,15 @@ class _FormListState extends State<FormList> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: _getStatusColor(form['status']).withValues(alpha: 0.1),
+                    color: _getStatusColor(form.status).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    _getStatusName(form['status']),
+                    _getStatusName(form.status),
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
-                      color: _getStatusColor(form['status']),
+                      color: _getStatusColor(form.status),
                     ),
                   ),
                 ),

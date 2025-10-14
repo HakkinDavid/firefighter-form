@@ -132,7 +132,7 @@ class ServiceForm {
       'filler': filler,
       'status': status,
       'content': content,
-      'filled_at': filledAt,
+      'filled_at': filledAt.toIso8601String(),
     };
   }
 
@@ -141,7 +141,7 @@ class ServiceForm {
       json['id'],
       json['template_id'],
       json['filler'],
-      json['filled_at'],
+      DateTime.parse(json['filled_at']),
       json['content'],
       json['status'],
     );

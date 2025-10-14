@@ -28,18 +28,28 @@ class Settings {
   int role = 0;
 
   Map<String, FirefighterUser> userCache = {};
-  Map<String, ServiceForm> formQueue = {};
+  List<ServiceForm> _formsQueue = [];
+  List<ServiceForm> _formsList = [];
 
   bool get isLoggedIn => userId != null && userCache.containsKey(userId);
 
   FirefighterUser? get self => userCache[userId];
   FirefighterUser? get watcher => userCache[self?.watchedByUserId ?? ""];
 
+  List<ServiceForm> get formsList => _formsQueue + _formsList;
+
   Future<void> setUser() async {
     setUserId();
     await getUser();
     role = self!.role;
     await saveToDisk();
+  }
+
+  Future<void> setForms() async {
+    final formRecords = await Supabase.instance.client
+        .from('filled_in')
+        .select('*');
+    _formsList = formRecords.asMap().map((key, value) => MapEntry(key, ServiceForm.fromJson(value))).values.toList();
   }
 
   void setUserId() {
@@ -240,7 +250,12 @@ class Settings {
   }
 
   Future<void> enqueueForm(ServiceForm form) async {
-    formQueue[form.id] = form;
+    int index = _formsQueue.indexWhere((f) => f.id == form.id);
+    if (index == -1) {
+      _formsQueue.add(form);
+    } else {
+      _formsQueue[index] = form;
+    }
     await saveToDisk();
   }
 
@@ -256,15 +271,14 @@ class Settings {
         'userCache': userCache.map(
           (key, value) => MapEntry(key, value.toJson()),
         ),
-        'formQueue': formQueue.map(
-          (key, value) => MapEntry(key, value.toJson()),
+        'formsQueue': _formsQueue.asMap().map(
+          (key, value) => MapEntry('$key', value.toJson()),
         ),
       };
 
       final jsonString = jsonEncode(jsonMap);
       await file.writeAsString(jsonString);
     } catch (e) {
-      // Handle errors if needed
     }
   }
 
@@ -279,20 +293,24 @@ class Settings {
         final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
 
         userId = jsonMap['userId'];
-        role = jsonMap['role'];
+        role = jsonMap['role'] ?? 0;
 
         Map<String, dynamic> cacheMap = Map<String, dynamic>.from(
-          jsonMap['userCache'],
+          jsonMap['userCache'] ?? {},
         );
+
+        Map<String, dynamic> queueMap = Map<String, dynamic>.from(
+          jsonMap['formsQueue'] ?? {},
+        );
+
         userCache = cacheMap.map(
           (key, value) => MapEntry(key, FirefighterUser.fromJson(value)),
         );
-        formQueue = cacheMap.map(
+        _formsQueue = queueMap.map(
           (key, value) => MapEntry(key, ServiceForm.fromJson(value)),
-        );
+        ).values.toList();
       }
     } catch (e) {
-      // Handle errors if needed
     }
   }
 }

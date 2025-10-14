@@ -27,7 +27,7 @@ class BomberosApp extends StatelessWidget {
         primaryColor: Settings.instance.colors.primary
       ),
       onGenerateRoute: (settings) {
-        final arguments = settings.arguments as Map?;
+        final arguments = settings.arguments as Map<String, dynamic>?;
         return CupertinoPageRoute(
               builder: (context) {
                 switch (settings.name) {
@@ -35,7 +35,7 @@ class BomberosApp extends StatelessWidget {
                     if (arguments == null || arguments['template_id'] == null || arguments['filler'] == null || arguments['filled_at'] == null || arguments['content'] == null || arguments['status'] == null) {
                       return const Home();
                     }
-                    return DynamicFormPage(form: ServiceForm(arguments['id'], arguments['template_id'], arguments['filler'], arguments['filled_at'], arguments['content'], arguments['status']));
+                    return DynamicFormPage(form: ServiceForm.fromJson(arguments));
                   case '/home':
                     return const Home();
                   case '/search':
