@@ -123,6 +123,13 @@ class ServiceForm {
   }
 
   Map<String, dynamic> toJson() {
-    return content;
+    return {
+      'id': id,
+      'template_id': templateId,
+      'filler': filler,
+      'status': status,
+      'content': content,
+      'filled_at': filledAt,
+    };
   }
 }
