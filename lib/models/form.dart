@@ -132,4 +132,15 @@ class ServiceForm {
       'filled_at': filledAt,
     };
   }
+
+  factory ServiceForm.fromJson(Map<String, dynamic> json) {
+    return ServiceForm(
+      json['id'],
+      json['template_id'],
+      json['filler'],
+      json['filled_at'],
+      json['content'],
+      json['status'],
+    );
+  }
 }

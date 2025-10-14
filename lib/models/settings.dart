@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
@@ -27,6 +28,7 @@ class Settings {
   int role = 0;
 
   Map<String, FirefighterUser> userCache = {};
+  Map<String, ServiceForm> formQueue = {};
 
   bool get isLoggedIn => userId != null && userCache.containsKey(userId);
 
@@ -147,25 +149,19 @@ class Settings {
   }
 
   Future<bool> isTemplateAvailable(int id) async {
-    return await File(
-      await getTemplateRoute(id),
-    ).exists();
+    return await File(await getTemplateRoute(id)).exists();
   }
 
   Future<Map<String, dynamic>> getTemplate(int id) async {
     if (!(await isTemplateAvailable(id))) await fetchTemplate(id: id);
-    File templateFile = File(
-      await getTemplateRoute(id),
-    );
+    File templateFile = File(await getTemplateRoute(id));
 
     return json.decode(await templateFile.readAsString());
   }
 
   Future<int?> getNewestSavedTemplate() async {
     try {
-      final directory = Directory(
-        await getTemplatesDirectoryRoute(),
-      );
+      final directory = Directory(await getTemplatesDirectoryRoute());
       int? newest;
 
       if (await directory.exists()) {
@@ -256,6 +252,9 @@ class Settings {
         'userCache': userCache.map(
           (key, value) => MapEntry(key, value.toJson()),
         ),
+        'formQueue': formQueue.map(
+          (key, value) => MapEntry(key, value.toJson()),
+        ),
       };
 
       final jsonString = jsonEncode(jsonMap);
@@ -283,6 +282,9 @@ class Settings {
         );
         userCache = cacheMap.map(
           (key, value) => MapEntry(key, FirefighterUser.fromJson(value)),
+        );
+        formQueue = cacheMap.map(
+          (key, value) => MapEntry(key, ServiceForm.fromJson(value)),
         );
       }
     } catch (e) {
