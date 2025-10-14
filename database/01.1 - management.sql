@@ -94,7 +94,7 @@ SECURITY DEFINER
 SET search_path = public
 AS $function$
 BEGIN
-  IF NOT es_administrador() THEN
+  IF NOT is_admin() THEN
     RAISE EXCEPTION 'No autorizado: se requiere rol de administrador';
   END IF;
 END;
