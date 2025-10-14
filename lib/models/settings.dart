@@ -166,19 +166,19 @@ class Settings {
       final directory = Directory(
         await getTemplatesDirectoryRoute(),
       );
-      int? largest;
+      int? newest;
 
       if (await directory.exists()) {
         await for (var t in directory.list()) {
           String name = t.path.split('/').last.split('.').first;
           int? tId = int.tryParse(name);
-          if (tId != null && tId > (largest ?? 0)) largest = tId;
+          if (tId != null && tId > (newest ?? 0)) newest = tId;
         }
       } else {
         await updateTemplates();
       }
 
-      return largest;
+      return newest;
     } catch (e) {
       // Handle exceptions if needed
     }
@@ -219,7 +219,7 @@ class Settings {
     try {
       await fetchTemplate();
     } catch (e) {
-      // haz algo...
+      // yo cuando hago algo
     }
   }
 
