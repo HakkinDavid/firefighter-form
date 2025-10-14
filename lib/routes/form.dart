@@ -21,10 +21,13 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     _loadForm();
   }
 
+  void _exitForm() {
+    Navigator.pushReplacementNamed(context, '/home');
+  }
+
   void _saveForm() async {
     await Settings.instance.enqueueForm(widget.form);
-    if (!mounted) return;
-    Navigator.pushReplacementNamed(context, '/home');
+    _exitForm();
   }
 
   Future<void> _loadForm() async {
@@ -35,7 +38,9 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
       });
     } catch (exception) {
       setState(() {
-        loadError = !exception.toString().contains("Postgrest") ? "Formulario no disponible, conéctate a Internet." : "Plantilla no disponible.";
+        loadError = !exception.toString().contains("Postgrest")
+            ? "Formulario no disponible, conéctate a Internet."
+            : "Plantilla no disponible.";
       });
     }
   }
@@ -789,8 +794,12 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
           navigationBar: CupertinoNavigationBar(
             middle: Text(widget.form.name),
             trailing: CupertinoButton(
-              onPressed: _saveForm,
-              child: Icon(CupertinoIcons.check_mark_circled_solid),
+              onPressed: widget.form.canSaveForm ? _saveForm : _exitForm,
+              child: Icon(
+                widget.form.canSaveForm
+                    ? CupertinoIcons.check_mark_circled_solid
+                    : CupertinoIcons.clear,
+              ),
             ),
           ),
           child: SafeArea(
