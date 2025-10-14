@@ -65,11 +65,9 @@ class _SearchState extends State<Search> {
 
   // Empty callback functions for the FormList
   void _onFormTap(Map<String, dynamic> form) {
-    print('Tapped on form: ${form['title']}');
   }
 
   void _onPdfTap(Map<String, dynamic> form) {
-    print('Generate PDF for: ${form['title']}');
   }
 
   void _onDeleteTap(Map<String, dynamic> form) {
