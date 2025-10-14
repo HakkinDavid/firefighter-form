@@ -1,21 +1,59 @@
-class ServiceForm {
-  Map<String, dynamic> template = {};
-  Map<String, dynamic> data = {};
-  List<String> sectionKeys = [];
-  Map<String, List<String>> errors = {};
+import 'dart:convert';
+import 'dart:io';
 
-  ServiceForm({this.template = const {}, this.data = const {}}) {
+import 'package:path_provider/path_provider.dart';
+
+class ServiceForm {
+  Map<String, dynamic> _template = const {};
+  List<String> _sectionKeys = const [];
+  final Map<String, List<String>> _errors = {};
+
+  final int _templateId;
+  final String _filler;
+  final int _status;
+  final Map<String, dynamic> _content;
+  final DateTime _filledAt;
+
+  String get name => _template['formname'] ?? 'Formulario';
+  Map<String, dynamic> get sections => _template['fields'];
+  List<String> get sectionKeys => _sectionKeys;
+  Map<String, dynamic> get content => _content;
+  Map<String, dynamic> get errors => _errors;
+
+  String get filler => _filler;
+  int get status => _status;
+  DateTime get filledAt => _filledAt;
+
+  bool get isLoaded => _template['formname'] != null;
+
+  ServiceForm(
+    this._templateId,
+    this._filler,
+    this._filledAt,
+    this._content,
+    this._status,
+  ) {
     load();
   }
 
-  void load() {
-    final sections = template['fields'] as Map<String, dynamic>;
-    sectionKeys = sections.keys.toList();
-    for (var section in sectionKeys) {
+  void load() async {
+    _template = json.decode(
+      await File(
+        '${(await getApplicationDocumentsDirectory()).path}/frap/$_templateId.json',
+      ).readAsString(),
+    );
+    final sections = _template['fields'] as Map<String, dynamic>;
+    _sectionKeys = sections.keys.toList();
+    for (var section in _sectionKeys) {
       for (var field in sections[section]) {
-        data[field['name']] ??= getDefaultValue(field);
+        _content[field['name']] ??= getDefaultValue(field);
       }
     }
+  }
+
+  void set(String fieldName, dynamic newValue) {
+    if (status != 0) return;
+    content[fieldName] = newValue;
   }
 
   dynamic getDefaultValue(Map<String, dynamic> field) {
@@ -49,11 +87,11 @@ class ServiceForm {
 
   // Restriction handler (minimal Dart port)
   void handleFieldRestrictions() {
-    if (template['restrictions'] == null) return;
-    template['restrictions'].forEach((key, items) {
+    if (_template['restrictions'] == null) return;
+    _template['restrictions'].forEach((key, items) {
       for (final field in items) {
         final fieldName = field['name'];
-        final value = data[fieldName];
+        final value = _content[fieldName];
         bool passed = true;
         switch (key) {
           case 'notEmpty':
@@ -81,9 +119,13 @@ class ServiceForm {
         }
         if (!passed) {
           final msg = field['message'] ?? 'Campo inválido';
-          errors[fieldName] = (errors[fieldName] ?? [])..add(msg);
+          _errors[fieldName] = msg;
         }
       }
     });
+  }
+
+  Map<String, dynamic> toJson() {
+    return content;
   }
 }

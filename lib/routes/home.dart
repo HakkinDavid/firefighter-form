@@ -69,7 +69,13 @@ class _HomeState extends State<Home> {
   }
 
   void _createForm() {
-    Navigator.pushNamed(context, '/form');
+    Navigator.pushNamed(context, '/form', arguments: {
+      'templateId': 0,
+      'filler': Settings().self?.id,
+      'filledAt': DateTime.now(),
+      'content': <String, dynamic>{},
+      'status': 0,
+    });
   }
 
   void _onFormTap(Map<String, dynamic> form) {

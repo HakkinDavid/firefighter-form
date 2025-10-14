@@ -140,8 +140,7 @@ class Settings {
 
   Future<void> saveToDisk() async {
     try {
-      final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/settings.json');
+      final file = File('${(await getApplicationDocumentsDirectory()).path}/settings.json');
 
       Map<String, dynamic> jsonMap = {
         'userId': userId,
@@ -157,8 +156,7 @@ class Settings {
 
   Future<void> loadFromDisk() async {
     try {
-      final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/settings.json');
+      final file = File('${(await getApplicationDocumentsDirectory()).path}/settings.json');
 
       if (await file.exists()) {
         final jsonString = await file.readAsString();

@@ -1,3 +1,4 @@
+import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/routes/form.dart';
 import 'package:bomberos/routes/home.dart';
@@ -30,7 +31,10 @@ class BomberosApp extends StatelessWidget {
               builder: (context) {
                 switch (settings.name) {
                   case '/form':
-                    return DynamicFormPage(draftData: arguments?['draftData'] ?? {}, templateId: arguments?['templateId']);
+                    if (arguments == null || arguments['templateId'] == null || arguments['filler'] == null || arguments['filledAt'] == null || arguments['content'] == null || arguments['status'] == null) {
+                      return const Home();
+                    }
+                    return DynamicFormPage(form: ServiceForm(arguments['templateId'], arguments['filler'], arguments['filledAt'], arguments['content'], arguments['status']));
                   case '/home':
                     return const Home();
                   case '/search':
