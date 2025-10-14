@@ -159,8 +159,7 @@ class Settings {
           int? tId = int.tryParse(name);
           if (tId != null && tId > (largest ?? 0)) largest = tId;
         }
-      }
-      else {
+      } else {
         await updateTemplates();
       }
 
