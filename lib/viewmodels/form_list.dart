@@ -99,7 +99,7 @@ class _FormListState extends State<FormList> {
                         color: Settings.instance.colors.primary,
                       ),
                     ),
-                    if (_canDeleteForm(form.status))
+                    if (form.canDeleteForm)
                       // Delete button
                       CupertinoButton(
                         onPressed: () => widget.onDeleteTap(form),
@@ -207,10 +207,6 @@ class _FormListState extends State<FormList> {
       default:
         return CupertinoIcons.question;
     }
-  }
-
-  bool _canDeleteForm(int status) {
-    return status == 0 || Settings.instance.role > 1;
   }
 
   @override
