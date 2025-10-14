@@ -70,8 +70,8 @@ class _HomeState extends State<Home> {
 
   void _createForm() {
     Navigator.pushNamed(context, '/form', arguments: {
-      'templateId': 0,
-      'filler': Settings().self?.id,
+      'templateId': 1,
+      'filler': Settings.instance.self?.id,
       'filledAt': DateTime.now(),
       'content': <String, dynamic>{},
       'status': 0,

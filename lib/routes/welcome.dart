@@ -165,7 +165,7 @@ class _WelcomeState extends State<Welcome> {
                                 );
                               }
                             },
-                            color: Settings().colors.primaryContrast,
+                            color: Settings.instance.colors.primaryContrast,
                             child: _isLoading
                                 ? const CupertinoActivityIndicator()
                                 : const Text('Entrar'),

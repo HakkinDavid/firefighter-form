@@ -172,7 +172,7 @@ class _HeaderState extends State<Header> {
                                       CupertinoIcons.person_crop_circle,
                                       size: 30,),
                                     padding: EdgeInsets.zero,
-                                    color: Settings().colors.primaryContrast,
+                                    color: Settings.instance.colors.primaryContrast,
                                     onPressed: () => _showUserMenu(context, contentWidth),
                                   ),
                                   const SizedBox(width: 12),
@@ -184,7 +184,7 @@ class _HeaderState extends State<Header> {
                                       size: 30,
                                     ),
                                     padding: EdgeInsets.zero,
-                                    color: Settings().colors.primaryContrast,
+                                    color: Settings.instance.colors.primaryContrast,
                                     onPressed: (currentRoute == '/home')
                                         ? _goToSearch
                                         : _goBack,
