@@ -159,8 +159,7 @@ class Settings {
           int? tId = int.tryParse(name);
           if (tId != null && tId > (newest ?? 0)) newest = tId;
         }
-      }
-      else {
+      } else {
         await updateTemplates();
       }
 
