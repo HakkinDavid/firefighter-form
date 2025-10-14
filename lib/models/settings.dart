@@ -138,6 +138,68 @@ class Settings {
     return user;
   }
 
+  Future<int?> getNewestSavedTemplate() async {
+    try {
+      final directory = Directory('${await getApplicationDocumentsDirectory()}/frap');
+      int largest = 0;
+
+      if (await directory.exists()) {
+        await for (var t in directory.list()) {
+          String name = t.path.split('/').last.split('.').first;
+          int? tId = int.tryParse(name);
+          if (tId != null && tId > largest) largest = tId;
+        }
+      }
+
+      return largest;
+    } catch(e) {
+      // Handle exceptions if needed
+    }
+
+    return null;
+  }
+
+  Future<Map<String, dynamic>> getTemplate({String? tId}) async {
+    final Map<String, dynamic> templateRecord;
+
+    if (tId == null) {
+      templateRecord = await Supabase.instance.client
+          .from('template')
+          .select('id, content')
+          .order('created_at', ascending: false)
+          .limit(1)
+          .single();
+    } else {
+      templateRecord = await Supabase.instance.client
+          .from('template')
+          .select('id, content')
+          .eq('id', tId)
+          .single();
+    }
+
+    return templateRecord;
+  }
+
+  Future<void> updateTemplates() async {
+    try {
+      final template = await getTemplate();
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/frap/${template['id'].toString()}.json');
+
+      if (!await file.exists()) {
+        file.create(recursive: true);
+        await file.writeAsString(jsonEncode(template['content']));
+      }
+    } catch (e) {
+      // Handle errors if needed
+    }
+  }
+
+  // This will be an actual function later
+  Future<void> uploadTemplate() async {
+    return;
+  }
+
   Future<void> saveToDisk() async {
     try {
       final file = File('${(await getApplicationDocumentsDirectory()).path}/settings.json');

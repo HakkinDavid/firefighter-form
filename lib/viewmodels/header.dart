@@ -172,23 +172,24 @@ class _HeaderState extends State<Header> {
                                       CupertinoIcons.person_crop_circle,
                                       size: 30,),
                                     padding: EdgeInsets.zero,
-                                    color: Settings.instance.colors.primaryContrast,
+                                    color: Settings().colors.primaryContrast,
                                     onPressed: () => _showUserMenu(context, contentWidth),
                                   ),
                                   const SizedBox(width: 12),
-                                  IconButton(
-                                    icon: Icon(
-                                      (currentRoute == '/home')
-                                          ? CupertinoIcons.search
-                                          : CupertinoIcons.arrow_left_circle,
-                                      size: 30,
+                                  if (currentRoute != '/welcome' && currentRoute != '/')
+                                    IconButton(
+                                      icon: Icon(
+                                        (currentRoute == '/home')
+                                            ? CupertinoIcons.search
+                                            : CupertinoIcons.arrow_left_circle,
+                                        size: 30,
+                                      ),
+                                      padding: EdgeInsets.zero,
+                                      color: Settings().colors.primaryContrast,
+                                      onPressed: (currentRoute == '/home')
+                                          ? _goToSearch
+                                          : _goBack,
                                     ),
-                                    padding: EdgeInsets.zero,
-                                    color: Settings.instance.colors.primaryContrast,
-                                    onPressed: (currentRoute == '/home')
-                                        ? _goToSearch
-                                        : _goBack,
-                                  ),
                                 ],
                               ),
                           ],
