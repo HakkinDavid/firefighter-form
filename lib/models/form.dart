@@ -1,7 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:path_provider/path_provider.dart';
+import 'package:bomberos/models/settings.dart';
 
 class ServiceForm {
   Map<String, dynamic> _template = const {};
@@ -40,11 +37,7 @@ class ServiceForm {
   );
 
   Future<void> load() async {
-    _template = json.decode(
-      await File(
-        '${(await getApplicationDocumentsDirectory()).path}/frap/$_templateId.json',
-      ).readAsString(),
-    );
+    _template = await Settings.instance.getTemplate(_templateId);
     final sections = _template['fields'] as Map<String, dynamic>;
     _sectionKeys = sections.keys.toList();
     for (var section in _sectionKeys) {

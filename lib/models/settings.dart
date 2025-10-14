@@ -146,10 +146,25 @@ class Settings {
     return user;
   }
 
+  Future<bool> isTemplateAvailable(int id) async {
+    return await File(
+      await getTemplateRoute(id),
+    ).exists();
+  }
+
+  Future<Map<String, dynamic>> getTemplate(int id) async {
+    if (!(await isTemplateAvailable(id))) await fetchTemplate(id: id);
+    File templateFile = File(
+      await getTemplateRoute(id),
+    );
+
+    return json.decode(await templateFile.readAsString());
+  }
+
   Future<int?> getNewestSavedTemplate() async {
     try {
       final directory = Directory(
-        '${(await getApplicationDocumentsDirectory()).path}/frap',
+        await getTemplatesDirectoryRoute(),
       );
       int? largest;
 
@@ -171,7 +186,7 @@ class Settings {
     return null;
   }
 
-  Future<Map<String, dynamic>> getTemplate({String? tId}) async {
+  Future<Map<String, dynamic>> getTemplateRecord({int? tId}) async {
     late final Map<String, dynamic> templateRecord;
 
     if (tId == null) {
@@ -192,20 +207,36 @@ class Settings {
     return templateRecord;
   }
 
+  Future<String> getTemplateRoute(int id) async {
+    return '${await getTemplatesDirectoryRoute()}/$id.json';
+  }
+
+  Future<String> getTemplatesDirectoryRoute() async {
+    return '${(await getApplicationDocumentsDirectory()).path}/frap';
+  }
+
   Future<void> updateTemplates() async {
     try {
-      final template = await getTemplate();
-      final file = File(
-        '${(await getApplicationDocumentsDirectory()).path}/frap/${template['id'].toString()}.json',
-      );
-
-      if (!(await file.exists()) || (await file.length()) == 0) {
-        file.create(recursive: true);
-        await file.writeAsString(jsonEncode(template['content']));
-      }
+      await fetchTemplate();
     } catch (e) {
       // haz algo...
     }
+  }
+
+  Future<void> fetchTemplate({int? id}) async {
+    late final File templateFile;
+    Map<String, dynamic>? template;
+
+    if (id != null) {
+      templateFile = File(await getTemplateRoute(id));
+    } else {
+      template = await getTemplateRecord();
+      templateFile = File(await getTemplateRoute(template['id']));
+    }
+    if (await templateFile.exists()) return;
+    template ??= await getTemplateRecord(tId: id);
+    await templateFile.create(recursive: true);
+    await templateFile.writeAsString(jsonEncode(template['content']));
   }
 
   // This will be an actual function later
