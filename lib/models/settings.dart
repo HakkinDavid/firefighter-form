@@ -24,6 +24,7 @@ class Settings {
   final ColorsSettings colors = ColorsSettings();
 
   String? userId;
+  int role = 0;
 
   Map<String, FirefighterUser> userCache = {};
 
@@ -35,10 +36,15 @@ class Settings {
   Future<void> setUser() async {
     setUserId();
     await getUser();
+    role = self!.role;
   }
 
   void setUserId() {
     userId = Supabase.instance.client.auth.currentUser!.id;
+  }
+
+  FirefighterUser getUserOrFail({String? pUserId}) {
+    return userCache[pUserId]!;
   }
 
   Future<FirefighterUser> getUser({String? pUserId}) async {
@@ -95,7 +101,8 @@ class Settings {
           .eq('id', watcherId)
           .maybeSingle();
 
-      if (watcherNameRecord != null) { // If tables are correct
+      if (watcherNameRecord != null) {
+        // If tables are correct
         final watcherUser = FirefighterUser(
           id: watcherId,
           givenName: watcherNameRecord['given'],
@@ -121,7 +128,8 @@ class Settings {
           .eq('id', wId)
           .maybeSingle();
 
-      if (underWatchNameRecord != null && underWatchRoleRecord != null) { // If tables are correct
+      if (underWatchNameRecord != null && underWatchRoleRecord != null) {
+        // If tables are correct
         FirefighterUser underWatchUser = FirefighterUser(
           id: wId,
           givenName: underWatchNameRecord['given'],
@@ -140,7 +148,9 @@ class Settings {
 
   Future<int?> getNewestSavedTemplate() async {
     try {
-      final directory = Directory('${await getApplicationDocumentsDirectory()}/frap');
+      final directory = Directory(
+        '${(await getApplicationDocumentsDirectory()).path}/frap',
+      );
       int largest = 0;
 
       if (await directory.exists()) {
@@ -152,7 +162,7 @@ class Settings {
       }
 
       return largest;
-    } catch(e) {
+    } catch (e) {
       // Handle exceptions if needed
     }
 
@@ -160,7 +170,7 @@ class Settings {
   }
 
   Future<Map<String, dynamic>> getTemplate({String? tId}) async {
-    final Map<String, dynamic> templateRecord;
+    late final Map<String, dynamic> templateRecord;
 
     if (tId == null) {
       templateRecord = await Supabase.instance.client
@@ -183,15 +193,16 @@ class Settings {
   Future<void> updateTemplates() async {
     try {
       final template = await getTemplate();
-      final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/frap/${template['id'].toString()}.json');
+      final file = File(
+        '${(await getApplicationDocumentsDirectory()).path}/frap/${template['id'].toString()}.json',
+      );
 
-      if (!await file.exists()) {
+      if (!(await file.exists()) || (await file.length()) == 0) {
         file.create(recursive: true);
         await file.writeAsString(jsonEncode(template['content']));
       }
     } catch (e) {
-      // Handle errors if needed
+      // haz algo...
     }
   }
 
@@ -202,11 +213,16 @@ class Settings {
 
   Future<void> saveToDisk() async {
     try {
-      final file = File('${(await getApplicationDocumentsDirectory()).path}/settings.json');
+      final file = File(
+        '${(await getApplicationDocumentsDirectory()).path}/settings.json',
+      );
 
       Map<String, dynamic> jsonMap = {
         'userId': userId,
-        'userCache': userCache.map((key, value) => MapEntry(key, value.toJson())),
+        'role': role,
+        'userCache': userCache.map(
+          (key, value) => MapEntry(key, value.toJson()),
+        ),
       };
 
       final jsonString = jsonEncode(jsonMap);
@@ -218,16 +234,23 @@ class Settings {
 
   Future<void> loadFromDisk() async {
     try {
-      final file = File('${(await getApplicationDocumentsDirectory()).path}/settings.json');
+      final file = File(
+        '${(await getApplicationDocumentsDirectory()).path}/settings.json',
+      );
 
       if (await file.exists()) {
         final jsonString = await file.readAsString();
         final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
 
         userId = jsonMap['userId'];
+        role = jsonMap['role'];
 
-        Map<String, dynamic> cacheMap = Map<String, dynamic>.from(jsonMap['userCache']);
-        userCache = cacheMap.map((key, value) => MapEntry(key, FirefighterUser.fromJson(value)));
+        Map<String, dynamic> cacheMap = Map<String, dynamic>.from(
+          jsonMap['userCache'],
+        );
+        userCache = cacheMap.map(
+          (key, value) => MapEntry(key, FirefighterUser.fromJson(value)),
+        );
       }
     } catch (e) {
       // Handle errors if needed
