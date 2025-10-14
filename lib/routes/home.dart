@@ -14,44 +14,28 @@ class _HomeState extends State<Home> {
   // Dummy data
   final List<Map<String, dynamic>> _formsList = [
     {
-      'id': '1',
-      'title': 'Formulario dummy',
-      'date': '2024-01-15',
-      'status': 'Completado',
-      'user': 'Mauricio Alcántar',
-      'supervisor': 'S',
+      'id': 'foliodeejemplo1',
+      'template_id': 1,
+      'filler': Settings.instance.userId,
+      'status': 0,
+      'content': <String, dynamic>{},
+      'filled_at': DateTime.now()
     },
     {
-      'id': '2', 
-      'title': 'Formulario Stupid',
-      'date': '2024-02-26',
-      'status': 'Pendiente',
-      'user': 'Espárrago Gazpacho',
-      'supervisor': 'T',
+      'id': 'foliodeejemplo2',
+      'template_id': 1,
+      'filler': Settings.instance.userId,
+      'status': 1,
+      'content': <String, dynamic>{},
+      'filled_at': DateTime.now()
     },
     {
-      'id': '3',
-      'title': 'Formulario Tontín',
-      'date': '2024-03-37',
-      'status': 'Completado',
-      'user': 'Telurio Fuzetinio',
-      'supervisor': 'A',
-    },
-    {
-      'id': '4',
-      'title': 'Formulario  de   Dunce',
-      'date': '2024-04-48',
-      'status': 'Borrador',
-      'user': 'David Emmanuel',
-      'supervisor': 'C',
-    },
-    {
-      'id': '5',
-      'title': 'Roberto de Arimotonga',
-      'date': '2024-05-59r',
-      'status': 'Borrador',
-      'user': 'Santana Romero',
-      'supervisor': 'K',
+      'id': 'foliodeejemplo3',
+      'template_id': 1,
+      'filler': Settings.instance.userId,
+      'status': 2,
+      'content': <String, dynamic>{},
+      'filled_at': DateTime.now()
     },
   ];
 
@@ -64,15 +48,13 @@ class _HomeState extends State<Home> {
   void _loadSavedForms() {
 
     // Load the forms that we have stored
-
-    print('Loading saved forms...');
   }
 
   void _createForm() {
     Navigator.pushNamed(context, '/form', arguments: {
-      'templateId': 1,
-      'filler': Settings.instance.self?.id,
-      'filledAt': DateTime.now(),
+      'template_id': 1,
+      'filler': Settings.instance.userId,
+      'filled_at': DateTime.now(),
       'content': <String, dynamic>{},
       'status': 0,
     });
@@ -81,15 +63,11 @@ class _HomeState extends State<Home> {
   void _onFormTap(Map<String, dynamic> form) {
 
     // Form interaction functionality goes Jeer
-
-    print('Tapped on form: ${form['title']}');
   }
 
   void _onPdfTap(Map<String, dynamic> form) {
 
     // Future PDF export implementation
-
-    print('Generate PDF for: ${form['title']}');
   }
 
   void _onDeleteTap(Map<String, dynamic> form) {
@@ -124,7 +102,6 @@ class _HomeState extends State<Home> {
       _formsList.removeWhere((item) => item['id'] == form['id']);
     });
     // Delete from storage eventually
-    print('Deleted form: ${form['title']}');
   }
 @override
 Widget build(BuildContext context) {
