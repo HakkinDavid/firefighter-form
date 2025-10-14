@@ -24,10 +24,7 @@ class _FormListState extends State<FormList> {
     return Container(
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(
-            color: CupertinoColors.separator,
-            width: 0.5,
-          ),
+          bottom: BorderSide(color: CupertinoColors.separator, width: 0.5),
         ),
       ),
       child: Padding(
@@ -59,7 +56,7 @@ class _FormListState extends State<FormList> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        form['title'],
+                        'Folio: ${form['id']}',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -70,7 +67,14 @@ class _FormListState extends State<FormList> {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        'Creado: ${form['date']}',
+                        'Llenado: ${form['filled_at']}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: CupertinoColors.secondaryLabel,
+                        ),
+                      ),
+                      Text(
+                        'Plantilla: v${form['template_id']}.0',
                         style: TextStyle(
                           fontSize: 12,
                           color: CupertinoColors.secondaryLabel,
@@ -87,24 +91,25 @@ class _FormListState extends State<FormList> {
                     CupertinoButton(
                       onPressed: () => widget.onPdfTap(form),
                       padding: EdgeInsets.all(6),
-                      minSize: 0,
+                      minimumSize: Size(0, 0),
                       child: Icon(
                         CupertinoIcons.doc,
                         size: 20,
                         color: Settings.instance.colors.primary,
                       ),
                     ),
-                    // Delete button
-                    CupertinoButton(
-                      onPressed: () => widget.onDeleteTap(form),
-                      padding: EdgeInsets.all(6),
-                      minSize: 0,
-                      child: Icon(
-                        CupertinoIcons.trash,
-                        size: 20,
-                        color: CupertinoColors.systemRed,
+                    if (_canDeleteForm(form['status']))
+                      // Delete button
+                      CupertinoButton(
+                        onPressed: () => widget.onDeleteTap(form),
+                        padding: EdgeInsets.all(6),
+                        minimumSize: Size(0, 0),
+                        child: Icon(
+                          CupertinoIcons.trash,
+                          size: 20,
+                          color: CupertinoColors.systemRed,
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ],
@@ -119,7 +124,7 @@ class _FormListState extends State<FormList> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Usuario:',
+                        'Responsable:',
                         style: TextStyle(
                           fontSize: 11,
                           color: CupertinoColors.tertiaryLabel,
@@ -128,34 +133,9 @@ class _FormListState extends State<FormList> {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        form['user'],
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: CupertinoColors.label,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 16),
-                // Supervisor information
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Supervisor:',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: CupertinoColors.tertiaryLabel,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        form['supervisor'],
+                        Settings.instance
+                            .getUserOrFail(pUserId: form['filler'])
+                            .fullName,
                         style: TextStyle(
                           fontSize: 13,
                           color: CupertinoColors.label,
@@ -170,11 +150,11 @@ class _FormListState extends State<FormList> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: _getStatusColor(form['status']).withOpacity(0.1),
+                    color: _getStatusColor(form['status']).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    form['status'],
+                    _getStatusName(form['status']),
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
@@ -190,30 +170,46 @@ class _FormListState extends State<FormList> {
     );
   }
 
-  Color _getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'completado':
+  String _getStatusName(int status) {
+    switch (status) {
+      case 2:
+        return "Sincronizado";
+      case 1:
+        return "Finalizado";
+      case 0:
+      default:
+        return "Borrador";
+    }
+  }
+
+  Color _getStatusColor(int status) {
+    switch (status) {
+      case 2:
         return CupertinoColors.systemGreen;
-      case 'pendiente':
+      case 1:
         return CupertinoColors.systemOrange;
-      case 'borrador':
+      case 0:
         return Settings.instance.colors.primary;
       default:
         return CupertinoColors.systemGrey;
     }
   }
 
-  IconData _getStatusIcon(String status) {
-    switch (status.toLowerCase()) {
-      case 'completado':
+  IconData _getStatusIcon(int status) {
+    switch (status) {
+      case 2:
         return CupertinoIcons.checkmark_alt_circle;
-      case 'pendiente':
+      case 1:
         return CupertinoIcons.clock;
-      case 'borrador':
+      case 0:
         return CupertinoIcons.doc;
       default:
         return CupertinoIcons.question;
     }
+  }
+
+  bool _canDeleteForm(int status) {
+    return status == 0 || Settings.instance.role > 1;
   }
 
   @override
