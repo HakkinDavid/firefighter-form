@@ -13,6 +13,8 @@ class DynamicFormPage extends StatefulWidget {
 }
 
 class _DynamicFormPageState extends State<DynamicFormPage> {
+  String? loadError;
+
   @override
   void initState() {
     super.initState();
@@ -24,10 +26,16 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
   }
 
   Future<void> _loadForm() async {
-    await widget.form.load();
-    setState(() {
-      widget.form.isLoaded = true;
-    });
+    try {
+      await widget.form.load();
+      setState(() {
+        widget.form.isLoaded = true;
+      });
+    } catch (exception) {
+      setState(() {
+        loadError = !exception.toString().contains("Postgrest") ? "Formulario no disponible, conéctate a Internet." : "Plantilla no disponible.";
+      });
+    }
   }
 
   Widget buildField(Map<String, dynamic> field) {
@@ -743,7 +751,20 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.form.isLoaded) {
+    if (loadError != null) {
+      return CupertinoPageScaffold(
+        child: CupertinoAlertDialog(
+          title: Text("No disponible"),
+          content: Text(loadError!),
+          actions: [
+            CupertinoDialogAction(
+              child: Text("De acuerdo"),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      );
+    } else if (!widget.form.isLoaded) {
       return CupertinoActivityIndicator();
     }
     // Aplica restricciones en cada build
