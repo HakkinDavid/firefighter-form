@@ -1,5 +1,6 @@
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/viewmodels/header.dart';
+import 'package:bomberos/models/formList.dart';
 import 'package:flutter/cupertino.dart';
 
 class Home extends StatefulWidget {
@@ -10,7 +11,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // Updated dummy data with user and supervisor information
+  // Dummy data
   final List<Map<String, dynamic>> _formsList = [
     {
       'id': '1',
@@ -22,7 +23,7 @@ class _HomeState extends State<Home> {
     },
     {
       'id': '2', 
-      'title': 'Formlulario Stupid',
+      'title': 'Formulario Stupid',
       'date': '2024-02-26',
       'status': 'Pendiente',
       'user': 'Espárrago Gazpacho',
@@ -61,7 +62,9 @@ class _HomeState extends State<Home> {
   }
 
   void _loadSavedForms() {
-    // TODO: Load actual saved forms from disk/database
+
+    // Load the forms that we have stored
+
     print('Loading saved forms...');
   }
 
@@ -70,17 +73,23 @@ class _HomeState extends State<Home> {
   }
 
   void _onFormTap(Map<String, dynamic> form) {
-    // We'll implement form viewing/editing later
+
+    // Form interaction functionality goes Jeer
+
     print('Tapped on form: ${form['title']}');
   }
 
   void _onPdfTap(Map<String, dynamic> form) {
-    // TODO: Implement PDF generation/export
+
+    // Future PDF export implementation
+
     print('Generate PDF for: ${form['title']}');
   }
 
   void _onDeleteTap(Map<String, dynamic> form) {
-    // TODO: Implement form deletion with confirmation
+
+    // Implement form deletion soon...
+
     showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoActionSheet(
@@ -108,204 +117,8 @@ class _HomeState extends State<Home> {
     setState(() {
       _formsList.removeWhere((item) => item['id'] == form['id']);
     });
-    // TODO: Also delete from persistent storage
+    // Delete from storage eventually
     print('Deleted form: ${form['title']}');
-  }
-
-  Widget _buildFormListItem(Map<String, dynamic> form) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: CupertinoColors.separator,
-            width: 0.5,
-          ),
-        ),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // First row: Status icon, Title, and Action buttons
-            Row(
-              children: [
-                // Status icon
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: _getStatusColor(form['status']),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    _getStatusIcon(form['status']),
-                    color: Settings.instance.colors.textOverPrimary,
-                    size: 16,
-                  ),
-                ),
-                SizedBox(width: 12),
-                // Title - expanded to take available space
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        form['title'],
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: CupertinoColors.label,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        'Creado: ${form['date']}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: CupertinoColors.secondaryLabel,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 8),
-                // Action buttons
-                Row(
-                  children: [
-                    // PDF button
-                    CupertinoButton(
-                      onPressed: () => _onPdfTap(form),
-                      padding: EdgeInsets.all(6),
-                      minSize: 0,
-                      child: Icon(
-                        CupertinoIcons.doc,
-                        size: 20,
-                        color: Settings.instance.colors.primary,
-                      ),
-                    ),
-                    // Delete button
-                    CupertinoButton(
-                      onPressed: () => _onDeleteTap(form),
-                      padding: EdgeInsets.all(6),
-                      minSize: 0,
-                      child: Icon(
-                        CupertinoIcons.trash,
-                        size: 20,
-                        color: CupertinoColors.systemRed,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(height: 8),
-            // Second row: User and Supervisor information
-            Row(
-              children: [
-                // User information
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Usuario:',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: CupertinoColors.tertiaryLabel,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        form['user'],
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: CupertinoColors.label,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 16),
-                // Supervisor information
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Supervisor:',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: CupertinoColors.tertiaryLabel,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        form['supervisor'],
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: CupertinoColors.label,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                // Status badge
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: _getStatusColor(form['status']).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    form['status'],
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                      color: _getStatusColor(form['status']),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Color _getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'completado':
-        return CupertinoColors.systemGreen;
-      case 'pendiente':
-        return CupertinoColors.systemOrange;
-      case 'borrador':
-        return Settings.instance.colors.primary;
-      default:
-        return CupertinoColors.systemGrey;
-    }
-  }
-
-  IconData _getStatusIcon(String status) {
-    switch (status.toLowerCase()) {
-      case 'completado':
-        return CupertinoIcons.checkmark_alt_circle;
-      case 'pendiente':
-        return CupertinoIcons.clock;
-      case 'borrador':
-        return CupertinoIcons.doc;
-      default:
-        return CupertinoIcons.question;
-    }
   }
 
   @override
@@ -323,92 +136,16 @@ class _HomeState extends State<Home> {
                   adminUsername: Settings.instance.watcher?.fullName,
                 ),
                 Expanded(
-                  child: Container(
-                    color: Settings.instance.colors.background,
-                    child: Column(
-                      children: [
-                        // Header for the list
-                        Container(
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Settings.instance.colors.primaryContrast,
-                            border: Border(
-                              bottom: BorderSide(
-                                color: CupertinoColors.separator,
-                                width: 0.5,
-                              ),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Formularios Recientes',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  color: Settings.instance.colors.primary,
-                                ),
-                              ),
-                              Text(
-                                '${_formsList.length} elementos',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: CupertinoColors.secondaryLabel,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // Forms list
-                        Expanded(
-                          child: _formsList.isEmpty
-                              ? Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        CupertinoIcons.doc,
-                                        size: 64,
-                                        color: CupertinoColors.systemGrey,
-                                      ),
-                                      SizedBox(height: 16),
-                                      Text(
-                                        'No hay formularios',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: CupertinoColors.secondaryLabel,
-                                        ),
-                                      ),
-                                      SizedBox(height: 8),
-                                      Text(
-                                        'Toca el botón + para crear uno',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: CupertinoColors.tertiaryLabel,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : ListView.builder(
-                                  itemCount: _formsList.length,
-                                  itemBuilder: (context, index) {
-                                    return CupertinoButton(
-                                      onPressed: () => _onFormTap(_formsList[index]),
-                                      padding: EdgeInsets.zero,
-                                      child: _buildFormListItem(_formsList[index]),
-                                    );
-                                  },
-                                ),
-                        ),
-                      ],
-                    ),
+                  child: FormList(
+                    formsList: _formsList,
+                    onFormTap: _onFormTap,
+                    onPdfTap: _onPdfTap,
+                    onDeleteTap: _onDeleteTap,
                   ),
                 ),
               ],
             ),
-            // Floating action button positioned at bottom right
+            // Button at the bottom right
             Positioned(
               right: 16,
               bottom: 16,
