@@ -9,9 +9,11 @@ class ServiceForm {
   String? _id;
   final int _templateId;
   final String _filler;
-  final int _status;
+  int _status;
   final Map<String, dynamic> _content;
   final DateTime _filledAt;
+
+  bool _edited = false;
 
   String get name => _template['formname'] ?? 'Formulario';
   Map<String, dynamic> get sections => _template['fields'];
@@ -25,6 +27,8 @@ class ServiceForm {
 
   String get id => _id!;
   int get templateId => _templateId;
+
+  bool get edited => _edited;
 
   bool isLoaded = false;
 
@@ -52,8 +56,11 @@ class ServiceForm {
   }
 
   void set(String fieldName, dynamic newValue) {
-    if (status != 0) return;
+    if (!canEditForm) return;
     content[fieldName] = newValue;
+    _errors[fieldName] = {};
+    _edited = true;
+    _status = 0;
   }
 
   dynamic getDefaultValue(Map<String, dynamic> field) {
@@ -146,4 +153,12 @@ class ServiceForm {
       json['status'],
     );
   }
+
+  bool get canDeleteForm => status == 0 || Settings.instance.role >= 1;
+
+  bool get canEditForm => status == 0 || Settings.instance.role >= 1;
+
+  bool get canSaveForm => canEditForm && edited;
+
+  bool get canFinishForm => canEditForm && errors.isEmpty;
 }
