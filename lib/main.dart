@@ -32,10 +32,10 @@ class BomberosApp extends StatelessWidget {
               builder: (context) {
                 switch (settings.name) {
                   case '/form':
-                    if (arguments == null || arguments['templateId'] == null || arguments['filler'] == null || arguments['filledAt'] == null || arguments['content'] == null || arguments['status'] == null) {
+                    if (arguments == null || arguments['template_id'] == null || arguments['filler'] == null || arguments['filled_at'] == null || arguments['content'] == null || arguments['status'] == null) {
                       return const Home();
                     }
-                    return DynamicFormPage(form: ServiceForm(arguments['id'], arguments['templateId'], arguments['filler'], arguments['filledAt'], arguments['content'], arguments['status']));
+                    return DynamicFormPage(form: ServiceForm(arguments['id'], arguments['template_id'], arguments['filler'], arguments['filled_at'], arguments['content'], arguments['status']));
                   case '/home':
                     return const Home();
                   case '/search':
