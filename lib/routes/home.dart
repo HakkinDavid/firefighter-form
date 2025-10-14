@@ -93,7 +93,7 @@ class _HomeState extends State<Home> {
       builder: (context) => CupertinoActionSheet(
         title: Text('Eliminar formulario'),
         message: Text(
-          '¿Estás seguro de que quieres eliminar "${form['title']}"? Esta acción no se puede deshacer.',
+          '¿Estás seguro de que quieres eliminar el folio "${form['id']}"? Esta acción no se puede deshacer.',
         ),
         actions: [
           CupertinoActionSheetAction(
