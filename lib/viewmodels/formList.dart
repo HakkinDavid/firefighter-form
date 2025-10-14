@@ -220,85 +220,45 @@ class _FormListState extends State<FormList> {
   Widget build(BuildContext context) {
     return Container(
       color: Settings.instance.colors.background,
-      child: Column(
-        children: [
-          // Header for the list
-          Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Settings.instance.colors.primaryContrast,
-              border: Border(
-                bottom: BorderSide(
-                  color: CupertinoColors.separator,
-                  width: 0.5,
-                ),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Formularios Recientes',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Settings.instance.colors.primary,
+      child: widget.formsList.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    CupertinoIcons.doc,
+                    size: 64,
+                    color: CupertinoColors.systemGrey,
                   ),
-                ),
-                Text(
-                  '${widget.formsList.length} elementos',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: CupertinoColors.secondaryLabel,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Forms list
-          Expanded(
-            child: widget.formsList.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          CupertinoIcons.doc,
-                          size: 64,
-                          color: CupertinoColors.systemGrey,
-                        ),
-                        SizedBox(height: 16),
-                        Text(
-                          'No hay formularios',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: CupertinoColors.secondaryLabel,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          'Toca el botón + para crear uno',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: CupertinoColors.tertiaryLabel,
-                          ),
-                        ),
-                      ],
+                  SizedBox(height: 16),
+                  Text(
+                    'No hay formularios',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: CupertinoColors.secondaryLabel,
                     ),
-                  )
-                : ListView.builder(
-                    itemCount: widget.formsList.length,
-                    itemBuilder: (context, index) {
-                      return CupertinoButton(
-                        onPressed: () => widget.onFormTap(widget.formsList[index]),
-                        padding: EdgeInsets.zero,
-                        child: _buildFormListItem(widget.formsList[index]),
-                      );
-                    },
                   ),
-          ),
-        ],
-      ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Toca el botón + para crear uno',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: CupertinoColors.tertiaryLabel,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : ListView.builder(
+              itemCount: widget.formsList.length,
+              itemBuilder: (context, index) {
+                return CupertinoButton(
+                  onPressed: () => widget.onFormTap(widget.formsList[index]),
+                  padding: EdgeInsets.zero,
+                  child: _buildFormListItem(widget.formsList[index]),
+                );
+              },
+            ),
     );
   }
 }

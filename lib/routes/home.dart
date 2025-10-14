@@ -1,6 +1,6 @@
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/viewmodels/header.dart';
-import 'package:bomberos/models/formList.dart';
+import 'package:bomberos/viewmodels/formList.dart';
 import 'package:flutter/cupertino.dart';
 
 class Home extends StatefulWidget {
@@ -120,50 +120,92 @@ class _HomeState extends State<Home> {
     // Delete from storage eventually
     print('Deleted form: ${form['title']}');
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: null,
-      backgroundColor: Settings.instance.colors.primaryContrast,
-      child: SafeArea(
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                Header(
-                  username: Settings.instance.self?.fullName,
-                  adminUsername: Settings.instance.watcher?.fullName,
-                ),
-                Expanded(
-                  child: FormList(
-                    formsList: _formsList,
-                    onFormTap: _onFormTap,
-                    onPdfTap: _onPdfTap,
-                    onDeleteTap: _onDeleteTap,
+@override
+Widget build(BuildContext context) {
+  return CupertinoPageScaffold(
+    navigationBar: null,
+    backgroundColor: Settings.instance.colors.primaryContrast,
+    child: SafeArea(
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              Header(
+                username: Settings.instance.self?.fullName,
+                adminUsername: Settings.instance.watcher?.fullName,
+              ),
+              Expanded(
+                child: Container(  // ← ADD THIS CONTAINER
+                  color: Settings.instance.colors.background,
+                  child: Column(
+                    children: [
+                      // Header for the list - NOW ONLY IN HOME
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Settings.instance.colors.primaryContrast,
+                          border: Border(
+                            bottom: BorderSide(
+                              color: CupertinoColors.separator,
+                              width: 0.5,
+                            ),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Formularios Recientes',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Settings.instance.colors.primary,
+                              ),
+                            ),
+                            Text(
+                              '${_formsList.length} elementos',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: CupertinoColors.secondaryLabel,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Forms list component
+                      Expanded(  // ← NESTED EXPANDED FOR THE FORM LIST
+                        child: FormList(
+                          formsList: _formsList,
+                          onFormTap: _onFormTap,
+                          onPdfTap: _onPdfTap,
+                          onDeleteTap: _onDeleteTap,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-            // Button at the bottom right
-            Positioned(
-              right: 16,
-              bottom: 16,
-              child: CupertinoButton(
-                onPressed: _createForm,
-                color: Settings.instance.colors.primaryContrast,
-                borderRadius: BorderRadius.circular(48),
-                padding: EdgeInsets.all(16),
-                child: Icon(
-                  CupertinoIcons.add,
-                  color: Settings.instance.colors.primary,
-                  size: 36,
-                ),
+              ),
+            ],
+          ),
+          // Floating action button positioned at bottom right
+          Positioned(
+            right: 16,
+            bottom: 16,
+            child: CupertinoButton(
+              onPressed: _createForm,
+              color: Settings.instance.colors.primaryContrast,
+              borderRadius: BorderRadius.circular(48),
+              padding: EdgeInsets.all(16),
+              child: Icon(
+                CupertinoIcons.add,
+                color: Settings.instance.colors.primary,
+                size: 36,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 }
