@@ -1,11 +1,12 @@
 import 'package:bomberos/models/settings.dart';
+import 'package:uuid/uuid.dart';
 
 class ServiceForm {
   Map<String, dynamic> _template = const {};
   List<String> _sectionKeys = const [];
   final Map<String, Set<String>> _errors = {};
 
-  final String? _id;
+  String? _id;
   final int _templateId;
   final String _filler;
   final int _status;
@@ -22,7 +23,7 @@ class ServiceForm {
   int get status => _status;
   DateTime get filledAt => _filledAt;
 
-  String? get id => _id;
+  String get id => _id!;
   int get templateId => _templateId;
 
   bool isLoaded = false;
@@ -34,7 +35,9 @@ class ServiceForm {
     this._filledAt,
     this._content,
     this._status,
-  );
+  ) {
+    _id ??= Uuid().v8();
+  }
 
   Future<void> load() async {
     _template = await Settings.instance.getTemplate(_templateId);
