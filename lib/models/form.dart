@@ -8,6 +8,7 @@ class ServiceForm {
   List<String> _sectionKeys = const [];
   final Map<String, List<String>> _errors = {};
 
+  final String? _id;
   final int _templateId;
   final String _filler;
   final int _status;
@@ -24,9 +25,13 @@ class ServiceForm {
   int get status => _status;
   DateTime get filledAt => _filledAt;
 
+  String? get id => _id;
+  int get templateId => _templateId;
+
   bool get isLoaded => _template['formname'] != null;
 
   ServiceForm(
+    this._id,
     this._templateId,
     this._filler,
     this._filledAt,
