@@ -19,7 +19,7 @@ class _HomeState extends State<Home> {
       'filler': Settings.instance.userId,
       'status': 0,
       'content': <String, dynamic>{},
-      'filled_at': DateTime.now()
+      'filled_at': DateTime.now(),
     },
     {
       'id': 'foliodeejemplo2',
@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
       'filler': Settings.instance.userId,
       'status': 1,
       'content': <String, dynamic>{},
-      'filled_at': DateTime.now()
+      'filled_at': DateTime.now(),
     },
     {
       'id': 'foliodeejemplo3',
@@ -35,7 +35,15 @@ class _HomeState extends State<Home> {
       'filler': Settings.instance.userId,
       'status': 2,
       'content': <String, dynamic>{},
-      'filled_at': DateTime.now()
+      'filled_at': DateTime.now(),
+    },
+    {
+      'id': 'estonofunciona',
+      'template_id': 2,
+      'filler': Settings.instance.userId,
+      'status': 2,
+      'content': <String, dynamic>{},
+      'filled_at': DateTime.now(),
     },
   ];
 
@@ -46,41 +54,47 @@ class _HomeState extends State<Home> {
   }
 
   void _loadSavedForms() {
-
     // Load the forms that we have stored
   }
 
   void _createForm() async {
     int? latestTemplate = await Settings.instance.getNewestSavedTemplate();
     if (!mounted) return;
-    Navigator.pushNamed(context, '/form', arguments: {
-      'template_id': latestTemplate,
-      'filler': Settings.instance.userId,
-      'filled_at': DateTime.now(),
-      'content': <String, dynamic>{},
-      'status': 0,
-    });
+    Navigator.pushNamed(
+      context,
+      '/form',
+      arguments: {
+        'template_id': latestTemplate,
+        'filler': Settings.instance.userId,
+        'filled_at': DateTime.now(),
+        'content': <String, dynamic>{},
+        'status': 0,
+      },
+    );
   }
 
   void _onFormTap(Map<String, dynamic> form) {
-
-    // Form interaction functionality goes Jeer
+    Navigator.pushNamed(
+      context,
+      '/form',
+      arguments: form,
+    );
   }
 
   void _onPdfTap(Map<String, dynamic> form) {
-
     // Future PDF export implementation
   }
 
   void _onDeleteTap(Map<String, dynamic> form) {
-
     // Implement form deletion soon...
 
     showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoActionSheet(
         title: Text('Eliminar formulario'),
-        message: Text('¿Estás seguro de que quieres eliminar "${form['title']}"? Esta acción no se puede deshacer.'),
+        message: Text(
+          '¿Estás seguro de que quieres eliminar "${form['title']}"? Esta acción no se puede deshacer.',
+        ),
         actions: [
           CupertinoActionSheetAction(
             onPressed: () {
@@ -105,92 +119,95 @@ class _HomeState extends State<Home> {
     });
     // Delete from storage eventually
   }
-@override
-Widget build(BuildContext context) {
-  return CupertinoPageScaffold(
-    navigationBar: null,
-    backgroundColor: Settings.instance.colors.primaryContrast,
-    child: SafeArea(
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              Header(
-                username: Settings.instance.self?.fullName,
-                adminUsername: Settings.instance.watcher?.fullName,
-              ),
-              Expanded(
-                child: Container(  // ← ADD THIS CONTAINER
-                  color: Settings.instance.colors.background,
-                  child: Column(
-                    children: [
-                      // Header for the list - NOW ONLY IN HOME
-                      Container(
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Settings.instance.colors.primaryContrast,
-                          border: Border(
-                            bottom: BorderSide(
-                              color: CupertinoColors.separator,
-                              width: 0.5,
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: null,
+      backgroundColor: Settings.instance.colors.primaryContrast,
+      child: SafeArea(
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                Header(
+                  username: Settings.instance.self?.fullName,
+                  adminUsername: Settings.instance.watcher?.fullName,
+                ),
+                Expanded(
+                  child: Container(
+                    // ← ADD THIS CONTAINER
+                    color: Settings.instance.colors.background,
+                    child: Column(
+                      children: [
+                        // Header for the list - NOW ONLY IN HOME
+                        Container(
+                          padding: EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Settings.instance.colors.primaryContrast,
+                            border: Border(
+                              bottom: BorderSide(
+                                color: CupertinoColors.separator,
+                                width: 0.5,
+                              ),
                             ),
                           ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Formularios Recientes',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                                color: Settings.instance.colors.primary,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Formularios Recientes',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: Settings.instance.colors.primary,
+                                ),
                               ),
-                            ),
-                            Text(
-                              '${_formsList.length} elementos',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: CupertinoColors.secondaryLabel,
+                              Text(
+                                '${_formsList.length} elementos',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: CupertinoColors.secondaryLabel,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      // Forms list component
-                      Expanded(  // ← NESTED EXPANDED FOR THE FORM LIST
-                        child: FormList(
-                          formsList: _formsList,
-                          onFormTap: _onFormTap,
-                          onPdfTap: _onPdfTap,
-                          onDeleteTap: _onDeleteTap,
+                        // Forms list component
+                        Expanded(
+                          // ← NESTED EXPANDED FOR THE FORM LIST
+                          child: FormList(
+                            formsList: _formsList,
+                            onFormTap: _onFormTap,
+                            onPdfTap: _onPdfTap,
+                            onDeleteTap: _onDeleteTap,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          // Floating action button positioned at bottom right
-          Positioned(
-            right: 16,
-            bottom: 16,
-            child: CupertinoButton(
-              onPressed: _createForm,
-              color: Settings.instance.colors.primaryContrast,
-              borderRadius: BorderRadius.circular(48),
-              padding: EdgeInsets.all(16),
-              child: Icon(
-                CupertinoIcons.add,
-                color: Settings.instance.colors.primary,
-                size: 36,
+              ],
+            ),
+            // Floating action button positioned at bottom right
+            Positioned(
+              right: 16,
+              bottom: 16,
+              child: CupertinoButton(
+                onPressed: _createForm,
+                color: Settings.instance.colors.primaryContrast,
+                borderRadius: BorderRadius.circular(48),
+                padding: EdgeInsets.all(16),
+                child: Icon(
+                  CupertinoIcons.add,
+                  color: Settings.instance.colors.primary,
+                  size: 36,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
