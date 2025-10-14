@@ -39,6 +39,7 @@ class Settings {
     setUserId();
     await getUser();
     role = self!.role;
+    await saveToDisk();
   }
 
   void setUserId() {
@@ -143,8 +144,6 @@ class Settings {
         userCache[wId] = underWatchUser;
       }
     }
-
-    await saveToDisk();
     return user;
   }
 
