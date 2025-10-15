@@ -36,8 +36,11 @@ class Settings {
   FirefighterUser? get self => userCache[userId];
   FirefighterUser? get watcher => userCache[self?.watchedByUserId ?? ""];
 
-  List<ServiceForm> get formsList => _formsQueue + (_formsList
-    ..retainWhere((fl) => _formsQueue.indexWhere((fq) => fq.id == fl.id) == -1));
+  List<ServiceForm> get formsList =>
+      _formsQueue +
+      (_formsList..retainWhere(
+        (fl) => _formsQueue.indexWhere((fq) => fq.id == fl.id) == -1,
+      ));
 
   Future<void> setUser() async {
     setUserId();
