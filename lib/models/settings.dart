@@ -294,6 +294,21 @@ class Settings {
     await dequeueForm(form.id);
     return true;
   }
+
+  Future<void> syncForms() async {
+    final syncCandidates = _formsQueue.where((f) => f.status == 1);
+
+    for (var syncing in syncCandidates) {
+      if (!(await uploadForm(syncing))) {
+        return;
+      }
+    }
+
+    try {
+      await setForms();
+    } catch (error) {}
+  }
+
   Future<void> saveToDisk() async {
     try {
       final file = File(
