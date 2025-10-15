@@ -271,6 +271,29 @@ class Settings {
     _formsQueue.removeWhere((f) => f.id == id);
     await saveToDisk();
   }
+
+  Future<bool> uploadForm(ServiceForm form) async {
+    try {
+      await Supabase.instance.client.rpc(
+        'upload_filled_in',
+        params: {
+          'p_id': form.id,
+          'p_template_id': form.templateId,
+          'p_status': form.status,
+          'p_content': form.content,
+          'p_filled_at': form.filledAt,
+        },
+      );
+    } catch (error) {
+      if (!error.toString().contains('Postgrest')) {
+        return false;
+      } else {
+        rethrow;
+      }
+    }
+    await dequeueForm(form.id);
+    return true;
+  }
   Future<void> saveToDisk() async {
     try {
       final file = File(
