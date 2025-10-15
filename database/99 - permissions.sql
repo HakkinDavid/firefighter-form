@@ -17,4 +17,4 @@ grant execute on function only_supervisors() to authenticated;
 grant execute on function only_admins() to authenticated;
 
 grant execute on function upload_template(jsonb) to authenticated;
-grant execute on function upload_filled_in(uuid, uuid, jsonb, timestamp) to authenticated;
+grant execute on function upload_filled_in(uuid, uuid, smallint, jsonb, timestamp) to authenticated;
