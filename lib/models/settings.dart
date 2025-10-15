@@ -267,6 +267,10 @@ class Settings {
     await saveToDisk();
   }
 
+  Future<void> dequeueForm(String id) async {
+    _formsQueue.removeWhere((f) => f.id == id);
+    await saveToDisk();
+  }
   Future<void> saveToDisk() async {
     try {
       final file = File(
