@@ -225,5 +225,5 @@ class ServiceForm {
   }
 
   List<String> get tags =>
-      _content.values.whereType<String>().where((t) => t.isNotEmpty).toList();
+      _content.values.whereType<String>().where((t) => t.isNotEmpty && !t.startsWith('data:image')).toList();
 }
