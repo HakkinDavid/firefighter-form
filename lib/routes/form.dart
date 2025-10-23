@@ -581,7 +581,9 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
       );
     } else if (type == 'tuple') {
       final tupleFields = field['tuple'] as List<dynamic>? ?? [];
-      final tupleList = value as List<Map<String, dynamic>>;
+      final tupleList = value.isEmpty
+          ? List.from(<Map<String, dynamic>>[])
+          : value as List<Map<String, dynamic>>;
       fieldWidget = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
