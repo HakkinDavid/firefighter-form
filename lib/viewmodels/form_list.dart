@@ -41,11 +41,11 @@ class _FormListState extends State<FormList> {
                   width: 32,
                   height: 32,
                   decoration: BoxDecoration(
-                    color: form.getStatusColor,
+                    color: form.statusColor,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    form.getStatusIcon,
+                    form.statusIcon,
                     color: Settings.instance.colors.textOverPrimary,
                     size: 16,
                   ),
@@ -144,6 +144,26 @@ class _FormListState extends State<FormList> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      if (form.tags.isNotEmpty)
+                        SizedBox(height: 2),
+                        Text(
+                          'Etiquetas:',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: CupertinoColors.tertiaryLabel,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          form.tags.join(", "),
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: CupertinoColors.label,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                     ],
                   ),
                 ),
@@ -151,15 +171,15 @@ class _FormListState extends State<FormList> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: form.getStatusColor.withValues(alpha: 0.1),
+                    color: form.statusColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    form.getStatusName,
+                    form.statusName,
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
-                      color: form.getStatusColor,
+                      color: form.statusColor,
                     ),
                   ),
                 ),
