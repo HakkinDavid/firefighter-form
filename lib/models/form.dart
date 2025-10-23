@@ -189,7 +189,7 @@ class ServiceForm {
 
   bool get canFinishForm => canEditForm && errors.isEmpty;
 
-  String get getStatusName {
+  String get statusName {
     switch (status) {
       case 2:
         return "Sincronizado";
@@ -201,7 +201,7 @@ class ServiceForm {
     }
   }
 
-  Color get getStatusColor {
+  Color get statusColor {
     switch (status) {
       case 2:
         return CupertinoColors.systemGreen;
@@ -214,7 +214,7 @@ class ServiceForm {
     }
   }
 
-  IconData get getStatusIcon {
+  IconData get statusIcon {
     switch (status) {
       case 2:
         return CupertinoIcons.checkmark_alt_circle;
@@ -226,4 +226,6 @@ class ServiceForm {
         return CupertinoIcons.question;
     }
   }
+
+  List<String> get tags => _content.values.whereType<String>().where((t) => t.isNotEmpty).toList();
 }
