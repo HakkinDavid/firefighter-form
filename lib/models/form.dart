@@ -1,6 +1,7 @@
 import 'package:bomberos/models/settings.dart';
 import 'package:flutter/cupertino.dart' show IconData, CupertinoColors, CupertinoIcons;
 import 'package:flutter/widgets.dart' show Color;
+import 'package:uuid/data.dart';
 import 'package:uuid/uuid.dart';
 
 class ServiceForm {
@@ -44,7 +45,9 @@ class ServiceForm {
     this._content,
     this._status,
   ) {
-    _id ??= Uuid().v8();
+    _id ??= Uuid().v8(
+      config: V8Options(DateTime.now(), null)
+    );
   }
 
   Future<void> load() async {
