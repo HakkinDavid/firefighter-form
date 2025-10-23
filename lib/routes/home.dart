@@ -50,14 +50,12 @@ class _HomeState extends State<Home> {
   }
 
   void _onDeleteTap(ServiceForm form) {
-    // Implement form deletion soon...
-
     showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoActionSheet(
         title: Text('Eliminar formulario'),
         message: Text(
-          '¿Estás seguro de que quieres eliminar el folio "${form.id}"? Esta acción no se puede deshacer.',
+          '¿Estás seguro de que deseas eliminar el folio ${form.getStatusName.toLowerCase()} "${form.id}"? Esta acción no se puede deshacer.',
         ),
         actions: [
           CupertinoActionSheetAction(
@@ -66,7 +64,7 @@ class _HomeState extends State<Home> {
               _deleteForm(form);
             },
             isDestructiveAction: true,
-            child: Text('Eliminar'),
+            child: Text('Eliminar folio ${form.getStatusName.toLowerCase()}'),
           ),
         ],
         cancelButton: CupertinoActionSheetAction(
@@ -77,11 +75,9 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void _deleteForm(ServiceForm form) {
-    setState(() {
-      Settings.instance.formsList.remove(form);
-    });
-    // Delete from storage eventually
+  void _deleteForm(ServiceForm form) async {
+    await Settings.instance.deleteForm(form);
+    setState(() {});
   }
 
   @override
