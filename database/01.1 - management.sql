@@ -20,7 +20,7 @@ BEGIN
     SELECT 1
     FROM public.user_role
     WHERE id = p_user_id
-      AND value = p_role_id
+      AND value >= p_role_id
   ) THEN
     RETURN true;
   END IF;
