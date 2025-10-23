@@ -808,7 +808,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
             middle: Column(
               children: [
                 Text("FRAP", style: TextStyle(fontSize: 24)),
-                Text(widget.form.id, style: TextStyle(fontSize: 12)),
+                Text(widget.form.id.substring(14), style: TextStyle(fontSize: 12)),
               ],
             ),
             leading: CupertinoButton(
