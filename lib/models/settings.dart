@@ -309,6 +309,20 @@ class Settings {
     } catch (error) {}
   }
 
+  Future<void> deleteForm(ServiceForm form) async {
+    try {
+      if (form.status == 2) {
+        await Supabase.instance.client.rpc('delete_filled_in', params: {
+          'p_id': form.id
+        });
+      }
+      else {
+        await Settings.instance.dequeueForm(form.id);
+      }
+      await setForms();
+    } catch (error) {}
+  }
+
   Future<void> saveToDisk() async {
     try {
       final file = File(
