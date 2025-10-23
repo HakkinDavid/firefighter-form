@@ -41,11 +41,11 @@ class _FormListState extends State<FormList> {
                   width: 32,
                   height: 32,
                   decoration: BoxDecoration(
-                    color: _getStatusColor(form.status),
+                    color: form.getStatusColor,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    _getStatusIcon(form.status),
+                    form.getStatusIcon,
                     color: Settings.instance.colors.textOverPrimary,
                     size: 16,
                   ),
@@ -151,15 +151,15 @@ class _FormListState extends State<FormList> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: _getStatusColor(form.status).withValues(alpha: 0.1),
+                    color: form.getStatusColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    _getStatusName(form.status),
+                    form.getStatusName,
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
-                      color: _getStatusColor(form.status),
+                      color: form.getStatusColor,
                     ),
                   ),
                 ),
@@ -169,44 +169,6 @@ class _FormListState extends State<FormList> {
         ),
       ),
     );
-  }
-
-  String _getStatusName(int status) {
-    switch (status) {
-      case 2:
-        return "Sincronizado";
-      case 1:
-        return "Finalizado";
-      case 0:
-      default:
-        return "Borrador";
-    }
-  }
-
-  Color _getStatusColor(int status) {
-    switch (status) {
-      case 2:
-        return CupertinoColors.systemGreen;
-      case 1:
-        return CupertinoColors.systemOrange;
-      case 0:
-        return Settings.instance.colors.primary;
-      default:
-        return CupertinoColors.systemGrey;
-    }
-  }
-
-  IconData _getStatusIcon(int status) {
-    switch (status) {
-      case 2:
-        return CupertinoIcons.checkmark_alt_circle;
-      case 1:
-        return CupertinoIcons.clock;
-      case 0:
-        return CupertinoIcons.doc;
-      default:
-        return CupertinoIcons.question;
-    }
   }
 
   @override
