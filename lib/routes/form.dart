@@ -1,4 +1,5 @@
 import 'package:bomberos/models/form.dart';
+import 'package:bomberos/viewmodels/canvas.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show Colors, Card;
 import 'package:bomberos/models/settings.dart';
@@ -549,6 +550,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
         fieldWidget = SizedBox.shrink();
       }
     } else if (type == 'drawingboard') {
+      final myCanvasController = ServiceCanvasController();
       fieldWidget = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -557,25 +559,32 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
           SizedBox(height: 8),
-          Container(
-            height: 200,
-            decoration: BoxDecoration(
-              color: CupertinoColors.systemGrey5,
-              border: Border.all(color: CupertinoColors.separator),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(child: Text('Canvas aquí (no implementado)')),
+          ServiceCanvas(controller: myCanvasController, defaultData: value),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                child: Icon(CupertinoIcons.clear, size: 20),
+                onPressed: () {
+                  myCanvasController.clear();
+                  setState(() {
+                    widget.form.set(field['name'], null);
+                  });
+                },
+              ),
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                child: Icon(CupertinoIcons.check_mark, size: 20),
+                onPressed: () async {
+                  final data = await myCanvasController.exportAsSvg();
+                  setState(() {
+                    widget.form.set(field['name'], data);
+                  });
+                },
+              ),
+            ],
           ),
-          if (!isRequired)
-            CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: Icon(CupertinoIcons.clear, size: 20),
-              onPressed: () {
-                setState(() {
-                  widget.form.set(field['name'], null);
-                });
-              },
-            ),
         ],
       );
     } else if (type == 'tuple') {
