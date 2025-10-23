@@ -55,7 +55,7 @@ class _HomeState extends State<Home> {
       builder: (context) => CupertinoActionSheet(
         title: Text('Eliminar formulario'),
         message: Text(
-          '¿Estás seguro de que deseas eliminar el folio ${form.getStatusName.toLowerCase()} "${form.id}"? Esta acción no se puede deshacer.',
+          '¿Estás seguro de que deseas eliminar el folio ${form.statusName.toLowerCase()} "${form.id}"? Esta acción no se puede deshacer.',
         ),
         actions: [
           CupertinoActionSheetAction(
@@ -64,7 +64,7 @@ class _HomeState extends State<Home> {
               _deleteForm(form);
             },
             isDestructiveAction: true,
-            child: Text('Eliminar folio ${form.getStatusName.toLowerCase()}'),
+            child: Text('Eliminar folio ${form.statusName.toLowerCase()}'),
           ),
         ],
         cancelButton: CupertinoActionSheetAction(
