@@ -26,14 +26,13 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     Navigator.pushReplacementNamed(context, '/home');
   }
 
-  Future<void> _saveForm() async {
-    await widget.form.save();
+  Future<void> _saveForm({bool shouldSetAsFinished = false}) async {
+    await widget.form.save(shouldSetAsFinished: shouldSetAsFinished);
     _exitForm();
   }
 
   Future<void> _finishForm() async {
-    widget.form.setAsFinished();
-    await _saveForm();
+    await _saveForm(shouldSetAsFinished: true);
   }
 
   Future<void> _loadForm() async {
@@ -77,7 +76,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                   onPressed: () async {
                     DateTime now = DateTime.now();
                     DateTime initial = now;
-                    if (value != '') {
+                    if (value != '' && widget.form.canEditForm) {
                       initial = DateTime.tryParse(value) ?? now;
                     }
                     DateTime pickedDate = initial;
@@ -121,7 +120,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                     );
                   },
                 ),
-                if (value != '')
+                if (value != '' && widget.form.canEditForm)
                   CupertinoButton(
                     padding: EdgeInsets.zero,
                     child: Icon(CupertinoIcons.clear, size: 20),
@@ -194,7 +193,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                     );
                   },
                 ),
-                if (value != '')
+                if (value != '' && widget.form.canEditForm)
                   CupertinoButton(
                     padding: EdgeInsets.zero,
                     child: Icon(CupertinoIcons.clear, size: 20),
@@ -344,7 +343,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                     ),
                   ),
                 ),
-                if (value != '')
+                if (value != '' && widget.form.canEditForm)
                   CupertinoButton(
                     padding: EdgeInsets.zero,
                     child: Icon(CupertinoIcons.clear, size: 20),
@@ -446,7 +445,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                   ),
                 ),
               ),
-              if (value != '')
+              if (value != '' && widget.form.canEditForm)
                 CupertinoButton(
                   padding: EdgeInsets.zero,
                   child: Icon(CupertinoIcons.clear, size: 20),
@@ -534,7 +533,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                 ),
               ),
             ),
-            if (value != '')
+            if (value != '' && widget.form.canEditForm)
               CupertinoButton(
                 padding: EdgeInsets.zero,
                 child: Icon(CupertinoIcons.clear, size: 20),
@@ -559,32 +558,33 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
           SizedBox(height: 8),
-          ServiceCanvas(controller: myCanvasController, defaultData: value),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              CupertinoButton(
-                padding: EdgeInsets.zero,
-                child: Icon(CupertinoIcons.clear, size: 20),
-                onPressed: () {
-                  myCanvasController.clear();
-                  setState(() {
-                    widget.form.set(field['name'], null);
-                  });
-                },
-              ),
-              CupertinoButton(
-                padding: EdgeInsets.zero,
-                child: Icon(CupertinoIcons.check_mark, size: 20),
-                onPressed: () async {
-                  final data = await myCanvasController.exportAsSvg();
-                  setState(() {
-                    widget.form.set(field['name'], data);
-                  });
-                },
-              ),
-            ],
-          ),
+          ServiceCanvas(readOnly: !widget.form.canEditForm, controller: myCanvasController, defaultData: value),
+          if (widget.form.canEditForm)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  child: Icon(CupertinoIcons.clear, size: 20),
+                  onPressed: () {
+                    myCanvasController.clear();
+                    setState(() {
+                      widget.form.set(field['name'], null);
+                    });
+                  },
+                ),
+                CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  child: Icon(CupertinoIcons.check_mark, size: 20),
+                  onPressed: () async {
+                    final data = await myCanvasController.exportAsSvg();
+                    setState(() {
+                      widget.form.set(field['name'], data);
+                    });
+                  },
+                ),
+              ],
+            ),
         ],
       );
     } else if (type == 'tuple') {
@@ -818,7 +818,10 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
             middle: Column(
               children: [
                 Text("FRAP", style: TextStyle(fontSize: 24)),
-                Text(widget.form.id.substring(14), style: TextStyle(fontSize: 12)),
+                Text(
+                  widget.form.id.substring(14),
+                  style: TextStyle(fontSize: 12),
+                ),
               ],
             ),
             leading: CupertinoButton(
@@ -836,7 +839,17 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                     onPressed: _finishForm,
                     child: Icon(CupertinoIcons.cloud_upload, size: 28),
                   )
-                : null,
+                : (!widget.form.canEditForm &&
+                      Settings.instance.role >= 1
+                ? CupertinoButton(
+                    onPressed: () => {
+                      setState(() {
+                        widget.form.editOverride = true;
+                      })
+                    },
+                    child: Icon(CupertinoIcons.pencil, size: 28),
+                  )
+                : null),
           ),
           child: SafeArea(
             child: Padding(
