@@ -66,7 +66,7 @@ class ServiceForm {
     if (!canEditForm) return;
     _edited[fieldName] = newValue != _content[fieldName] && newValue != null && newValue.isNotEmpty;
     _content[fieldName] = newValue;
-    _errors[fieldName] = {};
+    _errors.remove(fieldName);
     setAsDraft();
   }
 
