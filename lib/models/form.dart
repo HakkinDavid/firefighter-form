@@ -15,7 +15,7 @@ class ServiceForm {
   final Map<String, dynamic> _content;
   final DateTime _filledAt;
 
-  bool _edited = false;
+  final Map<String, bool> _edited = {};
 
   String get name => _template['formname'] ?? 'Formulario';
   Map<String, dynamic> get sections => _template['fields'];
@@ -30,7 +30,7 @@ class ServiceForm {
   String get id => _id!;
   int get templateId => _templateId;
 
-  bool get edited => _edited;
+  bool get edited => _edited.containsValue(true);
 
   bool _isLoaded = false;
 
@@ -61,9 +61,9 @@ class ServiceForm {
 
   void set(String fieldName, dynamic newValue) {
     if (!canEditForm) return;
-    content[fieldName] = newValue;
+    _edited[fieldName] = newValue != _content[fieldName] && newValue != null && newValue.isNotEmpty;
+    _content[fieldName] = newValue;
     _errors[fieldName] = {};
-    _edited = true;
     setAsDraft();
   }
 
