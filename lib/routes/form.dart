@@ -775,7 +775,16 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
         ),
       );
     } else if (!widget.form.isLoaded) {
-      return CupertinoActivityIndicator();
+      return CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          middle: Text("Cargando formulario..."),
+          leading: CupertinoButton(
+            onPressed: _exitForm,
+            child: Icon(CupertinoIcons.clear, size: 28),
+          ),
+        ),
+        child: CupertinoActivityIndicator(),
+      );
     }
     // Aplica restricciones en cada build
     widget.form.handleFieldRestrictions();
@@ -795,15 +804,29 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
         final fields = widget.form.sections[currentSection] as List<dynamic>;
         return CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
-            middle: Text(widget.form.name),
-            leading: CupertinoButton(
-              onPressed: widget.form.canSaveForm ? _saveForm : _exitForm,
-              child: Icon(widget.form.canSaveForm ? CupertinoIcons.floppy_disk : CupertinoIcons.clear),
+            padding: EdgeInsetsDirectional.symmetric(),
+            middle: Column(
+              children: [
+                Text("FRAP", style: TextStyle(fontSize: 24)),
+                Text(widget.form.id, style: TextStyle(fontSize: 12)),
+              ],
             ),
-            trailing: widget.form.canFinishForm ? CupertinoButton(
-              onPressed: _finishForm,
-              child: Icon(CupertinoIcons.cloud_upload),
-            ) : null,
+            leading: CupertinoButton(
+              alignment: AlignmentGeometry.centerLeft,
+              onPressed: widget.form.canSaveForm ? _saveForm : _exitForm,
+              child: Icon(
+                widget.form.canSaveForm
+                    ? CupertinoIcons.back
+                    : CupertinoIcons.clear,
+                size: 28,
+              ),
+            ),
+            trailing: widget.form.canFinishForm
+                ? CupertinoButton(
+                    onPressed: _finishForm,
+                    child: Icon(CupertinoIcons.cloud_upload, size: 28),
+                  )
+                : null,
           ),
           child: SafeArea(
             child: Padding(
