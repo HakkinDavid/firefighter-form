@@ -11,18 +11,20 @@ class StrokePoint {
 /// Modelo para un trazo, que es una lista de puntos.
 class Stroke {
   final List<Offset> points;
-  Stroke(this.points);
+  final Color color;
+  Stroke(this.points, {this.color = CupertinoColors.black});
 }
 
 /// Controller para controlar el canvas externamente, manteniendo trazos previos y nuevos en coordenadas absolutas.
 class ServiceCanvasController extends ChangeNotifier {
   final int viewBoxWidth;
   final int viewBoxHeight;
+  bool hasBackground;
 
   final List<Stroke> _previousStrokes = [];
   final List<Stroke> _currentStrokes = [];
 
-  ServiceCanvasController({this.viewBoxWidth = 300, this.viewBoxHeight = 300});
+  ServiceCanvasController({this.viewBoxWidth = 300, this.viewBoxHeight = 300, this.hasBackground = false});
 
   /// Establece los trazos previos a partir de SVG base64 absoluto.
   /// Analiza el SVG para extraer los trazos en coordenadas absolutas.
@@ -72,7 +74,7 @@ class ServiceCanvasController extends ChangeNotifier {
   /// Añade un punto al trazo actual.
   void addPointToCurrentStroke(Offset point) {
     if (_currentStrokes.isEmpty) {
-      _currentStrokes.add(Stroke([point]));
+      _currentStrokes.add(Stroke([point], color: hasBackground ? CupertinoColors.systemRed : CupertinoColors.black));
     } else {
       _currentStrokes.last.points.add(point);
     }
@@ -81,7 +83,8 @@ class ServiceCanvasController extends ChangeNotifier {
 
   /// Inicia un nuevo trazo.
   void startNewStroke(Offset point) {
-    _currentStrokes.add(Stroke([point]));
+    final color = hasBackground ? CupertinoColors.systemRed : CupertinoColors.black;
+    _currentStrokes.add(Stroke([point], color: color));
     notifyListeners();
   }
 
@@ -119,7 +122,8 @@ class ServiceCanvasController extends ChangeNotifier {
             buffer.write(' L');
           }
         }
-        buffer.write('" stroke="black" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>');
+        final strokeColor = stroke.color.toCssString();
+        buffer.write('" stroke="$strokeColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>');
       }
       return buffer.toString();
     }
@@ -216,6 +220,7 @@ class _ServiceCanvasState extends State<ServiceCanvas> {
     super.initState();
 
     widget.controller.setDefaultData(widget.defaultData);
+    widget.controller.hasBackground = widget.backgroundData != null;
     widget.controller.addListener(_onControllerChanged);
   }
 
@@ -227,8 +232,10 @@ class _ServiceCanvasState extends State<ServiceCanvas> {
       oldWidget.controller.removeListener(_onControllerChanged);
       widget.controller.addListener(_onControllerChanged);
       widget.controller.setDefaultData(widget.defaultData);
+      widget.controller.hasBackground = widget.backgroundData != null;
     } else if (widget.defaultData != oldWidget.defaultData) {
       widget.controller.setDefaultData(widget.defaultData);
+      widget.controller.hasBackground = widget.backgroundData != null;
     }
   }
 
@@ -400,15 +407,16 @@ class _CanvasPainter extends CustomPainter {
     // No dibujamos los trazos previos aquí porque se muestran como SVG debajo.
     // Sólo dibujamos los trazos nuevos escalados.
 
-    final paint = Paint()
-      ..color = CupertinoColors.black
-      ..strokeWidth = 2 * scale
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round;
-
     for (final stroke in currentStrokes) {
       if (stroke.points.length < 2) continue;
+
+      final paint = Paint()
+        ..color = stroke.color
+        ..strokeWidth = 2 * scale
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round;
+
       final path = Path();
       path.moveTo(stroke.points[0].dx * scale, stroke.points[0].dy * scale);
       for (int i = 1; i < stroke.points.length; i++) {
@@ -421,5 +429,11 @@ class _CanvasPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _CanvasPainter oldDelegate) {
     return oldDelegate.currentStrokes != currentStrokes || oldDelegate.scale != scale;
+  }
+}
+
+extension ColorToCssString on Color {
+  String toCssString() {
+    return '#${value.toRadixString(16).padLeft(8, '0').substring(2)}';
   }
 }
