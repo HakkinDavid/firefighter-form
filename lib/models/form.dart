@@ -64,7 +64,27 @@ class ServiceForm {
     content[fieldName] = newValue;
     _errors[fieldName] = {};
     _edited = true;
+    setAsDraft();
+  }
+
+  void setAsDraft() {
+    if (!canEditForm) return;
     _status = 0;
+  }
+
+  Future<void> save() async {
+    if (!canSaveForm) return;
+    await Settings.instance.enqueueForm(this);
+  }
+
+  Future<void> delete() async {
+    if (!canDeleteForm) return;
+    await Settings.instance.deleteForm(this);
+  }
+
+  void setAsFinished() {
+    if (!canFinishForm) return;
+    _status = 1;
   }
 
   dynamic getDefaultValue(Map<String, dynamic> field) {
