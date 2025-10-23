@@ -190,6 +190,7 @@ class ServiceCanvas extends StatefulWidget {
   final bool disabled;
   final double viewBoxWidth;
   final double viewBoxHeight;
+  final bool readOnly;
 
   const ServiceCanvas({
     super.key,
@@ -199,6 +200,7 @@ class ServiceCanvas extends StatefulWidget {
     this.disabled = false,
     this.viewBoxWidth = 300,
     this.viewBoxHeight = 300,
+    this.readOnly = false,
   });
 
   @override
@@ -320,46 +322,58 @@ class _ServiceCanvasState extends State<ServiceCanvas> {
                           width: canvasWidth,
                           height: canvasHeight,
                         ),
-                      // Trazos nuevos dibujados con CustomPainter y todos los eventos de puntero absorbidos para evitar scroll/gestos del parent
-                      Listener(
-                        behavior: HitTestBehavior.opaque,
-                        onPointerDown: (_) {},
-                        onPointerMove: (_) {},
-                        onPointerUp: (_) {},
-                        child: GestureDetector(
+                      if (!widget.readOnly)
+                        Listener(
                           behavior: HitTestBehavior.opaque,
-                          onPanStart: widget.disabled
-                              ? null
-                              : (details) {
-                                  final renderBox = context.findRenderObject() as RenderBox;
-                                  final localPos = _globalToLocal(details.globalPosition, renderBox);
-                                  widget.controller.startNewStroke(localPos);
-                                },
-                          onPanUpdate: widget.disabled
-                              ? null
-                              : (details) {
-                                  final renderBox = context.findRenderObject() as RenderBox;
-                                  final localPos = _globalToLocal(details.globalPosition, renderBox);
-                                  widget.controller.addPointToCurrentStroke(localPos);
-                                },
-                          onPanEnd: widget.disabled
-                              ? null
-                              : (details) {
-                                  widget.controller.endCurrentStroke();
-                                },
-                          child: SizedBox(
-                            width: canvasWidth,
-                            height: canvasHeight,
-                            child: CustomPaint(
-                              size: Size(canvasWidth, canvasHeight),
-                              painter: _CanvasPainter(
-                                scale: scale,
-                                currentStrokes: widget.controller.currentStrokes,
+                          onPointerDown: (_) {},
+                          onPointerMove: (_) {},
+                          onPointerUp: (_) {},
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onPanStart: widget.disabled
+                                ? null
+                                : (details) {
+                                    final renderBox = context.findRenderObject() as RenderBox;
+                                    final localPos = _globalToLocal(details.globalPosition, renderBox);
+                                    widget.controller.startNewStroke(localPos);
+                                  },
+                            onPanUpdate: widget.disabled
+                                ? null
+                                : (details) {
+                                    final renderBox = context.findRenderObject() as RenderBox;
+                                    final localPos = _globalToLocal(details.globalPosition, renderBox);
+                                    widget.controller.addPointToCurrentStroke(localPos);
+                                  },
+                            onPanEnd: widget.disabled
+                                ? null
+                                : (details) {
+                                    widget.controller.endCurrentStroke();
+                                  },
+                            child: SizedBox(
+                              width: canvasWidth,
+                              height: canvasHeight,
+                              child: CustomPaint(
+                                size: Size(canvasWidth, canvasHeight),
+                                painter: _CanvasPainter(
+                                  scale: scale,
+                                  currentStrokes: widget.controller.currentStrokes,
+                                ),
                               ),
                             ),
                           ),
+                        )
+                      else
+                        SizedBox(
+                          width: canvasWidth,
+                          height: canvasHeight,
+                          child: CustomPaint(
+                            size: Size(canvasWidth, canvasHeight),
+                            painter: _CanvasPainter(
+                              scale: scale,
+                              currentStrokes: widget.controller.currentStrokes,
+                            ),
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),
