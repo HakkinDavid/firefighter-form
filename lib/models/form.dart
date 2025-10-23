@@ -1,4 +1,6 @@
 import 'package:bomberos/models/settings.dart';
+import 'package:flutter/cupertino.dart' show IconData, CupertinoColors, CupertinoIcons;
+import 'package:flutter/widgets.dart' show Color;
 import 'package:uuid/uuid.dart';
 
 class ServiceForm {
@@ -163,4 +165,42 @@ class ServiceForm {
   bool get canSaveForm => canEditForm && edited;
 
   bool get canFinishForm => canEditForm && errors.isEmpty;
+
+  String get getStatusName {
+    switch (status) {
+      case 2:
+        return "Sincronizado";
+      case 1:
+        return "Finalizado";
+      case 0:
+      default:
+        return "Borrador";
+    }
+  }
+
+  Color get getStatusColor {
+    switch (status) {
+      case 2:
+        return CupertinoColors.systemGreen;
+      case 1:
+        return CupertinoColors.systemOrange;
+      case 0:
+        return Settings.instance.colors.primary;
+      default:
+        return CupertinoColors.systemGrey;
+    }
+  }
+
+  IconData get getStatusIcon {
+    switch (status) {
+      case 2:
+        return CupertinoIcons.checkmark_alt_circle;
+      case 1:
+        return CupertinoIcons.clock;
+      case 0:
+        return CupertinoIcons.doc;
+      default:
+        return CupertinoIcons.question;
+    }
+  }
 }
