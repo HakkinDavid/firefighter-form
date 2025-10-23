@@ -25,9 +25,14 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     Navigator.pushReplacementNamed(context, '/home');
   }
 
-  void _saveForm() async {
-    await Settings.instance.enqueueForm(widget.form);
+  Future<void> _saveForm() async {
+    await widget.form.save();
     _exitForm();
+  }
+
+  Future<void> _finishForm() async {
+    widget.form.setAsFinished();
+    await _saveForm();
   }
 
   Future<void> _loadForm() async {
@@ -791,14 +796,14 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
         return CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
             middle: Text(widget.form.name),
-            trailing: CupertinoButton(
+            leading: CupertinoButton(
               onPressed: widget.form.canSaveForm ? _saveForm : _exitForm,
-              child: Icon(
-                widget.form.canSaveForm
-                    ? CupertinoIcons.check_mark_circled_solid
-                    : CupertinoIcons.clear,
-              ),
+              child: Icon(widget.form.canSaveForm ? CupertinoIcons.floppy_disk : CupertinoIcons.clear),
             ),
+            trailing: widget.form.canFinishForm ? CupertinoButton(
+              onPressed: _finishForm,
+              child: Icon(CupertinoIcons.cloud_upload),
+            ) : null,
           ),
           child: SafeArea(
             child: Padding(
