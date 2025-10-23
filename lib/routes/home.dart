@@ -76,7 +76,7 @@ class _HomeState extends State<Home> {
   }
 
   void _deleteForm(ServiceForm form) async {
-    await Settings.instance.deleteForm(form);
+    await form.delete();
     setState(() {});
   }
 
