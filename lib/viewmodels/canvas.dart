@@ -19,8 +19,8 @@ class ServiceCanvasController extends ChangeNotifier {
   final int viewBoxWidth;
   final int viewBoxHeight;
 
-  List<Stroke> _previousStrokes = [];
-  List<Stroke> _currentStrokes = [];
+  final List<Stroke> _previousStrokes = [];
+  final List<Stroke> _currentStrokes = [];
 
   ServiceCanvasController({this.viewBoxWidth = 300, this.viewBoxHeight = 300});
 
