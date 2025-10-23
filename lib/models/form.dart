@@ -1,6 +1,5 @@
 import 'package:bomberos/models/settings.dart';
-import 'package:flutter/cupertino.dart' show IconData, CupertinoColors, CupertinoIcons;
-import 'package:flutter/widgets.dart' show Color;
+import 'package:flutter/cupertino.dart';
 import 'package:uuid/data.dart';
 import 'package:uuid/uuid.dart';
 
@@ -16,7 +15,7 @@ class ServiceForm {
   final Map<String, dynamic> _content;
   final DateTime _filledAt;
 
-  final Map<String, bool> _edited = {};
+  bool _edited = false;
 
   String get name => _template['formname'] ?? 'Formulario';
   Map<String, dynamic> get sections => _template['fields'];
@@ -31,11 +30,15 @@ class ServiceForm {
   String get id => _id!;
   int get templateId => _templateId;
 
-  bool get edited => _edited.containsValue(true);
+  bool get edited => _edited;
 
   bool _isLoaded = false;
 
   bool get isLoaded => _isLoaded;
+
+  set editOverride(bool v) {
+    if (Settings.instance.role >= 1 && v) _status = 0;
+  }
 
   ServiceForm(
     this._id,
@@ -45,9 +48,7 @@ class ServiceForm {
     this._content,
     this._status,
   ) {
-    _id ??= Uuid().v8(
-      config: V8Options(DateTime.now(), null)
-    );
+    _id ??= Uuid().v8(config: V8Options(DateTime.now(), null));
   }
 
   Future<void> load() async {
@@ -64,30 +65,23 @@ class ServiceForm {
 
   void set(String fieldName, dynamic newValue) {
     if (!canEditForm) return;
-    _edited[fieldName] = newValue != _content[fieldName] && newValue != null && newValue.isNotEmpty;
+    if (newValue != _content[fieldName]) _edited = true;
     _content[fieldName] = newValue;
     _errors.remove(fieldName);
-    setAsDraft();
   }
 
-  void setAsDraft() {
-    if (!canEditForm) return;
-    _status = 0;
-  }
-
-  Future<void> save() async {
-    if (!canSaveForm) return;
+  Future<void> save({bool shouldSetAsFinished = false}) async {
+    if (shouldSetAsFinished && canFinishForm) {
+      _status = 1;
+    } else if (!canSaveForm) {
+      return;
+    }
     await Settings.instance.enqueueForm(this);
   }
 
   Future<void> delete() async {
     if (!canDeleteForm) return;
     await Settings.instance.deleteForm(this);
-  }
-
-  void setAsFinished() {
-    if (!canFinishForm) return;
-    _status = 1;
   }
 
   dynamic getDefaultValue(Map<String, dynamic> field) {
@@ -183,9 +177,12 @@ class ServiceForm {
 
   bool get canDeleteForm => status == 0 || Settings.instance.role >= 1;
 
-  bool get canEditForm => status == 0 || Settings.instance.role >= 1;
+  bool get canEditForm => status == 0;
 
-  bool get canSaveForm => canEditForm && edited;
+  bool get canSaveForm =>
+      canEditForm &&
+      edited &&
+      _content.values.any((c) => c?.isNotEmpty == true);
 
   bool get canFinishForm => canEditForm && errors.isEmpty;
 
@@ -227,5 +224,6 @@ class ServiceForm {
     }
   }
 
-  List<String> get tags => _content.values.whereType<String>().where((t) => t.isNotEmpty).toList();
+  List<String> get tags =>
+      _content.values.whereType<String>().where((t) => t.isNotEmpty).toList();
 }
