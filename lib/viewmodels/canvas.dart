@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 /// Modelo para un punto en el trazo.
@@ -388,7 +387,7 @@ class _CanvasPainter extends CustomPainter {
     // Sólo dibujamos los trazos nuevos escalados.
 
     final paint = Paint()
-      ..color = Colors.black
+      ..color = CupertinoColors.black
       ..strokeWidth = 2 * scale
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
