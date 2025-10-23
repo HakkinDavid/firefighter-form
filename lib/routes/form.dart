@@ -54,7 +54,6 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     final dynamic value = widget.form.content[field['name']];
     final List<dynamic>? options = field['options'] as List<dynamic>?;
     final Set<String> errors = widget.form.errors[field['name']] ?? <String>{};
-    final bool isRequired = errors.isNotEmpty;
 
     Widget fieldWidget;
 
@@ -121,7 +120,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                     );
                   },
                 ),
-                if (!isRequired && value != '')
+                if (value != '')
                   CupertinoButton(
                     padding: EdgeInsets.zero,
                     child: Icon(CupertinoIcons.clear, size: 20),
@@ -194,7 +193,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                     );
                   },
                 ),
-                if (!isRequired && value != '')
+                if (value != '')
                   CupertinoButton(
                     padding: EdgeInsets.zero,
                     child: Icon(CupertinoIcons.clear, size: 20),
@@ -344,7 +343,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                     ),
                   ),
                 ),
-                if (!isRequired && value != '')
+                if (value != '')
                   CupertinoButton(
                     padding: EdgeInsets.zero,
                     child: Icon(CupertinoIcons.clear, size: 20),
@@ -446,7 +445,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                   ),
                 ),
               ),
-              if (!isRequired && value != '')
+              if (value != '')
                 CupertinoButton(
                   padding: EdgeInsets.zero,
                   child: Icon(CupertinoIcons.clear, size: 20),
@@ -534,7 +533,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                 ),
               ),
             ),
-            if (!isRequired && value != '')
+            if (value != '')
               CupertinoButton(
                 padding: EdgeInsets.zero,
                 child: Icon(CupertinoIcons.clear, size: 20),
