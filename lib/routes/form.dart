@@ -558,7 +558,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
           SizedBox(height: 8),
-          ServiceCanvas(readOnly: !widget.form.canEditForm, controller: myCanvasController, defaultData: value),
+          ServiceCanvas(readOnly: !widget.form.canEditForm, controller: myCanvasController, defaultData: value, backgroundData: field['background']),
           if (widget.form.canEditForm)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
