@@ -1,5 +1,6 @@
 import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/settings.dart';
+import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
 import 'package:bomberos/routes/form.dart';
 import 'package:bomberos/routes/home.dart';
 import 'package:bomberos/routes/search.dart';
@@ -12,7 +13,8 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 Future<void> main() async {
   await Supabase.initialize(url: supabaseUrl, anonKey: supabaseKey);
-  await Settings.instance.loadFromDisk();
+  ServiceReliabilityEngineer.instance.initialize();
+  // Hasnt been moved to SRE yet
   await Settings.instance.updateTemplates();
   runApp(BomberosApp());
 }

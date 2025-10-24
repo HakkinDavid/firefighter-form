@@ -1,3 +1,4 @@
+import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
 import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/viewmodels/header.dart';
@@ -19,10 +20,8 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> _loadSavedForms() async {
-    try {
-      await Settings.instance.setForms();
-      setState(() {});
-    } catch (e) {}
+    ServiceReliabilityEngineer.instance.enqueueTasks({"SetForms"});
+    setState(() {});
   }
 
   void _createForm() async {
