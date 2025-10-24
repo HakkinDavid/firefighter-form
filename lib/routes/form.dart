@@ -14,6 +14,24 @@ class DynamicFormPage extends StatefulWidget {
 }
 
 class _DynamicFormPageState extends State<DynamicFormPage> {
+  IconData _sectionIcon(String section) {
+    switch (section) {
+      case 'Servicio':
+        return CupertinoIcons.plus_square;
+      case 'Paciente':
+        return CupertinoIcons.person;
+      case 'Primaria':
+        return CupertinoIcons.bag_badge_plus;
+      case 'Secundaria':
+        return CupertinoIcons.bag_badge_minus;
+      case 'Tratamiento':
+        return CupertinoIcons.bandage;
+      case 'Resultados':
+        return CupertinoIcons.recordingtape;
+      default:
+        return CupertinoIcons.square_list;
+    }
+  }
   String? loadError;
 
   bool _sectionHasErrors(String sectionKey) {
