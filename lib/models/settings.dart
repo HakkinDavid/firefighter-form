@@ -11,6 +11,7 @@ class ColorsSettings {
   final Color background = CupertinoColors.white;
   final Color primaryContrast = Color.fromRGBO(231, 210, 149, 1.0);
   final Color textOverPrimary = CupertinoColors.white;
+  final Color attentionBadge = CupertinoColors.activeOrange;
 }
 
 class Settings {

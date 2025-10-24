@@ -16,6 +16,19 @@ class DynamicFormPage extends StatefulWidget {
 class _DynamicFormPageState extends State<DynamicFormPage> {
   String? loadError;
 
+  bool _sectionHasErrors(String sectionKey) {
+    final sectionFields = widget.form.sections[sectionKey] as List<dynamic>;
+    for (final field in sectionFields) {
+      final name = field['name'];
+      if (name != null &&
+          widget.form.errors.containsKey(name) &&
+          widget.form.errors[name]!.isNotEmpty) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -804,7 +817,25 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
         items: [
           for (final section in widget.form.sectionKeys)
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.square_list),
+              icon: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Icon(_sectionIcon(section)),
+                  if (_sectionHasErrors(section))
+                    Positioned(
+                      right: -2,
+                      top: -2,
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          color: Settings.instance.colors.attentionBadge,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
               label: section,
             ),
         ],
