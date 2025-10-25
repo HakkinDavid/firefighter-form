@@ -88,17 +88,18 @@ class _FormListState extends State<FormList> {
                 // Action buttons
                 Row(
                   children: [
-                    // PDF button
-                    CupertinoButton(
-                      onPressed: () => widget.onPdfTap(form),
-                      padding: EdgeInsets.all(6),
-                      minimumSize: Size(0, 0),
-                      child: Icon(
-                        CupertinoIcons.doc,
-                        size: 20,
-                        color: Settings.instance.colors.primary,
+                    if (form.status >= 1)
+                      // PDF button
+                      CupertinoButton(
+                        onPressed: () => widget.onPdfTap(form),
+                        padding: EdgeInsets.all(6),
+                        minimumSize: Size(0, 0),
+                        child: Icon(
+                          CupertinoIcons.doc,
+                          size: 20,
+                          color: Settings.instance.colors.primary,
+                        ),
                       ),
-                    ),
                     if (form.canDeleteForm)
                       // Delete button
                       CupertinoButton(
