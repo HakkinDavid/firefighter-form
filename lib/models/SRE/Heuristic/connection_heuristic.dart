@@ -6,6 +6,7 @@ class ConnectionHeuristic extends Heuristic {
   Future<bool> testHeuristic() async {
     try {
       final result = await InternetAddress.lookup('gpmonaitogjvxrfznhef.supabase.co');
+      final result = await InternetAddress.lookup(DatabaseSettings.host);
       return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
     } on SocketException catch (_) {
       return false;

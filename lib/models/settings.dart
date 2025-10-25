@@ -14,8 +14,16 @@ class ColorsSettings {
   final Color attentionBadge = CupertinoColors.activeOrange;
 }
 
+class DatabaseSettings {
+  static final host = 'gpmonaitogjvxrfznhef.supabase.co';
+  static final url = 'https://${DatabaseSettings.host}';
+  static final anonKey =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwbW9uYWl0b2dqdnhyZnpuaGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3NjQxNTksImV4cCI6MjA3NDM0MDE1OX0.-udPuvfzbJ1SKdP-QcBt_NTlpU720P-hdBGm_n0kE7I";
+}
+
 class Settings {
   static final Settings instance = Settings._internal();
+  final ColorsSettings colors = ColorsSettings();
 
   Settings._internal();
 
@@ -23,19 +31,20 @@ class Settings {
     return instance;
   }
 
-  final ColorsSettings colors = ColorsSettings();
+  String? _userId;
+  int _role = 0;
 
-  String? userId;
-  int role = 0;
+  String get userId => _userId ?? '';
+  int get role => _role;
 
-  Map<String, FirefighterUser> userCache = {};
+  Map<String, FirefighterUser> _userCache = {};
   List<ServiceForm> _formsQueue = [];
   List<ServiceForm> _formsList = [];
 
-  bool get isLoggedIn => userId != null && userCache.containsKey(userId);
+  bool get isLoggedIn => _userId != null && _userCache.containsKey(_userId);
 
-  FirefighterUser? get self => userCache[userId];
-  FirefighterUser? get watcher => userCache[self?.watchedByUserId ?? ""];
+  FirefighterUser? get self => _userCache[_userId];
+  FirefighterUser? get watcher => _userCache[self?.watchedByUserId ?? ""];
 
   List<ServiceForm> get formsList =>
       _formsQueue +
@@ -46,7 +55,7 @@ class Settings {
   Future<void> setUser() async {
     setUserId();
     await getUser();
-    role = self!.role;
+    _role = self!.role;
     await saveToDisk();
   }
 
@@ -62,16 +71,16 @@ class Settings {
   }
 
   void setUserId() {
-    userId = Supabase.instance.client.auth.currentUser!.id;
+    _userId = Supabase.instance.client.auth.currentUser!.id;
   }
 
   FirefighterUser getUserOrFail({String? pUserId}) {
-    return userCache[pUserId]!;
+    return _userCache[pUserId]!;
   }
 
   Future<FirefighterUser> getUser({String? pUserId}) async {
-    pUserId ??= userId!;
-    if (userCache.containsKey(pUserId)) return userCache[pUserId]!;
+    pUserId ??= _userId!;
+    if (_userCache.containsKey(pUserId)) return _userCache[pUserId]!;
     final nameRecord = await Supabase.instance.client
         .from('user_name')
         .select('id, given, surname1, surname2')
@@ -111,7 +120,7 @@ class Settings {
       watchedByUserId: watchedByRecord?['watched_by'],
       watchesUsersId: watchesUsersId,
     );
-    userCache[pUserId] = user;
+    _userCache[pUserId] = user;
 
     // Watcher User logic
     if (watchedByRecord != null) {
@@ -132,7 +141,7 @@ class Settings {
           secondSurname: watcherNameRecord['surname2'],
           role: roleRecord['value'] + 1, // obviously wrong, check later
         );
-        userCache[watcherId] = watcherUser;
+        _userCache[watcherId] = watcherUser;
       }
     }
 
@@ -160,7 +169,7 @@ class Settings {
           role: underWatchRoleRecord['value'],
           watchedByUserId: pUserId,
         );
-        userCache[wId] = underWatchUser;
+        _userCache[wId] = underWatchUser;
       }
     }
     return user;
@@ -291,7 +300,9 @@ class Settings {
   }
 
   Future<void> syncForms() async {
-    final syncCandidates = List<ServiceForm>.from(_formsQueue.where((f) => f.status == 1));
+    final syncCandidates = List<ServiceForm>.from(
+      _formsQueue.where((f) => f.status == 1),
+    );
 
     for (var syncing in syncCandidates) {
       if (!(await uploadForm(syncing))) {
@@ -325,9 +336,9 @@ class Settings {
       );
 
       Map<String, dynamic> jsonMap = {
-        'userId': userId,
-        'role': role,
-        'userCache': userCache.map(
+        'userId': _userId,
+        'role': _role,
+        '_userCache': _userCache.map(
           (key, value) => MapEntry(key, value.toJson()),
         ),
         'formsQueue': _formsQueue.asMap().map(
@@ -350,18 +361,18 @@ class Settings {
         final jsonString = await file.readAsString();
         final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
 
-        userId = jsonMap['userId'];
-        role = jsonMap['role'] ?? 0;
+        _userId = jsonMap['userId'];
+        _role = jsonMap['role'] ?? 0;
 
         Map<String, dynamic> cacheMap = Map<String, dynamic>.from(
-          jsonMap['userCache'] ?? {},
+          jsonMap['_userCache'] ?? {},
         );
 
         Map<String, dynamic> queueMap = Map<String, dynamic>.from(
           jsonMap['formsQueue'] ?? {},
         );
 
-        userCache = cacheMap.map(
+        _userCache = cacheMap.map(
           (key, value) => MapEntry(key, FirefighterUser.fromJson(value)),
         );
         _formsQueue = queueMap
