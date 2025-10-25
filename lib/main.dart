@@ -25,7 +25,9 @@ class BomberosApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoApp(
       title: 'Servicios Digitales para Bomberos',
-      theme: CupertinoThemeData(primaryColor: Settings.instance.colors.primary),
+      theme: CupertinoThemeData(primaryColor: Settings.instance.colors.primary, primaryContrastingColor: Settings.instance.colors.primaryContrast, textTheme: CupertinoTextThemeData(
+        primaryColor: CupertinoColors.black, pickerTextStyle: TextStyle(color: CupertinoColors.white, fontSize: 24), dateTimePickerTextStyle: TextStyle(color: CupertinoColors.white, fontSize: 24),
+      ),),
       onGenerateRoute: (settings) {
         final arguments = settings.arguments as Map<String, dynamic>?;
         return CupertinoPageRoute(
