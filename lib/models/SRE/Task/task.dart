@@ -4,11 +4,13 @@ class Task {
   final Heuristic heuristic;
   final Future<void> Function() trueTask;
   final Future<void> Function()? fallbackTask;
+  final Set<String> dependsOn;
   bool ready = false;
   Task({
     required this.heuristic,
     required this.trueTask,
     this.fallbackTask,
+    this.dependsOn = const {},
   });
 
   void setReady(bool value) => ready = value;
