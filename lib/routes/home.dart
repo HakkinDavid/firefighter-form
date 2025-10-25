@@ -83,7 +83,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: null,
-      backgroundColor: Settings.instance.colors.primaryContrast,
+      backgroundColor: Settings.instance.colors.primary,
       child: SafeArea(
         child: Stack(
           children: [
