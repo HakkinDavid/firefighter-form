@@ -277,13 +277,7 @@ class Settings {
     try {
       await Supabase.instance.client.rpc(
         'upload_filled_in',
-        params: {
-          'p_id': form.id,
-          'p_template_id': form.templateId,
-          'p_status': form.status,
-          'p_content': form.content,
-          'p_filled_at': form.filledAt,
-        },
+        params: form.toJson(asUpload: true),
       );
     } catch (error) {
       if (!error.toString().contains('Postgrest')) {
@@ -313,11 +307,11 @@ class Settings {
   Future<void> deleteForm(ServiceForm form) async {
     try {
       if (form.status == 2) {
-        await Supabase.instance.client.rpc('delete_filled_in', params: {
-          'p_id': form.id
-        });
-      }
-      else {
+        await Supabase.instance.client.rpc(
+          'delete_filled_in',
+          params: {'p_id': form.id},
+        );
+      } else {
         await Settings.instance.dequeueForm(form.id);
       }
       await setForms();
