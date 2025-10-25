@@ -153,14 +153,14 @@ class ServiceForm {
     });
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({bool asUpload = false}) {
     return {
-      'id': id,
-      'template_id': templateId,
-      'filler': filler,
-      'status': status,
-      'content': content,
-      'filled_at': filledAt.toIso8601String(),
+      '${asUpload ? 'p_' : ''}id': id,
+      '${asUpload ? 'p_' : ''}template_id': templateId,
+      if (!asUpload) 'filler': filler,
+      '${asUpload ? 'p_' : ''}status': status,
+      '${asUpload ? 'p_' : ''}content': content,
+      '${asUpload ? 'p_' : ''}filled_at': filledAt.toIso8601String(),
     };
   }
 
@@ -224,6 +224,8 @@ class ServiceForm {
     }
   }
 
-  List<String> get tags =>
-      _content.values.whereType<String>().where((t) => t.isNotEmpty && !t.startsWith('data:image')).toList();
+  List<String> get tags => _content.values
+      .whereType<String>()
+      .where((t) => t.isNotEmpty && !t.startsWith('data:image'))
+      .toList();
 }
