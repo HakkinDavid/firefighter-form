@@ -15,8 +15,11 @@ class Header extends StatefulWidget {
 class _HeaderState extends State<Header> {
   final GlobalKey _buttonKey = GlobalKey();
 
-  void _goToSearch() {
-    Navigator.pushNamed(context, '/search');
+  void _goToSearch() async {
+    await Navigator.pushNamed(context, '/search');
+    setState(() {
+      
+    });
   }
   void _goBack() {
     Navigator.pop(context);
