@@ -291,7 +291,7 @@ class Settings {
   }
 
   Future<void> syncForms() async {
-    final syncCandidates = _formsQueue.where((f) => f.status == 1);
+    final syncCandidates = List<ServiceForm>.from(_formsQueue.where((f) => f.status == 1));
 
     for (var syncing in syncCandidates) {
       if (!(await uploadForm(syncing))) {
