@@ -50,8 +50,8 @@ class _HomeState extends State<Home> {
     setState(() {});
   }
 
-  void _onPdfTap(ServiceForm form) {
-    // Future PDF export implementation
+  void _onPdfTap(ServiceForm form) async {
+    await form.render();
   }
 
   void _onDeleteTap(ServiceForm form) {
