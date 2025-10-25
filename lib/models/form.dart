@@ -1,3 +1,4 @@
+import 'package:bomberos/models/pdf_renderer.dart';
 import 'package:bomberos/models/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/data.dart';
@@ -82,6 +83,11 @@ class ServiceForm {
   Future<void> delete() async {
     if (!canDeleteForm) return;
     await Settings.instance.deleteForm(this);
+  }
+
+  Future<void> render() async {
+    if (!_isLoaded) await load();
+    await ServicePDF.generate(formId: _id!, template: _template, formData: content, ignoreEmptyFields: true);
   }
 
   dynamic getDefaultValue(Map<String, dynamic> field) {
