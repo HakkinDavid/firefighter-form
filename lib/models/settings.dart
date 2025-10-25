@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
 import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/user.dart';
 import 'package:flutter/cupertino.dart';
@@ -278,6 +279,7 @@ class Settings {
       _formsQueue[index] = form;
     }
     await saveToDisk();
+    ServiceReliabilityEngineer.instance.enqueueTasks({"syncForms"});
   }
 
   Future<void> dequeueForm(String id) async {
