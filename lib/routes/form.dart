@@ -873,9 +873,9 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     return CupertinoTabScaffold(
       backgroundColor: Settings.instance.colors.background,
       tabBar: CupertinoTabBar(
-        inactiveColor: Settings.instance.colors.primary,
-        activeColor: Settings.instance.colors.primaryBright,
-        backgroundColor: Settings.instance.colors.primaryContrast,
+        inactiveColor: Settings.instance.colors.primaryContrastDark,
+        activeColor: Settings.instance.colors.primaryContrast,
+        backgroundColor: Settings.instance.colors.primary,
         items: [
           for (final section in widget.form.sectionKeys)
             BottomNavigationBarItem(
