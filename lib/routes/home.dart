@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
   void _createForm() async {
     int? latestTemplate = await Settings.instance.getNewestSavedTemplate();
     if (!mounted) return;
-    Navigator.pushReplacementNamed(
+    await Navigator.pushNamed(
       context,
       '/form',
       arguments: {
@@ -38,10 +38,16 @@ class _HomeState extends State<Home> {
         'status': 0,
       },
     );
+    setState(() {});
   }
 
-  void _onFormTap(ServiceForm form) {
-    Navigator.pushReplacementNamed(context, '/form', arguments: form.toJson());
+  void _onFormTap(ServiceForm form) async {
+    await Navigator.pushNamed(
+      context,
+      '/form',
+      arguments: form.toJson(),
+    );
+    setState(() {});
   }
 
   void _onPdfTap(ServiceForm form) {
