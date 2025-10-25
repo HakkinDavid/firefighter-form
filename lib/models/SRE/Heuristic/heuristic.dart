@@ -1,4 +1,4 @@
 abstract class Heuristic {
-  Future<bool> testHeuristic();
-  Future<bool> get value async => await testHeuristic();
+  Future<bool> execute();
+  Future<bool> get result async => await execute();
 }

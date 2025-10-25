@@ -5,7 +5,7 @@ class DiskHeuristic extends Heuristic {
   static DateTime lastWriteTimestamp = DateTime.utc(0);
 
   @override
-  Future<bool> testHeuristic() async {
+  Future<bool> execute() async {
     if (lastWriteTime < 1000) return true;
 
     Duration timeElapsed = DateTime.now().difference(lastWriteTimestamp);
