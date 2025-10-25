@@ -108,7 +108,8 @@ class ServiceCanvasController extends ChangeNotifier {
 
   /// Exporta el contenido combinado de trazos previos y nuevos como SVG en base64.
   /// Los trazos nuevos se agregan a los previos y se limpian.
-  Future<String> exportAsSvg() async {
+  Future<String?> exportAsSvg() async {
+    if (_currentStrokes.isEmpty && _previousStrokes.isEmpty) return null;
     // Construir paths SVG para los trazos nuevos
     String strokesToSvgPaths(List<Stroke> strokes) {
       final buffer = StringBuffer();
