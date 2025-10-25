@@ -853,14 +853,16 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
       );
     } else if (!widget.form.isLoaded) {
       return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: Text("Cargando formulario..."),
-          leading: CupertinoButton(
-            onPressed: _exitForm,
-            child: Icon(CupertinoIcons.clear, size: 28),
-          ),
+        child: CupertinoAlertDialog(
+          title: Text("Cargando..."),
+          content: Text("Esto está demorando demasiado..."),
+          actions: [
+            CupertinoDialogAction(
+              child: Text("Salir"),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
         ),
-        child: CupertinoActivityIndicator(),
       );
     }
     // Aplica restricciones en cada build
