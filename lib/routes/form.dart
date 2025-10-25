@@ -813,6 +813,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(height: 8),
         fieldWidget,
         if (errors.isNotEmpty)
           Padding(
@@ -832,6 +833,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                   .toList(),
             ),
           ),
+        SizedBox(height: 8),
       ],
     );
   }
