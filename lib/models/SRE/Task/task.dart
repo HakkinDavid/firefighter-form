@@ -2,8 +2,8 @@ import '../Heuristic/heuristic.dart';
 
 class Task {
   final Heuristic heuristic;
-  final void Function() trueTask;
-  final void Function()? fallbackTask;
+  final Future<void> Function() trueTask;
+  final Future<void> Function()? fallbackTask;
   bool ready = false;
   Task({
     required this.heuristic,
@@ -15,7 +15,7 @@ class Task {
 
   Future<void> runTask() async {
     if (await heuristic.value) {
-      await Future.value(trueTask);
+      await trueTask();
       ready = false;
     } else if (fallbackTask != null) {
       await Future.value(fallbackTask!);
