@@ -216,7 +216,8 @@ class ServicePDF {
                 field['background'].replaceAll(RegExp(r'data:image/svg\+xml;base64,'), ''),
               ),
             ) : "<svg></svg>",
-            width: 200
+            width: 200,
+            height: 200
           );
           pw.Widget imgWidget = pw.SvgImage(
             svg: value != null ? utf8.decode(
@@ -224,7 +225,8 @@ class ServicePDF {
                 value.replaceAll(RegExp(r'data:image/svg\+xml;base64,'), ''),
               ),
             ) : "<svg></svg>",
-            width: 200
+            width: 200,
+            height: 200
           );
           content.add(
             pw.Column(
