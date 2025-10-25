@@ -4,7 +4,7 @@ import 'package:bomberos/models/settings.dart';
 
 class ConnectionHeuristic extends Heuristic {
   @override
-  Future<bool> execute() async {
+  Future<bool> evaluate() async {
     try {
       final result = await InternetAddress.lookup(DatabaseSettings.host);
       return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
