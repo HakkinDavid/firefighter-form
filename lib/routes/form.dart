@@ -14,24 +14,35 @@ class DynamicFormPage extends StatefulWidget {
 }
 
 class _DynamicFormPageState extends State<DynamicFormPage> {
-  IconData _sectionIcon(String section) {
+  IconData _sectionIcon(String section, {bool active = false}) {
     switch (section) {
       case 'Servicio':
-        return CupertinoIcons.plus_square;
+        return active
+            ? CupertinoIcons.plus_square_fill
+            : CupertinoIcons.plus_square;
       case 'Paciente':
-        return CupertinoIcons.person;
+        return active ? CupertinoIcons.person_fill : CupertinoIcons.person;
       case 'Primaria':
-        return CupertinoIcons.bag_badge_plus;
+        return active
+            ? CupertinoIcons.bag_fill_badge_plus
+            : CupertinoIcons.bag_badge_plus;
       case 'Secundaria':
-        return CupertinoIcons.bag_badge_minus;
+        return active
+            ? CupertinoIcons.bag_fill_badge_minus
+            : CupertinoIcons.bag_badge_minus;
       case 'Tratamiento':
-        return CupertinoIcons.bandage;
+        return active ? CupertinoIcons.bandage_fill : CupertinoIcons.bandage;
       case 'Resultados':
-        return CupertinoIcons.recordingtape;
+        return active
+            ? CupertinoIcons.doc_chart_fill
+            : CupertinoIcons.doc_chart;
       default:
-        return CupertinoIcons.square_list;
+        return active
+            ? CupertinoIcons.square_list_fill
+            : CupertinoIcons.square_list;
     }
   }
+
   String? loadError;
 
   bool _sectionHasErrors(String sectionKey) {
@@ -45,6 +56,28 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
       }
     }
     return false;
+  }
+
+  Widget _sectionBarItemIcon(String section, {bool active = false}) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Icon(_sectionIcon(section, active: active)),
+        if (_sectionHasErrors(section))
+          Positioned(
+            right: -2,
+            top: -2,
+            child: Container(
+              width: 10,
+              height: 10,
+              decoration: BoxDecoration(
+                color: Settings.instance.colors.attentionBadge,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+      ],
+    );
   }
 
   @override
@@ -115,7 +148,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                       context: context,
                       builder: (_) => SafeArea(
                         child: Container(
-                          color: Settings.instance.colors.primaryContrast,
+                          color: Settings.instance.colors.primary,
                           height: 300,
                           child: Column(
                             children: [
@@ -192,7 +225,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                       context: context,
                       builder: (_) => SafeArea(
                         child: Container(
-                          color: Settings.instance.colors.primaryContrast,
+                          color: Settings.instance.colors.primary,
                           height: 300,
                           child: Column(
                             children: [
@@ -314,7 +347,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                         context: context,
                         builder: (_) => SafeArea(
                           child: Container(
-                            color: Settings.instance.colors.primaryContrast,
+                            color: Settings.instance.colors.primary,
                             height: 250,
                             child: Column(
                               children: [
@@ -421,7 +454,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                       context: context,
                       builder: (_) => SafeArea(
                         child: Container(
-                          color: Settings.instance.colors.primaryContrast,
+                          color: Settings.instance.colors.primary,
                           height: 250,
                           child: Column(
                             children: [
@@ -589,7 +622,12 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
           SizedBox(height: 8),
-          ServiceCanvas(readOnly: !widget.form.canEditForm, controller: myCanvasController, defaultData: value, backgroundData: field['background']),
+          ServiceCanvas(
+            readOnly: !widget.form.canEditForm,
+            controller: myCanvasController,
+            defaultData: value,
+            backgroundData: field['background'],
+          ),
           if (widget.form.canEditForm)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -680,10 +718,8 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                       context: context,
                                       builder: (_) => SafeArea(
                                         child: Container(
-                                          color: Settings
-                                              .instance
-                                              .colors
-                                              .primaryContrast,
+                                          color:
+                                              Settings.instance.colors.primary,
                                           height: 300,
                                           child: Column(
                                             children: [
@@ -831,28 +867,21 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     widget.form.handleFieldRestrictions();
 
     return CupertinoTabScaffold(
+      backgroundColor: Settings.instance.colors.background,
       tabBar: CupertinoTabBar(
+        inactiveColor: Settings.instance.colors.primary,
+        activeColor: Settings.instance.colors.primaryBright,
+        backgroundColor: Settings.instance.colors.primaryContrast,
         items: [
           for (final section in widget.form.sectionKeys)
             BottomNavigationBarItem(
-              icon: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Icon(_sectionIcon(section)),
-                  if (_sectionHasErrors(section))
-                    Positioned(
-                      right: -2,
-                      top: -2,
-                      child: Container(
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                          color: Settings.instance.colors.attentionBadge,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                ],
+              icon: Padding(
+                padding: EdgeInsetsGeometry.only(top: 6),
+                child: _sectionBarItemIcon(section),
+              ),
+              activeIcon: Padding(
+                padding: EdgeInsetsGeometry.only(top: 6),
+                child: _sectionBarItemIcon(section, active: true),
               ),
               label: section,
             ),
@@ -863,46 +892,70 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
         final fields = widget.form.sections[currentSection] as List<dynamic>;
         return CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
-            padding: EdgeInsetsDirectional.symmetric(),
+            backgroundColor: Settings.instance.colors.primary,
+            automaticBackgroundVisibility: false,
+            padding: EdgeInsetsDirectional.only(bottom: 6),
             middle: Column(
               children: [
-                Text("FRAP", style: TextStyle(fontSize: 24)),
+                Text(
+                  "FRAP",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Settings.instance.colors.textOverPrimary,
+                  ),
+                ),
                 Text(
                   widget.form.id.substring(14),
-                  style: TextStyle(fontSize: 12),
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Settings.instance.colors.textOverPrimary,
+                  ),
                 ),
               ],
             ),
             leading: CupertinoButton(
-              alignment: AlignmentGeometry.centerLeft,
+              padding: EdgeInsets.only(bottom: 6),
+              alignment: AlignmentGeometry.centerRight,
               onPressed: widget.form.canSaveForm ? _saveForm : _exitForm,
               child: Icon(
                 widget.form.canSaveForm
                     ? CupertinoIcons.back
                     : CupertinoIcons.clear,
                 size: 28,
+                color: Settings.instance.colors.primaryContrast,
               ),
             ),
             trailing: widget.form.canFinishForm
                 ? CupertinoButton(
+                    padding: EdgeInsets.only(bottom: 6),
+                    alignment: AlignmentGeometry.centerLeft,
                     onPressed: _finishForm,
-                    child: Icon(CupertinoIcons.cloud_upload, size: 28),
+                    child: Icon(
+                      CupertinoIcons.cloud_upload,
+                      size: 28,
+                      color: Settings.instance.colors.primaryContrast,
+                    ),
                   )
-                : (!widget.form.canEditForm &&
-                      Settings.instance.role >= 1
-                ? CupertinoButton(
-                    onPressed: () => {
-                      setState(() {
-                        widget.form.editOverride = true;
-                      })
-                    },
-                    child: Icon(CupertinoIcons.pencil, size: 28),
-                  )
-                : null),
+                : (!widget.form.canEditForm && Settings.instance.role >= 1
+                      ? CupertinoButton(
+                          padding: EdgeInsets.only(bottom: 6),
+                          alignment: AlignmentGeometry.centerLeft,
+                          onPressed: () => {
+                            setState(() {
+                              widget.form.editOverride = true;
+                            }),
+                          },
+                          child: Icon(
+                            CupertinoIcons.pencil,
+                            size: 28,
+                            color: Settings.instance.colors.primaryContrast,
+                          ),
+                        )
+                      : null),
           ),
           child: SafeArea(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: ListView.builder(
                 itemCount: fields.length,
                 itemBuilder: (context, idx) {
