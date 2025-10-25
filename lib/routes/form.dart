@@ -112,11 +112,32 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     }
   }
 
+  List<dynamic>? formatOptions(
+    List<dynamic>? originalOptions, {
+    bool allowOwnOptions = false,
+  }) {
+    if (originalOptions == null) return null;
+    final options = List<dynamic>.from(originalOptions);
+    for (int i = 0; i < options.length; i++) {
+      if (options[i] is String) {
+        options[i] = (options[i] as String).replaceAll(
+          '{filler}',
+          Settings.instance.getUserOrFail(pUserId: widget.form.filler).fullName,
+        );
+      }
+    }
+    if (allowOwnOptions) options.add("Otro");
+    return options;
+  }
+
   Widget buildField(Map<String, dynamic> field) {
     final String type = field['type'];
     final String label = field['label'] ?? '';
     final dynamic value = widget.form.content[field['name']];
-    final List<dynamic>? options = field['options'] as List<dynamic>?;
+    final List<dynamic>? options = formatOptions(
+      field['options'] as List<dynamic>?,
+      allowOwnOptions: field['allowOwnOptions'] == true,
+    );
     final Set<String> errors = widget.form.errors[field['name']] ?? <String>{};
 
     Widget fieldWidget;
@@ -164,7 +185,15 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                 ),
                               ),
                               CupertinoButton(
-                                child: Text('Confirmar'),
+                                child: Text(
+                                  'Confirmar',
+                                  style: TextStyle(
+                                    color: Settings
+                                        .instance
+                                        .colors
+                                        .primaryContrast,
+                                  ),
+                                ),
                                 onPressed: () {
                                   setState(() {
                                     widget.form.set(
@@ -239,7 +268,15 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                 ),
                               ),
                               CupertinoButton(
-                                child: Text('Confirmar'),
+                                child: Text(
+                                  'Confirmar',
+                                  style: TextStyle(
+                                    color: Settings
+                                        .instance
+                                        .colors
+                                        .primaryContrast,
+                                  ),
+                                ),
                                 onPressed: () {
                                   setState(() {
                                     widget.form.set(
@@ -367,14 +404,56 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                   ),
                                 ),
                                 CupertinoButton(
-                                  child: Text('Confirmar'),
-                                  onPressed: () {
-                                    setState(() {
-                                      widget.form.set(
-                                        field['name'],
-                                        options[pickedIndex],
+                                  child: Text(
+                                    'Confirmar',
+                                    style: TextStyle(
+                                      color: Settings
+                                          .instance
+                                          .colors
+                                          .primaryContrast,
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    if (options[pickedIndex] == "Otro") {
+                                      await showCupertinoDialog(
+                                        context: context,
+                                        builder: (context) =>
+                                            CupertinoAlertDialog(
+                                              title: Text(label),
+                                              content: CupertinoTextField(
+                                                placeholder: "Otra opción",
+                                                controller:
+                                                    TextEditingController(),
+                                                onChanged: (otherValue) {
+                                                  setState(() {
+                                                    widget.form.set(
+                                                      field['name'],
+                                                      otherValue.isNotEmpty
+                                                          ? otherValue
+                                                          : null,
+                                                    );
+                                                  });
+                                                },
+                                              ),
+                                              actions: [
+                                                CupertinoDialogAction(
+                                                  child: Text("Aceptar"),
+                                                  onPressed: () => Navigator.of(
+                                                    context,
+                                                  ).pop(),
+                                                ),
+                                              ],
+                                            ),
                                       );
-                                    });
+                                    } else {
+                                      setState(() {
+                                        widget.form.set(
+                                          field['name'],
+                                          options[pickedIndex],
+                                        );
+                                      });
+                                    }
+                                    if (!mounted) return;
                                     Navigator.of(context).pop();
                                   },
                                 ),
@@ -449,7 +528,8 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
               Expanded(
                 child: GestureDetector(
                   onTap: () async {
-                    int selected = options?.indexOf(value) ?? 0;
+                    int selected = options!.indexOf(value);
+                    int pickedIndex = selected;
                     await showCupertinoModalPopup(
                       context: context,
                       builder: (_) => SafeArea(
@@ -465,21 +545,63 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                     initialItem: selected,
                                   ),
                                   onSelectedItemChanged: (i) {
-                                    setState(() {
-                                      widget.form.set(
-                                        field['name'],
-                                        options[i],
-                                      );
-                                    });
+                                    pickedIndex = i;
                                   },
-                                  children: options!
+                                  children: options
                                       .map((o) => Text(o.toString()))
                                       .toList(),
                                 ),
                               ),
                               CupertinoButton(
-                                child: Text('Confirmar'),
-                                onPressed: () {
+                                child: Text(
+                                  'Confirmar',
+                                  style: TextStyle(
+                                    color: Settings
+                                        .instance
+                                        .colors
+                                        .primaryContrast,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  if (options[pickedIndex] == "Otro") {
+                                    await showCupertinoDialog(
+                                      context: context,
+                                      builder: (context) =>
+                                          CupertinoAlertDialog(
+                                            title: Text(label),
+                                            content: CupertinoTextField(
+                                              placeholder: "Otra opción",
+                                              controller:
+                                                  TextEditingController(),
+                                              onChanged: (otherValue) {
+                                                setState(() {
+                                                  widget.form.set(
+                                                    field['name'],
+                                                    otherValue.isNotEmpty
+                                                        ? otherValue
+                                                        : null,
+                                                  );
+                                                });
+                                              },
+                                            ),
+                                            actions: [
+                                              CupertinoDialogAction(
+                                                child: Text("Aceptar"),
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
+                                              ),
+                                            ],
+                                          ),
+                                    );
+                                  } else {
+                                    setState(() {
+                                      widget.form.set(
+                                        field['name'],
+                                        options[pickedIndex],
+                                      );
+                                    });
+                                  }
+                                  if (!mounted) return;
                                   Navigator.of(context).pop();
                                 },
                               ),
@@ -737,7 +859,15 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                                 ),
                                               ),
                                               CupertinoButton(
-                                                child: Text('Confirmar'),
+                                                child: Text(
+                                                  'Confirmar',
+                                                  style: TextStyle(
+                                                    color: Settings
+                                                        .instance
+                                                        .colors
+                                                        .primaryContrast,
+                                                  ),
+                                                ),
                                                 onPressed: () {
                                                   setState(() {
                                                     tupleList[i][subfield['name']] =
