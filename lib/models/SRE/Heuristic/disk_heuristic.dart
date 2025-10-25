@@ -1,4 +1,4 @@
-import 'heuristic.dart';
+import 'package:bomberos/models/SRE/Heuristic/heuristic.dart';
 
 class DiskHeuristic extends Heuristic {
   static int lastWriteTime = 0;

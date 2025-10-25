@@ -1,4 +1,4 @@
-import '../Heuristic/heuristic.dart';
+import 'package:bomberos/models/SRE/Heuristic/heuristic.dart';
 
 class Task {
   final Heuristic heuristic;

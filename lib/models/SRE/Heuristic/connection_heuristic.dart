@@ -1,5 +1,6 @@
 import 'dart:io';
-import 'heuristic.dart';
+import 'package:bomberos/models/SRE/Heuristic/heuristic.dart';
+import 'package:bomberos/models/settings.dart';
 
 class ConnectionHeuristic extends Heuristic {
   @override
