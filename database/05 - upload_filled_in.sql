@@ -1,6 +1,6 @@
 create or replace function upload_filled_in (
   p_id uuid,
-  p_template_id uuid,
+  p_template_id int,
   p_status smallint,
   p_content jsonb,
   p_filled_at timestamp
