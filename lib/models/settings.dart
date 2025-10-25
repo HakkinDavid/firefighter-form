@@ -8,10 +8,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ColorsSettings {
   final Color primary = Color.fromRGBO(98, 19, 51, 1.0);
+  final Color primaryBright = Color.fromRGBO(156, 35, 72, 1.0);
   final Color background = CupertinoColors.white;
   final Color primaryContrast = Color.fromRGBO(231, 210, 149, 1.0);
   final Color textOverPrimary = CupertinoColors.white;
   final Color attentionBadge = CupertinoColors.activeOrange;
+  final Color disabled = Color.fromRGBO(152, 152, 154, 1.0);
 }
 
 class DatabaseSettings {
