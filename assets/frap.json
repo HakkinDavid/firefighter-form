@@ -41,7 +41,8 @@
                     "Estación 16",
                     "Estación 17",
                     "Estación 18"
-                ]
+                ],
+                "allowOwnOptions": true
             },
             {
                 "name": "campounidad",
@@ -53,7 +54,8 @@
                     "Ambulancia 2",
                     "Ambulancia 3",
                     "Ambulancia 4"
-                ]
+                ],
+                "allowOwnOptions": true
             },
             {
                 "name": "date",
@@ -145,7 +147,17 @@
                 "name": "municipio",
                 "label": "Municipio",
                 "type": "input",
-                "inputType": "text"
+                "inputType": "text",
+                "options": [
+                    "Tijuana",
+                    "Tecate",
+                    "Rosarito",
+                    "Ensenada",
+                    "San Quintín",
+                    "Mexicali",
+                    "San Felipe"
+                ],
+                "allowOwnOptions": true
             },
             {
                 "name": "estado",
@@ -277,7 +289,17 @@
                 "name": "municipiopaciente",
                 "label": "Municipio",
                 "type": "input",
-                "inputType": "text"
+                "inputType": "text",
+                "options": [
+                    "Tijuana",
+                    "Tecate",
+                    "Rosarito",
+                    "Ensenada",
+                    "San Quintín",
+                    "Mexicali",
+                    "San Felipe"
+                ],
+                "allowOwnOptions": true
             },
             {
                 "name": "estadopaciente",
@@ -1712,7 +1734,10 @@
                 "name": "filler",
                 "label": "Nombre del responsable de la atención",
                 "type": "input",
-                "inputType": "text"
+                "inputType": "text",
+                "options": [
+                    "{filler}"
+                ]
             },
             {
                 "name": "firmaBomberoAtencion",
