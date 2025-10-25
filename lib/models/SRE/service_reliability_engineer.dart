@@ -33,7 +33,7 @@ class ServiceReliabilityEngineer {
       dependsOn: {"LoadFromDisk"},
     );
 
-    enqueueTasks({"LoadFromDisk", "SetForms", "SyncForms"});
+    enqueueTasks({"LoadFromDisk"});
   }
 
   void enqueueTasks(Iterable<String> requestedTasks) {
@@ -55,9 +55,9 @@ class ServiceReliabilityEngineer {
           (dependency) => !_tasksRepository[dependency]!.pending,
         )) {
           await processedTask.runTask();
-        }
-        if (!processedTask.pending) {
-          _tasksQueue.removeWhere((t) => t == taskId);
+          if (!processedTask.pending) {
+            _tasksQueue.removeWhere((t) => t == taskId);
+          }
         }
       }
       await Future.delayed(Duration.zero);
@@ -67,20 +67,10 @@ class ServiceReliabilityEngineer {
 
   // final ConnectionHeuristic _connectionHeuristic = ConnectionHeuristic();
 
-  // late Timer timer = Timer.periodic(
-  //   const Duration(seconds: 30),
-  //   (t) async => await testConnectionHeuristic(),
-  // );
-  //
-  // Future<void> testConnectionHeuristic() async {
-  //   if (await _connectionHeuristic.value) {
-  //     for (var taskName in _connectionTasks) {
-  //       if (_tasksRepository[taskName]!.pending) {
-  //         await _tasksRepository[taskName]!.runTask();
-  //       }
-  //     }
-  //   }
-  // }
+  late Timer timer = Timer.periodic(
+    const Duration(seconds: 5),
+    (t) => _processQueue(),
+  );
 
   // Temporary function while all disk logic is being moved from Settings to here
   Future<void> Function() timeDiskTask(Future<void> Function() func) {
