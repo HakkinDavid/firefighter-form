@@ -14,54 +14,55 @@ class ServiceReliabilityEngineer {
     return instance;
   }
 
-  final Map<String, Task> tasks = {};
+  final Map<String, Task> _tasksRepository = {};
   final List<String> _tasksQueue = [];
-  bool _isWorking = false;
+  bool _busy = false;
 
   void initialize() {
-    tasks["LoadFromDisk"] = Task(
+    _tasksRepository["LoadFromDisk"] = Task(
       heuristic: DiskHeuristic(),
-      trueTask: timeDiskTask(Settings.instance.loadFromDisk),
+      duty: timeDiskTask(Settings.instance.loadFromDisk),
     );
-    tasks["SetForms"] = Task(
+    _tasksRepository["SetForms"] = Task(
       heuristic: ConnectionHeuristic(),
-      trueTask: Settings.instance.setForms,
+      duty: Settings.instance.setForms,
     );
-    tasks["SyncForms"] = Task(
+    _tasksRepository["SyncForms"] = Task(
       heuristic: ConnectionHeuristic(),
-      trueTask: Settings.instance.syncForms,
+      duty: Settings.instance.syncForms,
       dependsOn: {"LoadFromDisk"},
     );
 
     enqueueTasks({"LoadFromDisk", "SetForms", "SyncForms"});
   }
 
-  void enqueueTasks(Iterable<String> newTasks) {
-    for (String task in newTasks) {
-      if (tasks.containsKey(task)) {
-        tasks[task]!.setReady(true);
-        _tasksQueue.add(task);
-      }
+  void enqueueTasks(Iterable<String> requestedTasks) {
+    for (String requested in requestedTasks) {
+      _tasksRepository[requested]?.setAsPending();
+      _tasksQueue.add(requested);
     }
 
     _processQueue();
   }
 
   void _processQueue() async {
-    if (_isWorking || _tasksQueue.isEmpty) return;
+    if (_busy || _tasksQueue.isEmpty) return;
 
-    _isWorking = true;
-    tasks.forEach((key, value) async {
-      if (_tasksQueue.contains(key)) {
-        if (value.dependsOn.every((dependency) => !tasks[dependency]!.ready))
-          await value.runTask();
-        if (!value.ready) {
-          _tasksQueue.removeWhere((t) => t == key);
+    _busy = true;
+    _tasksRepository.forEach((taskId, processedTask) async {
+      if (_tasksQueue.contains(taskId)) {
+        if (processedTask.dependsOn.every(
+          (dependency) => !_tasksRepository[dependency]!.pending,
+        )) {
+          await processedTask.runTask();
+        }
+        if (!processedTask.pending) {
+          _tasksQueue.removeWhere((t) => t == taskId);
         }
       }
       await Future.delayed(Duration.zero);
     });
-    _isWorking = false;
+    _busy = false;
   }
 
   // final ConnectionHeuristic _connectionHeuristic = ConnectionHeuristic();
@@ -74,8 +75,8 @@ class ServiceReliabilityEngineer {
   // Future<void> testConnectionHeuristic() async {
   //   if (await _connectionHeuristic.value) {
   //     for (var taskName in _connectionTasks) {
-  //       if (tasks[taskName]!.ready) {
-  //         await tasks[taskName]!.runTask();
+  //       if (_tasksRepository[taskName]!.pending) {
+  //         await _tasksRepository[taskName]!.runTask();
   //       }
   //     }
   //   }
