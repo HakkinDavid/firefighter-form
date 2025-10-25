@@ -87,7 +87,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
   }
 
   void _exitForm() {
-    Navigator.pushReplacementNamed(context, '/home');
+    Navigator.pop(context);
   }
 
   Future<void> _saveForm({bool shouldSetAsFinished = false}) async {
