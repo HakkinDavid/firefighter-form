@@ -25,7 +25,7 @@ class ServiceReliabilityEngineer {
   void initialize() {
     _tasksRepository["LoadFromDisk"] = Task(
       heuristic: DiskHeuristic(),
-      duty: timeDiskTask(Settings.instance.loadFromDisk),
+      duty: loadFromDisk,
     );
     _tasksRepository["SetForms"] = Task(
       heuristic: ConnectionHeuristic(),
@@ -75,18 +75,6 @@ class ServiceReliabilityEngineer {
     const Duration(seconds: 5),
     (t) => _processQueue(),
   );
-
-  // Temporary function while all disk logic is being moved from Settings to here
-  Future<void> Function() timeDiskTask(Future<void> Function() func) {
-    return () async {
-      DateTime start = DateTime.now();
-      await func();
-      DiskHeuristic.lastWriteTime = DateTime.now()
-          .difference(start)
-          .inMilliseconds;
-      DiskHeuristic.lastWriteTimestamp = DateTime.now();
-    };
-  }
 
   // === DISK FUNCTIONS ===
   Future<void> loadFromDisk() async {
