@@ -261,6 +261,10 @@ class Settings {
     return '${(await getApplicationDocumentsDirectory()).path}/frap';
   }
 
+  Future<String> getSettingsDirectoryRoute() async {
+    return '${(await getApplicationDocumentsDirectory()).path}/settings';
+  }
+
   Future<void> updateTemplates() async {
     try {
       await fetchTemplate();
