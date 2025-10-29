@@ -1,5 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:bomberos/models/settings.dart';
+import 'package:bomberos/models/user.dart';
+import 'package:bomberos/models/form.dart';
 import 'Heuristic/connection_heuristic.dart';
 import 'Heuristic/disk_heuristic.dart';
 import 'Task/task.dart';
@@ -82,5 +86,62 @@ class ServiceReliabilityEngineer {
           .inMilliseconds;
       DiskHeuristic.lastWriteTimestamp = DateTime.now();
     };
+  }
+
+  // === DISK FUNCTIONS ===
+  Future<void> loadFromDisk() async {
+    try {
+      final directory = Directory(await Settings.instance.getSettingsDirectoryRoute());
+
+      if (await directory.exists()) {
+        DateTime start = DateTime.now();
+
+        final userDataFile = File('${directory.path}/user_data.json');
+
+        if (await userDataFile.exists()) {
+          final userDataString = await userDataFile.readAsString();
+          final Map<String, dynamic> userDataMap = jsonDecode(userDataString);
+
+          Settings.instance.userId = userDataMap['userId'];
+          Settings.instance.role = userDataMap['role'] ?? 0;
+        }
+
+        final userCacheFile = File('${directory.path}/user_cache.json');
+
+        if (await userCacheFile.exists()) {
+          final userCacheString = await userCacheFile.readAsString();
+          final Map<String, dynamic> userCacheMap = jsonDecode(userCacheString);
+
+          Settings.instance.userCache = userCacheMap.map(
+                (key, value) => MapEntry(key, FirefighterUser.fromJson(value)),
+          );
+        }
+
+        // What should the subdirectory be called?
+        final formsQueueDirectory = Directory('${directory.path}/forms');
+
+        if (await formsQueueDirectory.exists()) {
+          List<ServiceForm> formsQueue = [];
+
+          await for (var queuedForm in formsQueueDirectory.list()) {
+            File formFile = File(queuedForm.path);
+            String formString = await formFile.readAsString();
+
+            ServiceForm form = ServiceForm.fromJson(jsonDecode(formString));
+            formsQueue.add(form);
+          }
+
+          Settings.instance.formsQueue = formsQueue;
+        }
+
+        // Gather metrics for DiskHeuristic
+        DiskHeuristic.lastWriteTime = DateTime.now()
+            .difference(start)
+            .inMilliseconds;
+        DiskHeuristic.lastWriteTimestamp = DateTime.now();
+      }
+    } catch (e) {
+      //
+    }
   }
 }
