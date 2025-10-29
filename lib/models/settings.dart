@@ -40,10 +40,29 @@ class Settings {
 
   String get userId => _userId ?? '';
   int get role => _role;
+  set userId(String userId) {
+    // Maybe check with regex that the id format is correct
+    _userId = userId;
+  }
+  set role(int role) {
+    _role = (role >= 0 && role <= 2)
+        ? role
+        : 0;
+  }
 
   Map<String, FirefighterUser> _userCache = {};
   List<ServiceForm> _formsQueue = [];
   List<ServiceForm> _formsList = [];
+
+  Map<String, FirefighterUser> get userCache => _userCache;
+  List<ServiceForm> get formsQueue => _formsQueue;
+  // Direct setters for now
+  set userCache(Map<String, FirefighterUser> userCache) {
+    _userCache = userCache;
+  }
+  set formsQueue(List<ServiceForm> formsQueue) {
+    _formsQueue = formsQueue;
+  }
 
   bool get isLoggedIn => _userId != null && _userCache.containsKey(_userId);
 
