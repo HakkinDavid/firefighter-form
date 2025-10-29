@@ -111,9 +111,8 @@ class ServiceReliabilityEngineer {
         if (await formsQueueDirectory.exists()) {
           List<ServiceForm> formsQueue = [];
 
-          await for (var queuedForm in formsQueueDirectory.list()) {
-            File formFile = File(queuedForm.path);
-            String formString = await formFile.readAsString();
+          await for (var queued in formsQueueDirectory.list()) {
+            String formString = await File(queued.path).readAsString();
 
             ServiceForm form = ServiceForm.fromJson(jsonDecode(formString));
             formsQueue.add(form);
