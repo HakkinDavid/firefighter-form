@@ -132,4 +132,55 @@ class ServiceReliabilityEngineer {
       //
     }
   }
+
+  Future<void> saveUserDataToDisk() async {
+    try {
+      DateTime start = DateTime.now();
+
+      final file = File(
+        '${await Settings.instance.getSettingsDirectoryRoute()}/user_data.json'
+      );
+
+      Map<String, dynamic> jsonMap = {
+        'userId': Settings.instance.userId,
+        'role': Settings.instance.role,
+      };
+
+      final jsonString = jsonEncode(jsonMap);
+      await file.writeAsString(jsonString);
+
+      // Gather metrics for DiskHeuristic
+      DiskHeuristic.lastWriteTime = DateTime.now()
+          .difference(start)
+          .inMilliseconds;
+      DiskHeuristic.lastWriteTimestamp = DateTime.now();
+    } catch (e) {
+      //
+    }
+  }
+
+  Future<void> saveUserCacheToDisk() async {
+    try {
+      DateTime start = DateTime.now();
+
+      final file = File(
+          '${await Settings.instance.getSettingsDirectoryRoute()}/user_cache.json'
+      );
+
+      Map<String, dynamic> jsonMap = Settings.instance.userCache.map(
+          (key, value) => MapEntry(key, value.toJson()),
+      );
+
+      final jsonString = jsonEncode(jsonMap);
+      await file.writeAsString(jsonString);
+
+      // Gather metrics for DiskHeuristic
+      DiskHeuristic.lastWriteTime = DateTime.now()
+          .difference(start)
+          .inMilliseconds;
+      DiskHeuristic.lastWriteTimestamp = DateTime.now();
+    } catch (e) {
+      //
+    }
+  }
 }

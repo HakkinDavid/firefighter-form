@@ -339,10 +339,6 @@ class Settings {
     }
 
     ServiceReliabilityEngineer.instance.enqueueTasks({"SetForms"});
-
-    // try {
-    //   await setForms();
-    // } catch (error) { }
   }
 
   Future<void> deleteForm(ServiceForm form) async {
