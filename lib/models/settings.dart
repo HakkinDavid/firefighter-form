@@ -51,6 +51,46 @@ class Settings {
         : 0;
   }
 
+  Map<String, dynamic> Function() mapAccessor(String accessed) {
+    switch(accessed) {
+      case 'userData': {
+        return () {
+          Map<String, dynamic> map = {
+            'userId': _userId,
+            'role': _role,
+          };
+          return map;
+        };
+      }
+      case 'userCache': {
+        return () {
+          Map<String, dynamic> map = {
+            '_userCache': _userCache.map(
+                  (key, value) => MapEntry(key, value.toJson()),
+            ),
+          };
+          return map;
+        };
+      }
+      case 'formsQueue': {
+        return () {
+          Map<String, dynamic> map = {
+            'formsQueue': _formsQueue.asMap().map(
+                  (key, value) => MapEntry('$key', value.toJson()),
+            ),
+          };
+          return map;
+        };
+      }
+      default: {
+        return () {
+          Map<String, dynamic> map = {};
+          return map;
+        };
+      }
+    }
+  }
+
   Map<String, FirefighterUser> _userCache = {};
   List<ServiceForm> _formsQueue = [];
   List<ServiceForm> _formsList = [];
