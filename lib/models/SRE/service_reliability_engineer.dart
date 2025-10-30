@@ -20,6 +20,7 @@ class ServiceReliabilityEngineer {
 
   final Map<String, Task> _tasksRepository = {};
   final List<String> _tasksQueue = [];
+  final List<(String, Map<String, dynamic> Function())> _writeQueue = [];
   bool _busy = false;
 
   void initialize() {
@@ -69,7 +70,10 @@ class ServiceReliabilityEngineer {
     _busy = false;
   }
 
-  // final ConnectionHeuristic _connectionHeuristic = ConnectionHeuristic();
+  void enqueueWriteTask(String path, Map<String, dynamic> Function() accessor) {
+    _writeQueue.add((path, accessor));
+    enqueueTasks({"SaveToDisk"});
+  }
 
   late Timer timer = Timer.periodic(
     const Duration(seconds: 5),
