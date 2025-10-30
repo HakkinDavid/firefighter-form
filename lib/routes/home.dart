@@ -59,52 +59,53 @@ class _HomeState extends State<Home> {
                   child: Container(
                     // ← ADD THIS CONTAINER
                     color: Settings.instance.colors.background,
-                    child: Column(
-                      children: [
-                        // Header for the list - NOW ONLY IN HOME
-                        Container(
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Settings.instance.colors.primaryContrast,
-                            border: Border(
-                              bottom: BorderSide(
-                                color: CupertinoColors.separator,
-                                width: 0.5,
+                    child: StreamBuilder<List<ServiceForm>>(
+                      stream: Settings.instance.formsListStream,
+                      initialData: Settings.instance.formsList,
+                      builder: (context, snapshot) {
+                        final forms = snapshot.data ?? [];
+                        return Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Settings.instance.colors.primaryContrast,
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: CupertinoColors.separator,
+                                    width: 0.5,
+                                  ),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Formularios Recientes',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: Settings.instance.colors.primary,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${forms.length} elementos',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: CupertinoColors.secondaryLabel,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Formularios Recientes',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  color: Settings.instance.colors.primary,
-                                ),
+                            Expanded(
+                              child: FormList(
+                                formsList: forms
                               ),
-                              Text(
-                                '${Settings.instance.formsList.length} elementos',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: CupertinoColors.secondaryLabel,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // Forms list component
-                        Expanded(
-                          // ← NESTED EXPANDED FOR THE FORM LIST
-                          child: FormList(
-                            formsList: Settings.instance.formsList,
-                            onFormTap: _onFormTap,
-                            onPdfTap: _onPdfTap,
-                            onDeleteTap: _onDeleteTap,
-                          ),
-                        ),
-                      ],
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ),
