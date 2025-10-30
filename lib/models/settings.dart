@@ -51,6 +51,37 @@ class Settings {
         : 0;
   }
 
+  Map<String, FirefighterUser> _userCache = {};
+  List<ServiceForm> _formsQueue = [];
+  List<ServiceForm> _formsList = [];
+
+  final StreamController<List<ServiceForm>> _formsStreamController = StreamController<List<ServiceForm>>.broadcast();
+  Stream<List<ServiceForm>> get formsListStream => _formsStreamController.stream;
+
+  Map<String, FirefighterUser> get userCache => _userCache;
+  List<ServiceForm> get formsQueue => _formsQueue;
+  // Direct setters for now
+  set userCache(Map<String, FirefighterUser> userCache) {
+    _userCache = userCache;
+  }
+  set formsQueue(List<ServiceForm> formsQueue) {
+    _formsQueue = formsQueue;
+  }
+
+  bool get isLoggedIn => _userId != null && _userCache.containsKey(_userId);
+
+  FirefighterUser? get self => _userCache[_userId];
+  FirefighterUser? get watcher => _userCache[self?.watchedByUserId ?? ""];
+
+  List<ServiceForm> get formsList {
+    final combined = _formsQueue +
+        (_formsList..retainWhere(
+          (fl) => _formsQueue.indexWhere((fq) => fq.id == fl.id) == -1,
+        ));
+    _formsStreamController.add(combined);
+    return combined;
+  }
+
   Map<String, dynamic> Function() mapAccessor(String accessed) {
     switch(accessed) {
       case 'userData': {
@@ -91,42 +122,26 @@ class Settings {
     }
   }
 
-  Map<String, FirefighterUser> _userCache = {};
-  List<ServiceForm> _formsQueue = [];
-  List<ServiceForm> _formsList = [];
-
-  final StreamController<List<ServiceForm>> _formsStreamController = StreamController<List<ServiceForm>>.broadcast();
-  Stream<List<ServiceForm>> get formsListStream => _formsStreamController.stream;
-
-  Map<String, FirefighterUser> get userCache => _userCache;
-  List<ServiceForm> get formsQueue => _formsQueue;
-  // Direct setters for now
-  set userCache(Map<String, FirefighterUser> userCache) {
-    _userCache = userCache;
-  }
-  set formsQueue(List<ServiceForm> formsQueue) {
-    _formsQueue = formsQueue;
-  }
-
-  bool get isLoggedIn => _userId != null && _userCache.containsKey(_userId);
-
-  FirefighterUser? get self => _userCache[_userId];
-  FirefighterUser? get watcher => _userCache[self?.watchedByUserId ?? ""];
-
-  List<ServiceForm> get formsList {
-    final combined = _formsQueue +
-        (_formsList..retainWhere(
-          (fl) => _formsQueue.indexWhere((fq) => fq.id == fl.id) == -1,
-        ));
-    _formsStreamController.add(combined);
-    return combined;
-  }
-
   Future<void> setUser() async {
     setUserId();
     await getUser();
     _role = self!.role;
-    await saveToDisk();
+    
+    String directory = await getSettingsDirectoryRoute();
+
+    Map<String, dynamic> Function() userDataAccessor = mapAccessor('userData');
+    ServiceReliabilityEngineer.instance.enqueueWriteTask(
+      '$directory/user_data.json',
+      userDataAccessor
+    );
+
+    Map<String, dynamic> Function() userCacheAccessor = mapAccessor('userCache');
+    ServiceReliabilityEngineer.instance.enqueueWriteTask(
+        '$directory/user_cache.json',
+        userCacheAccessor
+    );
+
+    // await saveToDisk();
   }
 
   Future<void> setForms() async {
