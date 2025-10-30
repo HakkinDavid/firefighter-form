@@ -24,6 +24,10 @@ class ServiceReliabilityEngineer {
   bool _busy = false;
 
   void initialize() {
+    _tasksRepository["SaveToDisk"] = Task(
+      heuristic: DiskHeuristic(),
+      duty: _saveToDisk,
+    );
     _tasksRepository["LoadFromDisk"] = Task(
       heuristic: DiskHeuristic(),
       duty: loadFromDisk,
