@@ -41,50 +41,6 @@ class _HomeState extends State<Home> {
     setState(() {});
   }
 
-  void _onFormTap(ServiceForm form) async {
-    await Navigator.pushNamed(
-      context,
-      '/form',
-      arguments: form.toJson(),
-    );
-    setState(() {});
-  }
-
-  void _onPdfTap(ServiceForm form) async {
-    await form.render();
-  }
-
-  void _onDeleteTap(ServiceForm form) {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) => CupertinoActionSheet(
-        title: Text('Eliminar formulario'),
-        message: Text(
-          '¿Estás seguro de que deseas eliminar el folio ${form.statusName.toLowerCase()} "${form.id}"? Esta acción no se puede deshacer.',
-        ),
-        actions: [
-          CupertinoActionSheetAction(
-            onPressed: () {
-              Navigator.pop(context);
-              _deleteForm(form);
-            },
-            isDestructiveAction: true,
-            child: Text('Eliminar folio ${form.statusName.toLowerCase()}'),
-          ),
-        ],
-        cancelButton: CupertinoActionSheetAction(
-          onPressed: () => Navigator.pop(context),
-          child: Text('Cancelar'),
-        ),
-      ),
-    );
-  }
-
-  void _deleteForm(ServiceForm form) async {
-    await form.delete();
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(

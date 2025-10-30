@@ -4,23 +4,52 @@ import 'package:flutter/cupertino.dart';
 
 class FormList extends StatefulWidget {
   final List<ServiceForm> formsList;
-  final Function(ServiceForm) onFormTap;
-  final Function(ServiceForm) onPdfTap;
-  final Function(ServiceForm) onDeleteTap;
 
-  const FormList({
-    super.key,
-    required this.formsList,
-    required this.onFormTap,
-    required this.onPdfTap,
-    required this.onDeleteTap,
-  });
+  const FormList({super.key, required this.formsList});
 
   @override
   State<FormList> createState() => _FormListState();
 }
 
 class _FormListState extends State<FormList> {
+  void onFormTap(ServiceForm form) async {
+    await Navigator.pushNamed(context, '/form', arguments: form.toJson());
+  }
+
+  void onPdfTap(ServiceForm form) async {
+    await form.render();
+  }
+
+  void onDeleteTap(ServiceForm form) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        title: Text('Eliminar formulario'),
+        message: Text(
+          '¿Estás seguro de que deseas eliminar el folio ${form.statusName.toLowerCase()} "${form.id}"? Esta acción no se puede deshacer.',
+        ),
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+              deleteForm(form);
+            },
+            isDestructiveAction: true,
+            child: Text('Eliminar folio ${form.statusName.toLowerCase()}'),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () => Navigator.pop(context),
+          child: Text('Cancelar'),
+        ),
+      ),
+    );
+  }
+
+  void deleteForm(ServiceForm form) async {
+    await form.delete();
+  }
+
   Widget _buildFormListItem(ServiceForm form) {
     return Container(
       decoration: BoxDecoration(
@@ -91,7 +120,7 @@ class _FormListState extends State<FormList> {
                     if (form.status >= 1)
                       // PDF button
                       CupertinoButton(
-                        onPressed: () => widget.onPdfTap(form),
+                        onPressed: () => onPdfTap(form),
                         padding: EdgeInsets.all(6),
                         minimumSize: Size(0, 0),
                         child: Icon(
@@ -103,7 +132,7 @@ class _FormListState extends State<FormList> {
                     if (form.canDeleteForm)
                       // Delete button
                       CupertinoButton(
-                        onPressed: () => widget.onDeleteTap(form),
+                        onPressed: () => onDeleteTap(form),
                         padding: EdgeInsets.all(6),
                         minimumSize: Size(0, 0),
                         child: Icon(
@@ -145,26 +174,25 @@ class _FormListState extends State<FormList> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      if (form.tags.isNotEmpty)
-                        SizedBox(height: 2),
-                        Text(
-                          'Etiquetas:',
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: CupertinoColors.tertiaryLabel,
-                            fontWeight: FontWeight.w500,
-                          ),
+                      if (form.tags.isNotEmpty) SizedBox(height: 2),
+                      Text(
+                        'Etiquetas:',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: CupertinoColors.tertiaryLabel,
+                          fontWeight: FontWeight.w500,
                         ),
-                        SizedBox(height: 2),
-                        Text(
-                          form.tags.join(", "),
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: CupertinoColors.label,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        form.tags.join(", "),
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: CupertinoColors.label,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ],
                   ),
                 ),
@@ -229,7 +257,7 @@ class _FormListState extends State<FormList> {
               itemCount: widget.formsList.length,
               itemBuilder: (context, index) {
                 return CupertinoButton(
-                  onPressed: () => widget.onFormTap(widget.formsList[index]),
+                  onPressed: () => onFormTap(widget.formsList[index]),
                   padding: EdgeInsets.zero,
                   child: _buildFormListItem(widget.formsList[index]),
                 );

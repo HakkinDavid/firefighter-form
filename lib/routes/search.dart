@@ -20,30 +20,6 @@ class _SearchState extends State<Search> {
     super.dispose();
   }
 
-  // Empty callback functions for the FormList
-  void _onFormTap(ServiceForm form) {
-  }
-
-  void _onPdfTap(ServiceForm form) {
-  }
-
-  void _onDeleteTap(ServiceForm form) {
-  // Show a message that deletion is not available from search
-  showCupertinoDialog(
-    context: context,
-    builder: (context) => CupertinoAlertDialog(
-      title: Text('Acción no disponible'),
-      content: Text('La eliminación de formularios no está disponible desde la búsqueda.'),
-      actions: [
-        CupertinoDialogAction(
-          child: Text('OK'),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ],
-    ),
-  );
-}
-
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
