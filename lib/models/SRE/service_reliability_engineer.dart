@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/models/user.dart';
 import 'package:bomberos/models/form.dart';
@@ -87,8 +86,6 @@ class ServiceReliabilityEngineer {
 
   // === DISK FUNCTIONS ===
   Future<void> _loadFromDisk() async {
-    if (kIsWeb) return;
-
     try {
       final directory = Directory(await Settings.instance.getSettingsDirectoryRoute());
 
@@ -144,7 +141,6 @@ class ServiceReliabilityEngineer {
   }
 
   Future<void> _saveToDisk() async{
-    if (kIsWeb) _writeQueue.clear();
     if (_writeQueue.isEmpty) return;
 
     try {
