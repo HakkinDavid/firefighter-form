@@ -14,6 +14,11 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   final _searchController = TextEditingController();
 
+  bool passesSearchCriteria(ServiceForm element) {
+    // TODO: Implementar criterios de búsqueda @DECastaV
+    return true;
+  }
+
   @override
   void dispose() {
     _searchController.dispose();
@@ -39,7 +44,7 @@ class _SearchState extends State<Search> {
                   stream: Settings.instance.formsListStream,
                   initialData: Settings.instance.formsList,
                   builder: (context, snapshot) {
-                    final forms = snapshot.data ?? [];
+                    final forms = (snapshot.data ?? []).where(passesSearchCriteria).toList();
                     return Column(
                       children: [
                         Container(
