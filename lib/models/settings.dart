@@ -83,7 +83,7 @@ class Settings {
     return combined;
   }
 
-  Map<String, dynamic> Function() mapAccessor(String accessed) {
+  Map<String, dynamic> Function() mapAccessor(String accessed, {String? id}) {
     switch(accessed) {
       case 'userData': {
         return () {
@@ -96,23 +96,27 @@ class Settings {
       }
       case 'userCache': {
         return () {
-          Map<String, dynamic> map = {
-            '_userCache': Settings.instance.userCache.map(
-                  (key, value) => MapEntry(key, value.toJson()),
-            ),
-          };
+          Map<String, dynamic> map = Settings.instance.userCache.map(
+                (key, value) => MapEntry(key, value.toJson()),
+          );
           return map;
         };
       }
       case 'formsQueue': {
-        return () {
-          Map<String, dynamic> map = {
-            'formsQueue': Settings.instance.formsQueue.asMap().map(
-                  (key, value) => MapEntry('$key', value.toJson()),
-            ),
+        if (id != null) {
+          return () {
+            Map<String, dynamic> map = {};
+            Iterable<ServiceForm> forms = Settings.instance.formsQueue
+                .where((f) => f.id == id);
+            if(forms.isNotEmpty) map = forms.first.toJson();
+            return map;
           };
-          return map;
-        };
+        } else {
+          return () {
+            Map<String, dynamic> map = {};
+            return map;
+          };
+        }
       }
       default: {
         return () {
@@ -143,8 +147,6 @@ class Settings {
           userCacheAccessor
       );
     }
-
-    // await saveToDisk();
   }
 
   Future<void> setForms() async {
@@ -443,38 +445,6 @@ class Settings {
 
       final jsonString = jsonEncode(jsonMap);
       await file.writeAsString(jsonString);
-    } catch (e) {}
-  }
-
-  Future<void> loadFromDisk() async {
-    try {
-      final file = File(
-        '${(await getApplicationDocumentsDirectory()).path}/settings.json',
-      );
-
-      if (await file.exists()) {
-        final jsonString = await file.readAsString();
-        final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-
-        _userId = jsonMap['userId'];
-        _role = jsonMap['role'] ?? 0;
-
-        Map<String, dynamic> cacheMap = Map<String, dynamic>.from(
-          jsonMap['_userCache'] ?? {},
-        );
-
-        Map<String, dynamic> queueMap = Map<String, dynamic>.from(
-          jsonMap['formsQueue'] ?? {},
-        );
-
-        _userCache = cacheMap.map(
-          (key, value) => MapEntry(key, FirefighterUser.fromJson(value)),
-        );
-        _formsQueue = queueMap
-            .map((key, value) => MapEntry(key, ServiceForm.fromJson(value)))
-            .values
-            .toList();
-      }
     } catch (e) {}
   }
 }

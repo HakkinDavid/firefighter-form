@@ -154,8 +154,10 @@ class ServiceReliabilityEngineer {
         final file = File(writeRequest.$1);
         Map<String, dynamic> jsonMap = writeRequest.$2();
 
-        final jsonString = jsonEncode(jsonMap);
-        await file.writeAsString(jsonString);
+        if (jsonMap.isNotEmpty) {
+          final jsonString = jsonEncode(jsonMap);
+          await file.writeAsString(jsonString);
+        }
       }
 
       // Gather metrics for DiskHeuristic
