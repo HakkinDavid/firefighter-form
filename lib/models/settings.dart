@@ -5,6 +5,7 @@ import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
 import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/user.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -126,20 +127,22 @@ class Settings {
     setUserId();
     await getUser();
     _role = self!.role;
-    
-    String directory = await getSettingsDirectoryRoute();
 
-    Map<String, dynamic> Function() userDataAccessor = mapAccessor('userData');
-    ServiceReliabilityEngineer.instance.enqueueWriteTask(
-      '$directory/user_data.json',
-      userDataAccessor
-    );
+    if (!kIsWeb) {
+      String directory = await getSettingsDirectoryRoute();
 
-    Map<String, dynamic> Function() userCacheAccessor = mapAccessor('userCache');
-    ServiceReliabilityEngineer.instance.enqueueWriteTask(
-        '$directory/user_cache.json',
-        userCacheAccessor
-    );
+      Map<String, dynamic> Function() userDataAccessor = mapAccessor('userData');
+      ServiceReliabilityEngineer.instance.enqueueWriteTask(
+          '$directory/user_data.json',
+          userDataAccessor
+      );
+
+      Map<String, dynamic> Function() userCacheAccessor = mapAccessor('userCache');
+      ServiceReliabilityEngineer.instance.enqueueWriteTask(
+          '$directory/user_cache.json',
+          userCacheAccessor
+      );
+    }
 
     // await saveToDisk();
   }
