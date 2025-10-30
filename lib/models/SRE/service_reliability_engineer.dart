@@ -30,7 +30,7 @@ class ServiceReliabilityEngineer {
     );
     _tasksRepository["LoadFromDisk"] = Task(
       heuristic: DiskHeuristic(),
-      duty: loadFromDisk,
+      duty: _loadFromDisk,
     );
     _tasksRepository["SetForms"] = Task(
       heuristic: ConnectionHeuristic(),
@@ -85,7 +85,7 @@ class ServiceReliabilityEngineer {
   );
 
   // === DISK FUNCTIONS ===
-  Future<void> loadFromDisk() async {
+  Future<void> _loadFromDisk() async {
     try {
       final directory = Directory(await Settings.instance.getSettingsDirectoryRoute());
 
@@ -180,6 +180,30 @@ class ServiceReliabilityEngineer {
 
       final jsonString = jsonEncode(jsonMap);
       await file.writeAsString(jsonString);
+
+      // Gather metrics for DiskHeuristic
+      DiskHeuristic.lastWriteTime = DateTime.now()
+          .difference(start)
+          .inMilliseconds;
+      DiskHeuristic.lastWriteTimestamp = DateTime.now();
+    } catch (e) {
+      //
+    }
+  }
+
+  Future<void> _saveToDisk() async{
+    if (_writeQueue.isEmpty) return;
+
+    try {
+      DateTime start = DateTime.now();
+
+      for (var writeRequest in _writeQueue) {
+        final file = File(writeRequest.$1);
+        Map<String, dynamic> jsonMap = writeRequest.$2();
+
+        final jsonString = jsonEncode(jsonMap);
+        await file.writeAsString(jsonString);
+      }
 
       // Gather metrics for DiskHeuristic
       DiskHeuristic.lastWriteTime = DateTime.now()
