@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
@@ -54,6 +55,9 @@ class Settings {
   List<ServiceForm> _formsQueue = [];
   List<ServiceForm> _formsList = [];
 
+  final StreamController<List<ServiceForm>> _formsStreamController = StreamController<List<ServiceForm>>.broadcast();
+  Stream<List<ServiceForm>> get formsListStream => _formsStreamController.stream;
+
   Map<String, FirefighterUser> get userCache => _userCache;
   List<ServiceForm> get formsQueue => _formsQueue;
   // Direct setters for now
@@ -69,11 +73,14 @@ class Settings {
   FirefighterUser? get self => _userCache[_userId];
   FirefighterUser? get watcher => _userCache[self?.watchedByUserId ?? ""];
 
-  List<ServiceForm> get formsList =>
-      _formsQueue +
-      (_formsList..retainWhere(
-        (fl) => _formsQueue.indexWhere((fq) => fq.id == fl.id) == -1,
-      ));
+  List<ServiceForm> get formsList {
+    final combined = _formsQueue +
+        (_formsList..retainWhere(
+          (fl) => _formsQueue.indexWhere((fq) => fq.id == fl.id) == -1,
+        ));
+    _formsStreamController.add(combined);
+    return combined;
+  }
 
   Future<void> setUser() async {
     setUserId();
@@ -91,6 +98,7 @@ class Settings {
         .map((key, value) => MapEntry(key, ServiceForm.fromJson(value)))
         .values
         .toList();
+    _formsStreamController.add(formsList);
   }
 
   void setUserId() {
@@ -303,11 +311,13 @@ class Settings {
     }
     await saveToDisk();
     ServiceReliabilityEngineer.instance.enqueueTasks({"syncForms"});
+    _formsStreamController.add(formsList);
   }
 
   Future<void> dequeueForm(String id) async {
     _formsQueue.removeWhere((f) => f.id == id);
     await saveToDisk();
+    _formsStreamController.add(formsList);
   }
 
   Future<bool> uploadForm(ServiceForm form) async {
@@ -352,6 +362,7 @@ class Settings {
         await Settings.instance.dequeueForm(form.id);
       }
       await setForms();
+      _formsStreamController.add(formsList);
     } catch (error) {}
   }
 

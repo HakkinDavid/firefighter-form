@@ -41,50 +41,6 @@ class _HomeState extends State<Home> {
     setState(() {});
   }
 
-  void _onFormTap(ServiceForm form) async {
-    await Navigator.pushNamed(
-      context,
-      '/form',
-      arguments: form.toJson(),
-    );
-    setState(() {});
-  }
-
-  void _onPdfTap(ServiceForm form) async {
-    await form.render();
-  }
-
-  void _onDeleteTap(ServiceForm form) {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) => CupertinoActionSheet(
-        title: Text('Eliminar formulario'),
-        message: Text(
-          '¿Estás seguro de que deseas eliminar el folio ${form.statusName.toLowerCase()} "${form.id}"? Esta acción no se puede deshacer.',
-        ),
-        actions: [
-          CupertinoActionSheetAction(
-            onPressed: () {
-              Navigator.pop(context);
-              _deleteForm(form);
-            },
-            isDestructiveAction: true,
-            child: Text('Eliminar folio ${form.statusName.toLowerCase()}'),
-          ),
-        ],
-        cancelButton: CupertinoActionSheetAction(
-          onPressed: () => Navigator.pop(context),
-          child: Text('Cancelar'),
-        ),
-      ),
-    );
-  }
-
-  void _deleteForm(ServiceForm form) async {
-    await form.delete();
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -103,52 +59,53 @@ class _HomeState extends State<Home> {
                   child: Container(
                     // ← ADD THIS CONTAINER
                     color: Settings.instance.colors.background,
-                    child: Column(
-                      children: [
-                        // Header for the list - NOW ONLY IN HOME
-                        Container(
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Settings.instance.colors.primaryContrast,
-                            border: Border(
-                              bottom: BorderSide(
-                                color: CupertinoColors.separator,
-                                width: 0.5,
+                    child: StreamBuilder<List<ServiceForm>>(
+                      stream: Settings.instance.formsListStream,
+                      initialData: Settings.instance.formsList,
+                      builder: (context, snapshot) {
+                        final forms = snapshot.data ?? [];
+                        return Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Settings.instance.colors.primaryContrast,
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: CupertinoColors.separator,
+                                    width: 0.5,
+                                  ),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Formularios Recientes',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: Settings.instance.colors.primary,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${forms.length} elementos',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: CupertinoColors.secondaryLabel,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Formularios Recientes',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  color: Settings.instance.colors.primary,
-                                ),
+                            Expanded(
+                              child: FormList(
+                                formsList: forms
                               ),
-                              Text(
-                                '${Settings.instance.formsList.length} elementos',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: CupertinoColors.secondaryLabel,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // Forms list component
-                        Expanded(
-                          // ← NESTED EXPANDED FOR THE FORM LIST
-                          child: FormList(
-                            formsList: Settings.instance.formsList,
-                            onFormTap: _onFormTap,
-                            onPdfTap: _onPdfTap,
-                            onDeleteTap: _onDeleteTap,
-                          ),
-                        ),
-                      ],
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ),

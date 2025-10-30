@@ -14,35 +14,16 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   final _searchController = TextEditingController();
 
+  bool passesSearchCriteria(ServiceForm element) {
+    // TODO: Implementar criterios de búsqueda @DECastaV
+    return true;
+  }
+
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
-
-  // Empty callback functions for the FormList
-  void _onFormTap(ServiceForm form) {
-  }
-
-  void _onPdfTap(ServiceForm form) {
-  }
-
-  void _onDeleteTap(ServiceForm form) {
-  // Show a message that deletion is not available from search
-  showCupertinoDialog(
-    context: context,
-    builder: (context) => CupertinoAlertDialog(
-      title: Text('Acción no disponible'),
-      content: Text('La eliminación de formularios no está disponible desde la búsqueda.'),
-      actions: [
-        CupertinoDialogAction(
-          child: Text('OK'),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ],
-    ),
-  );
-}
 
   @override
   Widget build(BuildContext context) {
@@ -59,43 +40,48 @@ class _SearchState extends State<Search> {
             Expanded(
               child: Container(
                 color: Settings.instance.colors.background,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 26),
-                      // Search Text Field (non-functional for now)
-                      child: CupertinoTextField(
-                        controller: _searchController,
-                        placeholder: 'Espacio que no hace nada',
-                        decoration: BoxDecoration(
-                          color: CupertinoColors.systemBackground,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        suffix: Padding(
-                          padding: const EdgeInsets.only(right: 12),
-                          child: const Icon(
-                            CupertinoIcons.search,
-                            size: 24,
+                child: StreamBuilder<List<ServiceForm>>(
+                  stream: Settings.instance.formsListStream,
+                  initialData: Settings.instance.formsList,
+                  builder: (context, snapshot) {
+                    final forms = (snapshot.data ?? []).where(passesSearchCriteria).toList();
+                    return Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 26,
+                          ),
+                          // Search Text Field (non-functional for now)
+                          child: CupertinoTextField(
+                            controller: _searchController,
+                            placeholder: 'Espacio que no hace nada',
+                            decoration: BoxDecoration(
+                              color: CupertinoColors.systemBackground,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            suffix: Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: const Icon(
+                                CupertinoIcons.search,
+                                size: 24,
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(12),
+                            autofocus: true,
+                            autocorrect: false,
                           ),
                         ),
-                        padding: const EdgeInsets.all(12),
-                        autofocus: true,
-                        autocorrect: false,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    // Add the FormList component here
-                    Expanded(
-                      child: FormList(
-                        formsList: Settings.instance.formsList,
-                        onFormTap: _onFormTap,
-                        onPdfTap: _onPdfTap,
-                        onDeleteTap: _onDeleteTap,
-                      ),
-                    ),
-                  ],
+                        const SizedBox(height: 16),
+                        // Add the FormList component here
+                        Expanded(
+                          child: FormList(
+                            formsList: forms
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ),
