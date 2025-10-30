@@ -87,8 +87,8 @@ class Settings {
       case 'userData': {
         return () {
           Map<String, dynamic> map = {
-            'userId': _userId,
-            'role': _role,
+            'userId': Settings.instance.userId,
+            'role': Settings.instance.role,
           };
           return map;
         };
@@ -96,7 +96,7 @@ class Settings {
       case 'userCache': {
         return () {
           Map<String, dynamic> map = {
-            '_userCache': _userCache.map(
+            '_userCache': Settings.instance.userCache.map(
                   (key, value) => MapEntry(key, value.toJson()),
             ),
           };
@@ -106,7 +106,7 @@ class Settings {
       case 'formsQueue': {
         return () {
           Map<String, dynamic> map = {
-            'formsQueue': _formsQueue.asMap().map(
+            'formsQueue': Settings.instance.formsQueue.asMap().map(
                   (key, value) => MapEntry('$key', value.toJson()),
             ),
           };
