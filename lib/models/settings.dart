@@ -366,7 +366,16 @@ class Settings {
     } else {
       _formsQueue[index] = form;
     }
-    await saveToDisk();
+
+    String directory = await getSettingsDirectoryRoute();
+    Map<String, dynamic> Function() formAccessor = mapAccessor(
+      'formsQueue',
+      id: form.id
+    );
+    ServiceReliabilityEngineer.instance.enqueueWriteTask(
+        '$directory/forms/${form.id}.json',
+        formAccessor
+    );
     ServiceReliabilityEngineer.instance.enqueueTasks({"syncForms"});
     _formsStreamController.add(formsList);
   }
