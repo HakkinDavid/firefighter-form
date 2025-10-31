@@ -20,7 +20,7 @@ class ServiceReliabilityEngineer {
 
   final Map<String, Task> _tasksRepository = {};
   final List<String> _tasksQueue = [];
-  final List<(String, Map<String, dynamic> Function())> _writeQueue = [];
+  final List<(String, Map<String, dynamic> Function()?)> _writeQueue = [];
   bool _busy = false;
 
   void initialize() {
@@ -148,11 +148,16 @@ class ServiceReliabilityEngineer {
 
       for (var writeRequest in _writeQueue) {
         final file = File(writeRequest.$1);
-        Map<String, dynamic> jsonMap = writeRequest.$2();
 
-        if (jsonMap.isNotEmpty) {
-          final jsonString = jsonEncode(jsonMap);
-          await file.writeAsString(jsonString);
+        if (writeRequest.$2 != null) {
+          Map<String, dynamic> jsonMap = writeRequest.$2!();
+
+          if (jsonMap.isNotEmpty) {
+            final jsonString = jsonEncode(jsonMap);
+            await file.writeAsString(jsonString);
+          }
+        } else if (await file.exists()){
+          await file.delete();
         }
       }
 
