@@ -382,7 +382,13 @@ class Settings {
 
   Future<void> dequeueForm(String id) async {
     _formsQueue.removeWhere((f) => f.id == id);
-    await saveToDisk();
+
+    String directory = await getSettingsDirectoryRoute();
+    ServiceReliabilityEngineer.instance.enqueueWriteTask(
+        '$directory/forms/$id.json',
+        null
+    );
+
     _formsStreamController.add(formsList);
   }
 
@@ -430,27 +436,5 @@ class Settings {
       await setForms();
       _formsStreamController.add(formsList);
     } catch (error) {}
-  }
-
-  Future<void> saveToDisk() async {
-    try {
-      final file = File(
-        '${(await getApplicationDocumentsDirectory()).path}/settings.json',
-      );
-
-      Map<String, dynamic> jsonMap = {
-        'userId': _userId,
-        'role': _role,
-        '_userCache': _userCache.map(
-          (key, value) => MapEntry(key, value.toJson()),
-        ),
-        'formsQueue': _formsQueue.asMap().map(
-          (key, value) => MapEntry('$key', value.toJson()),
-        ),
-      };
-
-      final jsonString = jsonEncode(jsonMap);
-      await file.writeAsString(jsonString);
-    } catch (e) {}
   }
 }

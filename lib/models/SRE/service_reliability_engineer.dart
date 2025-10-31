@@ -74,7 +74,7 @@ class ServiceReliabilityEngineer {
     _busy = false;
   }
 
-  void enqueueWriteTask(String path, Map<String, dynamic> Function() accessor) {
+  void enqueueWriteTask(String path, Map<String, dynamic> Function()? accessor) {
     _writeQueue.add((path, accessor));
     enqueueTasks({"SaveToDisk"});
   }
