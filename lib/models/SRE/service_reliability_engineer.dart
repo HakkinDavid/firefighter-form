@@ -143,10 +143,11 @@ class ServiceReliabilityEngineer {
   Future<void> _saveToDisk() async{
     if (_writeQueue.isEmpty) return;
 
-    try {
-      DateTime start = DateTime.now();
+    DateTime start = DateTime.now();
+    List<(String, Map<String, dynamic> Function()?)> completedWrites = [];
 
-      for (var writeRequest in _writeQueue) {
+    for (var writeRequest in _writeQueue) {
+      try {
         final file = File(writeRequest.$1);
 
         if (writeRequest.$2 != null) {
@@ -154,20 +155,26 @@ class ServiceReliabilityEngineer {
 
           if (jsonMap.isNotEmpty) {
             final jsonString = jsonEncode(jsonMap);
+
+            if (!await file.exists()) file.create(recursive: true);
             await file.writeAsString(jsonString);
           }
-        } else if (await file.exists()){
+        } else if (await file.exists()) {
           await file.delete();
         }
-      }
 
-      // Gather metrics for DiskHeuristic
-      DiskHeuristic.lastWriteTime = DateTime.now()
-          .difference(start)
-          .inMilliseconds;
-      DiskHeuristic.lastWriteTimestamp = DateTime.now();
-    } catch (e) {
-      //
+        completedWrites.add(writeRequest);
+      } catch (e) {
+        //
+      }
     }
+    // This seems fishy with the way Dart handles references
+    _writeQueue.removeWhere((wq) => completedWrites.contains(wq));
+
+    // Gather metrics for DiskHeuristic
+    DiskHeuristic.lastWriteTime = DateTime.now()
+        .difference(start)
+        .inMilliseconds;
+    DiskHeuristic.lastWriteTimestamp = DateTime.now();
   }
 }
