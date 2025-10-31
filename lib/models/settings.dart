@@ -104,10 +104,8 @@ class Settings {
       case 'formsQueue': {
         if (id != null) {
           return () {
-            Map<String, dynamic> map = {};
-            Iterable<ServiceForm> forms = Settings.instance.formsQueue
-                .where((f) => f.id == id);
-            if (forms.isNotEmpty) map = forms.first.toJson();
+            Map<String, dynamic> map = Settings.instance.formsQueue
+                .firstWhere((f) => f.id == id).toJson();
             return map;
           };
         } else {
