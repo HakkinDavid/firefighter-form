@@ -107,7 +107,7 @@ class ServiceReliabilityEngineer {
           );
           await processedTask.runTask();
           Logging(
-            "Terminó ejecución de $taskId.",
+            "Terminó ejecución de $taskId. Tarea ${processedTask.pending ? "pendiente" : "terminada"}.",
             caller: "SRE (_processQueue)",
             attentionLevel: 1,
           );
@@ -120,7 +120,7 @@ class ServiceReliabilityEngineer {
             _tasksQueue.removeWhere((t) => t == taskId);
           }
           Logging(
-            "Liberando mutex ${_busy.isLocked ? "bloqueado" : "libre (??)"}. Tarea ${processedTask.pending ? "pendiente" : "terminada"}.",
+            "Liberando mutex ${_busy.isLocked ? "bloqueado" : "libre (??)"}.",
             caller: "SRE (_processQueue)",
           );
           _busy.release();
