@@ -155,7 +155,9 @@ class Settings {
         '$directory/user_cache.json',
         userCacheAccessor,
       );
-    } catch (_) {}
+    } catch (_) {
+      ServiceReliabilityEngineer.instance.enqueueTasks({"SetUser"});
+    }
   }
 
   Future<void> setForms() async {
