@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:bomberos/models/printf.dart' show log;
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/models/user.dart';
 import 'package:bomberos/models/form.dart';
@@ -63,10 +64,16 @@ class ServiceReliabilityEngineer {
         if (processedTask.dependsOn.every(
           (dependency) => !_tasksRepository[dependency]!.pending,
         )) {
+          log("Solicitando mutex. Actualmente está ${_busy.isLocked ? "bloqueado" : "libre"}.", caller: "SRE (_processQueue)");
           await _busy.acquire();
+          log("Adquirido mutex. Ahora está ${_busy.isLocked ? "bloqueado" : "libre (??)"}.", caller: "SRE (_processQueue)");
+          log("Ejecutando... $taskId", caller: "SRE (_processQueue)");
           await processedTask.runTask();
+          log("Terminó ejecución de $taskId.", caller: "SRE (_processQueue)");
           if (!processedTask.pending) {
+            log("Eliminando de la cola a $taskId.", caller: "SRE (_processQueue)");
             _tasksQueue.removeWhere((t) => t == taskId);
+            log("Liberando mutex ${_busy.isLocked ? "bloqueado" : "libre (??)"}.", caller: "SRE (_processQueue)");
             _busy.release();
           }
         }
@@ -106,6 +113,11 @@ class ServiceReliabilityEngineer {
 
           Settings.instance.userId = userDataMap['userId'];
           Settings.instance.role = userDataMap['role'] ?? 0;
+
+          log("Objeto actualizado (Settings.instance.userId): ${Settings.instance.userId}", caller: "SRE (_loadFromDisk)");
+          log("Objeto actualizado (Settings.instance.role): ${Settings.instance.role}", caller: "SRE (_loadFromDisk)");
+        } else {
+          log("No existe userDataFile", caller: "SRE (_loadFromDisk)");
         }
 
         final userCacheFile = File('${directory.path}/user_cache.json');
@@ -117,6 +129,9 @@ class ServiceReliabilityEngineer {
           Settings.instance.userCache = userCacheMap.map(
             (key, value) => MapEntry(key, FirefighterUser.fromJson(value)),
           );
+          log("Objeto actualizado (Settings.instance.userCache): ${Settings.instance.userCache}", caller: "SRE (_loadFromDisk)");
+        } else {
+          log("No existe userCacheFile", caller: "SRE (_loadFromDisk)");
         }
 
         // What should the subdirectory be called?
@@ -133,6 +148,10 @@ class ServiceReliabilityEngineer {
           }
 
           Settings.instance.formsQueue = formsQueue;
+
+          log("Objeto actualizado (Settings.instance.formsQueue): ${Settings.instance.formsQueue}", caller: "SRE (_loadFromDisk)");
+        } else {
+          log("No existe formsQueueDirectory", caller: "SRE (_loadFromDisk)");
         }
 
         // Gather metrics for DiskHeuristic
@@ -140,19 +159,27 @@ class ServiceReliabilityEngineer {
             .difference(start)
             .inMilliseconds;
         DiskHeuristic.lastWriteTimestamp = DateTime.now();
+      } else {
+        log("El directorio no existe...", caller: "SRE (_loadFromDisk)");
       }
     } catch (e) {
-      //
+      log(e, caller: "SRE (_loadFromDisk)");
     }
   }
 
-  Future<void> _saveToDisk() async{
-    if (_writeQueue.isEmpty) return;
+  Future<void> _saveToDisk() async {
+    if (_writeQueue.isEmpty) {
+      log("No hay nada para escribir", caller: "SRE (_saveToDisk)");
+      return;
+    }
+
+    log("Cola: $_writeQueue", caller: "SRE (_saveToDisk)");
 
     DateTime start = DateTime.now();
     List<(String, Map<String, dynamic> Function()?)> completedWrites = [];
 
     for (var writeRequest in _writeQueue) {
+      log("Intentando con ${writeRequest.$1}", caller: "SRE (_saveToDisk)");
       try {
         final file = File(writeRequest.$1);
 
@@ -165,22 +192,31 @@ class ServiceReliabilityEngineer {
             if (!await file.exists()) file.create(recursive: true);
             await file.writeAsString(jsonString);
           }
+          log("Escrito.", caller: "SRE (_saveToDisk)");
         } else if (await file.exists()) {
+          log("Eliminado", caller: "SRE (_saveToDisk)");
           await file.delete();
         }
 
         completedWrites.add(writeRequest);
       } catch (e) {
-        //
+        log(e, caller: "SRE (_saveToDisk)");
       }
     }
     // This seems fishy with the way Dart handles references
     _writeQueue.removeWhere((wq) => completedWrites.contains(wq));
+
+    log("Completados: $completedWrites", caller: "SRE (_saveToDisk)");
 
     // Gather metrics for DiskHeuristic
     DiskHeuristic.lastWriteTime = DateTime.now()
         .difference(start)
         .inMilliseconds;
     DiskHeuristic.lastWriteTimestamp = DateTime.now();
+
+    log(
+      "Nuevas heurísticas: ${DiskHeuristic.lastWriteTime} ms (${DiskHeuristic.lastWriteTimestamp})",
+      caller: "SRE (_saveToDisk)"
+    );
   }
 }
