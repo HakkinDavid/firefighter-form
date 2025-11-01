@@ -118,12 +118,12 @@ class ServiceReliabilityEngineer {
               attentionLevel: 1,
             );
             _tasksQueue.removeWhere((t) => t == taskId);
-            Logging(
-              "Liberando mutex ${_busy.isLocked ? "bloqueado" : "libre (??)"}.",
-              caller: "SRE (_processQueue)",
-            );
-            _busy.release();
           }
+          Logging(
+            "Liberando mutex ${_busy.isLocked ? "bloqueado" : "libre (??)"}. Tarea ${processedTask.pending ? "pendiente" : "terminada"}.",
+            caller: "SRE (_processQueue)",
+          );
+          _busy.release();
         }
       }
       await Future.delayed(Duration.zero);
