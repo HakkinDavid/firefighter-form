@@ -55,6 +55,10 @@ class ServiceReliabilityEngineer {
       duty: Settings.instance.syncForms,
       dependsOn: {"LoadFromDisk"},
     );
+    _tasksRepository["SetUser"] = Task(
+      heuristic: ConnectionHeuristic(),
+      duty: Settings.instance.setUser
+    );
 
     enqueueTasks({"LoadFromDisk", "SyncForms"});
 
