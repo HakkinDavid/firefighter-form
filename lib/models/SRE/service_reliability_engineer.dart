@@ -25,6 +25,18 @@ class ServiceReliabilityEngineer {
   final List<(String, Map<String, dynamic> Function()?)> _writeQueue = [];
   final _busy = Mutex();
 
+  static Timer? _timer;
+
+  static Function get startTimer => () {
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+    _timer = Timer.periodic(
+      const Duration(seconds: 5),
+      (t) => ServiceReliabilityEngineer.instance._processQueue(),
+    );
+  };
+
   void initialize() {
     _tasksRepository["SaveToDisk"] = Task(
       heuristic: DiskHeuristic(),
@@ -45,15 +57,25 @@ class ServiceReliabilityEngineer {
     );
 
     enqueueTasks({"LoadFromDisk", "SyncForms"});
+
+    ServiceReliabilityEngineer.startTimer();
   }
 
   void enqueueTasks(Iterable<String> requestedTasks) {
     for (String requested in requestedTasks) {
       if (!_tasksRepository.containsKey(requested)) {
-        Logging("Rechazando encolamiento de $requested. No es una tarea válida.", caller: "SRE (enqueueTasks)", attentionLevel: 2);
+        Logging(
+          "Rechazando encolamiento de $requested. No es una tarea válida.",
+          caller: "SRE (enqueueTasks)",
+          attentionLevel: 2,
+        );
         return;
       }
-      Logging("Aceptando encolamiento de $requested en la posición ${_tasksQueue.length}.", caller: "SRE (enqueueTasks)", attentionLevel: 1);
+      Logging(
+        "Aceptando encolamiento de $requested en la posición ${_tasksQueue.length}.",
+        caller: "SRE (enqueueTasks)",
+        attentionLevel: 1,
+      );
       _tasksRepository[requested]?.setAsPending();
       _tasksQueue.add(requested);
     }
@@ -69,16 +91,37 @@ class ServiceReliabilityEngineer {
         if (processedTask.dependsOn.every(
           (dependency) => !_tasksRepository[dependency]!.pending,
         )) {
-          Logging("Solicitando mutex. Actualmente está ${_busy.isLocked ? "bloqueado" : "libre"}.", caller: "SRE (_processQueue)");
+          Logging(
+            "Solicitando mutex. Actualmente está ${_busy.isLocked ? "bloqueado" : "libre"}.",
+            caller: "SRE (_processQueue)",
+          );
           await _busy.acquire();
-          Logging("Adquirido mutex. Ahora está ${_busy.isLocked ? "bloqueado" : "libre (??)"}.", caller: "SRE (_processQueue)");
-          Logging("Ejecutando... $taskId", caller: "SRE (_processQueue)", attentionLevel: 1);
+          Logging(
+            "Adquirido mutex. Ahora está ${_busy.isLocked ? "bloqueado" : "libre (??)"}.",
+            caller: "SRE (_processQueue)",
+          );
+          Logging(
+            "Ejecutando... $taskId",
+            caller: "SRE (_processQueue)",
+            attentionLevel: 1,
+          );
           await processedTask.runTask();
-          Logging("Terminó ejecución de $taskId.", caller: "SRE (_processQueue)", attentionLevel: 1);
+          Logging(
+            "Terminó ejecución de $taskId.",
+            caller: "SRE (_processQueue)",
+            attentionLevel: 1,
+          );
           if (!processedTask.pending) {
-            Logging("Eliminando de la cola a $taskId.", caller: "SRE (_processQueue)", attentionLevel: 1);
+            Logging(
+              "Eliminando de la cola a $taskId.",
+              caller: "SRE (_processQueue)",
+              attentionLevel: 1,
+            );
             _tasksQueue.removeWhere((t) => t == taskId);
-            Logging("Liberando mutex ${_busy.isLocked ? "bloqueado" : "libre (??)"}.", caller: "SRE (_processQueue)");
+            Logging(
+              "Liberando mutex ${_busy.isLocked ? "bloqueado" : "libre (??)"}.",
+              caller: "SRE (_processQueue)",
+            );
             _busy.release();
           }
         }
@@ -91,15 +134,13 @@ class ServiceReliabilityEngineer {
     String path,
     Map<String, dynamic> Function()? accessor,
   ) {
-    Logging("Recibiendo solicitud de ${accessor != null ? "escritura" : "eliminación"} para ruta ${path.replaceRange(0, path.length-30, '...')}.", caller: "SRE (enqueueWriteTask)");
+    Logging(
+      "Recibiendo solicitud de ${accessor != null ? "escritura" : "eliminación"} para ruta ${path.replaceRange(0, path.length - 30, '...')}.",
+      caller: "SRE (enqueueWriteTask)",
+    );
     _writeQueue.add((path, accessor));
     enqueueTasks({"SaveToDisk"});
   }
-
-  late Timer timer = Timer.periodic(
-    const Duration(seconds: 5),
-    (t) => _processQueue(),
-  );
 
   // === DISK FUNCTIONS ===
   Future<void> _loadFromDisk() async {
@@ -120,8 +161,14 @@ class ServiceReliabilityEngineer {
           Settings.instance.userId = userDataMap['userId'];
           Settings.instance.role = userDataMap['role'] ?? 0;
 
-          Logging("Actualizado Settings.instance.userId: ${Settings.instance.userId}", caller: "SRE (_loadFromDisk)");
-          Logging("Actualizado Settings.instance.role: ${Settings.instance.role}", caller: "SRE (_loadFromDisk)");
+          Logging(
+            "Actualizado Settings.instance.userId: ${Settings.instance.userId}",
+            caller: "SRE (_loadFromDisk)",
+          );
+          Logging(
+            "Actualizado Settings.instance.role: ${Settings.instance.role}",
+            caller: "SRE (_loadFromDisk)",
+          );
         } else {
           Logging("No existe userDataFile", caller: "SRE (_loadFromDisk)");
         }
@@ -135,7 +182,10 @@ class ServiceReliabilityEngineer {
           Settings.instance.userCache = userCacheMap.map(
             (key, value) => MapEntry(key, FirefighterUser.fromJson(value)),
           );
-          Logging("Actualizado Settings.instance.userCache: ${Settings.instance.userCache.keys}", caller: "SRE (_loadFromDisk)");
+          Logging(
+            "Actualizado Settings.instance.userCache: ${Settings.instance.userCache.keys}",
+            caller: "SRE (_loadFromDisk)",
+          );
         } else {
           Logging("No existe userCacheFile", caller: "SRE (_loadFromDisk)");
         }
@@ -155,9 +205,15 @@ class ServiceReliabilityEngineer {
 
           Settings.instance.formsQueue = formsQueue;
 
-          Logging("Actualizado Settings.instance.formsQueue con longitud: ${Settings.instance.formsQueue.length}", caller: "SRE (_loadFromDisk)");
+          Logging(
+            "Actualizado Settings.instance.formsQueue con longitud: ${Settings.instance.formsQueue.length}",
+            caller: "SRE (_loadFromDisk)",
+          );
         } else {
-          Logging("No existe formsQueueDirectory", caller: "SRE (_loadFromDisk)");
+          Logging(
+            "No existe formsQueueDirectory",
+            caller: "SRE (_loadFromDisk)",
+          );
         }
 
         // Gather metrics for DiskHeuristic
@@ -183,7 +239,10 @@ class ServiceReliabilityEngineer {
     List<(String, Map<String, dynamic> Function()?)> completedWrites = [];
 
     for (var writeRequest in _writeQueue) {
-      Logging("Atendiendo ${writeRequest.$1.replaceRange(0, writeRequest.$1.length-30, '...')}", caller: "SRE (_saveToDisk)");
+      Logging(
+        "Atendiendo ${writeRequest.$1.replaceRange(0, writeRequest.$1.length - 30, '...')}",
+        caller: "SRE (_saveToDisk)",
+      );
       try {
         final file = File(writeRequest.$1);
 
@@ -218,7 +277,7 @@ class ServiceReliabilityEngineer {
 
     Logging(
       "Nuevas heurísticas: ${DiskHeuristic.lastWriteTime} ms (${DiskHeuristic.lastWriteTimestamp})",
-      caller: "SRE (_saveToDisk)"
+      caller: "SRE (_saveToDisk)",
     );
   }
 }
