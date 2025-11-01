@@ -374,7 +374,7 @@ class Settings {
         '$directory/forms/${form.id}.json',
         formAccessor
     );
-    ServiceReliabilityEngineer.instance.enqueueTasks({"syncForms"});
+    ServiceReliabilityEngineer.instance.enqueueTasks({"SyncForms"});
     _formsStreamController.add(formsList);
   }
 
@@ -431,7 +431,7 @@ class Settings {
       } else {
         await Settings.instance.dequeueForm(form.id);
       }
-      await setForms();
+      ServiceReliabilityEngineer.instance.enqueueTasks({"SetForms"});
       _formsStreamController.add(formsList);
     } catch (error) {}
   }
