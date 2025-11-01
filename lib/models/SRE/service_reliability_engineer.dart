@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:bomberos/models/printf.dart' show log;
+import 'package:bomberos/models/logging.dart' show Logging;
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/models/user.dart';
 import 'package:bomberos/models/form.dart';
@@ -49,6 +49,11 @@ class ServiceReliabilityEngineer {
 
   void enqueueTasks(Iterable<String> requestedTasks) {
     for (String requested in requestedTasks) {
+      if (!_tasksRepository.containsKey(requested)) {
+        Logging("Rechazando encolamiento de $requested. No es una tarea válida.", caller: "SRE (enqueueTasks)", attentionLevel: 2);
+        return;
+      }
+      Logging("Aceptando encolamiento de $requested en la posición ${_tasksQueue.length}.", caller: "SRE (enqueueTasks)", attentionLevel: 1);
       _tasksRepository[requested]?.setAsPending();
       _tasksQueue.add(requested);
     }
@@ -64,16 +69,16 @@ class ServiceReliabilityEngineer {
         if (processedTask.dependsOn.every(
           (dependency) => !_tasksRepository[dependency]!.pending,
         )) {
-          log("Solicitando mutex. Actualmente está ${_busy.isLocked ? "bloqueado" : "libre"}.", caller: "SRE (_processQueue)");
+          Logging("Solicitando mutex. Actualmente está ${_busy.isLocked ? "bloqueado" : "libre"}.", caller: "SRE (_processQueue)");
           await _busy.acquire();
-          log("Adquirido mutex. Ahora está ${_busy.isLocked ? "bloqueado" : "libre (??)"}.", caller: "SRE (_processQueue)");
-          log("Ejecutando... $taskId", caller: "SRE (_processQueue)");
+          Logging("Adquirido mutex. Ahora está ${_busy.isLocked ? "bloqueado" : "libre (??)"}.", caller: "SRE (_processQueue)");
+          Logging("Ejecutando... $taskId", caller: "SRE (_processQueue)", attentionLevel: 1);
           await processedTask.runTask();
-          log("Terminó ejecución de $taskId.", caller: "SRE (_processQueue)");
+          Logging("Terminó ejecución de $taskId.", caller: "SRE (_processQueue)", attentionLevel: 1);
           if (!processedTask.pending) {
-            log("Eliminando de la cola a $taskId.", caller: "SRE (_processQueue)");
+            Logging("Eliminando de la cola a $taskId.", caller: "SRE (_processQueue)", attentionLevel: 1);
             _tasksQueue.removeWhere((t) => t == taskId);
-            log("Liberando mutex ${_busy.isLocked ? "bloqueado" : "libre (??)"}.", caller: "SRE (_processQueue)");
+            Logging("Liberando mutex ${_busy.isLocked ? "bloqueado" : "libre (??)"}.", caller: "SRE (_processQueue)");
             _busy.release();
           }
         }
@@ -86,6 +91,7 @@ class ServiceReliabilityEngineer {
     String path,
     Map<String, dynamic> Function()? accessor,
   ) {
+    Logging("Recibiendo solicitud de ${accessor != null ? "escritura" : "eliminación"} para ruta ${path.replaceRange(0, path.length-30, '...')}.", caller: "SRE (enqueueWriteTask)");
     _writeQueue.add((path, accessor));
     enqueueTasks({"SaveToDisk"});
   }
@@ -114,10 +120,10 @@ class ServiceReliabilityEngineer {
           Settings.instance.userId = userDataMap['userId'];
           Settings.instance.role = userDataMap['role'] ?? 0;
 
-          log("Objeto actualizado (Settings.instance.userId): ${Settings.instance.userId}", caller: "SRE (_loadFromDisk)");
-          log("Objeto actualizado (Settings.instance.role): ${Settings.instance.role}", caller: "SRE (_loadFromDisk)");
+          Logging("Actualizado Settings.instance.userId: ${Settings.instance.userId}", caller: "SRE (_loadFromDisk)");
+          Logging("Actualizado Settings.instance.role: ${Settings.instance.role}", caller: "SRE (_loadFromDisk)");
         } else {
-          log("No existe userDataFile", caller: "SRE (_loadFromDisk)");
+          Logging("No existe userDataFile", caller: "SRE (_loadFromDisk)");
         }
 
         final userCacheFile = File('${directory.path}/user_cache.json');
@@ -129,9 +135,9 @@ class ServiceReliabilityEngineer {
           Settings.instance.userCache = userCacheMap.map(
             (key, value) => MapEntry(key, FirefighterUser.fromJson(value)),
           );
-          log("Objeto actualizado (Settings.instance.userCache): ${Settings.instance.userCache}", caller: "SRE (_loadFromDisk)");
+          Logging("Actualizado Settings.instance.userCache: ${Settings.instance.userCache.keys}", caller: "SRE (_loadFromDisk)");
         } else {
-          log("No existe userCacheFile", caller: "SRE (_loadFromDisk)");
+          Logging("No existe userCacheFile", caller: "SRE (_loadFromDisk)");
         }
 
         // What should the subdirectory be called?
@@ -149,9 +155,9 @@ class ServiceReliabilityEngineer {
 
           Settings.instance.formsQueue = formsQueue;
 
-          log("Objeto actualizado (Settings.instance.formsQueue): ${Settings.instance.formsQueue}", caller: "SRE (_loadFromDisk)");
+          Logging("Actualizado Settings.instance.formsQueue con longitud: ${Settings.instance.formsQueue.length}", caller: "SRE (_loadFromDisk)");
         } else {
-          log("No existe formsQueueDirectory", caller: "SRE (_loadFromDisk)");
+          Logging("No existe formsQueueDirectory", caller: "SRE (_loadFromDisk)");
         }
 
         // Gather metrics for DiskHeuristic
@@ -160,26 +166,24 @@ class ServiceReliabilityEngineer {
             .inMilliseconds;
         DiskHeuristic.lastWriteTimestamp = DateTime.now();
       } else {
-        log("El directorio no existe...", caller: "SRE (_loadFromDisk)");
+        Logging("El directorio no existe...", caller: "SRE (_loadFromDisk)");
       }
     } catch (e) {
-      log(e, caller: "SRE (_loadFromDisk)");
+      Logging(e, caller: "SRE (_loadFromDisk)");
     }
   }
 
   Future<void> _saveToDisk() async {
     if (_writeQueue.isEmpty) {
-      log("No hay nada para escribir", caller: "SRE (_saveToDisk)");
+      Logging("No hay nada para escribir", caller: "SRE (_saveToDisk)");
       return;
     }
-
-    log("Cola: $_writeQueue", caller: "SRE (_saveToDisk)");
 
     DateTime start = DateTime.now();
     List<(String, Map<String, dynamic> Function()?)> completedWrites = [];
 
     for (var writeRequest in _writeQueue) {
-      log("Intentando con ${writeRequest.$1}", caller: "SRE (_saveToDisk)");
+      Logging("Atendiendo ${writeRequest.$1.replaceRange(0, writeRequest.$1.length-30, '...')}", caller: "SRE (_saveToDisk)");
       try {
         final file = File(writeRequest.$1);
 
@@ -192,21 +196,19 @@ class ServiceReliabilityEngineer {
             if (!await file.exists()) file.create(recursive: true);
             await file.writeAsString(jsonString);
           }
-          log("Escrito.", caller: "SRE (_saveToDisk)");
+          Logging("Escrito.", caller: "SRE (_saveToDisk)");
         } else if (await file.exists()) {
-          log("Eliminado", caller: "SRE (_saveToDisk)");
+          Logging("Eliminado.", caller: "SRE (_saveToDisk)");
           await file.delete();
         }
 
         completedWrites.add(writeRequest);
       } catch (e) {
-        log(e, caller: "SRE (_saveToDisk)");
+        Logging(e, caller: "SRE (_saveToDisk)");
       }
     }
     // This seems fishy with the way Dart handles references
     _writeQueue.removeWhere((wq) => completedWrites.contains(wq));
-
-    log("Completados: $completedWrites", caller: "SRE (_saveToDisk)");
 
     // Gather metrics for DiskHeuristic
     DiskHeuristic.lastWriteTime = DateTime.now()
@@ -214,7 +216,7 @@ class ServiceReliabilityEngineer {
         .inMilliseconds;
     DiskHeuristic.lastWriteTimestamp = DateTime.now();
 
-    log(
+    Logging(
       "Nuevas heurísticas: ${DiskHeuristic.lastWriteTime} ms (${DiskHeuristic.lastWriteTimestamp})",
       caller: "SRE (_saveToDisk)"
     );
