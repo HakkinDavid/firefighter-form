@@ -4,8 +4,9 @@ import 'package:flutter/cupertino.dart';
 
 class FormList extends StatefulWidget {
   final List<ServiceForm> formsList;
+  final Widget? placeholder;
 
-  const FormList({super.key, required this.formsList});
+  const FormList({super.key, required this.formsList, this.placeholder});
 
   @override
   State<FormList> createState() => _FormListState();
@@ -226,32 +227,7 @@ class _FormListState extends State<FormList> {
       color: Settings.instance.colors.background,
       child: widget.formsList.isEmpty
           ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    CupertinoIcons.doc,
-                    size: 64,
-                    color: CupertinoColors.systemGrey,
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    'No hay formularios',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: CupertinoColors.secondaryLabel,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Toca el botón + para crear uno',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: CupertinoColors.tertiaryLabel,
-                    ),
-                  ),
-                ],
-              ),
+              child: widget.placeholder
             )
           : ListView.builder(
               itemCount: widget.formsList.length,
