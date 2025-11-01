@@ -7,6 +7,7 @@ import 'package:bomberos/models/form.dart';
 import 'Heuristic/connection_heuristic.dart';
 import 'Heuristic/disk_heuristic.dart';
 import 'Task/task.dart';
+import 'package:mutex/mutex.dart';
 
 class ServiceReliabilityEngineer {
   static final ServiceReliabilityEngineer instance =
@@ -21,7 +22,7 @@ class ServiceReliabilityEngineer {
   final Map<String, Task> _tasksRepository = {};
   final List<String> _tasksQueue = [];
   final List<(String, Map<String, dynamic> Function()?)> _writeQueue = [];
-  bool _busy = false;
+  final _busy = Mutex();
 
   void initialize() {
     _tasksRepository["SaveToDisk"] = Task(
@@ -55,26 +56,29 @@ class ServiceReliabilityEngineer {
   }
 
   void _processQueue() async {
-    if (_busy || _tasksQueue.isEmpty) return;
+    if (_tasksQueue.isEmpty) return;
 
-    _busy = true;
     _tasksRepository.forEach((taskId, processedTask) async {
       if (_tasksQueue.contains(taskId)) {
         if (processedTask.dependsOn.every(
           (dependency) => !_tasksRepository[dependency]!.pending,
         )) {
+          await _busy.acquire();
           await processedTask.runTask();
           if (!processedTask.pending) {
             _tasksQueue.removeWhere((t) => t == taskId);
+            _busy.release();
           }
         }
       }
       await Future.delayed(Duration.zero);
     });
-    _busy = false;
   }
 
-  void enqueueWriteTask(String path, Map<String, dynamic> Function()? accessor) {
+  void enqueueWriteTask(
+    String path,
+    Map<String, dynamic> Function()? accessor,
+  ) {
     _writeQueue.add((path, accessor));
     enqueueTasks({"SaveToDisk"});
   }
@@ -87,7 +91,9 @@ class ServiceReliabilityEngineer {
   // === DISK FUNCTIONS ===
   Future<void> _loadFromDisk() async {
     try {
-      final directory = Directory(await Settings.instance.getSettingsDirectoryRoute());
+      final directory = Directory(
+        await Settings.instance.getSettingsDirectoryRoute(),
+      );
 
       if (await directory.exists()) {
         DateTime start = DateTime.now();
@@ -109,7 +115,7 @@ class ServiceReliabilityEngineer {
           final Map<String, dynamic> userCacheMap = jsonDecode(userCacheString);
 
           Settings.instance.userCache = userCacheMap.map(
-                (key, value) => MapEntry(key, FirefighterUser.fromJson(value)),
+            (key, value) => MapEntry(key, FirefighterUser.fromJson(value)),
           );
         }
 
