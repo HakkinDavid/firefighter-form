@@ -1,0 +1,30 @@
+digraph Contexto {
+  rankdir=LR;
+  label="Diagrama de Contexto — Proyecto Bomberos";
+  fontsize=12;
+
+  node [shape=ellipse, style=filled, fillcolor="#F6F6F6"];
+  Bombero [label="Bombero / Usuario"];
+  Supervisor [label="Supervisor"];
+  Despachador [label="Despachador"];
+  Paciente [label="Paciente"];
+  Testigo [label="Testigo/Tutor"];
+
+  node [shape=box, style=filled, fillcolor="#FFFFFF"];
+  App [label="App Móvil\n(Flutter iOS/Android)"];
+  Portal [label="Portal Administrativo en el App Móvil\n(Flutter iOS/Android)"];
+  Supabase [shape=component, label="Supabase Backend\n(Auth, DB, Storage, Realtime)"];
+  Ext1 [shape=note, label="Secretaría de Salud"];
+  Ext2 [shape=note, label="Ayuntamiento"];
+
+  // Relaciones
+  Bombero -> App;
+  Paciente -> App;
+  Testigo -> App;
+  Despachador -> App;
+  Supervisor -> Portal;
+  App -> Supabase;
+  Portal -> Supabase;
+  Supabase -> Ext1;
+  Supabase -> Ext2;
+}

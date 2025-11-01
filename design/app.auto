@@ -1,0 +1,31 @@
+digraph AppFlujo {
+  rankdir=LR;
+  label="Flujo en la Aplicación Móvil";
+  fontsize=12;
+
+  node [shape=box, style=filled, fillcolor="#FFFFFF"];
+  Home [label="Pantalla Principal"];
+  FormsList [label="Listado de Formularios"];
+  Editor [label="Editor de Formulario"];
+  Folio [label="Generador de Folio"];
+  Validation [label="Motor de Validación"];
+  Vitals [label="Módulo Signos Vitales"];
+  Body [label="Anotador de Lesiones"];
+  Image [label="Captura de Fotos"];
+  Inventory [label="Módulo Inventario"];
+  Signature [label="Firma Digital"];
+  PDF [label="Generar PDF Local"];
+
+  // Flujo
+  Home -> FormsList;
+  FormsList -> Editor [label="Nuevo / Abrir"];
+  Editor -> Folio;
+  Editor -> Validation;
+  Editor -> Vitals;
+  Editor -> Body;
+  Editor -> Image;
+  Editor -> Inventory;
+  Editor -> Signature;
+  Signature -> Editor [label="firma completada"];
+  Editor -> PDF [label="opcional"];
+}

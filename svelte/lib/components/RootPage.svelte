@@ -1,0 +1,276 @@
+<script>
+<<<<<<<< HEAD:src/routes/+page.svelte
+	import RootPage from "$lib/components/RootPage.svelte";
+	import { disconnect_db } from "$lib/db/sqliteConfig";
+	import { appFunctions } from "$lib/stores/appStore.svelte";
+	import { onMount } from "svelte";
+
+	let pageKey = $state(0);
+	onMount(() => {
+		appFunctions.onReset = async () => {
+			await disconnect_db();
+			pageKey = !pageKey;
+		}
+	});
+</script>
+
+{#key pageKey}
+	<RootPage/>
+{/key}
+========
+	import WelcomeScreen from '$lib/components/WelcomeScreen.svelte';
+	import FormsList from '$lib/components/FormsList.svelte';
+	import Button from '$lib/components/Button.svelte';
+	import Icon from '$lib/components/Icon.svelte';
+	import SearchBar from '$lib/components/SearchBar.svelte';
+
+	import { Preferences } from '@capacitor/preferences';
+	import { onDestroy, onMount } from 'svelte';
+	import FormRenderer from '$lib/components/forms/FormRenderer.svelte';
+	import formulario from '../../routes/form/frap.json';
+	import PDFModal from '$lib/components/PDFModal.svelte';
+	import AdminModal from '$lib/components/settings/AdminModal.svelte';
+	import { adminDialog } from '$lib/stores/adminDialogStore.svelte.js';
+	import Navbar from '$lib/components/Navbar.svelte';
+	import Footer from '$lib/components/Footer.svelte';
+	import ModalDialog from '$lib/components/ModalDialog.svelte';
+
+	import { Capacitor } from '@capacitor/core';
+	import { App } from '@capacitor/app';
+
+	import { FORM_STATUSES, NOTICE_TYPES, ACTION_STATUSES } from '$lib/Dictionary.svelte';
+	import { connect_db, get_db, init_db } from '$lib/db/sqliteConfig';
+
+	let showModal = $state(false);
+	let forms = $state([]);
+	let selectedFormIndex = $state(null);
+	let logged_in = $state(false);
+	let admin_modal;
+	let pdfModal = $state(undefined);
+	let formRenderer = $state(undefined);
+	let settings = $state({});
+	let was_admin_registered = $state(true);
+	let isPreview = $state(false);
+	
+	const CURRENT_PLATFORM = Capacitor.getPlatform();
+	let db;
+
+	// Guardar formulario en la base de datos local
+	async function save_form(form) {
+		const dataJson = JSON.stringify(form.data);
+
+		// Si ya existe el formulario, se actualiza.
+		if ((await db.query('SELECT * FROM forms WHERE id = ?', [form.id])).values.length > 0) {
+			await db.run(
+				`UPDATE forms SET date = ?, filler = ?, patient = ?, status = ?, data = ? WHERE id = ?`,
+				[form.date, form.filler, form.patient, form.status, dataJson, form.id]
+			);
+			forms[forms.findIndex(f => f.id === form.id)] = form;
+		}
+		// Si no, se crea.
+		else {
+			await db.run(
+				`INSERT INTO forms (date, filler, patient, status, data) VALUES (?, ?, ?, ?, ?)`,
+				[form.date, form.filler, form.patient, form.status, dataJson]
+			);
+			form.id = (await db.query("select seq from sqlite_sequence where name=\"forms\"")).values[0]?.seq ?? forms.length;
+			forms.unshift(form);
+		}
+
+		showModal = false;
+	}
+
+	// Cargar los formularios desde memoria
+	async function load_forms(q, p) {
+		selectedFormIndex = null;
+		const res = await db.query(q, p);
+		forms = res.values.map(f => ({
+			id: f.id,
+			date: f.date,
+			filler: f.filler,
+			patient: f.patient,
+			status: f.status,
+			data: JSON.parse(f.data)
+		}));
+	}
+
+	// Eliminar formulario seleccionado
+	async function delete_form(index) {
+		adminDialog.onAuthorize = async () => {
+			await db.run('DELETE FROM forms WHERE id = ?', [forms[index].id])
+			forms = forms.toSpliced(index, 1);
+			selectedFormIndex = null;
+		}
+		adminDialog.open();
+	}
+
+	async function load_settings() {
+		if (CURRENT_PLATFORM === 'web') {
+			settings = await get_object('settings');
+			if (!settings) settings = {};
+		}
+		const current_settings = await db.query('SELECT * FROM settings ORDER BY key DESC');
+
+		current_settings.values.forEach(setting_row => {
+			settings[setting_row.key] = setting_row.value;
+		});
+	}
+
+	async function save_settings(include_sensitive = false) {
+		if (CURRENT_PLATFORM === 'web') {
+			await set_object('settings', settings);
+		}
+		for (const s in settings) {
+			switch (s) {
+				case "admin_username":
+				case "admin_password":
+					if (!include_sensitive) {
+						console.log("Saltando configuración: " + s);
+						continue;
+					}
+					else {
+						console.warn("Guardando configuración: " + s);
+					}
+				break;
+				default:
+					console.log("Guardando configuración: " + s);
+				break;
+			}
+			if ((await db.query('SELECT * FROM settings WHERE key = ?', [s])).values.length > 0) {
+				await db.run(`UPDATE settings SET value = ? WHERE key = ?`, [settings[s], s]);
+			}
+			else {
+				await db.run(`INSERT INTO settings (key, value) VALUES (?, ?)`, [s, settings[s]]);
+			}
+		}
+	}
+
+	async function attempt_admin_register () {
+		if (was_admin_registered || !settings || !settings.admin_username || !settings.admin_password) {
+			if (CURRENT_PLATFORM === 'web') {
+				console.error("Simulando cierre...");
+				window.location.reload();
+			}
+			// Apple no acepta cerrar aplicaciones programáticamente (considerar alternativa)
+			App.exitApp();
+			return;
+		}
+		else {
+			await save_settings(true);
+			was_admin_registered = true;
+		}
+	}
+
+	// Función para guardar un objeto en almacenamiento persistente
+	async function set_object(k, v) {
+		await Preferences.set({
+			key: k,
+			value: JSON.stringify(v)
+		});
+	}
+
+	// Función para recuperar un objeto desde el almacenamiento
+	async function get_object(k) {
+		return JSON.parse((await Preferences.get({ key: k })).value);
+	}
+
+	function reset_admin_modal () {
+		adminDialog.onReject = () => {
+			console.warn("Se negó la autorización del supervisor sin algún comportamiento definido.");
+		}
+		adminDialog.onAuthorize = () => {
+			console.warn("Se concedió la autorización del supervisor sin algún comportamiento definido.");
+		}
+	}
+
+	// Se ejecuta al montar el componente, recuperando los formularios guardados
+	onMount(async () => {
+		try {
+			await connect_db(CURRENT_PLATFORM);
+			db = get_db();
+			await init_db();
+			await load_settings();
+			reset_admin_modal();
+
+			if (settings && (!settings.admin_username || !settings.admin_password)) {
+				was_admin_registered = false;
+				console.log("No hay datos de administrador establecidos. Solicitando.");
+				adminDialog.onReject = () => {
+					if (CURRENT_PLATFORM === 'web') {
+						console.error("Simulando cierre...");
+						window.location.reload();
+					}
+					// Apple no acepta cerrar aplicaciones programáticamente (considerar alternativa)
+					App.exitApp();
+				}
+				adminDialog.open(NOTICE_TYPES.INFORMATION, ACTION_STATUSES.SIGN_ADMIN_UP);
+			}
+			await load_forms('SELECT * FROM forms ORDER BY id DESC', []);
+		} catch (err) {
+			alert("Ha ocurrido un error inesperado. Por favor, reinicia la aplicación.");
+		}
+	});
+</script>
+
+{#if was_admin_registered}
+	<Navbar username={settings.username} admin_username={settings.admin_username}/>
+	{#if !logged_in}
+		<!-- Pantalla de bienvenida que se muestra antes de iniciar sesión -->
+		<WelcomeScreen
+			on:login={() => {
+				logged_in = true;
+			}}
+		/>
+	{:else}
+		<!-- Barra de búsqueda -->
+		<SearchBar queryFunc={load_forms}/>
+		<!-- Lista de formularios cargados -->
+		<FormsList bind:forms bind:selectedFormIndex={selectedFormIndex} 
+			bind:showModal bind:pdfModal bind:isPreviewOnly={isPreview}
+			on:delete={(e) => delete_form(e.detail.index)}/>
+		
+		<div class="flex w-full place-items-center justify-center">
+			<!-- Botón para añadir un formulario -->
+			<button
+				onclick={() => {
+					isPreview = false;
+					selectedFormIndex = null;
+					showModal = true;
+				}}
+				class="fixed bottom-10 right-6 w-16 h-16 cursor-pointer rounded-full border border-black 
+				bg-bronze text-white transition hover:bg-wine active:bg-wine"
+			>
+				<Icon type="Plus" class="h-8"/>
+			</button>
+		</div>
+
+		<PDFModal bind:this={pdfModal} bind:showModal bind:formRenderer bind:isPreviewOnly={isPreview}>
+			{#snippet header()}
+				<h2 class="text-charcoal-gray text-sm md:text-base">Editar Formulario</h2>
+			{/snippet}
+			
+			{#snippet children()}
+				<FormRenderer bind:this={formRenderer} template={formulario} formData={forms[selectedFormIndex]}
+					bind:isPreviewOnly={isPreview} on:submit={(e) => save_form(e.detail)}/>
+			{/snippet}
+		</PDFModal>
+	{/if}
+	<Footer/>
+{:else}
+<div class="w-screen h-screen bg-black">
+
+</div>
+{/if}
+
+<AdminModal bind:this={admin_modal} 
+	bind:settings 
+	on:registered={attempt_admin_register} 
+/>
+<ModalDialog/>
+
+<svelte:head>
+	<title>
+		Formato de Atención Médica Digital
+	</title>
+</svelte:head>
+>>>>>>>> flutter-migration:svelte/lib/components/RootPage.svelte

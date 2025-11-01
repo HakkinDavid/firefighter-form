@@ -1,0 +1,1868 @@
+{
+    "formname": "Formato de Registro de Atención Prehospitalaria",
+    "fields": {
+        "Servicio": [
+            {
+                "name": "label1",
+                "type": "text",
+                "text": "Datos del servicio"
+            },
+            {
+                "name": "campoturno",
+                "label": "Turno",
+                "type": "select",
+                "options": [
+                    "Turno 1",
+                    "Turno 2",
+                    "Turno 3"
+                ]
+            },
+            {
+                "name": "campoestacion",
+                "label": "Estación",
+                "type": "select",
+                "options": [
+                    "Central de bomberos",
+                    "Estación 1",
+                    "Estación 2",
+                    "Estación 3",
+                    "Estación 4",
+                    "Estación 5",
+                    "Estación 6",
+                    "Estación 7",
+                    "Estación 8",
+                    "Estación 9",
+                    "Estación 10",
+                    "Estación 11",
+                    "Estación 12",
+                    "Estación 13",
+                    "Estación 14",
+                    "Estación 15",
+                    "Estación 16",
+                    "Estación 17",
+                    "Estación 18"
+                ],
+                "allowOwnOptions": true
+            },
+            {
+                "name": "campounidad",
+                "label": "Unidad",
+                "type": "select",
+                "options": [
+                    "Máquina",
+                    "Ambulancia 1",
+                    "Ambulancia 2",
+                    "Ambulancia 3",
+                    "Ambulancia 4"
+                ],
+                "allowOwnOptions": true
+            },
+            {
+                "name": "date",
+                "label": "Fecha",
+                "type": "input",
+                "inputType": "date"
+            },
+            {
+                "name": "cronometria",
+                "type": "text",
+                "text": "Cronometría (Hora)"
+            },
+            {
+                "name": "camposervicio",
+                "label": "Tipo de Servicio",
+                "type": "select",
+                "options": [
+                    "Trauma",
+                    "Enfermo",
+                    "Gineco Obstétrico"
+                ]
+            },
+            {
+                "name": "campollamada",
+                "label": "Hora de llamada",
+                "type": "input",
+                "inputType": "time"
+            },
+            {
+                "name": "salida",
+                "label": "Hora de salida",
+                "type": "input",
+                "inputType": "time"
+            },
+            {
+                "name": "llegada",
+                "label": "Hora de llegada",
+                "type": "input",
+                "inputType": "time"
+            },
+            {
+                "name": "traslado",
+                "label": "Hora de traslado",
+                "type": "input",
+                "inputType": "time"
+            },
+            {
+                "name": "hospital",
+                "label": "Hora de hospital",
+                "type": "input",
+                "inputType": "time"
+            },
+            {
+                "name": "disponible",
+                "label": "Hora de disponible",
+                "type": "input",
+                "inputType": "time"
+            },
+            {
+                "name": "servicioubi",
+                "type": "text",
+                "text": "Ubicación del Servicio"
+            },
+            {
+                "name": "calle",
+                "label": "Calle",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "esquina",
+                "label": "Avenidas colindantes",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "colonia",
+                "label": "Colonia / Comunidad",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "codigopostal",
+                "label": "Código Postal",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "municipio",
+                "label": "Municipio",
+                "type": "input",
+                "inputType": "text",
+                "options": [
+                    "Tijuana",
+                    "Tecate",
+                    "Rosarito",
+                    "Ensenada",
+                    "San Quintín",
+                    "Mexicali",
+                    "San Felipe"
+                ],
+                "allowOwnOptions": true
+            },
+            {
+                "name": "estado",
+                "label": "Estado",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "ocurrencia",
+                "label": "Lugar de ocurrencia",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "resultado",
+                "label": "Resultado del despacho",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "telefono",
+                "label": "Teléfono",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "tripulacion",
+                "type": "text",
+                "text": "Tripulación"
+            },
+            {
+                "name": "jefe",
+                "label": "Jefe del servicio",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "maquinista",
+                "label": "Maquinista",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "auxiliares",
+                "label": "Auxiliares",
+                "type": "input",
+                "inputType": "text",
+                "multiple": true,
+                "allowOwnOptions": true
+            }
+        ],
+        "Paciente": [
+            {
+                "name": "pacienteinfo",
+                "type": "text",
+                "text": "Paciente"
+            },
+            {
+                "name": "patient",
+                "label": "Nombre del paciente",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "genero",
+                "label": "Género",
+                "type": "input",
+                "inputType": "text",
+                "multiple": false,
+                "options": [
+                    "Mujer",
+                    "Hombre"
+                ],
+                "allowOwnOptions": true
+            },
+            {
+                "name": "edad",
+                "label": "Edad",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "serviciomedico",
+                "label": "Servicio médico",
+                "type": "input",
+                "inputType": "text",
+                "options": [
+                    "ISSSTE",
+                    "ISSSTECALI",
+                    "HGR 1",
+                    "HGR 20",
+                    "HGR 7",
+                    "HG Tijuana",
+                    "HG Rosarito",
+                    "HG Tecate"
+                ],
+                "allowOwnOptions": true
+            },
+            {
+                "name": "domiciliopaciente",
+                "type": "text",
+                "text": "Domicilio del paciente"
+            },
+            {
+                "name": "callepaciente",
+                "label": "Calle",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "esquinapaciente",
+                "label": "Avenidas colindantes",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "coloniapaciente",
+                "label": "Colonia / Comunidad",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "codigopostalpaciente",
+                "label": "Código Postal",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "municipiopaciente",
+                "label": "Municipio",
+                "type": "input",
+                "inputType": "text",
+                "options": [
+                    "Tijuana",
+                    "Tecate",
+                    "Rosarito",
+                    "Ensenada",
+                    "San Quintín",
+                    "Mexicali",
+                    "San Felipe"
+                ],
+                "allowOwnOptions": true
+            },
+            {
+                "name": "estadopaciente",
+                "label": "Estado",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "telefonopaciente",
+                "label": "Teléfono",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "correopaciente",
+                "label": "Correo electrónico",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "ocupacionpaciente",
+                "label": "Ocupación",
+                "type": "textarea",
+                "inputType": "text"
+            }
+        ],
+        "Primaria": [
+            {
+                "name": "primeraeval",
+                "type": "text",
+                "text": "Evaluación primaria"
+            },
+            {
+                "name": "motivo",
+                "label": "Motivo de la atención",
+                "type": "textarea",
+                "inputType": "text"
+            },
+            {
+                "name": "CONCIENCIA",
+                "label": "Nivel de conciencia",
+                "type": "select",
+                "options": [
+                    "Alerta",
+                    "Verbal",
+                    "Dolor",
+                    "Inconsciente"
+                ]
+            },
+            {
+                "name": "prioridad",
+                "label": "Prioridad inicial",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "Verde",
+                    "Amarilla",
+                    "Roja",
+                    "Negra"
+                ]
+            },
+            {
+                "name": "viaaerea",
+                "label": "Vía aérea",
+                "type": "select",
+                "options": [
+                    "Permeable",
+                    "Comprometida"
+                ]
+            },
+            {
+                "name": "ventilacion",
+                "label": "Ventilación",
+                "type": "select",
+                "options": [
+                    "Regular",
+                    "Irregular",
+                    "Rápida",
+                    "Superficial",
+                    "Apnea"
+                ]
+            },
+            {
+                "name": "pulsos",
+                "label": "Pulsos",
+                "type": "select",
+                "options": [
+                    "Ausente",
+                    "Radial",
+                    "Cardiaco"
+                ]
+            },
+            {
+                "name": "calidadpulsos",
+                "label": "Calidad",
+                "type": "select",
+                "options": [
+                    "Rápido",
+                    "Lento",
+                    "Rítmico",
+                    "Arrítmico"
+                ]
+            },
+            {
+                "name": "piel",
+                "label": "Piel",
+                "type": "select",
+                "options": [
+                    "Normal",
+                    "Pálida",
+                    "Cianótica"
+                ]
+            },
+            {
+                "name": "caracteristicaspiel",
+                "label": "Características",
+                "type": "select",
+                "options": [
+                    "Caliente",
+                    "Fría",
+                    "Diaforesis"
+                ]
+            },
+            {
+                "name": "pos",
+                "label": "Posición, orientación (Dónde y cómo se encontró al paciente)",
+                "type": "textarea",
+                "rows": 5
+            }
+        ],
+        "Secundaria": [
+            {
+                "name": "segundaeval",
+                "type": "text",
+                "text": "Evaluación secundaria"
+            },
+            {
+                "name": "pupilader",
+                "label": "Pupila derecha",
+                "type": "select",
+                "options": [
+                    "Isocórica",
+                    "Miótica",
+                    "Midriática"
+                ]
+            },
+            {
+                "name": "pupilaizq",
+                "label": "Pupila izquierda",
+                "type": "select",
+                "options": [
+                    "Isocórica",
+                    "Miótica",
+                    "Midriática"
+                ]
+            },
+            {
+                "name": "glasgowmeasure",
+                "label": "Glasgow",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "pulmonderecho",
+                "label": "Auscultación pulmón derecho",
+                "type": "select",
+                "options": [
+                    "Normales",
+                    "Disminuidos",
+                    "Ausentes"
+                ]
+            },
+            {
+                "name": "pulmonizq",
+                "label": "Auscultación pulmón izquierdo",
+                "type": "select",
+                "options": [
+                    "Normales",
+                    "Disminuidos",
+                    "Ausentes"
+                ]
+            },
+            {
+                "name": "corazon",
+                "label": "Auscultación corazón",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "ritmosegeval",
+                "label": "Ritmo",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "diagnosticoelectrografico",
+                "label": "Diagnóstico electrográfico",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "signosvitales",
+                "type": "text",
+                "text": "Signos vitales"
+            },
+            {
+                "name": "historico_sv",
+                "label": "Histórico de signos vitales",
+                "type": "tuple",
+                "tuple": [
+                    {
+                        "name": "hora",
+                        "label": "Hora",
+                        "type": "input",
+                        "inputType": "time"
+                    },
+                    {
+                        "name": "fcsignovitales",
+                        "label": "FC",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "frsignovitales",
+                        "label": "FR",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "tassignovitales",
+                        "label": "TAS",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "tadsignovitales",
+                        "label": "TAD",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "sa02ignovitales",
+                        "label": "Sa02",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "tempsignovitales",
+                        "label": "Temp",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "glucosasignovitales",
+                        "label": "Glucosa",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "glasgow",
+                        "type": "text",
+                        "text": "Glasgow"
+                    },
+                    {
+                        "name": "msignovitales",
+                        "label": "M",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "osignovitales",
+                        "label": "O",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "vsignovitales",
+                        "label": "V",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "totalsignovitales",
+                        "label": "Total",
+                        "type": "input",
+                        "inputType": "text"
+                    }
+                ]
+            },
+            {
+                "name": "hallazgosmultiple",
+                "label": "Hallazgos físicos",
+                "type": "multiple",
+                "inputType": "checkbox",
+                "options": [
+                    "Deformidades (D)",
+                    "Contusiones (CO)",
+                    "Abrasiones (A)",
+                    "Penetraciones (P)",
+                    "Quemaduras (Q)",
+                    "Laceraciones (L)",
+                    "Abulsiones / Amputaciones (AB)",
+                    "Edema (E)",
+                    "Crepitación (CR)",
+                    "Enfisema subcutáneo (ES)",
+                    "Dolor / Hiperstesia (H)",
+                    "Parestesia (PT)",
+                    "Alteración a la movilidad (AM)",
+                    "Parálisis (AM)",
+                    "Movimiento paradójico (MP)"
+                ]
+            },
+            {
+                "name": "zona_lesion",
+                "label": "Zona de lesión",
+                "type": "drawingboard",
+                "background": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjYxOCIgaGVpZ2h0PSI1MTUiPgo8cGF0aCBkPSJNMCAwIEM0LjczOTQ5NDY3IDMuMzcwMTQ5NjUgNy43NzU4OTc2MyA3LjM1NTAzNjY0IDkuNjA5Mzc1IDEyLjg1NTQ2ODc1IEM5LjgxMTQzNjYxIDE1LjE2NTE0NTE2IDkuOTczMzcwNDcgMTcuNDc4NDYzMDIgMTAuMTA5Mzc1IDE5Ljc5Mjk2ODc1IEMxMC4zNDEwNTA0IDI0LjQ4NDk0NzI3IDEwLjM0MTA1MDQgMjQuNDg0OTQ3MjcgMTEuMTkxNDA2MjUgMjkuMDgyMDMxMjUgQzEyLjI0MTU4NzU2IDMzLjUzNzk0MDczIDkuMzQyMjEyOTggMzguNzcwOTIyMDggNy42MDkzNzUgNDIuODU1NDY4NzUgQzYuNjE5Mzc1IDQyLjg1NTQ2ODc1IDUuNjI5Mzc1IDQyLjg1NTQ2ODc1IDQuNjA5Mzc1IDQyLjg1NTQ2ODc1IEMyLjExMDA4MTU0IDUzLjY2Njk4MjU3IDIuMTEwMDgxNTQgNTMuNjY2OTgyNTcgMy43OTY4NzUgNjQuNDgwNDY4NzUgQzguNzYzMTQ4ODUgNzIuMDU4NzYyMDcgMjAuNjU4NjY3NTQgNzQuMjQwNjM5OCAyOC44NTkzNzUgNzYuODU1NDY4NzUgQzM3Ljc1NTczNDk3IDc5LjcxNjAzNzYzIDQ1Ljg5ODcwMjM1IDgyLjc4NjIxOTc1IDUwLjU0Njg3NSA5MS40NTMxMjUgQzU2LjE4NjAwMDE2IDEwNC4yMDMzNTI4MyA1NS44NzEyMjUxNSAxMTUuNzkyNzg2MDIgNTUuNjQ0MDQyOTcgMTI5LjQ5NjA5Mzc1IEM1NS40ODExODI1MSAxNDUuMjc3NTAxODcgNTUuNTM0NzY2NTYgMTU5LjQwNjM5NDcgNjIuNTExNzE4NzUgMTczLjc3NzM0Mzc1IEM2My4yMTE2MjY1MyAxNzUuMjE5NzE3OTMgNjMuOTEwODI3MzQgMTc2LjY2MjQzNTM2IDY0LjYwOTM3NSAxNzguMTA1NDY4NzUgQzY0Ljk2MTY5MTg5IDE3OC44MjkyNzczNCA2NS4zMTQwMDg3OSAxNzkuNTUzMDg1OTQgNjUuNjc3MDAxOTUgMTgwLjI5ODgyODEyIEM2OS40MzMxMDcwOCAxODguMjIxMjQzNDMgNzEuMjUzODU5NjMgMTk2LjMyNjUwODYzIDczLjAyNzM0Mzc1IDIwNC44Njg2NTIzNCBDNzcuMjUwNTI0NDEgMjI1LjAwMTQwNjkyIDgzLjU5MTAzMjI3IDI0Mi4xNzM1MzAzIDk3LjYxMzI4MTI1IDI1Ny40ODA0Njg3NSBDMTAxLjUyODEzMjU4IDI2Mi4xMzg0NTIzMyAxMDQuODg2NjU5ODMgMjY3LjQxMDAzODQyIDEwNy42MDkzNzUgMjcyLjg1NTQ2ODc1IEMxMDYuNDg0Mzc1IDI3NC40MTc5Njg3NSAxMDYuNDg0Mzc1IDI3NC40MTc5Njg3NSAxMDQuNjA5Mzc1IDI3NS44NTU0Njg3NSBDMTAwLjc1Njg4OTA1IDI3NS42MTQ2ODgzOCA5OC44NDg5NzU2NiAyNzUuMDE1MjAyNTMgOTUuNjA5Mzc1IDI3Mi44NTU0Njg3NSBDOTUuNTg5NTU1NjYgMjczLjQyOTkwNzIzIDk1LjU2OTczNjMzIDI3NC4wMDQzNDU3IDk1LjU0OTMxNjQxIDI3NC41OTYxOTE0MSBDOTUuNDUzNDU0NzYgMjc3LjIyNDcwNzA4IDk1LjM0NDAyNjI2IDI3OS44NTI0OTM2NiA5NS4yMzQzNzUgMjgyLjQ4MDQ2ODc1IEM5NS4yMDM0Mzc1IDI4My4zODQxMDE1NiA5NS4xNzI1IDI4NC4yODc3MzQzOCA5NS4xNDA2MjUgMjg1LjIxODc1IEM5NC42NTU4MTE3NiAyOTYuMjg4NjUyMzYgOTQuNjU1ODExNzYgMjk2LjI4ODY1MjM2IDkxLjI0MjE4NzUgMzAwLjU3MDMxMjUgQzg3LjE5MDg0NDY1IDMwMy44NTU0Njg3NSA4Ny4xOTA4NDQ2NSAzMDMuODU1NDY4NzUgODQuNjcxODc1IDMwMy44NTU0Njg3NSBDODMuOTkxMjUgMzAzLjUyNTQ2ODc1IDgzLjMxMDYyNSAzMDMuMTk1NDY4NzUgODIuNjA5Mzc1IDMwMi44NTU0Njg3NSBDODEuNDEzMTI1IDMwMi40MjIzNDM3NSA4MC4yMTY4NzUgMzAxLjk4OTIxODc1IDc4Ljk4NDM3NSAzMDEuNTQyOTY4NzUgQzc1LjQyMDgwNjQ0IDI5OS43NjExODQ0NyA3NC45ODM4NTczOSAyOTkuMzQ0NTM5NDQgNzMuNjA5Mzc1IDI5NS44NTU0Njg3NSBDNzIuOTc2NDQ1MzEgMjk1LjI3NjY3OTY5IDcyLjM0MzUxNTYzIDI5NC42OTc4OTA2MyA3MS42OTE0MDYyNSAyOTQuMTAxNTYyNSBDNjQuOTkwMTk3MTUgMjg2Ljg3MjMwMzE1IDYzLjY1NTM3NDc4IDI3Mi4yOTAzNDgyNCA2My41MTU2MjUgMjYyLjcxMDkzNzUgQzYzLjMzOTA2OTkzIDI1Mi42NzE4ODIzMSA2MS44MjgzMDEwMyAyNDcuMDM1NzQ4MzcgNTUuNjA5Mzc1IDIzOC44NTU0Njg3NSBDNTQuMjMxNDcxNjEgMjM2LjcwMzgxOTYgNTIuODc3OTU2MTIgMjM0LjUzNjM5Mzk4IDUxLjU0Njg3NSAyMzIuMzU1NDY4NzUgQzUwLjg4MTcxODc1IDIzMS4yNzI2NTYyNSA1MC4yMTY1NjI1IDIzMC4xODk4NDM3NSA0OS41MzEyNSAyMjkuMDc0MjE4NzUgQzQ3LjIyMDI4NDk0IDIyNS4yMDM4MjE5OCA0NS4wNTA1ODQ5MiAyMjEuMjcyMTg0MjUgNDIuOTMzNTkzNzUgMjE3LjI5Mjk2ODc1IEM0Mi4wMjcwMDYxOCAyMTUuNjI0MjA1OCA0MS4wNzkyMTk1MyAyMTMuOTc3MzU1OTUgNDAuMDk3NjU2MjUgMjEyLjM1MTU2MjUgQzMyLjA2MzI4ODQxIDE5OC44NzY1OTkxMSAzMC4zMzY1MzE4NSAxODUuMTU4ODcyODQgMjkuODIwMzEyNSAxNjkuODEyNSBDMjkuNzkwMTY5NTQgMTY1Ljk1NTcxOTYyIDI5Ljc5MDE2OTU0IDE2NS45NTU3MTk2MiAyOC42MDkzNzUgMTYyLjg1NTQ2ODc1IEMyNi4wMDM3Njg3NSAxNzQuNzIwMjgyOTMgMjQuODU0ODMxNTcgMTg4LjA4NTc3OTAyIDI4LjE3MTg3NSAxOTkuOTI1NzgxMjUgQzI4LjY2ODc0MTEgMjAyLjExNzMxNTY3IDI4LjY3MTQ4Njk4IDIwNC4wNDkxNzMzMiAyOC42MDkzNzUgMjA2LjI5Mjk2ODc1IEMyOC40NjAzMTQwOSAyMTIuODg2MDQ3NDYgMjkuOTA5MTIzMjUgMjE5LjA0Mjk1ODc0IDMyLjEwOTM3NSAyMjUuMjMwNDY4NzUgQzM1LjQwMTQxNjgyIDIzNC43MDYzNTkzMiAzNS45NzEzNjU4OSAyNDQuNTI0Njc0OTQgMzUuOTIxODc1IDI1NC40ODA0Njg3NSBDMzUuOTE4NDEwNjQgMjU1LjYzOTgxOTM0IDM1LjkxNDk0NjI5IDI1Ni43OTkxNjk5MiAzNS45MTEzNzY5NSAyNTcuOTkzNjUyMzQgQzM1Ljc1OTU1NDQgMjcwLjQwMjgzODk4IDM0LjM4MjY2NDU5IDI4Mi41ODU0MTQ0MSAzMi42MDkzNzUgMjk0Ljg1NTQ2ODc1IEMzMi41MDI1NDM5NSAyOTUuNjM1MDI5MyAzMi4zOTU3MTI4OSAyOTYuNDE0NTg5ODQgMzIuMjg1NjQ0NTMgMjk3LjIxNzc3MzQ0IEMzMC4yNjg1OTA5OCAzMTEuNjY1MDQzNjggMjcuMzQ0NzYwOTEgMzI4LjIzNDAyNTU3IDIwLjg5MDYyNSAzNDEuMzQ3NjU2MjUgQzE4Ljk0MTA1NjY3IDM0Ni42ODUxOTM5MyAxOS4zNDU2NjM0MSAzNTEuNzMyODAzNjIgMTkuNjA5Mzc1IDM1Ny4zNTU0Njg3NSBDMTkuNjU2OTg5NzUgMzU4LjU0MDc2MTcyIDE5LjcwNDYwNDQ5IDM1OS43MjYwNTQ2OSAxOS43NTM2NjIxMSAzNjAuOTQ3MjY1NjIgQzIwLjIzMjM4MDAzIDM2OS45MDI0NTgzOCAyMS42MjM4NDY4MSAzNzguNDA2NDM0ODEgMjMuODgwODU5MzggMzg3LjA4MDA3ODEyIEMyNy45MDQzODQ0MiA0MDIuODEwNTM2MTEgMjMuMjU5Njg3NzUgNDE2LjM0ODk5Njc2IDE4LjgxMjUgNDMxLjQyMTg3NSBDMTguNTcxODg4NDMgNDMyLjIzODkyOTE0IDE4LjMzMTI3Njg2IDQzMy4wNTU5ODMyOCAxOC4wODMzNzQwMiA0MzMuODk3Nzk2NjMgQzE3Ljg0MDU4NzE2IDQzNC43MjEwNzQ1MiAxNy41OTc4MDAyOSA0MzUuNTQ0MzUyNDIgMTcuMzQ3NjU2MjUgNDM2LjM5MjU3ODEyIEMxNi45ODE0ODE5MyA0MzcuNjM0MzA3ODYgMTYuOTgxNDgxOTMgNDM3LjYzNDMwNzg2IDE2LjYwNzkxMDE2IDQzOC45MDExMjMwNSBDMTYuMTA3ODEyMjYgNDQwLjU4MjYzMjg5IDE1LjYwMTU5NDU5IDQ0Mi4yNjIzMzQ0NCAxNS4wODkzNTU0NyA0NDMuOTQwMTg1NTUgQzkuMzM0Nzg0NTYgNDYxLjI1MjU4Mzg5IDkuMzM0Nzg0NTYgNDYxLjI1MjU4Mzg5IDEyLjAxNjYwMTU2IDQ3OC41ODAzMjIyNyBDMTIuNTQyMjE2OCA0NzkuMzMxMTIwNjEgMTMuMDY3ODMyMDMgNDgwLjA4MTkxODk1IDEzLjYwOTM3NSA0ODAuODU1NDY4NzUgQzE0LjU5OTM3NSA0ODIuMzQwNDY4NzUgMTQuNTk5Mzc1IDQ4Mi4zNDA0Njg3NSAxNS42MDkzNzUgNDgzLjg1NTQ2ODc1IEMxMC4wNTQyOTAyNSA0ODIuNDA2MzE2MjEgMTAuMDU0MjkwMjUgNDgyLjQwNjMxNjIxIDguMjk2ODc1IDQ4MC4yMzA0Njg3NSBDNy4zMDQyMzU3OSA0NzYuODAxMzUxNDYgNi44NzQzNjQ0IDQ3My40MDEyNzkyNCA2LjYwOTM3NSA0NjkuODU1NDY4NzUgQzYuNTU1MjM0MzcgNDY5LjE1MTY0MDYzIDYuNTAxMDkzNzUgNDY4LjQ0NzgxMjUgNi40NDUzMTI1IDQ2Ny43MjI2NTYyNSBDNi4xOTQ1NzM4MSA0NjEuMzYzMDExMjMgNy43Njk0NTUxMyA0NTUuODk3NTc4NSA5LjYwOTM3NSA0NDkuODU1NDY4NzUgQzEwLjI3NzkzOTgzIDQ0Ny40ODEwMDIzOSAxMC45NDQ1MzgyNCA0NDUuMTA1OTgxNjUgMTEuNjA5Mzc1IDQ0Mi43MzA0Njg3NSBDMTUuMjAwNzcxMTcgNDMwLjIyMjAzMTkxIDE1LjIwMDc3MTE3IDQzMC4yMjIwMzE5MSAxNy4zOTA2MjUgNDI0Ljk4ODI4MTI1IEMyMy42NTM2MTk0MyA0MDkuODk0NDY0NjggMjIuNzQzNTM1NTYgMzkzLjkzMjQ5NjUgMTguNDY3NTI5MyAzNzguNTc1OTI3NzMgQzE2LjQyMzA3ODE2IDM3MC45NDAxNDA0NSAxNS45MjE5NzUwMiAzNjMuNTc0MTM0NzUgMTUuNzUgMzU1LjY5OTIxODc1IEMxNS43NTY0NjYxNiAzNTIuMTEyNDIxODcgMTUuNzU2NDY2MTYgMzUyLjExMjQyMTg3IDE1LjA2Mjk4ODI4IDM0OS43NDEyMTA5NCBDMTQuNDQ1MDEzNDIgMzQ3LjE3MjE5MTY3IDE1LjE0MjQyNjgzIDM0NS45ODk0MTY2NyAxNi4yMzQzNzUgMzQzLjYwNTQ2ODc1IEMxOS4yNDgwNTQ4MiAzMzYuNTI4NTE3MTcgMjEuNDI5ODM3MDIgMzI5LjIyMDY4MjE5IDIzLjYwOTM3NSAzMjEuODU1NDY4NzUgQzIzLjk3Mjg5MDYyIDMyMC42MzYwMTU2MyAyNC4zMzY0MDYyNSAzMTkuNDE2NTYyNSAyNC43MTA5Mzc1IDMxOC4xNjAxNTYyNSBDMzAuMjk2MDAyOTEgMjk4LjQyMDU3MzkyIDMxLjY2ODk0MDM1IDI3OC42MDE1NDIzMiAzMS43MzQzNzUgMjU4LjE2Nzk2ODc1IEMzMS43MzkxMjg0MiAyNTYuOTQ0MTY1MDQgMzEuNzQzODgxODQgMjU1LjcyMDM2MTMzIDMxLjc0ODc3OTMgMjU0LjQ1OTQ3MjY2IEMzMS44MDM5NzM3MiAyMzkuNTA1NTc4NCAzMS44MDM5NzM3MiAyMzkuNTA1NTc4NCAyOC42NzE4NzUgMjI0Ljk4MDQ2ODc1IEMyOC4zMzI4NTE1NiAyMjMuOTUxNzk2ODggMjcuOTkzODI4MTIgMjIyLjkyMzEyNSAyNy42NDQ1MzEyNSAyMjEuODYzMjgxMjUgQzI3LjMwMjkyOTY5IDIyMC44NzA3MDMxMyAyNi45NjEzMjgxMiAyMTkuODc4MTI1IDI2LjYwOTM3NSAyMTguODU1NDY4NzUgQzI1Ljk0MjAxNTYxIDIxNi44NTU2OTk3OSAyNS4yNzUxNDU5NCAyMTQuODU1NzY3MSAyNC42MDkzNzUgMjEyLjg1NTQ2ODc1IEMyMy45NDkzNzUgMjEyLjg1NTQ2ODc1IDIzLjI4OTM3NSAyMTIuODU1NDY4NzUgMjIuNjA5Mzc1IDIxMi44NTU0Njg3NSBDMjIuOTM5Mzc1IDIxMi4wMzA0Njg3NSAyMy4yNjkzNzUgMjExLjIwNTQ2ODc1IDIzLjYwOTM3NSAyMTAuMzU1NDY4NzUgQzI1LjM1ODYwNjg1IDIwNC4yMzMxNTcyNiAyNC45NDAwNDUwMyAxOTkuNjM3MTY3NzIgMjMuMTA5Mzc1IDE5My42Njc5Njg3NSBDMTkuNjU3NjY5MiAxODEuNTA0MDI0NzQgMjIuMzQ0ODEwMzEgMTcwLjg4NjIwMDU1IDI1LjM2MzI4MTI1IDE1OC45NzI2NTYyNSBDMjcuNTk3MDM3NDUgMTUwLjA1NDE0MTA5IDI4Ljk3Nzg3NzcgMTQxLjA2ODAzNjMyIDI4LjYwOTM3NSAxMzEuODU1NDY4NzUgQzI5LjkyOTM3NSAxMzIuNTE1NDY4NzUgMzEuMjQ5Mzc1IDEzMy4xNzU0Njg3NSAzMi42MDkzNzUgMTMzLjg1NTQ2ODc1IEMzMi43MDI0ODU3NCAxMzkuNjY5NzE3MjUgMzIuNjA3MzI1MzkgMTQ1LjExNzI1NDAyIDMxLjYwOTM3NSAxNTAuODU1NDY4NzUgQzMxLjMwMTA1OTE4IDE1NS40NjI1ODggMzEuNTAwMzMwOTYgMTU5LjUyMzU3NjYyIDMyLjYxNzE4NzUgMTY0LjAwNzgxMjUgQzMzLjU5NzYzMDU1IDE2OC4yMTY1NzUzMSAzMy43MjQxMjg1MSAxNzIuMDk1NjQxNjkgMzMuNjgxMTUyMzQgMTc2LjQwMTM2NzE5IEMzMy42MTM2MTAzMiAxOTYuMDg4MDg5NDIgNDIuODQzOTY3NDUgMjExLjczOTUxMjkzIDUzLjMxODYwMzUyIDIyNy44NTU3MTI4OSBDNTUuMDg3NTQ2MTEgMjMwLjU5NjI4NTc2IDU2Ljc5MzM2NDY3IDIzMy4zNzQ4MzU0IDU4LjQ5ODc3OTMgMjM2LjE1NTI3MzQ0IEM1OS42ODE3Nzg5NiAyMzguMDQyNjI3MDMgNTkuNjgxNzc4OTYgMjM4LjA0MjYyNzAzIDYxLjY3MTg3NSAyNDAuMjkyOTY4NzUgQzY3LjcxNzMwNDY3IDI0OC4yODg1MzcwMiA2Ny45ODQ0NTU5NCAyNTUuMjcxNTk1OTQgNjcuNjUyMzQzNzUgMjY0Ljk2NDg0Mzc1IEM2Ny42MTY4Njc0MyAyNjguMTc3MDYzNTcgNjcuODEzMzAwNDggMjcwLjc2ODQwMTE1IDY4LjYwOTM3NSAyNzMuODU1NDY4NzUgQzcxLjE1MTExNDc3IDI3My44ODI2MzY5OSA3My42OTI1NTkxNSAyNzMuOTAyMzg4NDQgNzYuMjM0Mzc1IDI3My45MTc5Njg3NSBDNzYuOTQ3MjI2NTYgMjczLjkyNjM0NzY2IDc3LjY2MDA3ODEzIDI3My45MzQ3MjY1NiA3OC4zOTQ1MzEyNSAyNzMuOTQzMzU5MzggQzgyLjU4MjgxOTM4IDI3My45NjI1NzE3MSA4Ni40ODIyMjEyIDI3My42ODIyMDE0NSA5MC42MDkzNzUgMjcyLjg1NTQ2ODc1IEM5MC42MDkzNzUgMjczLjg0NTQ2ODc1IDkwLjYwOTM3NSAyNzQuODM1NDY4NzUgOTAuNjA5Mzc1IDI3NS44NTU0Njg3NSBDODYuNzMyNTM0MTMgMjc3LjA0ODM0Mjg2IDgzLjY5MzE1NTc3IDI3Ny44NTU0Njg3NSA3OS42MDkzNzUgMjc3Ljg1NTQ2ODc1IEM3OS45MTg3NSAyNzguNTExNjAxNTYgODAuMjI4MTI1IDI3OS4xNjc3MzQzOCA4MC41NDY4NzUgMjc5Ljg0Mzc1IEM4Mi4wODcyNDUzMiAyODQuMjEwMDIwMjkgODIuMzgwMDg5MjYgMjg4LjY1ODgyMTYzIDgyLjgyMDMxMjUgMjkzLjIzNjMyODEyIEM4My4xNjUwNTA2NCAyOTcuNDk2Nzk2MDYgODMuMTY1MDUwNjQgMjk3LjQ5Njc5NjA2IDg1LjYwOTM3NSAzMDAuODU1NDY4NzUgQzg1LjI3OTM3NSAyOTMuNTk1NDY4NzUgODQuOTQ5Mzc1IDI4Ni4zMzU0Njg3NSA4NC42MDkzNzUgMjc4Ljg1NTQ2ODc1IEM4NS4yNjkzNzUgMjc4LjUyNTQ2ODc1IDg1LjkyOTM3NSAyNzguMTk1NDY4NzUgODYuNjA5Mzc1IDI3Ny44NTU0Njg3NSBDODcuODM2MzIyNzkgMjgxLjUzNjMxMjEzIDg4LjIxOTg4MDA4IDI4NS4yMDkzODIyMiA4OC42NzE4NzUgMjg5LjA0Mjk2ODc1IEM4OC43NjI3NTM5MSAyODkuNzkyNTU4NTkgODguODUzNjMyODEgMjkwLjU0MjE0ODQ0IDg4Ljk0NzI2NTYyIDI5MS4zMTQ0NTMxMiBDODkuMTcwNzQ4MSAyOTMuMTYxMTI0MSA4OS4zOTA0MzAxMyAyOTUuMDA4MjU0MjkgODkuNjA5Mzc1IDI5Ni44NTU0Njg3NSBDOTAuMjY5Mzc1IDI5Ni44NTU0Njg3NSA5MC45MjkzNzUgMjk2Ljg1NTQ2ODc1IDkxLjYwOTM3NSAyOTYuODU1NDY4NzUgQzkxLjYwNDEzODE4IDI5Ni4xMTkwOTE4IDkxLjU5ODkwMTM3IDI5NS4zODI3MTQ4NCA5MS41OTM1MDU4NiAyOTQuNjI0MDIzNDQgQzkxLjU3MjcwNjMzIDI5MS4yODQ1MTM5IDkxLjU1OTcwNTMyIDI4Ny45NDUwMTgwMSA5MS41NDY4NzUgMjg0LjYwNTQ2ODc1IEM5MS41Mzg0OTYwOSAyODMuNDQ2NjAxNTYgOTEuNTMwMTE3MTkgMjgyLjI4NzczNDM4IDkxLjUyMTQ4NDM4IDI4MS4wOTM3NSBDOTEuNTE4MjYxNzIgMjc5Ljk3ODcxMDk0IDkxLjUxNTAzOTA2IDI3OC44NjM2NzE4OCA5MS41MTE3MTg3NSAyNzcuNzE0ODQzNzUgQzkxLjUwNjQ4MTkzIDI3Ni42ODg0Mjc3MyA5MS41MDEyNDUxMiAyNzUuNjYyMDExNzIgOTEuNDk1ODQ5NjEgMjc0LjYwNDQ5MjE5IEM5MS41OTYwMDU0OSAyNzIuMTc5MjEyMTkgOTEuOTEwMTQ0MjIgMjcwLjE2ODQ5NTE0IDkyLjYwOTM3NSAyNjcuODU1NDY4NzUgQzkxLjI4OTM3NSAyNjcuNTI1NDY4NzUgODkuOTY5Mzc1IDI2Ny4xOTU0Njg3NSA4OC42MDkzNzUgMjY2Ljg1NTQ2ODc1IEM4OC42MDkzNzUgMjY2LjE5NTQ2ODc1IDg4LjYwOTM3NSAyNjUuNTM1NDY4NzUgODguNjA5Mzc1IDI2NC44NTU0Njg3NSBDOTIuODgyNzk0MTQgMjY1LjMzMDI5MzEgOTQuNzEyNTY5MjggMjY3Ljg4NjI0Mjg4IDk3LjYwOTM3NSAyNzAuODU1NDY4NzUgQzk5Ljg1NTc1ODE4IDI3Mi4yMDMyOTg2NiAxMDEuMDAzODMzMzQgMjcyLjg1NTQ2ODc1IDEwMy42MDkzNzUgMjcyLjg1NTQ2ODc1IEM5OS4xOTg1NjkyNyAyNjUuMzk1NzE4OTcgOTQuMzY3NDQ2NCAyNTguMzI5MjQ3OTEgODcuOTg0Mzc1IDI1Mi40MTc5Njg3NSBDNzYuNzg4OTk5NjIgMjQxLjU1Mjk5MjI2IDcxLjg2NzM0MDQ5IDIyMC43NzQyNjIyNCA2OS4wNDIyMzYzMyAyMDUuOTAzMDc2MTcgQzY1Ljk1ODgxMTUxIDE4OS42MTA1NzE0NCA2NS45NTg4MTE1MSAxODkuNjEwNTcxNDQgNTguNDIxODc1IDE3NS4xMDU0Njg3NSBDNDguNjc1MTE4ODkgMTYxLjk2NTIwODU1IDUxLjQ5OTg5MTMgMTM4LjA5NjcxODQ2IDUxLjY5OTIxODc1IDEyMi41ODAzMjIyNyBDNTEuODQwMzU5NjggMTEwLjYzNzI1MTEyIDUxLjk4NTQzMDg0IDk4LjM0MjYzNDA0IDQzLjYwOTM3NSA4OC44NTU0Njg3NSBDMzcuNzgyNzU2MzMgODMuMTkzNzU0MzggMzAuMjI5NjcyMzEgODEuMjEyMDEwNjEgMjIuNjEyNzkyOTcgNzkuMDM0NjY3OTcgQzEzLjY3MTAxNjIxIDc2LjQ1NjA0OTQyIDYuNTczNzY0NjIgNzMuMjA3Njk0MTggMC42MDkzNzUgNjUuODU1NDY4NzUgQy0wLjk5MjExMDUzIDYyLjc5MTc1NzMxIC0xLjM5MDYyNSA2MS4zMDU2MjA4MyAtMS4zOTA2MjUgNTcuODU1NDY4NzUgQy0xLjg2MTEzMjgxIDU4LjI3Njk5MjE5IC0yLjMzMTY0MDYzIDU4LjY5ODUxNTYyIC0yLjgxNjQwNjI1IDU5LjEzMjgxMjUgQy0zLjQzOTAyMzQ0IDU5LjY4MDY2NDA2IC00LjA2MTY0MDYyIDYwLjIyODUxNTYyIC00LjcwMzEyNSA2MC43OTI5Njg3NSBDLTUuMzE4MDA3ODEgNjEuMzM4MjQyMTkgLTUuOTMyODkwNjIgNjEuODgzNTE1NjMgLTYuNTY2NDA2MjUgNjIuNDQ1MzEyNSBDLTExLjA1NzE0MjgzIDY1LjkxNjczODQzIC0xNi45OTU2NzA4MyA2NS40NDAzNzEwNiAtMjIuMzkwNjI1IDY0Ljg1NTQ2ODc1IEMtMjUuMTk2MjUwMjUgNjMuNjYxNTg1NjcgLTI3LjIyNTExNjI0IDYyLjAyMDk3NzUxIC0yOS4zOTA2MjUgNTkuODU1NDY4NzUgQy0yOS43MjA2MjUgNjIuNDk1NDY4NzUgLTMwLjA1MDYyNSA2NS4xMzU0Njg3NSAtMzAuMzkwNjI1IDY3Ljg1NTQ2ODc1IEMtMzEuMDUwNjI1IDY3Ljg1NTQ2ODc1IC0zMS43MTA2MjUgNjcuODU1NDY4NzUgLTMyLjM5MDYyNSA2Ny44NTU0Njg3NSBDLTMyLjY2OTA2MjUgNjguNzIxNzE4NzUgLTMyLjY2OTA2MjUgNjguNzIxNzE4NzUgLTMyLjk1MzEyNSA2OS42MDU0Njg3NSBDLTM2Ljc5NzQ0ODIxIDc1LjYyMjY3MDMgLTQ1Ljg4OTQwNjE2IDc3Ljg2NzM1NDA4IC01Mi4zOTA2MjUgNzkuODU1NDY4NzUgQy01NC41NzQ0MjQ0MSA4MC4zMzExMjE4MSAtNTYuNzYyMTI0NiA4MC43ODkxNzE4NSAtNTguOTUzMTI1IDgxLjIzMDQ2ODc1IEMtNjYuMzM1NTUwMiA4Mi44OTYzMzY2NyAtNzIuNjkxOTg3MzIgODUuMTM1NzI0OTIgLTc3LjI2OTUzMTI1IDkxLjQ0NTMxMjUgQy04MS45MTg0MTI4IDk5LjYxMTY2MTA1IC04NC4zNDM5MjE4MSAxMDcuNDM0NjUzMjIgLTgzLjM5MDYyNSAxMTYuODU1NDY4NzUgQy04My4wNTkwMTM2NyAxMTcuODkzNzI4MDMgLTgyLjcyNzQwMjM0IDExOC45MzE5ODczIC04Mi4zODU3NDIxOSAxMjAuMDAxNzA4OTggQy04MS4zMTg1NzcxIDEyNC4xMzQ0ODY0MyAtODEuMTI1NTU2NzQgMTI3LjkxMDg0NzU3IC04MS4yMDMxMjUgMTMyLjE0MDYyNSBDLTgxLjIxMzkyMDkgMTMyLjkxODc3MDYgLTgxLjIyNDcxNjggMTMzLjY5NjkxNjIgLTgxLjIzNTgzOTg0IDEzNC40OTg2NDE5NyBDLTgxLjI2Mzc1MTAyIDEzNi4xNDAwNzU2IC04MS4yOTc3MDc4MiAxMzcuNzgxNDE2NDYgLTgxLjMzNzQwMjM0IDEzOS40MjI2MDc0MiBDLTgxLjM4OTk2NjM3IDE0MS44ODcwODg1NiAtODEuNDAwNzc5MDQgMTQ0LjM0OTQ4MTkxIC04MS40MTAxNTYyNSAxNDYuODE0NDUzMTIgQy04MS41NzU1MDQyNyAxNTcuNDg4MTAxMjEgLTgzLjM4Njg1MTA0IDE2NS4zNzgwNDA2NSAtODguMzkwNjI1IDE3NC44NTU0Njg3NSBDLTg5LjEyMDMxNDM4IDE3Ni4zMTM1NDA2MSAtODkuODQ5NjI0ODkgMTc3Ljc3MTgwMjMzIC05MC41NzgxMjUgMTc5LjIzMDQ2ODc1IEMtOTAuODkwMDc4MTMgMTc5Ljg0NjY0MDYyIC05MS4yMDIwMzEyNSAxODAuNDYyODEyNSAtOTEuNTIzNDM3NSAxODEuMDk3NjU2MjUgQy05NC41OTM1MTMwMSAxODcuMzIwNzgyMjggLTk1LjkyMTAyMjIzIDE5My4yODUyMDk3OCAtOTcuMTI5NjM4NjcgMjAwLjA5MzUwNTg2IEMtMTA1LjQ1NDkwMTc2IDI0Ni4zNTM3NDM4MiAtMTA1LjQ1NDkwMTc2IDI0Ni4zNTM3NDM4MiAtMTIxLjM5MDYyNSAyNTcuODU1NDY4NzUgQy0xMjIuMzgwNjI1IDI1OC4xODU0Njg3NSAtMTIzLjM3MDYyNSAyNTguNTE1NDY4NzUgLTEyNC4zOTA2MjUgMjU4Ljg1NTQ2ODc1IEMtMTI0LjY3OTM3NSAyNTkuNzIxNzE4NzUgLTEyNC45NjgxMjUgMjYwLjU4Nzk2ODc1IC0xMjUuMjY1NjI1IDI2MS40ODA0Njg3NSBDLTEyNi40NTI3NDY0OCAyNjUuMDQxODMzMiAtMTI3Ljk5OTYzMjkxIDI2Ny4zMTIyMDAwMyAtMTMwLjI2OTUzMTI1IDI3MC4yNDIxODc1IEMtMTMxLjU4Nzg0NTYyIDI3MS45Nzc2NDc3NiAtMTMxLjU4Nzg0NTYyIDI3MS45Nzc2NDc3NiAtMTMyLjM5MDYyNSAyNzQuODU1NDY4NzUgQy0xMjcuNDM5MTExNDIgMjcyLjgwMjQwMjE0IC0xMjQuNTQzNTI1NTggMjcwLjE1ODgxODcxIC0xMjEuMTAxNTYyNSAyNjYuMTgzNTkzNzUgQy0xMjAuMjU0NjQ4NDQgMjY1LjUyNjE3MTg4IC0xMjAuMjU0NjQ4NDQgMjY1LjUyNjE3MTg4IC0xMTkuMzkwNjI1IDI2NC44NTU0Njg3NSBDLTExNy4xNzk2ODc1IDI2NS4xNTIzNDM3NSAtMTE3LjE3OTY4NzUgMjY1LjE1MjM0Mzc1IC0xMTUuMzkwNjI1IDI2NS44NTU0Njg3NSBDLTExNi4wNDE4NDMyNiAyNjYuMjE0MzExNTIgLTExNi42OTMwNjE1MiAyNjYuNTczMTU0MyAtMTE3LjM2NDAxMzY3IDI2Ni45NDI4NzEwOSBDLTExOS42ODQ5MjU2IDI2OC43NDI1NTExOCAtMTE5LjY4NDkyNTYgMjY4Ljc0MjU1MTE4IC0xMTkuODYwNTk1NyAyNzEuODQyMjg1MTYgQy0xMTkuODQ2MDEzMTggMjczLjAzNTE1MTM3IC0xMTkuODMxNDMwNjYgMjc0LjIyODAxNzU4IC0xMTkuODE2NDA2MjUgMjc1LjQ1NzAzMTI1IEMtMTE5LjgwMzgzNzg5IDI3Ny4zOTgzNTkzOCAtMTE5LjgwMzgzNzg5IDI3Ny4zOTgzNTkzOCAtMTE5Ljc5MTAxNTYyIDI3OS4zNzg5MDYyNSBDLTExOS43NzY1OTQyNCAyODAuMDUxNDc0NjEgLTExOS43NjIxNzI4NSAyODAuNzI0MDQyOTcgLTExOS43NDczMTQ0NSAyODEuNDE2OTkyMTkgQy0xMTkuNzAzMTMzNjEgMjgzLjQ4MDA2Njg4IC0xMTkuNjg1ODY1MTUgMjg1LjU0MTk3OTAxIC0xMTkuNjczODI4MTIgMjg3LjYwNTQ2ODc1IEMtMTIwLjE4NjAzOTQ0IDI5My42MTc5NjY5NSAtMTIwLjE4NjAzOTQ0IDI5My42MTc5NjY5NSAtMTE4LjM5MDYyNSAyOTguODU1NDY4NzUgQy0xMTguMzMwMDM5MDYgMjk3LjgwNzQ2MDk0IC0xMTguMjY5NDUzMTIgMjk2Ljc1OTQ1MzEyIC0xMTguMjA3MDMxMjUgMjk1LjY3OTY4NzUgQy0xMTguMTIyNjA3NjIgMjk0LjMwMDc2ODI3IC0xMTguMDM3OTYwNTMgMjkyLjkyMTg2MjcgLTExNy45NTMxMjUgMjkxLjU0Mjk2ODc1IEMtMTE3LjkxMzgwODU5IDI5MC44NTI2NzU3OCAtMTE3Ljg3NDQ5MjE5IDI5MC4xNjIzODI4MSAtMTE3LjgzMzk4NDM4IDI4OS40NTExNzE4OCBDLTExNy42NDEzNTA4NSAyODYuMzgzODUzNCAtMTE3LjM2NzM5NzgzIDI4My43ODU3ODcyMyAtMTE2LjM5MDYyNSAyODAuODU1NDY4NzUgQy0xMTcuMDUwNjI1IDI4MC44NTU0Njg3NSAtMTE3LjcxMDYyNSAyODAuODU1NDY4NzUgLTExOC4zOTA2MjUgMjgwLjg1NTQ2ODc1IEMtMTE4LjM5MDYyNSAyODAuMTk1NDY4NzUgLTExOC4zOTA2MjUgMjc5LjUzNTQ2ODc1IC0xMTguMzkwNjI1IDI3OC44NTU0Njg3NSBDLTExMS40NjA2MjUgMjc4LjUyNTQ2ODc1IC0xMDQuNTMwNjI1IDI3OC4xOTU0Njg3NSAtOTcuMzkwNjI1IDI3Ny44NTU0Njg3NSBDLTk2LjQ0ODA0MDgxIDI3NS4wMjc3MTYxNyAtOTYuMjQyNjQ3MDYgMjczLjE1MjU3MTY5IC05Ni4xNzk2ODc1IDI3MC4yMTQ4NDM3NSBDLTk2LjE1MTMyODEyIDI2OS4zMDg2MzI4MSAtOTYuMTIyOTY4NzUgMjY4LjQwMjQyMTg4IC05Ni4wOTM3NSAyNjcuNDY4NzUgQy05Ni4wNDIwOTgxIDI2NS41NzU3MDc4MyAtOTUuOTk3NzAyMzUgMjYzLjY4MjQ1MjMgLTk1Ljk2MDkzNzUgMjYxLjc4OTA2MjUgQy05NS42MTk3NDEyMyAyNTEuNzM3OTg5MDMgLTkxLjI1MDYzOTk3IDI0NC42NDk3MjY3OCAtODYuMzI4MTI1IDIzNi4xMDU0Njg3NSBDLTg0LjAwOTk1ODQ0IDIzMi4wMjUzMzk0NyAtODEuNjk5Nzg1NjUgMjI3Ljk0MDcwMDc1IC03OS4zOTA2MjUgMjIzLjg1NTQ2ODc1IEMtNzguODg5MTc5NjkgMjIyLjk3MDUyNzM0IC03OC4zODc3MzQzOCAyMjIuMDg1NTg1OTQgLTc3Ljg3MTA5Mzc1IDIyMS4xNzM4MjgxMiBDLTY5LjEyOTU4ODQ3IDIwNS42MjkzNjA3NSAtNjUuMTY5MjcwNjggMTkxLjk2NDY2MDQ1IC02NC4wNzIyNjU2MiAxNzQuMTUzNTY0NDUgQy02My43NDU0MjA3IDE2OC45OTYwNjk0NiAtNjMuMTEyMDY1MDIgMTY0Ljc1Mzg3NTMgLTYxLjM5MDYyNSAxNTkuODU1NDY4NzUgQy02MC43Nzc0NTY0NyAxNTEuODIxMTU3NTggLTYxLjIxMzY2NTIgMTQzLjk4ODgwNzgyIC02Mi45NTMxMjUgMTM2LjEyNSBDLTYzLjM5MDYyNSAxMzMuODU1NDY4NzUgLTYzLjM5MDYyNSAxMzMuODU1NDY4NzUgLTYzLjM5MDYyNSAxMjkuODU1NDY4NzUgQy02Mi40MDA2MjUgMTI5Ljg1NTQ2ODc1IC02MS40MTA2MjUgMTI5Ljg1NTQ2ODc1IC02MC4zOTA2MjUgMTI5Ljg1NTQ2ODc1IEMtNTcuODY3ODk5OTcgMTM3Ljk0OTIxMTU2IC01Ny4yNjU3MjQyMSAxNDUuMDExMTI2NzIgLTU3LjUxNTYyNSAxNTMuNDE3OTY4NzUgQy01Ny43MzUxMDcxOSAxNjIuMDY1MjYwMDEgLTU2LjQyMjQzODYyIDE2OC4xMjE3MTcxNyAtNTIuMzkwNjI1IDE3NS44NTU0Njg3NSBDLTQ5LjM2NDQzNzcyIDE4NC4wMTQ4MTMyOSAtNTAuMDk4MjY3NjMgMTg5Ljg4MTU3ODU1IC01Mi44MzIwMzEyNSAxOTcuOTQ5MjE4NzUgQy01NC4yNzg2MTc2MyAyMDUuNDc1NTE0MzUgLTUxLjgxMTQ1MTQ0IDIxMC43NjY2NDE4MSAtNDguMDE1NjI1IDIxNy4wNDI5Njg3NSBDLTQ3LjYxNjAxNTYzIDIxNy43MjgxMDU0NyAtNDcuMjE2NDA2MjUgMjE4LjQxMzI0MjE5IC00Ni44MDQ2ODc1IDIxOS4xMTkxNDA2MiBDLTQ1LjExMTI1NTcgMjIyLjAxMzAxNTAzIC00My4zNzgzMzgzNyAyMjQuODc1MTMyNzIgLTQxLjYwMTU2MjUgMjI3LjcxODc1IEMtNDAuMzkwNjI1IDIyOS44NTU0Njg3NSAtNDAuMzkwNjI1IDIyOS44NTU0Njg3NSAtNDAuMzkwNjI1IDIzMS44NTU0Njg3NSBDLTM5LjQwMDYyNSAyMzIuMTg1NDY4NzUgLTM4LjQxMDYyNSAyMzIuNTE1NDY4NzUgLTM3LjM5MDYyNSAyMzIuODU1NDY4NzUgQy0zNy4zOTA2MjUgMjMzLjg0NTQ2ODc1IC0zNy4zOTA2MjUgMjM0LjgzNTQ2ODc1IC0zNy4zOTA2MjUgMjM1Ljg1NTQ2ODc1IEMtNDEuMTYwNDMxMjQgMjM0Ljk5Mzc5ODc1IC00Mi44MzA5NjkxIDIzMy41ODg3Nzc5NiAtNDQuODI4MTI1IDIzMC40MTc5Njg3NSBDLTQ1LjcwMTMwODI3IDIyOC45MDc5NzM0OCAtNDYuNTUzMzEyMTEgMjI3LjM4NTY0NTgxIC00Ny4zOTA2MjUgMjI1Ljg1NTQ2ODc1IEMtNDcuOTM0NjA5MzcgMjI0Ljg3NDQ5MjE5IC00OC40Nzg1OTM3NSAyMjMuODkzNTE1NjIgLTQ5LjAzOTA2MjUgMjIyLjg4MjgxMjUgQy01MC41MDUzOTU2MiAyMjAuMjE1MTg3NyAtNTEuOTU0ODA2NDggMjE3LjUzOTYxMDYgLTUzLjM5MDYyNSAyMTQuODU1NDY4NzUgQy01NC45MjU5ODk2OCAyMTkuOTI2ODI0ODIgLTU2LjA1Mzg5NDUyIDIyNC45NDg2MjU3MiAtNTYuOTUzMTI1IDIzMC4xNjc5Njg3NSBDLTU3LjA3ODgwODU5IDIzMC44NjM0MTc5NyAtNTcuMjA0NDkyMTkgMjMxLjU1ODg2NzE5IC01Ny4zMzM5ODQzOCAyMzIuMjc1MzkwNjIgQy01OC44ODUxNjkwNCAyNDEuMTM1ODIyMzkgLTU5LjU0OTUyMDIgMjQ5Ljk0MDA4NjAyIC01OS41OTM3NSAyNTguOTI5Njg3NSBDLTU5LjU5OTQ1MDA3IDI1OS44NTY1ODg5IC01OS42MDUxNTAxNSAyNjAuNzgzNDkwMyAtNTkuNjExMDIyOTUgMjYxLjczODQ3OTYxIEMtNTkuNjIwNDAxOTYgMjYzLjY4NzIxMzk5IC01OS42MjY5NzgzNiAyNjUuNjM1OTYzNzIgLTU5LjYzMDg1OTM4IDI2Ny41ODQ3MTY4IEMtNTkuNjQwNTQzNzUgMjcwLjUxODM1NzI1IC01OS42NzE2MjcyMyAyNzMuNDUxMjg5NDQgLTU5LjcwMzEyNSAyNzYuMzg0NzY1NjIgQy01OS43NjQ4NDU1NCAyODcuMzA0MjczNDggLTU5LjEyMTExMzk0IDI5Ny4yMzAxMjM2MiAtNTYuMzkwNjI1IDMwNy44NTU0Njg3NSBDLTU2LjE5MTc4NzExIDMwOC42OTYzNDAzMyAtNTUuOTkyOTQ5MjIgMzA5LjUzNzIxMTkxIC01NS43ODgwODU5NCAzMTAuNDAzNTY0NDUgQy01NS4yNzg5ODQ0NSAzMTIuNTA1MzQwNTMgLTU0LjcyNTM1Mjk4IDMxNC41ODYwOTQwMyAtNTQuMTQwNjI1IDMxNi42Njc5Njg3NSBDLTUzLjkzNTkwNTc2IDMxNy40MDQ0MjYyNyAtNTMuNzMxMTg2NTIgMzE4LjE0MDg4Mzc5IC01My41MjAyNjM2NyAzMTguODk5NjU4MiBDLTUxLjY2NTM4OTAzIDMyNS4zMzc1NjUwMSAtNDkuMzI4NzI5MDcgMzMxLjU1MzM3MDAzIC00Ni44MDE3NTc4MSAzMzcuNzU1MTI2OTUgQy00NS4wNDEyNjA5NyAzNDIuMDc2OTM2ODkgLTQzLjU5MDk2NjgzIDM0Ni4zNDM4MzkxMSAtNDIuMzkwNjI1IDM1MC44NTU0Njg3NSBDLTQxLjczMDYyNSAzNTAuODU1NDY4NzUgLTQxLjA3MDYyNSAzNTAuODU1NDY4NzUgLTQwLjM5MDYyNSAzNTAuODU1NDY4NzUgQy00MC4xOTQ2ODc1IDM1MS4zODY1NjI1IC0zOS45OTg3NSAzNTEuOTE3NjU2MjUgLTM5Ljc5Njg3NSAzNTIuNDY0ODQzNzUgQy0zNy41MzIwNDAwOCAzNTcuODE0NTQwMDIgLTM1LjM0OTY5NjI3IDM1OS45OTY4ODM4MyAtMzAgMzYyLjI2MTcxODc1IEMtMjkuMjAzMzU5MzggMzYyLjU1NTYyNSAtMjkuMjAzMzU5MzggMzYyLjU1NTYyNSAtMjguMzkwNjI1IDM2Mi44NTU0Njg3NSBDLTI4LjM5MDYyNSAzNjMuMTg1NDY4NzUgLTI4LjM5MDYyNSAzNjMuNTE1NDY4NzUgLTI4LjM5MDYyNSAzNjMuODU1NDY4NzUgQy0zMS41NzgxMjUgMzY0LjE2Nzk2ODc1IC0zMS41NzgxMjUgMzY0LjE2Nzk2ODc1IC0zNS4zOTA2MjUgMzYzLjg1NTQ2ODc1IEMtMzguMTI4OTA2MjUgMzYxLjMzNTkzNzUgLTM4LjEyODkwNjI1IDM2MS4zMzU5Mzc1IC00MC4zOTA2MjUgMzU4Ljg1NTQ2ODc1IEMtNDAuNjA5OTY3MDQgMzYwLjE0MTc5MTk5IC00MC42MDk5NjcwNCAzNjAuMTQxNzkxOTkgLTQwLjgzMzc0MDIzIDM2MS40NTQxMDE1NiBDLTQxLjM3ODU3OTk3IDM2NC42NDQ5MDQzNyAtNDEuOTI0NzkwOCAzNjcuODM1NDY4NiAtNDIuNDcxOTIzODMgMzcxLjAyNTg3ODkxIEMtNDIuNzA4MTQ4NTggMzcyLjQwNTAxNjk4IC00Mi45NDM4MzE1IDM3My43ODQyNDc5OCAtNDMuMTc4OTU1MDggMzc1LjE2MzU3NDIyIEMtNDMuNTE3NjA2MjYgMzc3LjE0OTY1OTU3IC00My44NTgzODc1MiAzNzkuMTM1MzgxMzUgLTQ0LjE5OTIxODc1IDM4MS4xMjEwOTM3NSBDLTQ0LjQwMzQ1NDU5IDM4Mi4zMTUwODc4OSAtNDQuNjA3NjkwNDMgMzgzLjUwOTA4MjAzIC00NC44MTgxMTUyMyAzODQuNzM5MjU3ODEgQy00NS4xNDMzOTg5MyAzODYuNTA5Nzk5ODcgLTQ1LjQ5OTE0MzI3IDM4OC4yNzY5NDU1NSAtNDUuOTQ3OTk4MDUgMzkwLjAyMDI2MzY3IEMtNTAuMjgyNDUyMTIgNDA3Ljk5MTYzMjI4IC00My43NjIyNjA4NiA0MjcuNDQ0NTk4NTggLTM1LjUxMzkxNjAyIDQ0My4xODc3NDQxNCBDLTMwLjM1ODUyNTI3IDQ1My4xOTM1NzEzNiAtMjguNzk3OTczNTYgNDY0LjcxODUzMzg4IC0zMC4zOTA2MjUgNDc1Ljg1NTQ2ODc1IEMtMzIuMjUzNDE3ODEgNDc5LjE5MDg0MzQgLTM0LjM4MTAzODAzIDQ4MS41MjE1MDMzNCAtMzcuMzkwNjI1IDQ4My44NTU0Njg3NSBDLTM2LjA3MDYyNSA0ODMuNTI1NDY4NzUgLTM0Ljc1MDYyNSA0ODMuMTk1NDY4NzUgLTMzLjM5MDYyNSA0ODIuODU1NDY4NzUgQy0zNS4yNjU2MjUgNDg3LjYwNTQ2ODc1IC0zNS4yNjU2MjUgNDg3LjYwNTQ2ODc1IC0zNi4zOTA2MjUgNDg5Ljg1NTQ2ODc1IEMtMzUuMDcwNjI1IDQ4OS44NTU0Njg3NSAtMzMuNzUwNjI1IDQ4OS44NTU0Njg3NSAtMzIuMzkwNjI1IDQ4OS44NTU0Njg3NSBDLTMyLjA2MDYyNSA0ODcuODc1NDY4NzUgLTMxLjczMDYyNSA0ODUuODk1NDY4NzUgLTMxLjM5MDYyNSA0ODMuODU1NDY4NzUgQy0zMC40MDA2MjUgNDgzLjUyNTQ2ODc1IC0yOS40MTA2MjUgNDgzLjE5NTQ2ODc1IC0yOC4zOTA2MjUgNDgyLjg1NTQ2ODc1IEMtMjkuMjY1NjI1IDQ4Ny42MDU0Njg3NSAtMjkuMjY1NjI1IDQ4Ny42MDU0Njg3NSAtMzAuMzkwNjI1IDQ4OS44NTU0Njg3NSBDLTI5LjQwMDYyNSA0OTAuMTg1NDY4NzUgLTI4LjQxMDYyNSA0OTAuNTE1NDY4NzUgLTI3LjM5MDYyNSA0OTAuODU1NDY4NzUgQy0yNi40MDA2MjUgNDg3Ljg4NTQ2ODc1IC0yNS40MTA2MjUgNDg0LjkxNTQ2ODc1IC0yNC4zOTA2MjUgNDgxLjg1NTQ2ODc1IEMtMjMuNzMwNjI1IDQ4MS44NTU0Njg3NSAtMjMuMDcwNjI1IDQ4MS44NTU0Njg3NSAtMjIuMzkwNjI1IDQ4MS44NTU0Njg3NSBDLTIyLjcyMDYyNSA0ODMuNTA1NDY4NzUgLTIzLjA1MDYyNSA0ODUuMTU1NDY4NzUgLTIzLjM5MDYyNSA0ODYuODU1NDY4NzUgQy0yMS43NDA2MjUgNDg2Ljg1NTQ2ODc1IC0yMC4wOTA2MjUgNDg2Ljg1NTQ2ODc1IC0xOC4zOTA2MjUgNDg2Ljg1NTQ2ODc1IEMtMTkuMzE4NzUgNDg3LjIyNjcxODc1IC0xOS4zMTg3NSA0ODcuMjI2NzE4NzUgLTIwLjI2NTYyNSA0ODcuNjA1NDY4NzUgQy0yMi43NDEzMTE4NyA0ODkuMDYxNzU1MTQgLTIzLjM0MTg3NTAyIDQ5MC4yMzM1OTM4MSAtMjQuMzkwNjI1IDQ5Mi44NTU0Njg3NSBDLTIxLjc1MDYyNSA0OTIuODU1NDY4NzUgLTE5LjExMDYyNSA0OTIuODU1NDY4NzUgLTE2LjM5MDYyNSA0OTIuODU1NDY4NzUgQy0xNS41MDkxNjgzNyA0ODcuNzY1NTUzNzkgLTE1LjM0MjE4MDY3IDQ4My4wMTc0NjcwNSAtMTUuNzAzMTI1IDQ3Ny44NTU0Njg3NSBDLTE1LjczODU3NDIyIDQ3Ny4xODI1NzgxMyAtMTUuNzc0MDIzNDQgNDc2LjUwOTY4NzUgLTE1LjgxMDU0Njg4IDQ3NS44MTY0MDYyNSBDLTE2LjAyMTg3Nzk1IDQ3Mi41NDg2NjAxMyAtMTYuNDQ5OTU2MDIgNDY5LjY2MDg5ODkxIC0xNy40MDY0OTQxNCA0NjYuNTI0MDMyNTkgQy0xOC4zODE4MDA4MyA0NjIuODg4MzYyNzcgLTE4LjYyMTE1Mjg2IDQ1OS45NzAwNDU3OCAtMTguNTg1OTM3NSA0NTYuMjIwOTQ3MjcgQy0xOC41NzYwMjc4MyA0NTQuMzA4NDQ5MzMgLTE4LjU3NjAyNzgzIDQ1NC4zMDg0NDkzMyAtMTguNTY1OTE3OTcgNDUyLjM1NzMxNTA2IEMtMTguNTUzNTYxMSA0NTEuMzQ5OTA2MTEgLTE4LjU1MzU2MTEgNDUxLjM0OTkwNjExIC0xOC41NDA5NTQ1OSA0NTAuMzIyMTQ1NDYgQy0xOC41MTUxODQxMSA0NDguMTk4MDM0ODggLTE4LjUwMjMzNDk4IDQ0Ni4wNzQxNzcyOCAtMTguNDkyNjc1NzggNDQzLjk0OTkzNTkxIEMtMTguNDY2MDgyMTkgNDM4LjY3NTkyMjU3IC0xOC40MTc2NzE1IDQzMy40MDIxNTE4OCAtMTguMzY5ODczMDUgNDI4LjEyODI5NTkgQy0xOC4zMzAyNDA3OSA0MjMuNjYzNDU5ODMgLTE4LjI5OTAzMjU0IDQxOS4xOTg3MTQ2MSAtMTguMjc4NzQ3NTYgNDE0LjczMzc0NzQ4IEMtMTguMjY1ODk1NjMgNDEyLjY1MzE4NjMyIC0xOC4yNDA4ODM5NiA0MTAuNTczMDA2OTcgLTE4LjIxNTMzMjAzIDQwOC40OTI1Njg5NyBDLTE4LjE4MTIwNDUgNDAxLjg4OTkwNjY0IC0xOC40MjA5NTk4MyAzOTYuMTY2Mzg4MTkgLTIwLjM5MDYyNSAzODkuODU1NDY4NzUgQy0yMS4wMDI5MTI5OSAzODQuNTk5MzM0MiAtMjAuNTQ5NzMyMTEgMzgwLjAwNzUzOTI4IC0xOC44ODcyMDcwMyAzNzQuOTkxNjk5MjIgQy0xNi44Nzc3MzIyMSAzNjcuODUwMTMyODMgLTE3LjAzMzA4OTc3IDM2MC44NDk0NzY5OSAtMTcuMTMyODEyNSAzNTMuNDg4MjgxMjUgQy0xNy4xNDA5ODg3NSAzNTIuMDA0MDY2MzEgLTE3LjE0NzYzNzIgMzUwLjUxOTg0MjI3IC0xNy4xNTI4NjI1NSAzNDkuMDM1NjE0MDEgQy0xNy4xNjk4NzQwMyAzNDUuMTM3Mjk4MTEgLTE3LjIwMzk3MjU0IDM0MS4yMzkzMzggLTE3LjI0MjkxOTkyIDMzNy4zNDExODY1MiBDLTE3LjMwOTM3MTI4IDMzMC40MzIwMzExOSAtMTcuMzQ2NjM4NTMgMzIzLjUyMjY0OTY5IC0xNy4zODI4MTI1IDMxNi42MTMyODEyNSBDLTE3LjM4NzMyMTcgMzE1Ljg2NzAxNzI5IC0xNy4zOTE4MzA5IDMxNS4xMjA3NTMzMyAtMTcuMzk2NDc2NzUgMzE0LjM1MTg3NTMxIEMtMTcuNDc5ODk3MjggMjk5LjQ5OTg0ODQxIC0xNy4wNTY3ODA3NCAyODQuNjkzMjA0NDcgLTE2LjM5MDYyNSAyNjkuODU1NDY4NzUgQy0xNC4zOTA2MjUgMjcwLjg1NTQ2ODc1IC0xNC4zOTA2MjUgMjcwLjg1NTQ2ODc1IC0xMy43ODMyMDMxMiAyNzIuNDg5NTAxOTUgQy0xMy4yNzEyMzU3MSAyNzUuNTc0OTk3MTEgLTEzLjE4Njk5MzY1IDI3OC41ODM2OTAzMyAtMTMuMTA5Mzc1IDI4MS43MTA5Mzc1IEMtMTMuMDkwOTY1NTggMjgyLjM3MjAxMDA0IC0xMy4wNzI1NTYxNSAyODMuMDMzMDgyNTggLTEzLjA1MzU4ODg3IDI4My43MTQxODc2MiBDLTEyLjk5NTA3OTAyIDI4NS44MjM2OTQzNCAtMTIuOTQyMjM5NTkgMjg3LjkzMzI4MjgxIC0xMi44OTA2MjUgMjkwLjA0Mjk2ODc1IEMtMTIuODM4Nzk1NjQgMjkyLjEzNDc5MTk2IC0xMi43ODU1MzU1NCAyOTQuMjI2NTI2MzIgLTEyLjcyNzY2MTEzIDI5Ni4zMTgxOTE1MyBDLTEyLjY3NDgyNiAyOTguMjI5MjAxNzIgLTEyLjYyNzI5NTEgMzAwLjE0MDM1NjQxIC0xMi41ODAwNzgxMiAzMDIuMDUxNTEzNjcgQy0xMi40NDMwNDQyMSAzMDQuODAyOTYzOTQgLTEyLjIyMDAzNTk0IDMwNy40MzU4MTEzNiAtMTEuODg0MDMzMiAzMTAuMTYwODg4NjcgQy0xMS4yODQzNDMzMiAzMTUuMjczODAzNDUgLTExLjIzNzc2MTI0IDMyMC4zNDUwNjQzMiAtMTEuMjE0ODQzNzUgMzI1LjQ4ODI4MTI1IEMtMTEuMTkxNjM2NTYgMzI3LjUzMjU2MjI4IC0xMS4xNjc1MTg4NyAzMjkuNTc2ODMzMTQgLTExLjE0MjU3ODEyIDMzMS42MjEwOTM3NSBDLTExLjEwNzY0MDE2IDMzNC43OTMzNjMwNiAtMTEuMDc4MTg5NjkgMzM3Ljk2NTI1Nzg2IC0xMS4wNjQ2OTcyNyAzNDEuMTM3Njk1MzEgQy0xMS4wMDczMDIwNiAzNTIuNDY0ODYwMTQgLTEwLjgwMzE0OTE3IDM2Mi45NzY3NTcyOSAtNy4zMzkxMTEzMyAzNzMuODI3NjM2NzIgQy01LjM4MzM2NDk1IDM4MC4wNzA5MjI4MiAtNS40ODcxOTE5NCAzODQuMzMwMzc5NTYgLTcuMzI4MTI1IDM5MC41NDI5Njg3NSBDLTkuNjk5OTAzNjQgMzk5LjM1MTU3NDQ5IC05LjgxMDk5NzQ4IDQwNi42NzIzMzg1NiAtOC42NTg4NzQ1MSA0MTUuNzU0Nzc2IEMtNy40NTEyMzk0MSA0MjUuNTA4MTcxNTggLTcuMDc4OTU2NSA0MzUuMTMyNDIyIC03LjEyOTg4MjgxIDQ0NC45NTQzNDU3IEMtNy4xNDA3NTczNCA0NDcuNDQ4MzE4NzQgLTcuMTI5ODIzNzMgNDQ5Ljk0MTU5MzIyIC03LjExNzE4NzUgNDUyLjQzNTU0Njg4IEMtNy4xMTg1MDcwOSA0NTQuMDU1OTkxMTQgLTcuMTIxMDY1MzEgNDU1LjY3NjQzNDk4IC03LjEyNSA0NTcuMjk2ODc1IEMtNy4xMjA5NTE1NCA0NTguMDI1MTYwMDYgLTcuMTE2OTAzMDggNDU4Ljc1MzQ0NTEzIC03LjExMjczMTkzIDQ1OS41MDM3OTk0NCBDLTcuMTU0MTY1NTMgNDY0LjExNzU4ODkxIC03Ljc5OTM3MzQgNDY4LjI4ODY0NDA0IC04Ljk0MzM4OTg5IDQ3Mi43NTk5NzkyNSBDLTkuNjk5Mzg3MTkgNDc2LjMwMjE1Mjg2IC05LjYwMzQ2MzkyIDQ3OS44MTMxOTQ0MiAtOS41MTU2MjUgNDgzLjQxNzk2ODc1IEMtOS41MDY2MDE1NiA0ODQuMTQwNDg4MjggLTkuNDk3NTc4MTMgNDg0Ljg2MzAwNzgxIC05LjQ4ODI4MTI1IDQ4NS42MDc0MjE4OCBDLTkuNDY1MTA5MDkgNDg3LjM1NjkyMDIyIC05LjQyOTI1ODIgNDg5LjEwNjI0MzUyIC05LjM5MDYyNSA0OTAuODU1NDY4NzUgQy02Ljc1MDYyNSA0OTAuODU1NDY4NzUgLTQuMTEwNjI1IDQ5MC44NTU0Njg3NSAtMS4zOTA2MjUgNDkwLjg1NTQ2ODc1IEMtMi43MTA2MjUgNDkwLjE5NTQ2ODc1IC00LjAzMDYyNSA0ODkuNTM1NDY4NzUgLTUuMzkwNjI1IDQ4OC44NTU0Njg3NSBDLTUuMzkwNjI1IDQ4OC4xOTU0Njg3NSAtNS4zOTA2MjUgNDg3LjUzNTQ2ODc1IC01LjM5MDYyNSA0ODYuODU1NDY4NzUgQy00LjczMDYyNSA0ODYuNTI1NDY4NzUgLTQuMDcwNjI1IDQ4Ni4xOTU0Njg3NSAtMy4zOTA2MjUgNDg1Ljg1NTQ2ODc1IEMtMy4zOTA2MjUgNDg1LjE5NTQ2ODc1IC0zLjM5MDYyNSA0ODQuNTM1NDY4NzUgLTMuMzkwNjI1IDQ4My44NTU0Njg3NSBDMC40ODQzNzUgNDg1LjczMDQ2ODc1IDAuNDg0Mzc1IDQ4NS43MzA0Njg3NSAxLjYwOTM3NSA0ODYuODU1NDY4NzUgQzEuNjUwMDEzMzIgNDg4LjUyMTYzOTkgMS42NTIwOTYgNDkwLjE4OTM0OTcgMS42MDkzNzUgNDkxLjg1NTQ2ODc1IEMyLjkyOTM3NSA0OTEuODU1NDY4NzUgNC4yNDkzNzUgNDkxLjg1NTQ2ODc1IDUuNjA5Mzc1IDQ5MS44NTU0Njg3NSBDNC45NDkzNzUgNDkxLjUyNTQ2ODc1IDQuMjg5Mzc1IDQ5MS4xOTU0Njg3NSAzLjYwOTM3NSA0OTAuODU1NDY4NzUgQzMuNjA5Mzc1IDQ5MC4xOTU0Njg3NSAzLjYwOTM3NSA0ODkuNTM1NDY4NzUgMy42MDkzNzUgNDg4Ljg1NTQ2ODc1IEM0LjI2OTM3NSA0ODguNTI1NDY4NzUgNC45MjkzNzUgNDg4LjE5NTQ2ODc1IDUuNjA5Mzc1IDQ4Ny44NTU0Njg3NSBDNS4yNzkzNzUgNDg2LjIwNTQ2ODc1IDQuOTQ5Mzc1IDQ4NC41NTU0Njg3NSA0LjYwOTM3NSA0ODIuODU1NDY4NzUgQzUuMjY5Mzc1IDQ4My4xODU0Njg3NSA1LjkyOTM3NSA0ODMuNTE1NDY4NzUgNi42MDkzNzUgNDgzLjg1NTQ2ODc1IEM2LjkzOTM3NSA0ODQuODQ1NDY4NzUgNy4yNjkzNzUgNDg1LjgzNTQ2ODc1IDcuNjA5Mzc1IDQ4Ni44NTU0Njg3NSBDOS40ODMyNDcxNiA0ODcuNjU3NTk1MDMgOS40ODMyNDcxNiA0ODcuNjU3NTk1MDMgMTEuNjcxODc1IDQ4OC4wNDI5Njg3NSBDMTIuNzcyMDg5ODQgNDg4LjI4MDgwMDc4IDEyLjc3MjA4OTg0IDQ4OC4yODA4MDA3OCAxMy44OTQ1MzEyNSA0ODguNTIzNDM3NSBDMTQuNzQzMzc4OTEgNDg4LjY4Nzc5Mjk3IDE0Ljc0MzM3ODkxIDQ4OC42ODc3OTI5NyAxNS42MDkzNzUgNDg4Ljg1NTQ2ODc1IEMxNS42MDkzNzUgNDg3Ljg2NTQ2ODc1IDE1LjYwOTM3NSA0ODYuODc1NDY4NzUgMTUuNjA5Mzc1IDQ4NS44NTU0Njg3NSBDMTcuNDIxODc1IDQ4NS4xNjc5Njg3NSAxNy40MjE4NzUgNDg1LjE2Nzk2ODc1IDE5LjYwOTM3NSA0ODQuODU1NDY4NzUgQzIxLjM1OTM3NSA0ODYuMDQyOTY4NzUgMjEuMzU5Mzc1IDQ4Ni4wNDI5Njg3NSAyMi42MDkzNzUgNDg3Ljg1NTQ2ODc1IEMyMi42MDkzNzUgNDg5LjE3NTQ2ODc1IDIyLjYwOTM3NSA0OTAuNDk1NDY4NzUgMjIuNjA5Mzc1IDQ5MS44NTU0Njg3NSBDMTguNzk1MDE4MDEgNDk0LjM5ODM3MzQxIDE1LjQ4MzMzNzgyIDQ5NC4zMDg4NDgwNCAxMS4wNDY4NzUgNDk0LjQ4MDQ2ODc1IEMxMC4yMzg1NTIyNSA0OTQuNTE2OTY1MzMgOS40MzAyMjk0OSA0OTQuNTUzNDYxOTEgOC41OTc0MTIxMSA0OTQuNTkxMDY0NDUgQzYuMjY4MzM3NjYgNDk0LjY5MDg0NTIxIDMuOTM5MjA1NjQgNDk0Ljc3NTU3OTg5IDEuNjA5Mzc1IDQ5NC44NTU0Njg3NSBDMC41MTg4MjgxMiA0OTQuODk4MDA3ODEgLTAuNTcxNzE4NzUgNDk0Ljk0MDU0Njg3IC0xLjY5NTMxMjUgNDk0Ljk4NDM3NSBDLTcuOTg3MjI0MDcgNDk1LjEyNDQwMjcxIC03Ljk4NzIyNDA3IDQ5NS4xMjQ0MDI3MSAtMTEuMzkwNjI1IDQ5Mi44NTU0Njg3NSBDLTExLjM5MDYyNSA0OTIuMTk1NDY4NzUgLTExLjM5MDYyNSA0OTEuNTM1NDY4NzUgLTExLjM5MDYyNSA0OTAuODU1NDY4NzUgQy0xMi4wNTA2MjUgNDkwLjg1NTQ2ODc1IC0xMi43MTA2MjUgNDkwLjg1NTQ2ODc1IC0xMy4zOTA2MjUgNDkwLjg1NTQ2ODc1IEMtMTMuMzkwNjI1IDQ5MS41MTU0Njg3NSAtMTMuMzkwNjI1IDQ5Mi4xNzU0Njg3NSAtMTMuMzkwNjI1IDQ5Mi44NTU0Njg3NSBDLTE2LjgwNzI1MTk1IDQ5NS4xMzMyMjAwNSAtMTcuOTY1MDE5NjEgNDk1LjA1MDcyODU4IC0yMS45NTMxMjUgNDk0LjkxNzk2ODc1IEMtMjUuODIxNTI3OTMgNDk0LjY4NzM4MTc4IC0yNS44MjE1Mjc5MyA0OTQuNjg3MzgxNzggLTI5LjM5MDYyNSA0OTUuODU1NDY4NzUgQy0zMi4wNzY0MzEwMyA0OTUuODE3ODQ0MzEgLTM0LjcxMzMzMjQyIDQ5NS43MTM4MDk5NyAtMzcuMzkwNjI1IDQ5NS41NDI5Njg3NSBDLTM4LjEyNzk2ODc1IDQ5NS41MDc1MTk1MyAtMzguODY1MzEyNSA0OTUuNDcyMDcwMzEgLTM5LjYyNSA0OTUuNDM1NTQ2ODggQy00NS4xNDgxODY5NSA0OTUuMDk3OTA2OCAtNDUuMTQ4MTg2OTUgNDk1LjA5NzkwNjggLTQ3LjM5MDYyNSA0OTIuODU1NDY4NzUgQy00Ny43MDYwOTMyNyA0ODkuNzAwNzg2MDIgLTQ3Ljc4NjYyMTkyIDQ4OC42MTAwMjIwNiAtNDYuMzkwNjI1IDQ4NS44NTU0Njg3NSBDLTQzLjY4MDA4ODIxIDQ4My40OTM4NTUwNiAtNDAuODY0MzYyNjkgNDgxLjUyNTc0MjU3IC0zNy44NTkzNzUgNDc5LjU1NDY4NzUgQy0zNS4zMDcwMjAwOSA0NzguMDkwOTM4OTYgLTM1LjMwNzAyMDA5IDQ3OC4wOTA5Mzg5NiAtMzQuMzkwNjI1IDQ3NS44NTU0Njg3NSBDLTMzLjQzMzYwNjU0IDQ2MC4xMDE0NzI2MSAtMzcuMjA0MDI0MDYgNDQ4LjYzMDYzMjU0IC00NC41NjI1IDQzNC42MjUgQy01My41Mjg0MTQyMyA0MTYuNzk2NjI0NCAtNTEuNTI3ODAzNjQgMzkzLjg3ODEzOTgyIC00Ni43NjU2MjUgMzc1LjE2Nzk2ODc1IEMtNDQuMTgyNjQ1NjYgMzY0LjQyNTQyMzg5IC00NC45MTM3MDk5NCAzNTUuMzE2OTQ4MTcgLTQ4LjYzMjMyNDIyIDM0NC45NzE2Nzk2OSBDLTQ5LjU1MzQ2MDgyIDM0Mi40MDEwMzgzNCAtNTAuNDQyNDk3MjMgMzM5LjgyMDAyNjQ2IC01MS4zMzIwMzEyNSAzMzcuMjM4MjgxMjUgQy01Mi43MDYxODc4MSAzMzMuMjU3NjgwNSAtNTQuMDkxNzg0NzYgMzI5LjI4MTQwODkgLTU1LjQ4ODI4MTI1IDMyNS4zMDg1OTM3NSBDLTU1LjgxMDIyNDYxIDMyNC4zODM0NDk3MSAtNTYuMTMyMTY3OTcgMzIzLjQ1ODMwNTY2IC01Ni40NjM4NjcxOSAzMjIuNTA1MTI2OTUgQy01Ny4wNDc3MTQ2MyAzMjAuODM1ODcwOCAtNTcuNjQwODM5ODQgMzE5LjE2OTgwMzA0IC01OC4yNDcwNzAzMSAzMTcuNTA4NTQ0OTIgQy02MC4yMjA3NTg3NCAzMTEuOTUwMDU2MjIgLTYxLjI5NDA0NDQgMzA2LjUxNjgxMTYyIC02Mi4wMTU2MjUgMzAwLjY2Nzk2ODc1IEMtNjIuMTM4OTcyMTcgMjk5LjY2OTgzMTU0IC02Mi4yNjIzMTkzNCAyOTguNjcxNjk0MzQgLTYyLjM4OTQwNDMgMjk3LjY0MzMxMDU1IEMtNjMuNTEzMTc1MDQgMjg3LjUwNjc5MzEgLTYzLjg5ODg3MjY3IDI3Ny4zNTU0ODY2NCAtNjQuMjAzMTI1IDI2Ny4xNjc5Njg3NSBDLTY0LjIzMDUzNzcyIDI2Ni4zNTYzMTI1NiAtNjQuMjU3OTUwNDQgMjY1LjU0NDY1NjM3IC02NC4yODYxOTM4NSAyNjQuNzA4NDA0NTQgQy02NC42MDM0MTI3MSAyNTQuODM2MzA4ODMgLTY0LjI5OTY2NzA2IDI0NS41OTMxMDY2NyAtNjIuMzkwNjI1IDIzNS44NTU0Njg3NSBDLTYyLjA0NDE4ODMzIDIzMy45MTk1MTgwOSAtNjEuNjk5MTA5MTUgMjMxLjk4MzMyMzk2IC02MS4zNTU0Njg3NSAyMzAuMDQ2ODc1IEMtNjEuMTg2NDQwNDMgMjI5LjEyMTgxMTUyIC02MS4wMTc0MTIxMSAyMjguMTk2NzQ4MDUgLTYwLjg0MzI2MTcyIDIyNy4yNDM2NTIzNCBDLTU5LjI4MDgxODcgMjE4LjY3MzE3MTA3IC01Ny45NDY3NDY4NCAyMTAuMzE3MzgwOTcgLTU3LjY2NDA2MjUgMjAxLjU5NzY1NjI1IEMtNTcuMzcyMDg0NjQgMTk4LjY2OTUzNTQ4IC01Ni41MTY0MDcxNyAxOTYuNTU5MDUxNjkgLTU1LjM5MDYyNSAxOTMuODU1NDY4NzUgQy01My40NzQ5NzIwNyAxODQuNjgxOTE5NTEgLTU1LjI0NTQ3MDg5IDE3Ny41MjIzOTkzOSAtNTguMzkwNjI1IDE2OC44NTU0Njg3NSBDLTU4LjUzMzEwNjY5IDE2OS45MjY5MjEzOSAtNTguNTMzMTA2NjkgMTY5LjkyNjkyMTM5IC01OC42Nzg0NjY4IDE3MS4wMjAwMTk1MyBDLTU5LjEyOTQzODcgMTc0LjM0MjQ5MTQ5IC01OS42MDM2OTM4NiAxNzcuNjYxMjY4NTUgLTYwLjA3ODEyNSAxODAuOTgwNDY4NzUgQy02MC4yMjcwMTE3MiAxODIuMTAzMjQyMTkgLTYwLjM3NTg5ODQ0IDE4My4yMjYwMTU2MyAtNjAuNTI5Mjk2ODggMTg0LjM4MjgxMjUgQy02Mi41Mjg5NDY3IDE5OC4xMDU4OTk1NiAtNjcuNTc4MzE4ODEgMjA5Ljg4NDk4MDc3IC03NC4wNzgxMjUgMjIyLjA0Mjk2ODc1IEMtNzQuOTkzMDc3MzkgMjIzLjc5NzcwNTA4IC03NC45OTMwNzczOSAyMjMuNzk3NzA1MDggLTc1LjkyNjUxMzY3IDIyNS41ODc4OTA2MiBDLTc4LjY3MDY1MjM3IDIzMC44NDQ4NDk5NCAtODEuNDcwMTk1OCAyMzYuMDUyODE0NjQgLTg0LjQ5MjE4NzUgMjQxLjE1NjI1IEMtOTAuMTIxNzQzMTMgMjUwLjgwNTM3MzE3IC05Mi4yODMwODk1NSAyNTguMDEzNjgzODEgLTkyLjI2NTYyNSAyNjkuMTg3NSBDLTkyLjI4OTkzMTE2IDI3NC4wMjEzODcgLTkzLjEyNjM0NzA4IDI3OC40ODI2NzU0OSAtOTQuMjY1NjI1IDI4My4xNjc5Njg3NSBDLTk0LjQyNzg4NTc0IDI4My44NTUyMDAyIC05NC41OTAxNDY0OCAyODQuNTQyNDMxNjQgLTk0Ljc1NzMyNDIyIDI4NS4yNTA0ODgyOCBDLTk3LjM4MDU5NzI3IDI5NS41NjY5ODk0NCAtOTcuMzgwNTk3MjcgMjk1LjU2Njk4OTQ0IC0xMDEuODI4MTI1IDI5OC40MTc5Njg3NSBDLTEwMi42NzM3NSAyOTguODkyMzQzNzUgLTEwMy41MTkzNzUgMjk5LjM2NjcxODc1IC0xMDQuMzkwNjI1IDI5OS44NTU0Njg3NSBDLTEwNS4wMDkzNzUgMzAwLjcyMTcxODc1IC0xMDUuNjI4MTI1IDMwMS41ODc5Njg3NSAtMTA2LjI2NTYyNSAzMDIuNDgwNDY4NzUgQy0xMDkuMDkzODU0ODIgMzA1LjY0MTQzMTQ5IC0xMTEuMjYyMDIxOTMgMzA1LjYxNzI4MDExIC0xMTUuMzkwNjI1IDMwNS44NTU0Njg3NSBDLTExNS43MjA2MjUgMzA0Ljg2NTQ2ODc1IC0xMTYuMDUwNjI1IDMwMy44NzU0Njg3NSAtMTE2LjM5MDYyNSAzMDIuODU1NDY4NzUgQy0xMTguMDQwNjI1IDMwMi41MjU0Njg3NSAtMTE5LjY5MDYyNSAzMDIuMTk1NDY4NzUgLTEyMS4zOTA2MjUgMzAxLjg1NTQ2ODc1IEMtMTIyLjQzMDM2OTk5IDI5OC40NDQ4MTczNiAtMTIyLjUwNTcxMDA2IDI5NS4zMzI4MjAzMyAtMTIyLjQ4ODI4MTI1IDI5MS43NzczNDM3NSBDLTEyMi40ODUwNTg1OSAyOTAuNjE3MTg3NSAtMTIyLjQ4MTgzNTk0IDI4OS40NTcwMzEyNSAtMTIyLjQ3ODUxNTYyIDI4OC4yNjE3MTg3NSBDLTEyMi40NzAxMzY3MiAyODcuMDU1MTU2MjUgLTEyMi40NjE3NTc4MSAyODUuODQ4NTkzNzUgLTEyMi40NTMxMjUgMjg0LjYwNTQ2ODc1IEMtMTIyLjQ0ODYxMzI4IDI4My4zODM0Mzc1IC0xMjIuNDQ0MTAxNTYgMjgyLjE2MTQwNjI1IC0xMjIuNDM5NDUzMTIgMjgwLjkwMjM0Mzc1IEMtMTIyLjQyNzY3MzE1IDI3Ny44ODY2NjkyOSAtMTIyLjQxMTIyMzUzIDI3NC44NzEwOTM3NyAtMTIyLjM5MDYyNSAyNzEuODU1NDY4NzUgQy0xMjMuMDA1NTA3ODEgMjcyLjI4ODU5Mzc1IC0xMjMuNjIwMzkwNjIgMjcyLjcyMTcxODc1IC0xMjQuMjUzOTA2MjUgMjczLjE2Nzk2ODc1IEMtMTI1LjQ2NjI2OTUzIDI3NC4wMDMyODEyNSAtMTI1LjQ2NjI2OTUzIDI3NC4wMDMyODEyNSAtMTI2LjcwMzEyNSAyNzQuODU1NDY4NzUgQy0xMjcuOTAzODg2NzIgMjc1LjY5MDc4MTI1IC0xMjcuOTAzODg2NzIgMjc1LjY5MDc4MTI1IC0xMjkuMTI4OTA2MjUgMjc2LjU0Mjk2ODc1IEMtMTMxLjM5MDYyNSAyNzcuODU1NDY4NzUgLTEzMS4zOTA2MjUgMjc3Ljg1NTQ2ODc1IC0xMzQuMzkwNjI1IDI3Ny44NTU0Njg3NSBDLTEzNC44NDIzMDE4NiAyNzIuNjQ5Mjk4NjcgLTEzMy40NTE2NTgxIDI2OS4yODQ5NTUwNSAtMTMwLjgyODEyNSAyNjQuOTE3OTY4NzUgQy0xMzAuNDY2Nzg0NjcgMjY0LjMwMTg3NzQ0IC0xMzAuMTA1NDQ0MzQgMjYzLjY4NTc4NjEzIC0xMjkuNzMzMTU0MyAyNjMuMDUxMDI1MzkgQy0xMjYuODU2MjgxMDUgMjU4LjI5NzM1NTgxIC0xMjMuNjAyNTYyMTUgMjU0LjQ5MDcxMDM1IC0xMTkuMzkwNjI1IDI1MC44NTU0Njg3NSBDLTExMi43Mzg1ODg5NSAyNDQuNTA1Nzk3OTcgLTExMC41NTYwMzE2NiAyMzguNzA1NDA0MzEgLTEwOC4yMDMxMjUgMjI5Ljk4MDQ2ODc1IEMtMTA3LjkwNDE0MzA3IDIyOC44OTc4MTczOCAtMTA3LjYwNTE2MTEzIDIyNy44MTUxNjYwMiAtMTA3LjI5NzExOTE0IDIyNi42OTk3MDcwMyBDLTEwNS41ODA3OTQ2NCAyMjAuNDMwODkwNTEgLTEwMy45NDYyNzAyNyAyMTQuMTQ0Mjk1OTcgLTEwMi4zNjcxODc1IDIwNy44Mzk4NDM3NSBDLTk0LjA0NDM3MTcyIDE3NC42NjQ5MDE3OCAtOTQuMDQ0MzcxNzIgMTc0LjY2NDkwMTc4IC04OC43ODUxNTYyNSAxNjcuNzQyMTg3NSBDLTg1LjgxNzE1MDE0IDE2My43MjY2NDk4MiAtODYuMTU4NjE4NDQgMTU4Ljk0ODgwMDY3IC04Ni4wMDM5MDYyNSAxNTQuMTI1IEMtODUuOTc4MzgxODEgMTUzLjM3NTE0MzI4IC04NS45NTI4NTczNiAxNTIuNjI1Mjg2NTYgLTg1LjkyNjU1OTQ1IDE1MS44NTI3MDY5MSBDLTg1Ljg3NDY0MzA3IDE1MC4yNjY3MDk1MSAtODUuODI1MjA1MzcgMTQ4LjY4MDYyOTI5IC04NS43NzgwNzYxNyAxNDcuMDk0NDgyNDIgQy04NS43MDM5MDc3NCAxNDQuNjkzMzA5NiAtODUuNjEzMDA3MzIgMTQyLjI5MzE0MzUyIC04NS41MjE0ODQzOCAxMzkuODkyNTc4MTIgQy04NS4yNjU5OTE5OCAxMzIuMjE5MzUzMTEgLTg1LjM4NjY3NzYyIDEyNS4zMjI2NDkwOCAtODcuMzkwNjI1IDExNy44NTU0Njg3NSBDLTg4LjAxMzk4MTI5IDEwOS4xNTY4MTUxMyAtODYuNTkwODg1MzEgMTAyLjA1NDIyNjM5IC04Mi44MjgxMjUgOTQuMjkyOTY4NzUgQy04Mi41MTgyNjY2IDkzLjYzODY4ODk2IC04Mi4yMDg0MDgyIDkyLjk4NDQwOTE4IC04MS44ODkxNjAxNiA5Mi4zMTAzMDI3MyBDLTc3LjY5NDE1NzAxIDg0LjM3NDk0MjQyIC03MS4wNTQwMzY5MiA4MC42ODUzMTcyNCAtNjIuNzEwOTM3NSA3OC4wMzUxNTYyNSBDLTYxLjM3Njc1NzgxIDc3LjYzNjgzNTk0IC02MS4zNzY3NTc4MSA3Ny42MzY4MzU5NCAtNjAuMDE1NjI1IDc3LjIzMDQ2ODc1IEMtNTguMjM2MDExODEgNzYuNjc4ODkyNzMgLTU2LjQ1NzM1ODc0IDc2LjEyNDIwOTI1IC01NC42Nzk2ODc1IDc1LjU2NjQwNjI1IEMtNTMuODA5NzMxNDUgNzUuMjkzNDQ3MjcgLTUyLjkzOTc3NTM5IDc1LjAyMDQ4ODI4IC01Mi4wNDM0NTcwMyA3NC43MzkyNTc4MSBDLTQyLjE3ODEzNTQ3IDcxLjgzMzMxMzU0IC00Mi4xNzgxMzU0NyA3MS44MzMzMTM1NCAtMzQuMzkwNjI1IDY1Ljg1NTQ2ODc1IEMtMzMuMjkyMjAxNTIgNTguNjcyNjQwNzEgLTM0LjA4NDM0MzA5IDUxLjM3MDM3ODY4IC0zNy4zOTA2MjUgNDQuODU1NDY4NzUgQy0zOC42ODQxODMyNyA0My40ODM1MTMwMSAtNDAuMDEzNjEyMDIgNDIuMTQzNjQyMTkgLTQxLjM5MDYyNSA0MC44NTU0Njg3NSBDLTQzLjg3NDYwMDE5IDM1LjQyMzM4NDYgLTQzLjU2MjI4OTU2IDMwLjM2NTAxMDgxIC00My4yNjU2MjUgMjQuNTQyOTY4NzUgQy00My4yNDI0MjE4OCAyMy42NDM4NDc2NiAtNDMuMjE5MjE4NzUgMjIuNzQ0NzI2NTYgLTQzLjE5NTMxMjUgMjEuODE4MzU5MzggQy00Mi44NDAwMTgyNSAxNC4xNDA2NzI3MSAtNDEuMDg2ODkwNzEgNy43NDQzMjQ4NyAtMzUuNzY1NjI1IDIuMDQyOTY4NzUgQy0yNC42MjE2MTg2MyAtNS45NjA3MDY2NSAtMTEuOTUwMzc1OTkgLTYuNjU0OTA1MTUgMCAwIFogTS0zNS43NjU2MjUgNS45MTc5Njg3NSBDLTM5LjkxMDE0NDg2IDExLjIyODg0MjU1IC00MC43NTU4MDYyMyAxNy40Mjg3MDk5NiAtNDAuMDU0Njg3NSAyNC4wMDc4MTI1IEMtMzkuNTg0ODQ4ODMgMjYuNjUzMjA4NDcgLTM5LjA0NTY3OTkzIDI5LjI1MDM2NTcgLTM4LjM5MDYyNSAzMS44NTU0Njg3NSBDLTM5LjA1MDYyNSAzMS44NTU0Njg3NSAtMzkuNzEwNjI1IDMxLjg1NTQ2ODc1IC00MC4zOTA2MjUgMzEuODU1NDY4NzUgQy00MC43MjA2MjUgMzEuMTk1NDY4NzUgLTQxLjA1MDYyNSAzMC41MzU0Njg3NSAtNDEuMzkwNjI1IDI5Ljg1NTQ2ODc1IEMtNDEuMDgxNDA2MTYgMzEuMzE0NTAxMzMgLTQwLjc2ODEzNzAxIDMyLjc3MjY3NTk3IC00MC40NTMxMjUgMzQuMjMwNDY4NzUgQy00MC4yNzkxMDE1NiAzNS4wNDI1NzgxMiAtNDAuMTA1MDc4MTMgMzUuODU0Njg3NSAtMzkuOTI1NzgxMjUgMzYuNjkxNDA2MjUgQy0zOS40NjczMTgwNyAzOC44ODQ5MzE3NSAtMzkuNDY3MzE4MDcgMzguODg0OTMxNzUgLTM4LjM5MDYyNSA0MC44NTU0Njg3NSBDLTM3LjQwMDYyNSA0MC44NTU0Njg3NSAtMzYuNDEwNjI1IDQwLjg1NTQ2ODc1IC0zNS4zOTA2MjUgNDAuODU1NDY4NzUgQy0zNS4wNTAzMTI1IDQyLjU1NzAzMTI1IC0zNS4wNTAzMTI1IDQyLjU1NzAzMTI1IC0zNC43MDMxMjUgNDQuMjkyOTY4NzUgQy0zMy40NzQ0Njc3MyA0OS4zMDYyNDkxNSAtMzEuMDQ5ODk3MTMgNTMuNDcwNzE0NyAtMjguMzkwNjI1IDU3Ljg1NTQ2ODc1IEMtMjcuNDAwNjI1IDU3Ljg1NTQ2ODc1IC0yNi40MTA2MjUgNTcuODU1NDY4NzUgLTI1LjM5MDYyNSA1Ny44NTU0Njg3NSBDLTI1LjM5MDYyNSA1OC41MTU0Njg3NSAtMjUuMzkwNjI1IDU5LjE3NTQ2ODc1IC0yNS4zOTA2MjUgNTkuODU1NDY4NzUgQy0yMC43ODcxMjQyMSA2Mi41MDExNTg4NiAtMTYuNTgwMzMxNzEgNjIuNDY1MDc4ODEgLTExLjM5MDYyNSA2MS44NTU0Njg3NSBDLTQuMzQ5NzA0MDYgNTkuMjczNzk3NzQgLTEuNjE1NDg4NTQgNTQuNDQwNDMyMDQgMS42MDkzNzUgNDcuODU1NDY4NzUgQzIuMjk3NzQwMTMgNDUuODYyODMyODQgMi45NzIxODg5OSA0My44NjUwNTUzOCAzLjYwOTM3NSA0MS44NTU0Njg3NSBDNS4xMDkzNzUgNDAuMjMwNDY4NzUgNS4xMDkzNzUgNDAuMjMwNDY4NzUgNi42MDkzNzUgMzguODU1NDY4NzUgQzguNzk3MzU0MTUgMzUuNTE1OTIxNjIgOC43ODgzMjAwMiAzMi43OTIyNTkyOSA4LjYwOTM3NSAyOC44NTU0Njg3NSBDOC4yNzkzNzUgMjguODU1NDY4NzUgNy45NDkzNzUgMjguODU1NDY4NzUgNy42MDkzNzUgMjguODU1NDY4NzUgQzcuNjQ0MTc5NjkgMjguMTY1ODIwMzEgNy42Nzg5ODQzNyAyNy40NzYxNzE4NyA3LjcxNDg0Mzc1IDI2Ljc2NTYyNSBDNy45MDUwNDIyNCAyMC4xNjMwMjAxNiA3LjIzMjYxNTY0IDE0LjkyMzI0NTAxIDQuNjA5Mzc1IDguODU1NDY4NzUgQzQuMDIxNTYyNSA3LjQ2MzI4MTI1IDQuMDIxNTYyNSA3LjQ2MzI4MTI1IDMuNDIxODc1IDYuMDQyOTY4NzUgQzAuMTQxOTkzMTEgMi4wODQ0OTA2IC00LjYwNDg4NzY1IDAuNDUwNzE0NTMgLTkuMzkwNjI1IC0xLjE0NDUzMTI1IEMtMTkuODk5ODc3NiAtMS45MDQ5ODcyNSAtMjguMDAzMjY4MjggLTEuNzg4ODEwMjMgLTM1Ljc2NTYyNSA1LjkxNzk2ODc1IFogTTY4LjYwOTM3NSAyNzYuODU1NDY4NzUgQzY5LjU5OTM3NSAyODEuNDc1NDY4NzUgNzAuNTg5Mzc1IDI4Ni4wOTU0Njg3NSA3MS42MDkzNzUgMjkwLjg1NTQ2ODc1IEM3Mi4yNjkzNzUgMjkwLjg1NTQ2ODc1IDcyLjkyOTM3NSAyOTAuODU1NDY4NzUgNzMuNjA5Mzc1IDI5MC44NTU0Njg3NSBDNzMuNDY3MzI3NTkgMjg5LjI3MTc5MTI4IDczLjMyMDU3MzQ3IDI4Ny42ODg1MzU1NyA3My4xNzE4NzUgMjg2LjEwNTQ2ODc1IEM3My4wOTA2NjQwNiAyODUuMjIzNzUgNzMuMDA5NDUzMTIgMjg0LjM0MjAzMTI1IDcyLjkyNTc4MTI1IDI4My40MzM1OTM3NSBDNzIuNjQ2OTkwMzUgMjgxLjE2MTk2NDIzIDcyLjIyMTQ2OTIzIDI3OS4wNTY5NTA1MiA3MS42MDkzNzUgMjc2Ljg1NTQ2ODc1IEM3MC42MTkzNzUgMjc2Ljg1NTQ2ODc1IDY5LjYyOTM3NSAyNzYuODU1NDY4NzUgNjguNjA5Mzc1IDI3Ni44NTU0Njg3NSBaIE03My42MDkzNzUgMjc3Ljg1NTQ2ODc1IEM3My45MzkzNzUgMjc4Ljg0NTQ2ODc1IDc0LjI2OTM3NSAyNzkuODM1NDY4NzUgNzQuNjA5Mzc1IDI4MC44NTU0Njg3NSBDNzQuOTcyNDQ0MDIgMjg0LjI4MTI1ODYyIDc1LjMyNjg2NDc2IDI4Ny43MDQxODYyIDc1LjU5NTcwMzEyIDI5MS4xMzg2NzE4OCBDNzUuODAyNzc0NjcgMjkzLjUyNzA3NjQ3IDc1LjgwMjc3NDY3IDI5My41MjcwNzY0NyA3Ni42MDkzNzUgMjk2Ljg1NTQ2ODc1IEM3OC41NDAzMDk3NCAyOTguNDM3NzQzNjIgNzguNTQwMzA5NzQgMjk4LjQzNzc0MzYyIDgwLjYwOTM3NSAyOTguODU1NDY4NzUgQzgwLjA5Mzk5NTQ4IDI5MS43MjE1MzEyMyA3OS4xNjkzMTU5OSAyODQuODM3MzQwNTggNzcuNjA5Mzc1IDI3Ny44NTU0Njg3NSBDNzYuMjg5Mzc1IDI3Ny44NTU0Njg3NSA3NC45NjkzNzUgMjc3Ljg1NTQ2ODc1IDczLjYwOTM3NSAyNzcuODU1NDY4NzUgWiBNLTExNC4zOTA2MjUgMjgwLjg1NTQ2ODc1IEMtMTE1LjcxNzgyMzg2IDI4Ny44MjMyNjI3OCAtMTE1LjQ3ODg3ODgxIDI5NC43ODUzNTc4NiAtMTE1LjM5MDYyNSAzMDEuODU1NDY4NzUgQy0xMTQuNDAwNjI1IDMwMS44NTU0Njg3NSAtMTEzLjQxMDYyNSAzMDEuODU1NDY4NzUgLTExMi4zOTA2MjUgMzAxLjg1NTQ2ODc1IEMtMTExLjI3MjM4Njg1IDI5OS42MTg5OTI0NCAtMTExLjE5NjY2NDM5IDI5OC4yMDY1NTM0NiAtMTExLjA3NDIxODc1IDI5NS43MjI2NTYyNSBDLTExMS4wMzIzMjQyMiAyOTQuOTE2OTkyMTkgLTExMC45OTA0Mjk2OSAyOTQuMTExMzI4MTIgLTExMC45NDcyNjU2MiAyOTMuMjgxMjUgQy0xMTAuOTA3OTQ5MjIgMjkyLjQzOTQ5MjE5IC0xMTAuODY4NjMyODEgMjkxLjU5NzczNDM4IC0xMTAuODI4MTI1IDI5MC43MzA0Njg3NSBDLTExMC43NjMzNDk2MSAyODkuNDU2MjMwNDcgLTExMC43NjMzNDk2MSAyODkuNDU2MjMwNDcgLTExMC42OTcyNjU2MiAyODguMTU2MjUgQy0xMTAuNTkxMDgyNjQgMjg2LjA1NjE4NjUyIC0xMTAuNDkwMzQwMDMgMjgzLjk1NTg0OTI3IC0xMTAuMzkwNjI1IDI4MS44NTU0Njg3NSBDLTExMS43MTA2MjUgMjgxLjUyNTQ2ODc1IC0xMTMuMDMwNjI1IDI4MS4xOTU0Njg3NSAtMTE0LjM5MDYyNSAyODAuODU1NDY4NzUgWiBNLTEwOC4zOTA2MjUgMjgxLjg1NTQ2ODc1IEMtMTA5LjA1MDYyNSAyODguMTI1NDY4NzUgLTEwOS43MTA2MjUgMjk0LjM5NTQ2ODc1IC0xMTAuMzkwNjI1IDMwMC44NTU0Njg3NSBDLTEwOS40MDA2MjUgMzAwLjg1NTQ2ODc1IC0xMDguNDEwNjI1IDMwMC44NTU0Njg3NSAtMTA3LjM5MDYyNSAzMDAuODU1NDY4NzUgQy0xMDUuNDc1NTMzMjYgMjk3LjUzODExMzE5IC0xMDQuODc5NzUxNiAyOTQuNTAzNzgwMTIgLTEwNC4zMjgxMjUgMjkwLjczMDQ2ODc1IEMtMTAzLjQ4Nzg0NzIyIDI4NS4wNDk5MTMxOSAtMTAzLjQ4Nzg0NzIyIDI4NS4wNDk5MTMxOSAtMTAyLjM5MDYyNSAyODIuODU1NDY4NzUgQy0xMDIuMzkwNjI1IDI4NS42MzU0Mjk4MiAtMTAyLjYwMzYwNDI5IDI4OC4yODAzOTQ0MiAtMTAyLjg5MDYyNSAyOTEuMDQyOTY4NzUgQy0xMDIuOTgzNDM3NSAyOTEuOTQ0MDIzNDQgLTEwMy4wNzYyNSAyOTIuODQ1MDc4MTIgLTEwMy4xNzE4NzUgMjkzLjc3MzQzNzUgQy0xMDMuMjgwMTU2MjUgMjk0LjgwNDA0Mjk3IC0xMDMuMjgwMTU2MjUgMjk0LjgwNDA0Mjk3IC0xMDMuMzkwNjI1IDI5NS44NTU0Njg3NSBDLTEwMi40MDA2MjUgMjk1LjUyNTQ2ODc1IC0xMDEuNDEwNjI1IDI5NS4xOTU0Njg3NSAtMTAwLjM5MDYyNSAyOTQuODU1NDY4NzUgQy05Ny45MzI3MjQ2MyAyODkuNTc1NTM0NjMgLTk3LjAyOTI3NTI4IDI4NS42MzcwNjQyOCAtOTcuMzkwNjI1IDI3OS44NTU0Njg3NSBDLTEwMS4xMTc0MDQ5NiAyNzkuODU1NDY4NzUgLTEwNC43NTI1OTA2MiAyODEuMDQ3MDE2NjcgLTEwOC4zOTA2MjUgMjgxLjg1NTQ2ODc1IFogTS00Mi4zOTA2MjUgMzUzLjg1NTQ2ODc1IEMtNDEuMzkwNjI1IDM1Ni44NTU0Njg3NSAtNDEuMzkwNjI1IDM1Ni44NTU0Njg3NSAtNDEuMzkwNjI1IDM1Ni44NTU0Njg3NSBaIE0tMTMuMzkwNjI1IDM3MC44NTU0Njg3NSBDLTE2Ljk1MzY1MDgzIDM4MC4zOTkyODc5NSAtMTguOTQ4NjI5NjkgMzg3LjAxODYzMjI1IC0xNS4zOTA2MjUgMzk2Ljg1NTQ2ODc1IEMtMTUuMDE1MzEwNTQgMzk5LjE4MjQxODM5IC0xNC42NzE0NTI5OCA0MDEuNTE1MjM1NiAtMTQuMzkwNjI1IDQwMy44NTU0Njg3NSBDLTEyLjIzODYzNTQ1IDQwMC4xMDY1Mjc2OCAtMTEuMjUyNzAwNjQgMzk2LjA3NDU5MTQxIC0xMC4yMDMxMjUgMzkxLjkxNzk2ODc1IEMtMTAuMDEyOTg4MjggMzkxLjIxNDc4NTE2IC05LjgyMjg1MTU2IDM5MC41MTE2MDE1NiAtOS42MjY5NTMxMiAzODkuNzg3MTA5MzggQy04LjExNzkzMzg4IDM4My44NDU2OTQxNCAtOC43ODIyNTg3MSAzODAuMTExNzEyNzEgLTEwLjk1MzEyNSAzNzQuNTQyOTY4NzUgQy0xMS40Mjc1IDM3My4zMjYwOTM3NSAtMTEuOTAxODc1IDM3Mi4xMDkyMTg3NSAtMTIuMzkwNjI1IDM3MC44NTU0Njg3NSBDLTEyLjcyMDYyNSAzNzAuODU1NDY4NzUgLTEzLjA1MDYyNSAzNzAuODU1NDY4NzUgLTEzLjM5MDYyNSAzNzAuODU1NDY4NzUgWiBNLTE0LjM5MDYyNSA0MDguODU1NDY4NzUgQy0xNC42NzkwNTM0MSA0MTMuMzkwMTYxNjQgLTE0Ljk2MzczNDkyIDQxNy45MjUwNjk1IC0xNS4yNDUxMTcxOSA0MjIuNDYwMjA1MDggQy0xNS4zNDExMjEyMyA0MjMuOTk5MzMwMzUgLTE1LjQzODEwNTM4IDQyNS41MzgzOTQ4NSAtMTUuNTM2MTMyODEgNDI3LjA3NzM5MjU4IEMtMTYuNjEyNjAzMyA0NDIuNjA3NjA3NzMgLTE2LjYxMjYwMzMgNDQyLjYwNzYwNzczIC0xNS41MTU2MjUgNDU4LjEwNTQ2ODc1IEMtMTUuMzUzMjAzMTIgNDU5LjI2NTYyNSAtMTUuMTkwNzgxMjUgNDYwLjQyNTc4MTI1IC0xNS4wMjM0Mzc1IDQ2MS42MjEwOTM3NSBDLTE0LjQ0MjI2MDUgNDY0LjU5MTU1Mzk3IC0xMy42MjI5MzE0MSA0NjcuMTAwOTAxNDkgLTEyLjM5MDYyNSA0NjkuODU1NDY4NzUgQy02LjMyMjE0OTAxIDQ2MC43NTI3NTQ3NyAtOS42ODk2OTU4NiA0NDQuNDI1NDAxNTkgLTEwLjQ4NzA2MDU1IDQzMy45NjQ4NDM3NSBDLTEwLjcwNTgxNTI2IDQzMS4wNjk4NjYxIC0xMC45MDM1OTcxOSA0MjguMTczOTQxMTcgLTExLjA5OTYwOTM4IDQyNS4yNzczNDM3NSBDLTExLjIzMzE0Mzc1IDQyMy40MzM1MDQxNyAtMTEuMzY3ODY0MzUgNDIxLjU4OTc1MDAyIC0xMS41MDM5MDYyNSA0MTkuNzQ2MDkzNzUgQy0xMS41NjIzNDIwNyA0MTguODgxNjM2MzUgLTExLjYyMDc3Nzg5IDQxOC4wMTcxNzg5NiAtMTEuNjgwOTg0NSA0MTcuMTI2NTI1ODggQy0xMS44NzM5NjY3MyA0MTIuNTE1NTA2MTYgLTExLjg3Mzk2NjczIDQxMi41MTU1MDYxNiAtMTQuMzkwNjI1IDQwOC44NTU0Njg3NSBaIE0tMTMuMzkwNjI1IDQ3Ni44NTU0Njg3NSBDLTEyLjM5MDYyNSA0ODAuODU1NDY4NzUgLTEyLjM5MDYyNSA0ODAuODU1NDY4NzUgLTEyLjM5MDYyNSA0ODAuODU1NDY4NzUgWiBNLTM5LjM5MDYyNSA0ODUuODU1NDY4NzUgQy00MC4zODA2MjUgNDg3LjM0MDQ2ODc1IC00MC4zODA2MjUgNDg3LjM0MDQ2ODc1IC00MS4zOTA2MjUgNDg4Ljg1NTQ2ODc1IEMtNDAuNDAwNjI1IDQ4OS4xODU0Njg3NSAtMzkuNDEwNjI1IDQ4OS41MTU0Njg3NSAtMzguMzkwNjI1IDQ4OS44NTU0Njg3NSBDLTM4LjA2MDYyNSA0ODguNTM1NDY4NzUgLTM3LjczMDYyNSA0ODcuMjE1NDY4NzUgLTM3LjM5MDYyNSA0ODUuODU1NDY4NzUgQy0zOC4wNTA2MjUgNDg1Ljg1NTQ2ODc1IC0zOC43MTA2MjUgNDg1Ljg1NTQ2ODc1IC0zOS4zOTA2MjUgNDg1Ljg1NTQ2ODc1IFogTS00NC4zOTA2MjUgNDg2Ljg1NTQ2ODc1IEMtNDQuNzIwNjI1IDQ4Ny41MTU0Njg3NSAtNDUuMDUwNjI1IDQ4OC4xNzU0Njg3NSAtNDUuMzkwNjI1IDQ4OC44NTU0Njg3NSBDLTQ0LjQwMDYyNSA0ODguNTI1NDY4NzUgLTQzLjQxMDYyNSA0ODguMTk1NDY4NzUgLTQyLjM5MDYyNSA0ODcuODU1NDY4NzUgQy00My4wNTA2MjUgNDg3LjUyNTQ2ODc1IC00My43MTA2MjUgNDg3LjE5NTQ2ODc1IC00NC4zOTA2MjUgNDg2Ljg1NTQ2ODc1IFogTTE4LjYwOTM3NSA0ODYuODU1NDY4NzUgQzE4LjYwOTM3NSA0ODcuNTE1NDY4NzUgMTguNjA5Mzc1IDQ4OC4xNzU0Njg3NSAxOC42MDkzNzUgNDg4Ljg1NTQ2ODc1IEMxOS4yNjkzNzUgNDg4Ljg1NTQ2ODc1IDE5LjkyOTM3NSA0ODguODU1NDY4NzUgMjAuNjA5Mzc1IDQ4OC44NTU0Njg3NSBDMjAuNjA5Mzc1IDQ4OC4xOTU0Njg3NSAyMC42MDkzNzUgNDg3LjUzNTQ2ODc1IDIwLjYwOTM3NSA0ODYuODU1NDY4NzUgQzE5Ljk0OTM3NSA0ODYuODU1NDY4NzUgMTkuMjg5Mzc1IDQ4Ni44NTU0Njg3NSAxOC42MDkzNzUgNDg2Ljg1NTQ2ODc1IFogTTE5LjYwOTM3NSA0ODkuODU1NDY4NzUgQzIwLjYwOTM3NSA0OTEuODU1NDY4NzUgMjAuNjA5Mzc1IDQ5MS44NTU0Njg3NSAyMC42MDkzNzUgNDkxLjg1NTQ2ODc1IFogTS0zMi4zOTA2MjUgNDkwLjg1NTQ2ODc1IEMtMzIuMzkwNjI1IDQ5MS41MTU0Njg3NSAtMzIuMzkwNjI1IDQ5Mi4xNzU0Njg3NSAtMzIuMzkwNjI1IDQ5Mi44NTU0Njg3NSBDLTMxLjQwMDYyNSA0OTMuMTg1NDY4NzUgLTMwLjQxMDYyNSA0OTMuNTE1NDY4NzUgLTI5LjM5MDYyNSA0OTMuODU1NDY4NzUgQy0yOS4wNjA2MjUgNDkzLjE5NTQ2ODc1IC0yOC43MzA2MjUgNDkyLjUzNTQ2ODc1IC0yOC4zOTA2MjUgNDkxLjg1NTQ2ODc1IEMtMjkuNzEwNjI1IDQ5MS41MjU0Njg3NSAtMzEuMDMwNjI1IDQ5MS4xOTU0Njg3NSAtMzIuMzkwNjI1IDQ5MC44NTU0Njg3NSBaIE0xNS42MDkzNzUgNDkwLjg1NTQ2ODc1IEMxNS45MzkzNzUgNDkxLjUxNTQ2ODc1IDE2LjI2OTM3NSA0OTIuMTc1NDY4NzUgMTYuNjA5Mzc1IDQ5Mi44NTU0Njg3NSBDMTYuOTM5Mzc1IDQ5Mi4xOTU0Njg3NSAxNy4yNjkzNzUgNDkxLjUzNTQ2ODc1IDE3LjYwOTM3NSA0OTAuODU1NDY4NzUgQzE2Ljk0OTM3NSA0OTAuODU1NDY4NzUgMTYuMjg5Mzc1IDQ5MC44NTU0Njg3NSAxNS42MDkzNzUgNDkwLjg1NTQ2ODc1IFogIiBmaWxsPSIjMDAwMDAwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNDIuMzkwNjI1LDEyLjE0NDUzMTI1KSIvPgo8cGF0aCBkPSJNMCAwIEM0LjYyNTc5Mjk0IDIuNTkwMjAwMjYgNy4xOTUwMTE3OCA0LjU4NDIyOTcxIDkuNDM3NSA5LjM3NSBDMTAuMDI1MzEyNSAxMC41MTk2ODc1IDEwLjAyNTMxMjUgMTAuNTE5Njg3NSAxMC42MjUgMTEuNjg3NSBDMTIuMDk4OTM4MDEgMTYuNTYyODMzNDEgMTMuMDY1ODc4OTkgMjEuNDg5ODYzMDQgMTEuNDM3NSAyNi4zNzUgQzEyLjQyNzUgMjYuNzA1IDEzLjQxNzUgMjcuMDM1IDE0LjQzNzUgMjcuMzc1IEMxNC44OTI0MDkxOCAzMy43NDM3Mjg1NSAxMy45OTA5OTAxNiAzOC4wMTUwNTMzMSAxMC40Mzc1IDQzLjM3NSBDOS45MTgwMDc4MSA0My44NDI5Mjk2OSA5LjM5ODUxNTYyIDQ0LjMxMDg1OTM3IDguODYzMjgxMjUgNDQuNzkyOTY4NzUgQzUuMzU3ODA2MjIgNDguNjgyNjA1NDMgNS45NzE3ODMgNTUuNDc4ODQwODEgNi4wNTA3ODEyNSA2MC40Mzc1IEM2LjU1NzgzMzE0IDY0LjI4OTA0NTY1IDcuNTg1NTM4ODYgNjYuMTk0MTY3NDYgMTAuMzY3MTg3NSA2OC44NTkzNzUgQzE3Ljc0MzgwNTk2IDc0LjI1OTYxNjQ0IDI2LjEyOTQ0MzE1IDc3LjE1MTg5OTYzIDM0LjgyOTU4OTg0IDc5LjYzOTE2MDE2IEM0My43NTc1NDUyMyA4Mi4yMTE0Njk4NCA0OS4wNTI2OTY4MyA4NS44NTE3ODczNCA1NC40Mzc1IDkzLjM3NSBDNTguNjY4OTk3ODkgMTAxLjAzNTQ3MDMyIDYxLjc0NjA2NDAzIDEwOS45Mzc3MDkyIDU5Ljk1MzEyNSAxMTguNzU3ODEyNSBDNTkuMzE3NjQyMDQgMTIxLjk4MzM2OTk1IDU5LjMwNTM2Mzg5IDEyNS4wMjYzMjEgNTkuMzEyNSAxMjguMzEyNSBDNTkuMzA5OTIxODcgMTI5LjQ5NzE0ODQ0IDU5LjMwNzM0Mzc1IDEzMC42ODE3OTY4OCA1OS4zMDQ2ODc1IDEzMS45MDIzNDM3NSBDNTkuNDI5MTU3MDIgMTM1LjE1Njg1NTY2IDU5Ljg5NjE1NzQ2IDEzOC4xNjk5MDg0OCA2MC40Mzc1IDE0MS4zNzUgQzYwLjQ3OTQ0NDU1IDE0My4yNzAzNjkyNyA2MC40Nzg4NzI1OSAxNDUuMTY3MTE4MTYgNjAuNDM3NSAxNDcuMDYyNSBDNjAuNDAxMDYzNTEgMTU5Ljk2Mzk2NDAxIDYwLjQwMTA2MzUxIDE1OS45NjM5NjQwMSA2NS43NTc4MTI1IDE3MS40MjE4NzUgQzcxLjYyMTQ1MDM2IDE4MS43MzA5Njg1MyA3My45MzM3MTY2MyAxOTQuMDg4OTMyOTkgNzYuNTQ1NDEwMTYgMjA1LjU0MDUyNzM0IEM3OC40Mjc4MTA5NSAyMTMuNjU3NzI2NjMgODAuODM5Mzc0MjYgMjIxLjUwNzE5NDM2IDgzLjY5Nzc1MzkxIDIyOS4zMzIwMzEyNSBDODQuMTc4NjA4OTggMjMwLjY2MDAxNjQ3IDg0LjY0NTI4MTI3IDIzMS45OTMyNTM0IDg1LjA5NTIxNDg0IDIzMy4zMzIwMzEyNSBDODcuODQ5MzgxMiAyNDEuNTExOTY4ODQgOTEuMjU4MzE0NjYgMjQ2LjY0NDU1MjUyIDk3Ljg4NjIzMDQ3IDI1Mi4wMjgzMjAzMSBDMTA0LjI2MjI4NDg1IDI1Ny40NTU4NTQyMyAxMDcuMjEwMjYxNTEgMjY0LjgwOTk3MzMxIDExMC40Mzc1IDI3Mi4zNzUgQzEwOC45NTI1IDI3My44NiAxMDguOTUyNSAyNzMuODYgMTA3LjQzNzUgMjc1LjM3NSBDMTA0LjUyMjMyNzA4IDI3NC4zMDA5ODg5MiAxMDIuNjU5Mzk4MjQgMjczLjU5Njg5ODI0IDEwMC40Mzc1IDI3MS4zNzUgQzk4Ljg1ODE3OTk2IDI3Mi45NTQzMjAwNCA5OS4yNzMyNjQ0MSAyNzQuNTk1MDkzNzkgOTkuMjI2NTYyNSAyNzYuNzg1MTU2MjUgQzk5LjE5ODIwMzEyIDI3Ny42OTMzMDA3OCA5OS4xNjk4NDM3NSAyNzguNjAxNDQ1MzEgOTkuMTQwNjI1IDI3OS41MzcxMDkzOCBDOTkuMDg5MjgyOTggMjgxLjQ0MzE4MjAzIDk5LjA0NDgwNDQyIDI4My4zNDk0NTQyMyA5OS4wMDc4MTI1IDI4NS4yNTU4NTkzOCBDOTguODA1MDQyMjEgMjkxLjI2NzE1MzU5IDk3Ljk5MzEzOTI1IDI5NS45MDM5NDcwNSA5NS40Mzc1IDMwMS4zNzUgQzkzLjA2MjUgMzAzLjQzNzUgOTMuMDYyNSAzMDMuNDM3NSA5MC40Mzc1IDMwNC4zNzUgQzg3LjYyNSAzMDQuMDYyNSA4Ny42MjUgMzA0LjA2MjUgODUuNDM3NSAzMDMuMzc1IEM4NS40Mzc1IDMwMi43MTUgODUuNDM3NSAzMDIuMDU1IDg1LjQzNzUgMzAxLjM3NSBDODQuODYgMzAxLjYyMjUgODQuMjgyNSAzMDEuODcgODMuNjg3NSAzMDIuMTI1IEM4Mi45NDUgMzAyLjIwNzUgODIuMjAyNSAzMDIuMjkgODEuNDM3NSAzMDIuMzc1IEM3OS41IDMwMC44MTI1IDc5LjUgMzAwLjgxMjUgNzcuNDM3NSAyOTguMzc1IEM3Ni42MTUwNzgxMiAyOTcuNDkwNzAzMTIgNzUuNzkyNjU2MjUgMjk2LjYwNjQwNjI1IDc0Ljk0NTMxMjUgMjk1LjY5NTMxMjUgQzcyLjIwNTk1NDA5IDI5Mi4zOTUyOTkwNyA3MS4xMzI0MTcxNCAyODguOTYwNzE4MjUgNzAuMjUgMjg0LjgxMjUgQzcwLjA4OTEwODg5IDI4NC4xMTE0MTExMyA2OS45MjgyMTc3NyAyODMuNDEwMzIyMjcgNjkuNzYyNDUxMTcgMjgyLjY4Nzk4ODI4IEM2Ny43OTYxODczIDI3My44OTExNzcxMiA2Ni40ODUyMzkxNCAyNjUuMjY3NTAwNDkgNjYuMjUgMjU2LjI1IEM2NS43NjcxMzA5OSAyNDguNzMyMjI5IDYyLjk0MDk5MzMyIDI0NC4yNDk0OTg5OSA1OC40Mzc1IDIzOC4zNzUgQzU3LjEwMjE0NzUzIDIzNi41NDMxMzY4MyA1NS43Njg4MjY1MyAyMzQuNzA5NzkxMTUgNTQuNDM3NSAyMzIuODc1IEM1My40Mzc4MzIwMyAyMzEuNTExODE2NDEgNTMuNDM3ODMyMDMgMjMxLjUxMTgxNjQxIDUyLjQxNzk2ODc1IDIzMC4xMjEwOTM3NSBDMzguMzU2MTQ3NzEgMjEwLjYyMzE0NDY2IDM0LjEyNTQ4OTUzIDE5MC44OTcwNjU0NCAzMi40Mzc1IDE2Ny4zNzUgQzMxLjc3NzUgMTY3LjM3NSAzMS4xMTc1IDE2Ny4zNzUgMzAuNDM3NSAxNjcuMzc1IEMzMC4wMTY1ODQ2IDE3MC4wMzk3ODgxMyAyOS42MjU1NzQyNSAxNzIuNzAzNzU1OTYgMjkuMjUgMTc1LjM3NSBDMjkuMTI5NDcyNjYgMTc2LjExODc4OTA2IDI5LjAwODk0NTMxIDE3Ni44NjI1NzgxMiAyOC44ODQ3NjU2MiAxNzcuNjI4OTA2MjUgQzI4LjIxMDE2MDkgMTgyLjYzNDAzODA5IDI4LjY5Nzk3NzAzIDE4NS45MTg2MDA4OCAzMC42OTY1MzMyIDE5MC41NDM5NDUzMSBDMzEuNzMwMTkxMjUgMTkzLjA5ODI4OTc2IDMxLjk1NDM2MTEzIDE5NS41MTIxOTQwNiAzMi4xMjUgMTk4LjI1IEMzMi4xOTMzMjAzMSAxOTkuMjg2NDA2MjUgMzIuMjYxNjQwNjMgMjAwLjMyMjgxMjUgMzIuMzMyMDMxMjUgMjAxLjM5MDYyNSBDMzIuNDIyMzAxMjggMjAzLjk0NDkzMjUyIDMyLjM5NjExOTI1IDIwNi40NDc0MTI0OSAzMi4zMTI1IDIwOSBDMzIuMTk5NjQ1MjcgMjE2LjY0OTA0Mjc3IDMzLjAwMzcwODY1IDIyNy41MDc0MTczIDM2LjQzNzUgMjM0LjM3NSBDMzguODk4NjA5NjEgMjUwLjYzMjY5NDkgMzkuMDQzODMyMTcgMjY2LjMxNzA3MzU4IDM2Ljk5MjE4NzUgMjgyLjYwNTQ2ODc1IEMzNi41ODU2ODI2NCAyODUuODk3ODg0MzggMzYuMjkwNzczNDEgMjg5LjE3ODI1MzgxIDM2LjA3MDMxMjUgMjkyLjQ4ODI4MTI1IEMzNC45NjI4MzgzNCAzMDguNTY0MzI5MDIgMzEuOTAwNjQ3OTkgMzI0LjIzNjgyNzY3IDI3LjE1NjI1IDMzOS42NTIzNDM3NSBDMjIuNzYyOTIwOCAzNTQuMTAzMjU4NzQgMjMuNjI1ODQzMSAzNjguNTM2MzU1ODYgMjYuMzY5Mzg0NzcgMzgzLjI1NDM5NDUzIEMyOS42MTgxNjQ1NiA0MDEuOTg0NDY3MDIgMjYuMDY3NzcwOTcgNDE4LjA5MDQzNDM1IDIxIDQzNi4xMjUgQzIwLjA3NzU0ODMgNDM5LjQ5MDM0MzMgMTkuMTYxODMxODYgNDQyLjg1NzQzNjIzIDE4LjI0OTAwODE4IDQ0Ni4yMjU0MDI4MyBDMTcuNjg0MDUwNTEgNDQ4LjMwMDg3NDAxIDE3LjExMjM4MTA3IDQ1MC4zNzQ1MzQxNCAxNi41MzI4NTIxNyA0NTIuNDQ1OTgzODkgQzE0LjcyMzc1NzgzIDQ1OC45NzU5OTA2NyAxMy4zMTExNTIwNCA0NjUuMjUwMTYyMjQgMTMuMjUgNDcyLjA2MjUgQzEzLjIzNTgyMDMxIDQ3Mi43ODgyNDIxOSAxMy4yMjE2NDA2MiA0NzMuNTEzOTg0MzggMTMuMjA3MDMxMjUgNDc0LjI2MTcxODc1IEMxMy40NzQwODA0NyA0NzYuNzEwNDI0MjkgMTQuMTQyMDMyMDQgNDc4LjI4ODYxNDc1IDE1LjQzNzUgNDgwLjM3NSBDMTYuMDk3NSA0ODAuNzA1IDE2Ljc1NzUgNDgxLjAzNSAxNy40Mzc1IDQ4MS4zNzUgQzE3LjQzNzUgNDgyLjAzNSAxNy40Mzc1IDQ4Mi42OTUgMTcuNDM3NSA0ODMuMzc1IEMxOC4yMjEyNSA0ODMuNjQzMTI1IDE5LjAwNSA0ODMuOTExMjUgMTkuODEyNSA0ODQuMTg3NSBDMjIuNDM3NSA0ODUuMzc1IDIyLjQzNzUgNDg1LjM3NSAyNC40Mzc1IDQ4OC4zNzUgQzI0LjA2MjUgNDkwLjU2MjUgMjQuMDYyNSA0OTAuNTYyNSAyMy40Mzc1IDQ5Mi4zNzUgQzE4LjIyMjc3Mzk0IDQ5NC4wNDkyMDE1MiAxMy4zOTY4MDU1NiA0OTQuODIyMjQ3ODEgNy45Mzc1IDQ5NS4xMjUgQzcuMjE2OTE0MDYgNDk1LjE4MDQyOTY5IDYuNDk2MzI4MTIgNDk1LjIzNTg1OTM4IDUuNzUzOTA2MjUgNDk1LjI5Mjk2ODc1IEMwLjg5NTc4NjQgNDk1LjU4Mjg3NDY0IC0yLjg4MDAyMTY3IDQ5NC44ODE3MzgwOCAtNy41NjI1IDQ5My4zNzUgQy0xMC4zODg4MDM0NSA0OTMuMjQzNDQ2ODcgLTEwLjM4ODgwMzQ1IDQ5My4yNDM0NDY4NyAtMTIuMzQ5MzY1MjMgNDkzLjg2MjMwNDY5IEMtMTcuNjA1ODI5NDMgNDk1LjA4MDAxODQgLTIzLjI1NjAzNjc5IDQ5NC42MDM1MTM0IC0yOC42MjUgNDk0LjYyNSBDLTMwLjU2MzQyNzczIDQ5NC42NTU5Mzc1IC0zMC41NjM0Mjc3MyA0OTQuNjU1OTM3NSAtMzIuNTQxMDE1NjIgNDk0LjY4NzUgQy0zMy43NzY1ODIwMyA0OTQuNjkyNjU2MjUgLTM1LjAxMjE0ODQ0IDQ5NC42OTc4MTI1IC0zNi4yODUxNTYyNSA0OTQuNzAzMTI1IEMtMzcuNDE3MDMzNjkgNDk0LjcxMjQ3MDcgLTM4LjU0ODkxMTEzIDQ5NC43MjE4MTY0MSAtMzkuNzE1MDg3ODkgNDk0LjczMTQ0NTMxIEMtNDIuNTYyNSA0OTQuMzc1IC00Mi41NjI1IDQ5NC4zNzUgLTQ0LjQ0NzAyMTQ4IDQ5Mi45NzU1ODU5NCBDLTQ1LjU2MjUgNDkxLjM3NSAtNDUuNTYyNSA0OTEuMzc1IC00NS42ODc1IDQ4OS40Mzc1IEMtNDQuNTYyNSA0ODcuMzc1IC00NC41NjI1IDQ4Ny4zNzUgLTQxLjMxMjUgNDg1Ljc1IEMtMzYuMjM4MzkzMjYgNDgzLjA3MTcwODYgLTM0LjI3MjY4MTIzIDQ3OC42ODg3Nzc0IC0zMi41NjI1IDQ3My4zNzUgQy0zMS4yODU5NTY5OCA0NjQuNTQ1NTc3NDcgLTMzLjg3NDQyNTYyIDQ1Ni45NjY4NjYyNSAtMzcuMjUgNDQ4LjkzNzUgQy00Ny4zODY4NDk1MyA0MjQuNzE1NDk2NDUgLTUxLjUyODgyNzEzIDQwMS40NTY4NjE5MiAtNDUuMzQxMzA4NTkgMzc1LjgyNDk1MTE3IEMtNDIuODc5NzYzNjEgMzY1LjQzNTc1NzU1IC00My4xMTM1ODE2OSAzNTcuMjYwMTIzNTIgLTQ2LjI1IDM0Ny4wNjI1IEMtNDYuNTIxODMxMDUgMzQ2LjE0Mzg4MTg0IC00Ni43OTM2NjIxMSAzNDUuMjI1MjYzNjcgLTQ3LjA3MzczMDQ3IDM0NC4yNzg4MDg1OSBDLTQ4LjU4NDM1NzEyIDMzOS4yNjcxOTY2NCAtNTAuMjUxODcxNDIgMzM0LjM2NjIwNjQzIC01Mi4xODc1IDMyOS41IEMtNjAuMzM1NjM2ODggMzA4Ljk5OTA3ODY3IC02MS44MjYzNDgxOSAyODcuNTkyNzMzNTUgLTYxLjkzNzUgMjY1Ljc1IEMtNjEuOTQ5MjgyODQgMjY0LjYwOTg1OTQ3IC02MS45NDkyODI4NCAyNjQuNjA5ODU5NDcgLTYxLjk2MTMwMzcxIDI2My40NDY2ODU3OSBDLTYyLjAzMzM0NjcxIDI1NC41MDMwNzkyOSAtNjEuMzgxMjk4OTIgMjQ2LjQ0Mjk4OTk5IC01OS4yNzUzOTA2MiAyMzcuNjk5MjE4NzUgQy01OC4xMDM2NjY2MyAyMzIuMjM1NDUzNyAtNTcuODk4MTU0NTcgMjI2Ljc1NjMwMjUyIC01Ny42MjUgMjIxLjE4NzUgQy01Ni45NzI1ODY5MSAyMTAuMDI2MDA3NzggLTU1LjY2NDY2OTIyIDE5OS4xMDM4ODk2OSAtNTMuNzk1MTY2MDIgMTg4LjA4MTI5ODgzIEMtNTMuNTM0OTc2ODEgMTg2LjQ5ODA0ODEgLTUzLjUzNDk3NjgxIDE4Ni40OTgwNDgxIC01My4yNjk1MzEyNSAxODQuODgyODEyNSBDLTUzLjEwOTQ0NTggMTgzLjk2MTI5Mzk1IC01Mi45NDkzNjAzNSAxODMuMDM5Nzc1MzkgLTUyLjc4NDQyMzgzIDE4Mi4wOTAzMzIwMyBDLTUyLjQwMTU1NTYxIDE3Ny40MDU3NzcyNSAtNTMuMjE3MzMyMDYgMTczLjQzOTk1Nzc3IC01NS41NjI1IDE2OS4zNzUgQy01Ny40NzEwODU3OSAxNzEuMjgzNTg1NzkgLTU2LjY2NjY5MzU3IDE3NC4xMTQzNDUxNiAtNTYuNjk4OTc0NjEgMTc2LjY1ODQ0NzI3IEMtNTcuMTc2MDUwODIgMjAxLjQ3MzI1ODMzIC02OS43MjI4NDQzMyAyMjEuMjQyNzYyMzQgLTgyLjE4MzgzNzg5IDI0MS45OTEyMTA5NCBDLTg4LjAwNjQ2MjUyIDI1MC40MTgzNTY0MiAtODguMDA2NDYyNTIgMjUwLjQxODM1NjQyIC04OS4xODc1IDI2MC4wNjI1IEMtODcuNzYyNzU5MDkgMjcwLjgyMDA5NDMxIC05MC4xNDczMTM2NyAyODEuMTgwOTkwOTkgLTkzLjU2MjUgMjkxLjM3NSBDLTk0LjIyMjUgMjkyLjAzNSAtOTQuODgyNSAyOTIuNjk1IC05NS41NjI1IDI5My4zNzUgQy05Ni44ODI1IDI5My4zNzUgLTk4LjIwMjUgMjkzLjM3NSAtOTkuNTYyNSAyOTMuMzc1IEMtOTkuNjQ1IDI5NC4yODI1IC05OS43Mjc1IDI5NS4xOSAtOTkuODEyNSAyOTYuMTI1IEMtMTAwLjY1NDk4NzMyIDI5OS43NzU3NzgzOSAtMTAxLjc0MTMxNjE4IDMwMS4wMDg4NDU4MyAtMTA0LjU2MjUgMzAzLjM3NSBDLTEwNS41NTI1IDMwMy4wNDUgLTEwNi41NDI1IDMwMi43MTUgLTEwNy41NjI1IDMwMi4zNzUgQy0xMDcuNTYyNSAzMDMuMDM1IC0xMDcuNTYyNSAzMDMuNjk1IC0xMDcuNTYyNSAzMDQuMzc1IEMtMTA4LjU1MjUgMzA0LjcwNSAtMTA5LjU0MjUgMzA1LjAzNSAtMTEwLjU2MjUgMzA1LjM3NSBDLTExMS4yMjI1IDMwNC43MTUgLTExMS44ODI1IDMwNC4wNTUgLTExMi41NjI1IDMwMy4zNzUgQy0xMTMuNDA4MTI1IDMwMy4wNDUgLTExNC4yNTM3NSAzMDIuNzE1IC0xMTUuMTI1IDMwMi4zNzUgQy0xMTcuNTYyNSAzMDEuMzc1IC0xMTcuNTYyNSAzMDEuMzc1IC0xMTguNTYyNSAyOTkuMzc1IEMtMTE4Ljc4NDg5Njg5IDI5Ny40MTg1NjUyNyAtMTE4Ljk1NDY1ODU0IDI5NS40NTYwMjI3NSAtMTE5LjA5NzY1NjI1IDI5My40OTIxODc1IEMtMTE5LjE4NDY2Nzk3IDI5Mi4zMjU1ODU5NCAtMTE5LjI3MTY3OTY5IDI5MS4xNTg5ODQzNyAtMTE5LjM2MTMyODEyIDI4OS45NTcwMzEyNSBDLTExOS40NDgzMzk4NCAyODguNzMzNzEwOTQgLTExOS41MzUzNTE1NiAyODcuNTEwMzkwNjMgLTExOS42MjUgMjg2LjI1IEMtMTE5LjcxNTg3ODkxIDI4NS4wMTg5NDUzMSAtMTE5LjgwNjc1NzgxIDI4My43ODc4OTA2MiAtMTE5LjkwMDM5MDYyIDI4Mi41MTk1MzEyNSBDLTEyMC4xMjQ4NTAwMyAyNzkuNDcxNjA4ODUgLTEyMC4zNDUzODU0MiAyNzYuNDIzNDUyOTcgLTEyMC41NjI1IDI3My4zNzUgQy0xMjEuNTAzNTE1NjIgMjc0LjIwMzg2NzE5IC0xMjIuNDQ0NTMxMjUgMjc1LjAzMjczNDM4IC0xMjMuNDE0MDYyNSAyNzUuODg2NzE4NzUgQy0xMjUuMDE4MDY2NDEgMjc3LjI5OTU2MDU1IC0xMjUuMDE4MDY2NDEgMjc3LjI5OTU2MDU1IC0xMjYuNTYyNSAyNzguMzc1IEMtMTI4LjkzNzUgMjc4LjE4NzUgLTEyOC45Mzc1IDI3OC4xODc1IC0xMzAuNTYyNSAyNzcuMzc1IEMtMTMxLjM3NSAyNzUuMzc1IC0xMzEuMzc1IDI3NS4zNzUgLTEzMS41NjI1IDI3Mi4zNzUgQy0xMzAuNDcyNTI0NjEgMjcwLjIxMjQ4ODgyIC0xMjkuMTg3MjA4OCAyNjguMjgzMjE1MDUgLTEyNy44MjAzMTI1IDI2Ni4yODUxNTYyNSBDLTEyNi40NDMzNjIwMSAyNjQuMzUzMTU4NzQgLTEyNi40NDMzNjIwMSAyNjQuMzUzMTU4NzQgLTEyNS42MjUgMjYxLjgxMjUgQy0xMjMuNTA1ODk3NjUgMjU2Ljk1MTAyOTkxIC0xMjAuMDM1MjI4NDMgMjUzLjI0NjYxNDc4IC0xMTUuNSAyNTAuNTYyNSBDLTEwNy44MTQ4MTIzMiAyNDQuODM5NDg3OSAtMTA2LjE5MDY0NDE4IDIzNC4yMzMwNDQ0IC0xMDQuMDUwNzgxMjUgMjI1LjM2OTE0MDYyIEMtMTAzLjU2NjM0NzUgMjIzLjM5MDcxMzIgLTEwMy4wNTMzODAzMiAyMjEuNDIxOTA5NjQgLTEwMi41MzEyNSAyMTkuNDUzMTI1IEMtMTAwLjcxNzY5NjM3IDIxMi41Mzk3MDEwMiAtOTkuMjQzOTM3MTEgMjA1LjY4NTAzNTQ3IC05OC4xMjUgMTk4LjYyNSBDLTk2Ljc0NDAzMTc5IDE5MC4xMzk4NDU5OCAtOTQuMzE4MTk1OTMgMTgyLjQyNzQ5NDAxIC04OS40Mzc1IDE3NS4yNSBDLTg0LjE4MDM1NTUgMTY3LjE4OTA0NTExIC04NC4zNzA2NjM0IDE1OS4wNzQ5NTczNiAtODQuNTUyMDAxOTUgMTQ5Ljc2ODc5ODgzIEMtODQuNjI1NjE1MTkgMTQ1LjE2MjE2MDIxIC04NC41MTExNTgxMSAxNDAuOTYxMTAyMDkgLTgzLjUgMTM2LjQzNzUgQy04Mi4zNjM4NjUyIDEzMS4zNTI3MDA4OSAtODIuNzU3MTczOTQgMTI2Ljc5NTczODExIC04My4yNTc4MTI1IDEyMS42MzY3MTg3NSBDLTg0LjI0MDAxMjQgMTExLjEyMjE0Mjg5IC04My43MDgwNzg1MyAxMDEuNzkxOTgwMjEgLTc5IDkyLjE4NzUgQy03MS41NDk4NjczOCA4My41OTExOTMxMyAtNjIuODgwNDMzMjMgNzguNTk0MjU3MDggLTUyLjEyNSA3NS40Mzc1IEMtNDUuMjMyOTk2MDUgNzMuMzkwNjg2NzYgLTM5LjQ4Njg3NDgxIDcwLjg3MTQxNzUyIC0zNCA2Ni4xODc1IEMtMzEuMzUxNjAzMzEgNjEuMDA1ODU0MzEgLTMxLjk0NzQ2MjIyIDU1LjU0ODEzMzQ4IC0zMy41IDUwLjA2MjUgQy0zMy44NTA2MjUgNDkuMTc1NjI1IC0zNC4yMDEyNSA0OC4yODg3NSAtMzQuNTYyNSA0Ny4zNzUgQy0zNC42ODYyNSA0Ni40Njc1IC0zNC44MSA0NS41NiAtMzQuOTM3NSA0NC42MjUgQy0zNS4yNDY4NzUgNDMuNTExMjUgLTM1LjI0Njg3NSA0My41MTEyNSAtMzUuNTYyNSA0Mi4zNzUgQy0zNi44ODcxNzc0NiA0MS42OTEyOTU1IC0zOC4yMjExMzYzMyA0MS4wMjUzNTgxNCAtMzkuNTYyNSA0MC4zNzUgQy00Mi4xMTM4NTg3OCAzNi4xNjUyNTgwMSAtNDIuMTcyOTg3ODYgMzEuMTY5MTI1MjYgLTQxLjU2MjUgMjYuMzc1IEMtNDAuNTcyNSAyNC44OSAtNDAuNTcyNSAyNC44OSAtMzkuNTYyNSAyMy4zNzUgQy0zOS42MjQzNzUgMjIuMTk5Mzc1IC0zOS42ODYyNSAyMS4wMjM3NSAtMzkuNzUgMTkuODEyNSBDLTM5Ljg1MjY4Nzk0IDE0LjIzNjU0NDc3IC0zNy43OTQwNTU5NyA5Ljg0ODMxMTI4IC0zNC41NjI1IDUuMzc1IEMtMjQuNzkyMTMxMzMgLTMuMzUzNjc0OTUgLTExLjkzNjgzODc3IC01LjU4MTIzOTE4IDAgMCBaIE0tMzQuMTI1IDguOTM3NSBDLTM4LjA5NjI4MzMzIDE1LjY3MTQxNTIxIC0zNy4xMjI3NDg0NCAyNC45NjM4MTk5MiAtMzUuNTYyNSAzMi4zNzUgQy0zNi4yMjI1IDMyLjM3NSAtMzYuODgyNSAzMi4zNzUgLTM3LjU2MjUgMzIuMzc1IEMtMzcuNTYyNSAzMC43MjUgLTM3LjU2MjUgMjkuMDc1IC0zNy41NjI1IDI3LjM3NSBDLTM5LjA0NzUgMjcuODcgLTM5LjA0NzUgMjcuODcgLTQwLjU2MjUgMjguMzc1IEMtMzkuNTcyNSAzMi44MyAtMzkuNTcyNSAzMi44MyAtMzguNTYyNSAzNy4zNzUgQy0zNy4yNDI1IDM2LjM4NSAtMzUuOTIyNSAzNS4zOTUgLTM0LjU2MjUgMzQuMzc1IEMtMzQuMzY5MTQwNjIgMzUuMDk5NDUzMTIgLTM0LjE3NTc4MTI1IDM1LjgyMzkwNjI1IC0zMy45NzY1NjI1IDM2LjU3MDMxMjUgQy0zMy41ODU5NzY1NiAzOC4wMjA1MDc4MSAtMzMuNTg1OTc2NTYgMzguMDIwNTA3ODEgLTMzLjE4NzUgMzkuNSBDLTMyLjkxNTUwNzgxIDQwLjUxMTkxNDA2IC0zMi42NDM1MTU2MyA0MS41MjM4MjgxMyAtMzIuMzYzMjgxMjUgNDIuNTY2NDA2MjUgQy0zMS41ODgzNzA0MiA0NS40NDc2MzQxMiAtMzEuNTg4MzcwNDIgNDUuNDQ3NjM0MTIgLTMwLjM3NSA0OC40Mzc1IEMtMjguNjEyMjY5MTkgNTQuODEwNDQ5ODYgLTI4LjY5MTYyNzMgNjIuNDAzNTg0NzkgLTMxLjU2MjUgNjguMzc1IEMtMzguMzk2MzEwMTkgNzQuMzAyMjM0NzggLTQ2LjU2NDU2NDY5IDc2LjY2OTk4OTg0IC01NS4wMzUxNTYyNSA3OS4yOTY4NzUgQy02MS40ODM5NzY3OCA4MS4zOTIwOTc2NSAtNjcuMzk1ODAwNzQgODMuODU5NzgyMTcgLTcyLjU2MjUgODguMzc1IEMtNzIuNTYyNSA4OS4wMzUgLTcyLjU2MjUgODkuNjk1IC03Mi41NjI1IDkwLjM3NSBDLTczLjU1MjUgOTAuNzA1IC03NC41NDI1IDkxLjAzNSAtNzUuNTYyNSA5MS4zNzUgQy03Ni43NzIxNjg2NyA5My4yOTI5MzcyOCAtNzYuNzcyMTY4NjcgOTMuMjkyOTM3MjggLTc3LjY4NzUgOTUuNjI1IEMtNzguMDIwMDc4MTIgOTYuMzkzMjgxMjUgLTc4LjM1MjY1NjI1IDk3LjE2MTU2MjUgLTc4LjY5NTMxMjUgOTcuOTUzMTI1IEMtODAuNDkwMzc1MzYgMTAyLjk2NjM2MzYyIC04MC42OTgxMjY4NiAxMDcuNTYxNTY5MDYgLTgwLjY4NzUgMTEyLjg3NSBDLTgwLjY5MDA3ODEzIDExNC4xNjQwNjI1IC04MC42OTI2NTYyNSAxMTUuNDUzMTI1IC04MC42OTUzMTI1IDExNi43ODEyNSBDLTgwLjU4MzM0NDMgMTE5LjgxMDk3NzgxIC04MC4yMjQ2MDc4NyAxMjIuNDM0MDA5MjQgLTc5LjU2MjUgMTI1LjM3NSBDLTc5LjMwNjMyMjA4IDEyOS45MDA4MDk5MSAtNzkuODQ2NzYwODUgMTMzLjUwOTM0MTA2IC04MS4wNDY4NzUgMTM3Ljg1NTQ2ODc1IEMtODIuMzMyOTQyNDIgMTQ0LjEzOTY2MTggLTgzLjU5NzEzNTkxIDE1Mi4yNzEwOTIyNiAtODEuNTYyNSAxNTguMzc1IEMtODAuNDU3ODY1ODYgMTY1LjY5MzIwMTE5IC04My40NTc2NjE4NiAxNzAuODM3OTI0NjMgLTg2LjgzNTkzNzUgMTc3LjEwNTQ2ODc1IEMtODguMjc0OTI0OTMgMTc5LjgzMDQyOTEgLTg5LjQ4NzY0MTIgMTgyLjQ5MjQyNDEzIC05MC41NjI1IDE4NS4zNzUgQy05MS4yMjI1IDE4NS4zNzUgLTkxLjg4MjUgMTg1LjM3NSAtOTIuNTYyNSAxODUuMzc1IEMtOTQuMDA2ODIzMDcgMTkwLjYyOTg3NzU0IC05NC45MjQwNTYyMSAxOTUuNzI4NzYwNDQgLTk1LjU1MDc4MTI1IDIwMS4xMzkxNjAxNiBDLTk2LjYwNjcxMzQ4IDIxMC4yNTI5MzY2OCAtOTguMTc5OTU2NjUgMjE4LjQyNzc0NjcgLTEwMS4zNzg5MDYyNSAyMjcuMDQ2ODc1IEMtMTAyLjUyNTA2NSAyMzAuMjY5NzM3MjMgLTEwMy4yOTA0MTY1OCAyMzMuNDA3ODIwMSAtMTA0IDIzNi43NSBDLTEwNS45Mjk0NzI2MyAyNDQuNjkxNzUyIC0xMDkuNDgyNjk4NjcgMjUwLjA2MDEwNDcxIC0xMTYuMTI1IDI1NC44MTI1IEMtMTIxLjA4MTA4NjY2IDI1OC4zODcyNDQ5NCAtMTIzLjU2NzA5ODQ5IDI2Mi42Mzk0NzQwNSAtMTI1LjU2MjUgMjY4LjM3NSBDLTEyNS41NjI1IDI2OS4zNjUgLTEyNS41NjI1IDI3MC4zNTUgLTEyNS41NjI1IDI3MS4zNzUgQy0xMjYuNTUyNSAyNzEuNzA1IC0xMjcuNTQyNSAyNzIuMDM1IC0xMjguNTYyNSAyNzIuMzc1IEMtMTI4LjA2NzUgMjczLjg2IC0xMjguMDY3NSAyNzMuODYgLTEyNy41NjI1IDI3NS4zNzUgQy0xMjQuMjcxMDE3NTcgMjc0LjI0MDAwNjA2IC0xMjMuNTY2NTEzMSAyNzMuMzgyMTY2MjQgLTEyMS44MTI1IDI3MC4yNSBDLTEyMS40IDI2OS4zMDEyNSAtMTIwLjk4NzUgMjY4LjM1MjUgLTEyMC41NjI1IDI2Ny4zNzUgQy0xMTcuNDc5ODg2MiAyNzMuMzQyNDEyODIgLTExNy4wNjY3NjY0OCAyNzguNDY3Nzc2NTEgLTExNi45Mzc1IDI4NS4xMjUgQy0xMTYuODg2NDc5NjYgMjg2Ljk5NDg5NTMyIC0xMTYuODMxOTQ3OTggMjg4Ljg2NDY5OTA2IC0xMTYuNzczNDM3NSAyOTAuNzM0Mzc1IEMtMTE2Ljc1NTg3NDAyIDI5MS41NTM4OTY0OCAtMTE2LjczODMxMDU1IDI5Mi4zNzM0MTc5NyAtMTE2LjcyMDIxNDg0IDI5My4yMTc3NzM0NCBDLTExNi42MzgwNjk0OSAyOTUuNTU4NjQ1NTMgLTExNi42MzgwNjk0OSAyOTUuNTU4NjQ1NTMgLTExNS41NjI1IDI5OC4zNzUgQy0xMTQuOTAyNSAyOTguMzc1IC0xMTQuMjQyNSAyOTguMzc1IC0xMTMuNTYyNSAyOTguMzc1IEMtMTEzLjIyNjYwNTc1IDI5NS4yNzExMDQ4NCAtMTEyLjg5NDIyNzYzIDI5Mi4xNjY4NDMwMSAtMTEyLjU2MjUgMjg5LjA2MjUgQy0xMTIuNDY3MTA5MzggMjg4LjE4MTQyNTc4IC0xMTIuMzcxNzE4NzUgMjg3LjMwMDM1MTU2IC0xMTIuMjczNDM3NSAyODYuMzkyNTc4MTIgQy0xMTIuMTgzMjAzMTIgMjg1LjU0NTAxOTUzIC0xMTIuMDkyOTY4NzUgMjg0LjY5NzQ2MDk0IC0xMTIgMjgzLjgyNDIxODc1IEMtMTExLjkxNjIxMDk0IDI4My4wNDM5MzMxMSAtMTExLjgzMjQyMTg4IDI4Mi4yNjM2NDc0NiAtMTExLjc0NjA5Mzc1IDI4MS40NTk3MTY4IEMtMTExLjUxODYzNjUxIDI3OS4yMjU3MjUyOSAtMTExLjUxODYzNjUxIDI3OS4yMjU3MjUyOSAtMTExLjU2MjUgMjc2LjM3NSBDLTEwOS41NjI1IDI3OC4zNzUgLTEwOS41NjI1IDI3OC4zNzUgLTEwOS41MTkwNDI5NyAyODAuNzEzMzc4OTEgQy0xMDkuNjEzMzA1NjYgMjgxLjY2NjQ3OTQ5IC0xMDkuNzA3NTY4MzYgMjgyLjYxOTU4MDA4IC0xMDkuODA0Njg3NSAyODMuNjAxNTYyNSBDLTEwOS45MDEzNjcxOSAyODQuNjMyODEyNSAtMTA5Ljk5ODA0Njg4IDI4NS42NjQwNjI1IC0xMTAuMDk3NjU2MjUgMjg2LjcyNjU2MjUgQy0xMTAuMjA5ODA0NjkgMjg3LjgwNjc5Njg3IC0xMTAuMzIxOTUzMTIgMjg4Ljg4NzAzMTI1IC0xMTAuNDM3NSAyOTAgQy0xMTAuNTQxOTE0MDYgMjkxLjA4Nzk2ODc1IC0xMTAuNjQ2MzI4MTMgMjkyLjE3NTkzNzUgLTExMC43NTM5MDYyNSAyOTMuMjk2ODc1IEMtMTExLjAxMzgzNDE3IDI5NS45OTA2NzM0OCAtMTExLjI4Mzc2NTM0IDI5OC42ODMwOTMxNCAtMTExLjU2MjUgMzAxLjM3NSBDLTExMC41NzI1IDMwMS4wNDUgLTEwOS41ODI1IDMwMC43MTUgLTEwOC41NjI1IDMwMC4zNzUgQy0xMDYuMjc5NjE5MTggMjkyLjU4NjM0Nzc4IC0xMDUuNTU4MTE4NzYgMjg0LjQxNDA5MTkxIC0xMDQuNTYyNSAyNzYuMzc1IEMtMTA0LjIzMjUgMjc2LjM3NSAtMTAzLjkwMjUgMjc2LjM3NSAtMTAzLjU2MjUgMjc2LjM3NSBDLTEwMy44OTI1IDI4My45NjUgLTEwNC4yMjI1IDI5MS41NTUgLTEwNC41NjI1IDI5OS4zNzUgQy0xMDMuOTAyNSAyOTkuMDQ1IC0xMDMuMjQyNSAyOTguNzE1IC0xMDIuNTYyNSAyOTguMzc1IEMtMTAxLjkwNzU0ODY2IDI5Ni40NDgzNDgwNCAtMTAxLjkwNzU0ODY2IDI5Ni40NDgzNDgwNCAtMTAxLjQ5MjE4NzUgMjk0LjEyMTA5Mzc1IEMtMTAxLjIzMTE1MjM0IDI5Mi44NDAwODc4OSAtMTAxLjIzMTE1MjM0IDI5Mi44NDAwODc4OSAtMTAwLjk2NDg0Mzc1IDI5MS41MzMyMDMxMiBDLTEwMC43OTA4MjAzMSAyOTAuNjM1MzcxMDkgLTEwMC42MTY3OTY4NyAyODkuNzM3NTM5MDYgLTEwMC40Mzc1IDI4OC44MTI1IEMtMTAwLjI1NTc0MjE5IDI4Ny45MTA4MDA3OCAtMTAwLjA3Mzk4NDM4IDI4Ny4wMDkxMDE1NiAtOTkuODg2NzE4NzUgMjg2LjA4MDA3ODEyIEMtOTkuNDM3NjMzMDEgMjgzLjg0NjQ2NzQ4IC05OC45OTY2MDU5NiAyODEuNjExNTYxOTIgLTk4LjU2MjUgMjc5LjM3NSBDLTk4LjIzMjUgMjc5LjcwNSAtOTcuOTAyNSAyODAuMDM1IC05Ny41NjI1IDI4MC4zNzUgQy05Ny44MjA2NjA0MyAyODIuNDA4MDEzMzUgLTk4LjA4MzA0NjkgMjg0LjQ0MTE1MTYxIC05OC40MDYyNSAyODYuNDY0ODQzNzUgQy05OC43MzU3MzM2IDI4OC40NjA3MzcwNSAtOTguNzM1NzMzNiAyODguNDYwNzM3MDUgLTk3LjU2MjUgMjkwLjM3NSBDLTk2LjkwMjUgMjkwLjM3NSAtOTYuMjQyNSAyOTAuMzc1IC05NS41NjI1IDI5MC4zNzUgQy05Mi43ODA3MjU0OCAyODAuODk5NTgwNTQgLTkxLjM0Mjg4NjM2IDI3Mi40NjIzOTkxOSAtOTEuNzUgMjYyLjU2MjUgQy05Mi4wNDM5Mjg4NiAyNTMuMzAyNDkxNzkgLTkwLjI3NDE3NDMxIDI0Ny44NDQ5NzQwNSAtODQuNTYyNSAyNDAuMzc1IEMtODMuMzk5NzQ3OTIgMjM4LjYxNTIyOTQ3IC04Mi4yNTM4NDg4NSAyMzYuODQ0MjA4NDUgLTgxLjEyNSAyMzUuMDYyNSBDLTgwLjU1MDA3ODEzIDIzNC4xNjc4OTA2MyAtNzkuOTc1MTU2MjUgMjMzLjI3MzI4MTI1IC03OS4zODI4MTI1IDIzMi4zNTE1NjI1IEMtNzYuMTcxMzM1NDYgMjI3LjEwMDE3NzI5IC03My4zMzI1MjM3MiAyMjEuNjU1NjcyMTEgLTcwLjUwNTg1OTM4IDIxNi4xODk5NDE0MSBDLTY5LjYyNjY5MDIzIDIxNC40OTg0OTY0MiAtNjguNzI4MTQ1MDggMjEyLjgxNzE2MTY2IC02Ny44MjgxMjUgMjExLjEzNjcxODc1IEMtNjEuNjY1MjU4MzggMTk5LjM3NTQwNjQ2IC01OS4yODg5NDA2MiAxODcuOTY5ODQyMDYgLTU5LjY2Nzk2ODc1IDE3NC42NzU3ODEyNSBDLTU5LjY4OTg5NTk4IDE2OS40MTc2MzIzOSAtNTguNTY3OTA4MDUgMTY0LjM5MTQ0NTgzIC01Ny41NjI1IDE1OS4yNSBDLTU1LjkyODIyNzY3IDE1MC40ODA4NTM0NyAtNTUuMDA0ODY2MzIgMTQyLjMxMjYyODY1IC01NS41NjI1IDEzMy4zNzUgQy01My41NjI1IDEzNS4zNzUgLTUzLjU2MjUgMTM1LjM3NSAtNTMuMjk2ODc1IDEzNy43NzM0Mzc1IEMtNTMuMzMwNjczMjIgMTQ0LjIxMTk5ODU0IC01My44NzE1OTk0NyAxNTAuMjY2NzA5ODIgLTU1LjEyNSAxNTYuNTg1OTM3NSBDLTU2LjA2NjgyOTQ2IDE2Mi41OTAxMDAyOCAtNTUuNTk2MTk3NTYgMTY1LjkxOTAyNzE1IC01Mi41IDE3MS4xODc1IEMtNDkuNDQxNTY2MTggMTc2Ljk1MjU3NTk2IC00OS4wMzcyODcgMTgwLjA3MDc4NjI3IC01MC41NjI1IDE4Ni4zNzUgQy01MC44OTI1IDE4Ny4wMzUgLTUxLjIyMjUgMTg3LjY5NSAtNTEuNTYyNSAxODguMzc1IEMtNTEuODQ3NjgzMTIgMTkwLjg2ODY3MjU3IC01Mi4wODMxODkwMiAxOTMuMzQ2Nzg4NDggLTUyLjI4MTI1IDE5NS44NDc2NTYyNSBDLTUyLjM0NDA1MTUxIDE5Ni42MDM1NjU1MiAtNTIuNDA2ODUzMDMgMTk3LjM1OTQ3NDc5IC01Mi40NzE1NTc2MiAxOTguMTM4MjkwNDEgQy01Mi42MDQ1NzczNiAxOTkuNzQ5NjY2NzIgLTUyLjczNTU4MDE0IDIwMS4zNjEyMTA1OCAtNTIuODY0NzQ2MDkgMjAyLjk3MjkwMDM5IEMtNTMuMDU3NTgyNyAyMDUuMzc2MjE1ODQgLTUzLjI1NjcwMjU5IDIwNy43Nzg5Mzk0NiAtNTMuNDU3MDMxMjUgMjEwLjE4MTY0MDYyIEMtNTQuMTUzNDQ1NiAyMTguNjQwOTA5NDIgLTU0LjczOTM1MzY1IDIyNy4wOTgwNTU2MiAtNTUuMjA4NDgwODMgMjM1LjU3Mjg3NTk4IEMtNTUuNDY2NzUzODUgMjQwLjEwNjMyMjI5IC01NS44NDk5NjE2OSAyNDQuNjA0MzQ3MzYgLTU2LjM2MjMwNDY5IDI0OS4xMTUyMzQzOCBDLTU5LjIwNTkwMjk1IDI3NC4yNTMwNjU4OSAtNTkuMDA4NTE5MyAzMDAuMzM5MjEyNDEgLTUwLjU2MjUgMzI0LjM3NSBDLTUwLjAyMDM2ODY1IDMyNS45MjY0NjcyOSAtNTAuMDIwMzY4NjUgMzI1LjkyNjQ2NzI5IC00OS40NjcyODUxNiAzMjcuNTA5Mjc3MzQgQy00NS41MDMzNTI3MSAzMzkuNjQyOTA3MjUgLTQ1LjUwMzM1MjcxIDMzOS42NDI5MDcyNSAtNDAuNTYyNSAzNTEuMzc1IEMtMzkuMjIwMjU4NTIgMzY0LjEyNjI5NDA1IC00Mi4yNTgzOTIwOCAzNzYuMzY5Mzk4NDQgLTQ0Ljk4OTk5MDIzIDM4OC43NTA0ODgyOCBDLTQ1LjE3ODkxODQ2IDM4OS42MTY1NzcxNSAtNDUuMzY3ODQ2NjggMzkwLjQ4MjY2NjAyIC00NS41NjI1IDM5MS4zNzUgQy00NS43NTMxMjAxMiAzOTIuMjQ2NzI4NTIgLTQ1Ljk0Mzc0MDIzIDM5My4xMTg0NTcwMyAtNDYuMTQwMTM2NzIgMzk0LjAxNjYwMTU2IEMtNDguNDk3OTY1ODYgNDA3LjE4MjI4MzM3IC00My43OTU5NzgzNSA0MjEuMjcxNjkzOTggLTM5LjA3ODEyNSA0MzMuMzgyODEyNSBDLTM3LjMxMTc5NDA3IDQzNy45NTIwNDMyNSAtMzUuODgzODE3NzIgNDQyLjYwMDM5MzY4IC0zNC41MDc4MTI1IDQ0Ny4zMDA3ODEyNSBDLTMzLjg4MDY1Njk0IDQ0OS4zNDAzMzI2IC0zMy4xODc3ODc0OSA0NTEuMzYwODgxNTIgLTMyLjQyOTY4NzUgNDUzLjM1NTQ2ODc1IEMtMjkuNTQ5MzY2ODggNDYwLjk3OTI1NDQ0IC0yOC4zMDYwMDQ4NSA0NjguMjM0MTc4NDYgLTI5LjU2MjUgNDc2LjM3NSBDLTMxLjkzNzUgNDc5LjUgLTMxLjkzNzUgNDc5LjUgLTM0LjU2MjUgNDgxLjM3NSBDLTM0Ljg3MTg3NSA0ODIuMDU1NjI1IC0zNS4xODEyNSA0ODIuNzM2MjUgLTM1LjUgNDgzLjQzNzUgQy0zNy4xMjc3MTY1OSA0ODYuNDA1Njg5MDcgLTM5LjcyNjIxNjUzIDQ4Ny42NDg1NjY1OCAtNDIuNTYyNSA0ODkuMzc1IEMtNDAuMzE3NTI3NzkgNDkxLjYxOTk3MjIxIC0zOS42MDIyMjY1MSA0OTEuNzQ1MDM0MTkgLTM2LjU2MjUgNDkyLjEyNSBDLTM1LjUxMDYyNSA0OTIuMjcxOTUzMTIgLTM1LjUxMDYyNSA0OTIuMjcxOTUzMTIgLTM0LjQzNzUgNDkyLjQyMTg3NSBDLTMyLjMxMjI4MjY0IDQ5Mi41ODQyNTg0OCAtMzIuMzEyMjgyNjQgNDkyLjU4NDI1ODQ4IC0zMC41NjI1IDQ5MC4zNzUgQy0zMC4yMzI1IDQ5MC43MDUgLTI5LjkwMjUgNDkxLjAzNSAtMjkuNTYyNSA0OTEuMzc1IEMtMjcuMDcxOTEwODYgNDkxLjQ3NDk3NjQyIC0yNC42MTUyMjYwNSA0OTEuNTEzNzk2MjcgLTIyLjEyNSA0OTEuNSBDLTIxLjQzMDgzOTg0IDQ5MS41MDM4NjcxOSAtMjAuNzM2Njc5NjkgNDkxLjUwNzczNDM3IC0yMC4wMjE0ODQzOCA0OTEuNTExNzE4NzUgQy0xNi4xNjQ4MDI0MyA0OTEuNTY4NTk4MzUgLTE2LjE2NDgwMjQzIDQ5MS41Njg1OTgzNSAtMTIuNTYyNSA0OTAuMzc1IEMtMTMuODY0MDUwMDYgNDg2LjI5NTM1NzE5IC0xMy44NjQwNTAwNiA0ODYuMjk1MzU3MTkgLTE1LjU2MjUgNDgyLjM3NSBDLTE0LjkwMjUgNDgyLjM3NSAtMTQuMjQyNSA0ODIuMzc1IC0xMy41NjI1IDQ4Mi4zNzUgQy0xMy41ODMxMjUgNDgxLjQyNjI1IC0xMy42MDM3NSA0ODAuNDc3NSAtMTMuNjI1IDQ3OS41IEMtMTMuNTYyNSA0NzYuMzc1IC0xMy41NjI1IDQ3Ni4zNzUgLTEyLjU2MjUgNDc0LjM3NSBDLTEyLjkxOTQxMDg1IDQ3MC4yMzQ4MzQyIC0xMy40NTE5NzAwMyA0NjYuMTQ0MjE2NzEgLTE0LjA0Mjk2ODc1IDQ2Mi4wMzEyNSBDLTE1LjE2MjY5ODk2IDQ1My44ODE2MzQ2NSAtMTUuODYxNzMyNDEgNDQ1Ljc4MTI3Mzg2IC0xNi4yNSA0MzcuNTYyNSBDLTE2LjI5ODMzOTg0IDQzNi42MjA2Nzg3MSAtMTYuMzQ2Njc5NjkgNDM1LjY3ODg1NzQyIC0xNi4zOTY0ODQzOCA0MzQuNzA4NDk2MDkgQy0xNi41ODI0NTk1NSA0MzAuMjA0OTAyMzEgLTE2LjU3MDI3NzI5IDQyNS44Njg1OTAzMiAtMTYuMDc0MjE4NzUgNDIxLjM4NjcxODc1IEMtMTUuNTQ3MDgyNDEgNDE2LjMzMzgzNjUgLTE1LjUxNDU0MTk5IDQxMS4zNjE1MzA5MSAtMTUuNTcwMzEyNSA0MDYuMjg5MDYyNSBDLTE1LjU3ODIxMzA0IDQwNS40NjAxNjAwNiAtMTUuNTg2MTEzNTkgNDA0LjYzMTI1NzYzIC0xNS41OTQyNTM1NCA0MDMuNzc3MjM2OTQgQy0xNS42MzAzMzIxIDQwMC4zMzI4NzI4MSAtMTUuNjcxMzY0MzUgMzk2Ljg4ODgxOTMyIC0xNS43MzM4ODY3MiAzOTMuNDQ0ODI0MjIgQy0xNS44OTU5NzUzOSAzODMuOTYxNzI2NTcgLTE1LjY0NTI1Mzg0IDM3NC45MDk3MzQxNCAtMTQuMDYyNSAzNjUuNTQ2ODc1IEMtMTEuODUyMjEyOTcgMzUyLjEyNzc5ODUxIC0xMi4yNTk2MjgwNSAzMzguNjIxOTgxMTYgLTEyLjQxNDc5NDkyIDMyNS4wNjkyNzQ5IEMtMTIuNDc0NzczODkgMzE5LjYwMjk2NTQ5IC0xMi41MTAyMTAzNyAzMTQuMTM2NDE3NzQgLTEyLjU0MjUxODYyIDMwOC42Njk4ODM3MyBDLTEyLjU1NDU4MzQyIDMwNi42ODEyMTkwMiAtMTIuNTY4ODc3NDcgMzA0LjY5MjU2ODI1IC0xMi41ODMxOTA5MiAzMDIuNzAzOTE4NDYgQy0xMi42MjQyNTQyIDI5My41NDc2NzAyMyAtMTIuMzg0ODA5NTYgMjg0LjQzNDM4NzkxIC0xMS44MzY2Mzk0IDI3NS4yOTQzNDIwNCBDLTExLjc4NzU4NDUzIDI3NC40MzMyNzg1IC0xMS43Mzg1Mjk2NiAyNzMuNTcyMjE0OTcgLTExLjY4Nzk4ODI4IDI3Mi42ODUwNTg1OSBDLTExLjY0MDA2MTM0IDI3MS45NDM3MTY3NCAtMTEuNTkyMTM0NCAyNzEuMjAyMzc0ODggLTExLjU0Mjc1NTEzIDI3MC40Mzg1NjgxMiBDLTExLjU2MzU0MDI0IDI2OC4yNjYyODI2NSAtMTEuOTUyNjE5NzMgMjY2LjQ1MzM0MjY2IC0xMi41NjI1IDI2NC4zNzUgQy0xMy4zOTAwNzgxMyAyNjQuNzAyNDIxODggLTE0LjIxNzY1NjI1IDI2NS4wMjk4NDM3NSAtMTUuMDcwMzEyNSAyNjUuMzY3MTg3NSBDLTE4Ljk0NDcwMDkyIDI2Ni40ODUyOTk1OSAtMjIuNDUwODIzMjMgMjY2LjYwMDQzOTUzIC0yNi40Mzc1IDI2Ni41IEMtMjcuMTI1ODU5MzggMjY2LjQ5MDk3NjU2IC0yNy44MTQyMTg3NSAyNjYuNDgxOTUzMTMgLTI4LjUyMzQzNzUgMjY2LjQ3MjY1NjI1IEMtMzAuMjAzMjc4MzggMjY2LjQ0OTMyNTEzIC0zMS44ODI5Mzc0NiAyNjYuNDEzNDYzMjYgLTMzLjU2MjUgMjY2LjM3NSBDLTMzLjg5MjUgMjY1LjcxNSAtMzQuMjIyNSAyNjUuMDU1IC0zNC41NjI1IDI2NC4zNzUgQy0zMy42MjE0ODQzOCAyNjQuMzk4MjAzMTMgLTMyLjY4MDQ2ODc1IDI2NC40MjE0MDYyNSAtMzEuNzEwOTM3NSAyNjQuNDQ1MzEyNSBDLTMwLjQ2NTcwMzEzIDI2NC40NjMzNTkzNyAtMjkuMjIwNDY4NzUgMjY0LjQ4MTQwNjI1IC0yNy45Mzc1IDI2NC41IEMtMjYuMDkyODUxNTYgMjY0LjUzNDgwNDY5IC0yNi4wOTI4NTE1NiAyNjQuNTM0ODA0NjkgLTI0LjIxMDkzNzUgMjY0LjU3MDMxMjUgQy0yMC41NzEzMTc2MyAyNjQuMzc1NDcyMDQgLTE3Ljg3NzUwMjg3IDI2My44NzgxOTk1IC0xNC41NjI1IDI2Mi4zNzUgQy0xMy42MzI0MTExIDI1OS41ODQ3MzMzIC0xMy4zNzU1MTIzMSAyNTcuNjA5NzA0NTggLTEzLjI0NjA5Mzc1IDI1NC43MDcwMzEyNSBDLTEzLjIwNDE5OTIyIDI1My44MTQzNTU0NyAtMTMuMTYyMzA0NjkgMjUyLjkyMTY3OTY5IC0xMy4xMTkxNDA2MiAyNTIuMDAxOTUzMTIgQy0xMy4wNzk4MjQyMiAyNTEuMDczMTgzNTkgLTEzLjA0MDUwNzgxIDI1MC4xNDQ0MTQwNiAtMTMgMjQ5LjE4NzUgQy0xMi45MzUyMjQ2MSAyNDcuNzc2OTQzMzYgLTEyLjkzNTIyNDYxIDI0Ny43NzY5NDMzNiAtMTIuODY5MTQwNjIgMjQ2LjMzNzg5MDYyIEMtMTIuNzYzMTEzMzUgMjQ0LjAxNzA3MTQ2IC0xMi42NjEwNDk3MSAyNDEuNjk2MTQ2NzUgLTEyLjU2MjUgMjM5LjM3NSBDLTExLjQ3MzY0MTE2IDI0MS41NTI3MTc2NyAtMTEuMzQ2MzI5MiAyNDIuOTU0NTg1MDQgLTExLjE2Nzk2ODc1IDI0NS4zNjcxODc1IEMtMTEuMDk5MDAzOTEgMjQ2LjE1NDgwNDY5IC0xMS4wMzAwMzkwNiAyNDYuOTQyNDIxODggLTEwLjk1ODk4NDM4IDI0Ny43NTM5MDYyNSBDLTEwLjgyMDM4OTUyIDI0OS40MDkyNzI3OCAtMTAuNjkyNjY0MDYgMjUxLjA2NTU4NzYyIC0xMC41NzYxNzE4OCAyNTIuNzIyNjU2MjUgQy0xMC4xMjg4MTk1NCAyNTcuNjEyMjMwNTUgLTEwLjEyODgxOTU0IDI1Ny42MTIyMzA1NSAtNy43MzgyODEyNSAyNjEuODIwMzEyNSBDLTMuMDUyMDMzODUgMjY1LjE2ODgzMzk4IC0wLjE3NDc0MjcgMjY1LjYwODU2MDA1IDUuNjg3NSAyNjUuNSBDNi45NTA3ODEyNSAyNjUuNDgxOTUzMTMgOC4yMTQwNjI1IDI2NS40NjM5MDYyNSA5LjUxNTYyNSAyNjUuNDQ1MzEyNSBDMTAuNDc5ODQzNzUgMjY1LjQyMjEwOTM3IDExLjQ0NDA2MjUgMjY1LjM5ODkwNjI1IDEyLjQzNzUgMjY1LjM3NSBDMTIuNDM3NSAyNjYuMDM1IDEyLjQzNzUgMjY2LjY5NSAxMi40Mzc1IDI2Ny4zNzUgQzQuNjc0ODYwMTQgMjY4LjYwNzE2NTA2IC0xLjE1MjU2OTk2IDI2Ny44NDQ5NzY2OCAtOC41NjI1IDI2NS4zNzUgQy04LjU1MDg5ODQ0IDI2Ni4wNzg4MjgxMiAtOC41MzkyOTY4NyAyNjYuNzgyNjU2MjUgLTguNTI3MzQzNzUgMjY3LjUwNzgxMjUgQy04LjQ3Njk5MTQ4IDI3My4wMTc3ODk4NyAtOC42MDEwNDU4MiAyNzguNDUwMDI1ODcgLTkuMDUzNzEwOTQgMjgzLjk0Mjg3MTA5IEMtOS41Nzk2NTMyMyAyOTEuMDIzOTQ5OTEgLTkuNzQwMDAyNjMgMjk4LjA2NTM5MTUzIC05Ljc2NTYyNSAzMDUuMTY0MDYyNSBDLTkuNzcxMzI1MDcgMzA2LjQyODU4MjQ2IC05Ljc3NzAyNTE1IDMwNy42OTMxMDI0MiAtOS43ODI4OTc5NSAzMDguOTk1OTQxMTYgQy05Ljc5MjI3Mzk0IDMxMS42NTMwOTIxMiAtOS43OTkyMDg2OSAzMTQuMzEwMTMyMjcgLTkuODAyNzM0MzggMzE2Ljk2NzI4NTE2IEMtOS44MDcxMTAyNSAzMTkuNjQ1MTU4NzggLTkuODIwOTkxNzQgMzIyLjMyMjcwODYyIC05Ljg0Mzc1IDMyNS4wMDA0ODgyOCBDLTEwLjk3MDYyNzYzIDM0OS44MzE1MTcyIC0xMC45NzA2Mjc2MyAzNDkuODMxNTE3MiAtNS40ODY3NzA2MyAzNzMuNzMzMTU0MyBDLTQuMzY2ODAzNDcgMzc2LjkzNDM2MDAyIC00LjU2NjM0ODA5IDM3OS4wNzUxMDk5OCAtNC45MzEzOTY0OCAzODIuNDM5OTQxNDEgQy01Ljc1MTcxODAxIDM5MS43NDI5NTk4NiAtNS42ODc2Njc3IDQwMS4wMDI1OTYzOSAtNS42NjAxNTYyNSA0MTAuMzM1OTM3NSBDLTUuNjU4Mjg2NTYgNDEyLjIyMTY0ODc4IC01LjY1Njg2NTI2IDQxNC4xMDczNjA1NiAtNS42NTU4Njg1MyA0MTUuOTkzMDcyNTEgQy01LjY1MjA4NjcyIDQyMC45MDg0MjA3IC01LjY0MjI5NDUyIDQyNS44MjM3Mzg0IC01LjYzMTE2NDU1IDQzMC43MzkwNzQ3MSBDLTUuNjIwODU2MTUgNDM1Ljc3Mzk2MjI4IC01LjYxNjM1MDg5IDQ0MC44MDg4NTQ4NyAtNS42MTEzMjgxMiA0NDUuODQzNzUgQy01LjYwMDY2NzQ5IDQ1NS42ODc1MTMyNSAtNS41ODM2NDQ1IDQ2NS41MzEyNTQwNyAtNS41NjI1IDQ3NS4zNzUgQy02LjIyMjUgNDc1LjM3NSAtNi44ODI1IDQ3NS4zNzUgLTcuNTYyNSA0NzUuMzc1IEMtNy41NjI1IDQ3Ny4wMjUgLTcuNTYyNSA0NzguNjc1IC03LjU2MjUgNDgwLjM3NSBDLTcuMjMyNSA0NzkuNzE1IC02LjkwMjUgNDc5LjA1NSAtNi41NjI1IDQ3OC4zNzUgQy01LjkwMjUgNDc4LjM3NSAtNS4yNDI1IDQ3OC4zNzUgLTQuNTYyNSA0NzguMzc1IEMtNC45MTMxMjUgNDc5LjI2MTg3NSAtNS4yNjM3NSA0ODAuMTQ4NzUgLTUuNjI1IDQ4MS4wNjI1IEMtNi43ODIyMjc3NSA0ODUuMTUxMzcxMzggLTYuNDQxMzM4NCA0ODcuNjE3MzIzMTkgLTQuNTYyNSA0OTEuMzc1IEMwLjQ1MjEyNTk3IDQ5Mi4zMDk5MzAyNyA0LjQxMDI4NDczIDQ5Mi41MDYxMjM0NCA5LjQzNzUgNDkxLjM3NSBDOS4xMDc1IDQ5MC4zODUgOC43Nzc1IDQ4OS4zOTUgOC40Mzc1IDQ4OC4zNzUgQzkuMDk3NSA0ODguMzc1IDkuNzU3NSA0ODguMzc1IDEwLjQzNzUgNDg4LjM3NSBDMTEuNDI3NSA0ODkuODYgMTEuNDI3NSA0ODkuODYgMTIuNDM3NSA0OTEuMzc1IEMxNS40MDc1IDQ5MS4wNDUgMTguMzc3NSA0OTAuNzE1IDIxLjQzNzUgNDkwLjM3NSBDMjEuNzY3NSA0ODkuMzg1IDIyLjA5NzUgNDg4LjM5NSAyMi40Mzc1IDQ4Ny4zNzUgQzE4LjYzMzIyNTA4IDQ4NS4xNzM2MTM0IDE4LjYzMzIyNTA4IDQ4NS4xNzM2MTM0IDE0LjQzNzUgNDg0LjM3NSBDMTQuNDM3NSA0ODMuMzg1IDE0LjQzNzUgNDgyLjM5NSAxNC40Mzc1IDQ4MS4zNzUgQzEyLjQ5NzQwNDc4IDQ3OS42Njk2NzY3NyAxMi40OTc0MDQ3OCA0NzkuNjY5Njc2NzcgMTAuNDM3NSA0NzguMzc1IEMxMC4xMDc1IDQ3OC43MDUgOS43Nzc1IDQ3OS4wMzUgOS40Mzc1IDQ3OS4zNzUgQzkuMjExNTQ3MDEgNDcyLjc0OTI2MDc0IDkuOTIyNDM0NiA0NjcuMDkyOTY4OSAxMS41NjI1IDQ2MC42ODc1IEMxMS43ODQwNTc2MiA0NTkuNzkxOTIzODMgMTIuMDA1NjE1MjMgNDU4Ljg5NjM0NzY2IDEyLjIzMzg4NjcyIDQ1Ny45NzM2MzI4MSBDMTguNTk0MjE3NTggNDMyLjU0MTEzNzAyIDE4LjU5NDIxNzU4IDQzMi41NDExMzcwMiAyMi4wNTQ2ODc1IDQyMi43MzQzNzUgQzI3LjM4MTI2MTYyIDQwNi45OTAyMzQ0NiAyNC41NTc5MzIxNSAzODguNzgxNDU3OSAyMS44NjA1OTU3IDM3Mi44NDA1NzYxNyBDMTkuMTg1OTMwNSAzNTYuODA1NjkwMiAyMS45MzA5MzU1NyAzNDMuMzA0NTEyNyAyNi40Mzc1IDMyNy44NzUgQzM2LjAyODQ4MTkgMjk0Ljc1MjM4MjY4IDQwLjYyMDM2MTA5IDI1MC45MjM1ODMyOCAyOS40Mzc1IDIxNy4zNzUgQzI5LjQwMTgwMjA3IDIxNS45MTMxMjYwNiAyOS40MjIzMTU2OSAyMTQuNDQ5NDM0MjEgMjkuNDgwNDY4NzUgMjEyLjk4ODI4MTI1IEMyOS41MDE3MzgyOCAyMTIuMTMxNjk5MjIgMjkuNTIzMDA3ODEgMjExLjI3NTExNzE5IDI5LjU0NDkyMTg4IDIxMC4zOTI1NzgxMiBDMjkuNTk3NzQxMTMgMjA4LjYwODMxNzk1IDI5LjY2MjU4Mjg4IDIwNi44MjQzNjc2NiAyOS43NDAyMzQzOCAyMDUuMDQxMDE1NjIgQzI5Ljg1MjA4MjYxIDE5OS40OTQxNzE2OSAyOS4wOTE2MDU4MyAxOTUuOTY2NjYyMTIgMjYuMzU2Njg5NDUgMTkxLjE0NjcyODUyIEMyMy4xMDk3MTAxNSAxODQuODg4MjA4MjQgMjUuNDA4NDI0MjUgMTc2LjgxNzUzNDU2IDI3LjM3NSAxNzAuNSBDMjcuNzM0NjQ4NDQgMTY5LjQ3MTMyODEzIDI4LjA5NDI5Njg4IDE2OC40NDI2NTYyNSAyOC40NjQ4NDM3NSAxNjcuMzgyODEyNSBDMzAuMjMxNzI3MyAxNjEuOTE4OTU1NzQgMzAuNDQ4MjU4ODYgMTU3Ljk5MzQyNTA5IDI5LjQzNzUgMTUyLjM3NSBDMjkuMzE1MDcyODYgMTQ5LjU4MjAwMTE0IDI5LjM0MjE0NzQxIDE0Ni43OTQ5OTc1NiAyOS4zNzUgMTQ0IEMyOS4zNzk1MTE3MiAxNDMuMjYzOTQ1MzEgMjkuMzg0MDIzNDQgMTQyLjUyNzg5MDYyIDI5LjM4ODY3MTg4IDE0MS43Njk1MzEyNSBDMjkuNDAwMzQ4NTggMTM5Ljk3MTMxODQyIDI5LjQxODI3OTg5IDEzOC4xNzMxNDgwMyAyOS40Mzc1IDEzNi4zNzUgQzMwLjA5NzUgMTM2LjM3NSAzMC43NTc1IDEzNi4zNzUgMzEuNDM3NSAxMzYuMzc1IEMzMS40MTQyOTY4NyAxMzcuMjY5NjA5MzcgMzEuMzkxMDkzNzUgMTM4LjE2NDIxODc1IDMxLjM2NzE4NzUgMTM5LjA4NTkzNzUgQzMxLjIzODk3MTM3IDE0Ny42NzY0MTg1MyAzMS43NzM4MDk3NCAxNTUuMzA3NDM3NzIgMzQuNDU3MDMxMjUgMTYzLjQ4MDQ2ODc1IEMzNS44NTE4MjgxIDE2OC4zMTYyMzk3OSAzNS45NDMyODQ5OSAxNzMuMjUxMzc0MjUgMzYuMjUgMTc4LjI1IEMzNy4zNTUwNjY2MyAxOTIuOTA0OTU1MzcgNDAuNDk4OTE4NzYgMjA1LjgyNjM4MzExIDQ4LjQzNzUgMjE4LjM3NSBDNDguODQzMDcxMjkgMjE5LjAyNTAwOTc3IDQ5LjI0ODY0MjU4IDIxOS42NzUwMTk1MyA0OS42NjY1MDM5MSAyMjAuMzQ0NzI2NTYgQzUzLjk5MTc4NjQyIDIyNy4yNTk1NTkzIDU4LjMxMTI2NjkgMjM0LjE0MzkwNjMxIDYzLjQzNzUgMjQwLjUgQzY4LjE0NjMwMjk0IDI0Ni40NjIyMjUzIDY5LjU3Nzg3Njg2IDI1MC4xMTE0MTg4IDY5LjMxMjUgMjU3LjY4NzUgQzY5LjAwMzQ1NTkyIDI2OS40NTQ5NDc1OCA3MS45OTE2MTEgMjgwLjkyNDg1Njg3IDc0LjQzNzUgMjkyLjM3NSBDNzUuNDI3NSAyOTIuNzA1IDc2LjQxNzUgMjkzLjAzNSA3Ny40Mzc1IDI5My4zNzUgQzc3LjEwNzUgMjg4Ljc1NSA3Ni43Nzc1IDI4NC4xMzUgNzYuNDM3NSAyNzkuMzc1IEM3OS41MTc4NTcxNCAyOTEuMjk0NjQyODYgNzkuNTE3ODU3MTQgMjkxLjI5NDY0Mjg2IDgwIDI5NS41NjI1IEM4MC4xNDQzNzUgMjk2LjQ5MDYyNSA4MC4yODg3NSAyOTcuNDE4NzUgODAuNDM3NSAyOTguMzc1IEM4MS4wOTc1IDI5OC43MDUgODEuNzU3NSAyOTkuMDM1IDgyLjQzNzUgMjk5LjM3NSBDODMuMDk3NSAyOTkuMDQ1IDgzLjc1NzUgMjk4LjcxNSA4NC40Mzc1IDI5OC4zNzUgQzgzLjgxMTYzNTUgMjkxLjM3MDY0NDA4IDgzLjE1MDc1OTA1IDI4NC4zNzEwMDkwMSA4Mi40Mzc1IDI3Ny4zNzUgQzg0LjUwNjQ0OTg3IDI4MS44NjM3MjE2OCA4NS4yNjgwNTcxIDI4Ni4zNTE5MzY4MSA4Ni4wNjI1IDI5MS4xODc1IEM4Ni4xOTY1NjI1IDI5MS45NzU3NjE3MiA4Ni4zMzA2MjUgMjkyLjc2NDAyMzQ0IDg2LjQ2ODc1IDI5My41NzYxNzE4OCBDODYuNzk2NjIyOSAyOTUuNTA4MjgwMDYgODcuMTE3NzQyMzcgMjk3LjQ0MTUzMjIgODcuNDM3NSAyOTkuMzc1IEM4OC4wOTc1IDI5OS4zNzUgODguNzU3NSAyOTkuMzc1IDg5LjQzNzUgMjk5LjM3NSBDODkuNTQ1NTgwMzIgMjkyLjI3NzcyNTcyIDg5LjM3NjA0MDA2IDI4NS40MTQwNTA0NCA4OC40Mzc1IDI3OC4zNzUgQzg5LjA5NzUgMjc4LjM3NSA4OS43NTc1IDI3OC4zNzUgOTAuNDM3NSAyNzguMzc1IEM5MC40NTczMTkzNCAyNzguOTQwMDkyNzcgOTAuNDc3MTM4NjcgMjc5LjUwNTE4NTU1IDkwLjQ5NzU1ODU5IDI4MC4wODc0MDIzNCBDOTAuNTkyNjgyMzYgMjgyLjY0MjA3OTk3IDkwLjcwMjQxMDU4IDI4NS4xOTU5MjU0MSA5MC44MTI1IDI4Ny43NSBDOTAuODU4OTA2MjUgMjg5LjA4NDE3OTY5IDkwLjg1ODkwNjI1IDI4OS4wODQxNzk2OSA5MC45MDYyNSAyOTAuNDQ1MzEyNSBDOTAuOTQ0OTIxODcgMjkxLjI5NjA5Mzc1IDkwLjk4MzU5Mzc1IDI5Mi4xNDY4NzUgOTEuMDIzNDM3NSAyOTMuMDIzNDM3NSBDOTEuMDU0ODU4NCAyOTMuODA4OTU5OTYgOTEuMDg2Mjc5MyAyOTQuNTk0NDgyNDIgOTEuMTE4NjUyMzQgMjk1LjQwMzgwODU5IEM5MS4yNzc0NDY1IDI5Ny42MDUwMjkzOSA5MS4yNzc0NDY1IDI5Ny42MDUwMjkzOSA5My40Mzc1IDI5OS4zNzUgQzkzLjc0Njg3NSAyOTguMzg1IDk0LjA1NjI1IDI5Ny4zOTUgOTQuMzc1IDI5Ni4zNzUgQzk0LjU0OTAyMzQ0IDI5NS44MTgxMjUgOTQuNzIzMDQ2ODggMjk1LjI2MTI1IDk0LjkwMjM0Mzc1IDI5NC42ODc1IEM5Ni40NDM5NDUwMyAyODguMDI1OTgyMDQgOTYuNjgxMTQ2NTkgMjgxLjE4MDY5MDc5IDk3IDI3NC4zNzUgQzk3LjA2NDc3NTM5IDI3My4wNjk4MjQyMiA5Ny4wNjQ3NzUzOSAyNzMuMDY5ODI0MjIgOTcuMTMwODU5MzggMjcxLjczODI4MTI1IEM5Ny4yMzU3NDIxOCAyNjkuNjE3MzE3ODEgOTcuMzM3MDAwNzUgMjY3LjQ5NjE3NTY3IDk3LjQzNzUgMjY1LjM3NSBDOTcuOTA4MDA3ODEgMjY1Ljg2ODcxMDk0IDk4LjM3ODUxNTYyIDI2Ni4zNjI0MjE4NyA5OC44NjMyODEyNSAyNjYuODcxMDkzNzUgQzk5LjQ4NTg5ODQ0IDI2Ny41MTE3NTc4MSAxMDAuMTA4NTE1NjIgMjY4LjE1MjQyMTg4IDEwMC43NSAyNjguODEyNSBDMTAxLjM2NDg4MjgxIDI2OS40NTA1ODU5NCAxMDEuOTc5NzY1NjMgMjcwLjA4ODY3MTg3IDEwMi42MTMyODEyNSAyNzAuNzQ2MDkzNzUgQzEwNC40NDM5NDA1NiAyNzIuNTk3MTQxOCAxMDQuNDQzOTQwNTYgMjcyLjU5NzE0MTggMTA3LjQzNzUgMjczLjM3NSBDMTA1LjkwODkyMjMxIDI2NS4wNTcxNTUxNyA5OS41ODQ1ODAwNiAyNTYuMDk2MzgyIDkzLjQzNzUgMjUwLjM3NSBDOTIuNTUwNjI1IDI0OS44NTkzNzUgOTEuNjYzNzUgMjQ5LjM0Mzc1IDkwLjc1IDI0OC44MTI1IEM4NS44NTQzNzEzNCAyNDUuNzY5MjcxMzcgODQuMzU4Nzc5NzEgMjM4Ljc1MzQ5OTIxIDgyLjQzNzUgMjMzLjUgQzgyLjE5IDIzMi44MzA5NzY1NiA4MS45NDI1IDIzMi4xNjE5NTMxMiA4MS42ODc1IDIzMS40NzI2NTYyNSBDODEuMTg1NTIxNTkgMjMwLjExNTc0NTg3IDgwLjY4NjI3MzM0IDIyOC43NTc4MjI1MSA4MC4xODk2OTcyNyAyMjcuMzk4OTI1NzggQzc5LjY5NzI2OTQ5IDIyNi4wNzM5NTc4MyA3OS4xOTA0MzIxNCAyMjQuNzU0MjM1MTUgNzguNjY3NzI0NjEgMjIzLjQ0MDkxNzk3IEM3Ni41NzkwNjg5MSAyMTguMTQ0MzI2OTYgNzUuMjQ5NDg2MDMgMjEyLjc5ODAyMjcxIDc0IDIwNy4yNSBDNzMuNTYwMjYzMyAyMDUuMzc4NTEzMTggNzMuMTE4ODU0NTUgMjAzLjUwNzQxODQ1IDcyLjY3NTc4MTI1IDIwMS42MzY3MTg3NSBDNzIuMDk4ODMyNzcgMTk5LjE5MjQyODMxIDcxLjUyMjI3ODU5IDE5Ni43NDg0NjUwOCA3MC45NjYzMDg1OSAxOTQuMjk5MzE2NDEgQzY5LjQ3NzgxMDY2IDE4Ny44MjE2ODkzMSA2Ny42MTU1NzUyMiAxODIuNDc0NDk0MTIgNjMuOTk3MzE0NDUgMTc2LjkzMTM5NjQ4IEM1Ny44Nzk2ODA1MSAxNjcuNDU4NTgzMzggNTcuNDQzNDk5NDggMTU5LjE3MzA0NTU0IDU3LjUzNTE1NjI1IDE0OC4wMzkwNjI1IEM1Ny41NjAyODE4NSAxNDMuMzYwOTE0NzggNTYuOTY3NTA1NjQgMTM5LjEyNzUwODQyIDU1Ljg5MTExMzI4IDEzNC41ODEwNTQ2OSBDNTUuMDcyOTE4NjMgMTMwLjYwMTkzMzY3IDU0Ljg5MzE3ODkyIDEyNi40NTI5MjQxMiA1NS45Mjk2ODc1IDEyMi40OTYwOTM3NSBDNTguNTI1OTM2MjkgMTExLjY1MTc2MjI3IDU1LjI1NDI1Mzg2IDEwMS42NzM3MDIwNSA0OS42MjUgOTIuNDM3NSBDNDUuNTQyNjE3MTEgODYuMDMyNTg4NDMgMzguNzMyMTI2MyA4My45Mjk5Njk5NSAzMS43NSA4MiBDMjQuNTM4NjQ1NyA3OS44NzU4MDk1NCAxOC4wMDY0Mjc4IDc3LjA3MDAyMTg4IDExLjQzNzUgNzMuMzc1IEMxMC43Nzc1IDczLjAxNDA2MjUgMTAuMTE3NSA3Mi42NTMxMjUgOS40Mzc1IDcyLjI4MTI1IEM1Ljg0MjU1NDc3IDcwLjEzODEwOTU3IDQuNjg4MzIzNDMgNjguMzAyMTM0ODEgMy40Mzc1IDY0LjM3NSBDMi42MDQyMTQxNCA1Ni4wNDIxNDE0NCAzLjcwNDc4Njk4IDQ3LjUzMjY2MzQ3IDUuNDM3NSAzOS4zNzUgQzUuNzY3NSAzOS4wNDUgNi4wOTc1IDM4LjcxNSA2LjQzNzUgMzguMzc1IEM3LjA5NzUgMzkuMDM1IDcuNzU3NSAzOS42OTUgOC40Mzc1IDQwLjM3NSBDMTAuNTkwNTU5NTcgMzYuNTE3NDM0OTMgMTEuODMwMDMyNTQgMzMuODIzNzAyMTUgMTEuNDM3NSAyOS4zNzUgQzEwLjQ0NzUgMzAuNjk1IDkuNDU3NSAzMi4wMTUgOC40Mzc1IDMzLjM3NSBDOC41NDQ0OTIxOSAzMi4zOTY2MDE1NiA4LjY1MTQ4NDM3IDMxLjQxODIwMzEzIDguNzYxNzE4NzUgMzAuNDEwMTU2MjUgQzkuNTg5MDAzIDIxLjM2MzQwMjY5IDEwLjExMzk2Njg1IDEzLjk3MDU4MzU2IDQuMTg3NSA2LjU2MjUgQzMuMjggNS44NDA2MjUgMi4zNzI1IDUuMTE4NzUgMS40Mzc1IDQuMzc1IEMwLjA0NTMxMjUgMy4yMzAzMTI1IDAuMDQ1MzEyNSAzLjIzMDMxMjUgLTEuMzc1IDIuMDYyNSBDLTEyLjU5MzQxMTk1IC0zLjkxNTczMjY4IC0yNS43ODYxNTQ1OCAwLjU5ODY1NDU4IC0zNC4xMjUgOC45Mzc1IFogTS0xMS41NjI1IDM2Ny4zNzUgQy0xMy45MjE3OTA5OCAzNzguNDE4MDM3OTEgLTEzLjkyMTc5MDk4IDM3OC40MTgwMzc5MSAtMTMuMDU4NTkzNzUgMzg5LjU3MDMxMjUgQy0xMi4zNjA5Nzk2NCAzOTMuNTE0MzA0MTEgLTEyLjQxODMxNDA2IDM5Ny4zNzc5Mjk0IC0xMi40Mzc1IDQwMS4zNzUgQy0xMi40MzM2MzI4MSA0MDIuMTQ5NzI2NTYgLTEyLjQyOTc2NTYzIDQwMi45MjQ0NTMxMyAtMTIuNDI1NzgxMjUgNDAzLjcyMjY1NjI1IEMtMTIuNDMzMzQ3MjUgNDA4LjM3NTc0NDcxIC0xMi42NjUxNDk4NiA0MTIuOTY0NTEyMTMgLTEzLjA1NDY4NzUgNDE3LjYwMTU2MjUgQy0xNC40MjE4Mzg2NyA0MzQuMzU1OTE0MTcgLTE1LjI5MDQ0MTk5IDQ1Mi4wODA0ODU2NCAtMTAuNTYyNSA0NjguMzc1IEMtOS41NzI1IDQ2Ny44OCAtOS41NzI1IDQ2Ny44OCAtOC41NjI1IDQ2Ny4zNzUgQy03LjI0OTQ2MjUyIDQ2MS43MTA3MzM0NSAtNy40MTM0NTk1MyA0NTUuNjIxNjYyMjIgLTcuNDI5Njg3NSA0NDkuODMyMDMxMjUgQy03LjQyODczMDc3IDQ0OS4wNTk5MzgyIC03LjQyNzc3NDA1IDQ0OC4yODc4NDUxNSAtNy40MjY3ODgzMyA0NDcuNDkyMzU1MzUgQy03LjQyNjExMzc0IDQ0NS44NzY0OTQ1MiAtNy40Mjc5MTcxNSA0NDQuMjYwNjMwODcgLTcuNDMyMTI4OTEgNDQyLjY0NDc3NTM5IEMtNy40Mzc1MDk3NCA0NDAuMTgzMDQzNDggLTcuNDMyMTQ4IDQzNy43MjE0OTIxNCAtNy40MjU3ODEyNSA0MzUuMjU5NzY1NjIgQy03LjQyNjQ0MTczIDQzMy42Nzk2ODcxIC03LjQyNzcyMjI3IDQzMi4wOTk2MDg2OSAtNy40Mjk2ODc1IDQzMC41MTk1MzEyNSBDLTcuNDI3NjYzMjcgNDI5Ljc5MTI3NjQgLTcuNDI1NjM5MDQgNDI5LjA2MzAyMTU1IC03LjQyMzU1MzQ3IDQyOC4zMTI2OTgzNiBDLTcuNDQyMjI4MzcgNDI0LjIxNzQzNTk5IC03Ljg2MTA0Njk5IDQyMC40MDExNjIxNiAtOC41NjI1IDQxNi4zNzUgQy04LjY1MDQwMTIxIDQxNC4zNTU1OTM5OSAtOC42OTMwNzY1MyA0MTIuMzMzODE2OTYgLTguNjk1MzEyNSA0MTAuMzEyNSBDLTguNjk3MjQ2MDkgNDA4LjYyMjUzOTA2IC04LjY5NzI0NjA5IDQwOC42MjI1MzkwNiAtOC42OTkyMTg3NSA0MDYuODk4NDM3NSBDLTguNjk1MzUxNTYgNDA1LjczNTcwMzEyIC04LjY5MTQ4NDM4IDQwNC41NzI5Njg3NSAtOC42ODc1IDQwMy4zNzUgQy04LjY5MTM2NzE5IDQwMi4yMTIyNjU2MiAtOC42OTUyMzQzNyA0MDEuMDQ5NTMxMjUgLTguNjk5MjE4NzUgMzk5Ljg1MTU2MjUgQy04LjY5NzkyOTY5IDM5OC43MjQ5MjE4OCAtOC42OTY2NDA2MiAzOTcuNTk4MjgxMjUgLTguNjk1MzEyNSAzOTYuNDM3NSBDLTguNjk0MTg0NTcgMzk1LjQxNzg1MTU2IC04LjY5MzA1NjY0IDM5NC4zOTgyMDMxMyAtOC42OTE4OTQ1MyAzOTMuMzQ3NjU2MjUgQy04LjU1ODUyNDIgMzkwLjI4MzY2MTcyIC04LjExMjc0NTQ5IDM4Ny4zODkzNjUxOSAtNy41NjI1IDM4NC4zNzUgQy02Ljk4OTA3OTc0IDM3Ny45NTcxMDQgLTcuOTkwMDM3MzcgMzczLjI3MDIyNjg1IC0xMC41NjI1IDM2Ny4zNzUgQy0xMC44OTI1IDM2Ny4zNzUgLTExLjIyMjUgMzY3LjM3NSAtMTEuNTYyNSAzNjcuMzc1IFogTS0xMC41NjI1IDQ3Ny4zNzUgQy0xMC43ODQyNDkzMyA0NzguODMxMzUzNzEgLTEwLjk4OTQ4Njk4IDQ4MC4yOTAyMjk1NiAtMTEuMTg3NSA0ODEuNzUgQy0xMS4zMDM1MTU2MiA0ODIuNTYyMTA5MzcgLTExLjQxOTUzMTI1IDQ4My4zNzQyMTg3NSAtMTEuNTM5MDYyNSA0ODQuMjEwOTM3NSBDLTExLjU0Njc5Njg3IDQ4NC45MjUwNzgxMyAtMTEuNTU0NTMxMjUgNDg1LjYzOTIxODc1IC0xMS41NjI1IDQ4Ni4zNzUgQy0xMC45MDI1IDQ4Ny4wMzUgLTEwLjI0MjUgNDg3LjY5NSAtOS41NjI1IDQ4OC4zNzUgQy05LjM1NjI1IDQ4Ny4xMTY4NzUgLTkuMTUgNDg1Ljg1ODc1IC04LjkzNzUgNDg0LjU2MjUgQy04LjgyMTQ4NDM4IDQ4My44NTQ4MDQ2OSAtOC43MDU0Njg3NSA0ODMuMTQ3MTA5MzggLTguNTg1OTM3NSA0ODIuNDE3OTY4NzUgQy04LjM2NjcyMTUyIDQ4MC4wNTc0NDE3NiAtOC4zNjY3MjE1MiA0ODAuMDU3NDQxNzYgLTEwLjU2MjUgNDc3LjM3NSBaICIgZmlsbD0iIzAwMDAwMCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTAwLjU2MjUsMTIuNjI1KSIvPgo8cGF0aCBkPSJNMCAwIEMwIDAuOTkgMCAxLjk4IDAgMyBDLTEuMTk2MjUgMi45NzkzNzUgLTIuMzkyNSAyLjk1ODc1IC0zLjYyNSAyLjkzNzUgQy03LjE4MDA0ODY5IDIuOTMxMTc0MjkgLTEwLjUwNTU1NjI0IDMuMzAxMTExMjUgLTE0IDQgQy0xNCAzLjM0IC0xNCAyLjY4IC0xNCAyIEMtOC43NzcyOTEzMSAtMC42NjQ2NDcyOSAtNS45MTgwNDk3IC0xLjMyODU0MTc3IDAgMCBaICIgZmlsbD0iIzAwMDAwMCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIzLDM1KSIvPgo8cGF0aCBkPSJNMCAwIEMwIDAuNjYgMCAxLjMyIDAgMiBDLTAuNjYzODY3MTkgMS45Mjc4MTI1IC0xLjMyNzczNDM4IDEuODU1NjI1IC0yLjAxMTcxODc1IDEuNzgxMjUgQy0yLjg5NDcyNjU2IDEuNjg4NDM3NSAtMy43Nzc3MzQzNyAxLjU5NTYyNSAtNC42ODc1IDEuNSBDLTUuNTU3NjE3MTkgMS40MDcxODc1IC02LjQyNzczNDM4IDEuMzE0Mzc1IC03LjMyNDIxODc1IDEuMjE4NzUgQy05Ljg5NzIzMzM5IDEuMDA4NDAxMzYgLTEyLjQxOTg0MzY0IDAuOTYyODA4NTYgLTE1IDEgQy0xNSAwLjM0IC0xNSAtMC4zMiAtMTUgLTEgQy05LjI0NDk0OTQ3IC0zLjgwMzc0MjU3IC01LjU3ODYxMDkxIC0yLjMwNTgyNTg0IDAgMCBaICIgZmlsbD0iIzAwMDAwMCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTQzLDM3KSIvPgo8cGF0aCBkPSJNMCAwIEMzLjA3OTIxMTMyIC0wLjI1NjYwMDk0IDUuMjExMzY5OTMgLTAuMzk0MzE1MDQgOCAxIEM3LjY3IDEuOTkgNy4zNCAyLjk4IDcgNCBDNC4wMyAzLjY3IDEuMDYgMy4zNCAtMiAzIEMtMS4zNCAyLjAxIC0wLjY4IDEuMDIgMCAwIFogIiBmaWxsPSIjMDAwMDAwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMTQsMzkpIi8+CjxwYXRoIGQ9Ik0wIDAgQzAuMzMgMC45OSAwLjY2IDEuOTggMSAzIEMtMC4yNTgxMjUgMy4xODU2MjUgLTEuNTE2MjUgMy4zNzEyNSAtMi44MTI1IDMuNTYyNSBDLTMuODc0MDQyOTcgMy43MTkxMjEwOSAtMy44NzQwNDI5NyAzLjcxOTEyMTA5IC00Ljk1NzAzMTI1IDMuODc4OTA2MjUgQy03IDQgLTcgNCAtMTAgMyBDLTkuNjcgMi4wMSAtOS4zNCAxLjAyIC05IDAgQy01LjkzMTA5ODEzIC0xLjUzNDQ1MDk0IC0zLjI5OTA1NzM0IC0wLjU0OTg0Mjg5IDAgMCBaICIgZmlsbD0iIzAwMDAwMCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTQxLDQwKSIvPgo8cGF0aCBkPSJNMCAwIEMwLjMzIDAgMC42NiAwIDEgMCBDMS4xMzI3NzM0NCAwLjYzODA4NTk0IDEuMjY1NTQ2ODggMS4yNzYxNzE4OCAxLjQwMjM0Mzc1IDEuOTMzNTkzNzUgQzEuNTc4OTQ1MzEgMi43NTk4ODI4MSAxLjc1NTU0Njg3IDMuNTg2MTcxODcgMS45Mzc1IDQuNDM3NSBDMi4xMTE1MjM0NCA1LjI2MTIxMDk0IDIuMjg1NTQ2ODcgNi4wODQ5MjE4NyAyLjQ2NDg0Mzc1IDYuOTMzNTkzNzUgQzIuODA3NTI5OTQgOC45NzY2MTIwNCAyLjgwNzUyOTk0IDguOTc2NjEyMDQgNCAxMCBDNCAxMS42NSA0IDEzLjMgNCAxNSBDMC43IDE1IC0yLjYgMTUgLTYgMTUgQy01LjY3IDE0LjAxIC01LjM0IDEzLjAyIC01IDEyIEMtMy4zNSAxMiAtMS43IDEyIDAgMTIgQzAgOS41MTIzNTA3OCAtMC4yMDU3NzEzMyA3LjMyMjQyOTYgLTAuNTYyNSA0Ljg3NSBDLTAuNzA2ODc1IDMuNTk2MjUgLTAuODUxMjUgMi4zMTc1IC0xIDEgQy0wLjY3IDAuNjcgLTAuMzQgMC4zNCAwIDAgWiAiIGZpbGw9IiMwMDAwMDAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEyOCw0MCkiLz4KPHBhdGggZD0iTTAgMCBDMC45Mzg0Mzc1IC0wLjAwNTE1NjI1IDEuODc2ODc1IC0wLjAxMDMxMjUgMi44NDM3NSAtMC4wMTU2MjUgQzUuNTQwNDc2NzYgMC4yNTQwNDc2OCA3LjE4OTQ5MjkzIDAuODc2Nzc0MSA5LjUgMi4yNSBDMi45MzUwNzg4OCAzLjAzNDQxMTUzIC0yLjk2ODM3Mzc4IDMuMzU5MTQ0MDggLTkuNSAyLjI1IEMtNi4yMzk2ODgyIDAuMzEyMjY3NTIgLTMuNzcxMzgwNjQgLTAuMDIwNzIxODcgMCAwIFogIiBmaWxsPSIjMDAwMDAwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMjYuNSw1OC43NSkiLz4KPHBhdGggZD0iTTAgMCBDNC4yOSAwIDguNTggMCAxMyAwIEM5LjMxMjgyNTYyIDIuNDU4MTE2MjUgNy4zNTY1NDI5NiAyLjMxMTE4MTY0IDMgMiBDMi4wMSAxLjM0IDEuMDIgMC42OCAwIDAgWiAiIGZpbGw9IiMwMDAwMDAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEyMCw2MykiLz4KPHBhdGggZD0iTTAgMCBDMC45OSAwLjMzIDEuOTggMC42NiAzIDEgQzMgMi4zMiAzIDMuNjQgMyA1IEMxLjM1IDUgLTAuMyA1IC0yIDUgQy0yIDMuNjggLTIgMi4zNiAtMiAxIEMtMS4zNCAwLjY3IC0wLjY4IDAuMzQgMCAwIFogIiBmaWxsPSIjMDAwMDAwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNjAsMTM2KSIvPgo8cGF0aCBkPSJNMCAwIEMxLjMyIDAgMi42NCAwIDQgMCBDNCAxLjY1IDQgMy4zIDQgNSBDMi42OCA1IDEuMzYgNSAwIDUgQy0wLjU2MjUgMy4wNjI1IC0wLjU2MjUgMy4wNjI1IC0xIDEgQy0wLjY3IDAuNjcgLTAuMzQgMC4zNCAwIDAgWiAiIGZpbGw9IiMwMDAwMDAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDk0LDEzOCkiLz4KPHBhdGggZD0iTTAgMCBDMC42NiAwLjMzIDEuMzIgMC42NiAyIDEgQy0wLjkyNDIzMTc4IDUuMzI3ODYzMDMgLTMuODc3NzQ5MTYgNy44OTQ4NTY4NCAtOSA5IEMtMTMuMzQ2MzMwMTggOS4yMzM1NjQ0NyAtMTcuNjUyNDA1OTEgOS4xNzY1MTg4NiAtMjIgOSBDLTIyIDguMzQgLTIyIDcuNjggLTIyIDcgQy0yMS4yMjY1NjI1IDYuOTc0MjE4NzUgLTIwLjQ1MzEyNSA2Ljk0ODQzNzUgLTE5LjY1NjI1IDYuOTIxODc1IEMtMTEuOTg0Nzc0NDYgNi41MDQxMjEzOCAtNS42NjY0OTE4IDUuNjY2NDkxOCAwIDAgWiAiIGZpbGw9IiMwMDAwMDAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE2OSwxNDIpIi8+CjxwYXRoIGQ9Ik0wIDAgQzIuNjI5MDEyODggMS41MjIwNjAwOSA0Ljg0MzY1OTY0IDIuODQzNjU5NjQgNyA1IEMxMy4xNjMxMTgzNCA1LjYyNzM4MzMgMTkuMjcyNjg2MTIgNS41NDU0NzI4MyAyNSAzIEMyNC4wNDI1NDAxMiA1LjYxMTI1NDIyIDIzLjM0Mzc4MzEyIDYuNzkxNjQ2NTkgMjAuOTM3NSA4LjI1IEMxNS40MTE5NDQwMiA5LjY2MDc4MDI1IDEwLjI0MDcyMzc3IDkuOTgyNjkwNTUgNS4wNjI1IDcuMzEyNSBDMS45Mzg1NDQ0NCA0Ljk1MzU5NDc4IDAuOTMzOTk2NTIgMy43MzU5ODYwOSAwIDAgWiAiIGZpbGw9IiMwMDAwMDAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDg0LDE0MykiLz4KPHBhdGggZD0iTTAgMCBDNC4zMTc3NDU4IDAuNTA3OTcwMDkgOC4wMzMwMjExNCAxLjE5NjgyNzc5IDEyIDMgQzEyIDMuMzMgMTIgMy42NiAxMiA0IEMxMC41NjEzODcwNiAzLjkxMjUzNzE2IDkuMTI0MDI0OTIgMy44MDQzNDY1MiA3LjY4NzUgMy42ODc1IEM2Ljg4Njk5MjE5IDMuNjI5NDkyMTkgNi4wODY0ODQzNyAzLjU3MTQ4NDM4IDUuMjYxNzE4NzUgMy41MTE3MTg3NSBDMi42MzcyNzY2NiAyLjkxNzkzMzA2IDEuNjkxNzkzMjggMi4wNDIxOTcwNiAwIDAgWiAiIGZpbGw9IiMwMDAwMDAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDYzLDE3OSkiLz4KPHBhdGggZD0iTTAgMCBDLTQuMjI5NDk5OTUgMi40MTY4NTcxMiAtNy4xMjMzNTk5MSAzLjM0ODMzMTQ0IC0xMiAzIEMtOC42MTYxMzM2NCAtMC4zODM4NjYzNiAtNC41NjQzMTMyNSAtMS43NTU1MDUwOSAwIDAgWiAiIGZpbGw9IiMwMDAwMDAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE5MywxODApIi8+CjxwYXRoIGQ9Ik0wIDAgQy0wLjY2IDEuMzIgLTEuMzIgMi42NCAtMiA0IEMtNC4zMSA0IC02LjYyIDQgLTkgNCBDLTggMiAtOCAyIC01LjA2MjUgMC44NzUgQy0yIDAgLTIgMCAwIDAgWiAiIGZpbGw9IiMwMDAwMDAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQzNywxOTQpIi8+CjxwYXRoIGQ9Ik0wIDAgQzMuNjc0NDY1NjcgMC43MDY2MjgwMSA2LjczOTEyMjA5IDIuMTg4NDAxMTYgMTAgNCBDMTAuMzMgNC42NiAxMC42NiA1LjMyIDExIDYgQzkuNTM4MTU5NDIgNS43NzEzOTk0MiA4LjA4MDQ0NTgxIDUuNTE2Mjk2MDggNi42MjUgNS4yNSBDNS40MDY4MzU5NCA1LjA0MTE3MTg4IDUuNDA2ODM1OTQgNS4wNDExNzE4OCA0LjE2NDA2MjUgNC44MjgxMjUgQzIgNCAyIDQgMC43MTA5Mzc1IDEuOTIxODc1IEMwLjQ3NjMyODEzIDEuMjg3NjU2MjUgMC4yNDE3MTg3NSAwLjY1MzQzNzUgMCAwIFogIiBmaWxsPSIjMDAwMDAwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1NDAsMTk3KSIvPgo8cGF0aCBkPSJNMCAwIEMwIDAuNjYgMCAxLjMyIDAgMiBDMC42NiAyIDEuMzIgMiAyIDIgQzEuNjcgMy4zMiAxLjM0IDQuNjQgMSA2IEMtMS40Mzc1IDUuNjI1IC0xLjQzNzUgNS42MjUgLTQgNSBDLTQuMzMgNC4zNCAtNC42NiAzLjY4IC01IDMgQy0yLjI1IDAgLTIuMjUgMCAwIDAgWiAiIGZpbGw9IiMwMDAwMDAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEzMCwyMDIpIi8+CjxwYXRoIGQ9Ik0wIDAgQzIuOTcgMC45OSA1Ljk0IDEuOTggOSAzIEM4LjAxIDMuNjYgNy4wMiA0LjMyIDYgNSBDMi4zMTI1IDMuNjI1IDIuMzEyNSAzLjYyNSAtMSAyIEMtMC42NyAxLjM0IC0wLjM0IDAuNjggMCAwIFogIiBmaWxsPSIjMDAwMDAwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNDEsMzczKSIvPgo8cGF0aCBkPSJNMCAwIEMwLjk5IDAuMzMgMS45OCAwLjY2IDMgMSBDNC4xODc1IDQuMDYyNSA0LjE4NzUgNC4wNjI1IDUgNyBDMy4wNjI1IDYuMzEyNSAzLjA2MjUgNi4zMTI1IDEgNSBDMC4yNSAyLjM3NSAwLjI1IDIuMzc1IDAgMCBaICIgZmlsbD0iIzAwMDAwMCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAzLDM3NSkiLz4KPHBhdGggZD0iTTAgMCBDMC42NiAwIDEuMzIgMCAyIDAgQzEuMzQgNS42MSAwLjY4IDExLjIyIDAgMTcgQy0wLjY2IDE2LjY3IC0xLjMyIDE2LjM0IC0yIDE2IEMtMi4yMDQxMzM2MSAxMC4yNjE1Nzc0OSAtMi4yNzE0MTQ1NCA1LjM5NDYwOTUzIDAgMCBaICIgZmlsbD0iIzAwMDAwMCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTUzLDM3NSkiLz4KPHBhdGggZD0iTTAgMCBDMC44MDA1MDc4MSAwLjEyNzYxNzE5IDEuNjAxMDE1NjMgMC4yNTUyMzQzNyAyLjQyNTc4MTI1IDAuMzg2NzE4NzUgQzMuMjM0MDIzNDQgMC41MDY2MDE1NiA0LjA0MjI2NTYzIDAuNjI2NDg0MzggNC44NzUgMC43NSBDNS40ODk4ODI4MSAwLjg1Njk5MjE5IDYuMTA0NzY1NjMgMC45NjM5ODQzNyA2LjczODI4MTI1IDEuMDc0MjE4NzUgQzYuNDA4MjgxMjUgMS43MzQyMTg3NSA2LjA3ODI4MTI1IDIuMzk0MjE4NzUgNS43MzgyODEyNSAzLjA3NDIxODc1IEMyLjEwODI4MTI1IDMuMDc0MjE4NzUgLTEuNTIxNzE4NzUgMy4wNzQyMTg3NSAtNS4yNjE3MTg3NSAzLjA3NDIxODc1IEMtMi4yNjE3MTg3NSAwLjA3NDIxODc1IC0yLjI2MTcxODc1IDAuMDc0MjE4NzUgMCAwIFogIiBmaWxsPSIjMDAwMDAwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0NzQuMjYxNzE4NzUsMzc0LjkyNTc4MTI1KSIvPgo8cGF0aCBkPSJNMCAwIEMxLjQ1NzkyODg0IC0wLjA1Mzk5NzM2IDIuOTE2NDI3MTIgLTAuMDkyNzkxNzcgNC4zNzUgLTAuMTI1IEM1LjE4NzEwOTM3IC0wLjE0ODIwMzEzIDUuOTk5MjE4NzUgLTAuMTcxNDA2MjUgNi44MzU5Mzc1IC0wLjE5NTMxMjUgQzkgMCA5IDAgMTEgMiBDNy4zMjU4OTIxNSAzLjE3NTcxNDUxIDMuODMwNzA4MTcgMy4wNzM2Njc0NiAwIDMgQzAgMi4wMSAwIDEuMDIgMCAwIFogIiBmaWxsPSIjMDAwMDAwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MDUsMzc1KSIvPgo8cGF0aCBkPSJNMCAwIEMyLjUyODkzMjk0IDIuMzQxNjA0NTcgNC43MzM1NDE5MSA0LjgyMTUyNzMyIDYuODEyNSA3LjU2MjUgQzcuMjUyMDcwMzEgOC4xNDEyODkwNiA3LjY5MTY0MDYyIDguNzIwMDc4MTIgOC4xNDQ1MzEyNSA5LjMxNjQwNjI1IEM4LjU2Nzk4ODI4IDEwLjE0OTc4NTE2IDguNTY3OTg4MjggMTAuMTQ5Nzg1MTYgOSAxMSBDOC42NyAxMS45OSA4LjM0IDEyLjk4IDggMTQgQzggMTMuMzQgOCAxMi42OCA4IDEyIEM3LjM0IDEyIDYuNjggMTIgNiAxMiBDNiAxMS4zNCA2IDEwLjY4IDYgMTAgQzUuNDAxODc1IDkuNzczMTI1IDQuODAzNzUgOS41NDYyNSA0LjE4NzUgOS4zMTI1IEMxLjM3ODI1MjY1IDcuNjI2OTUxNTkgMC4zNjcwNjMwMSA1Ljk0OTk3ODA4IC0xIDMgQy0wLjY3IDIuMDEgLTAuMzQgMS4wMiAwIDAgWiAiIGZpbGw9IiMwMDAwMDAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEzOCwzNzcpIi8+CjxwYXRoIGQ9Ik0wIDAgQzIgMSAyIDEgMy4wNzAzMTI1IDMuNjE3MTg3NSBDMy40MTgzNTkzNyA0LjY5MjI2NTYzIDMuNzY2NDA2MjUgNS43NjczNDM3NSA0LjEyNSA2Ljg3NSBDNC40NzgyMDMxMiA3Ljk0NDkyMTg3IDQuODMxNDA2MjUgOS4wMTQ4NDM3NSA1LjE5NTMxMjUgMTAuMTE3MTg3NSBDNiAxMyA2IDEzIDYgMTYgQzIuMDAxMzEwNzggMTMuMzM0MjA3MTggMS4yMTAxNjIyOSAxMC41MzgxMDg1OCAwIDYgQy0wLjE4NzUgMi41IC0wLjE4NzUgMi41IDAgMCBaICIgZmlsbD0iIzAwMDAwMCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTA0LDM4MSkiLz4KPC9zdmc+Cg==",
+                "aspect_ratio": 1.2
+            },
+            {
+                "name": "semiologia",
+                "type": "text",
+                "text": "Semiología del dolor"
+            },
+            {
+                "name": "aparicion",
+                "label": "Aparición",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "iniciodolor",
+                "label": "Hora de inicio",
+                "type": "input",
+                "inputType": "time"
+            },
+            {
+                "name": "localizaciondolor",
+                "label": "Localización",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "irradiaciondolor",
+                "label": "Irradiación",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "cardolor",
+                "label": "Características",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "intensidaddolor",
+                "label": "Intensidad (EVA)",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "alivio",
+                "label": "Alivio",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "sampler",
+                "type": "text",
+                "text": "Sampler"
+            },
+            {
+                "name": "signos",
+                "label": "Signos",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "alergias",
+                "label": "Alergias",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "medicamentos",
+                "label": "Medicamentos",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "padecimientos",
+                "label": "Padecimientos",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "ultimacomida",
+                "label": "Última comida",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "eventos relacionados",
+                "label": "Eventos relacionados",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "factoresriesgo",
+                "label": "Factores de riesgo",
+                "type": "textarea",
+                "rows": 5
+            },
+            {
+                "name": "gineco",
+                "type": "text",
+                "text": "Ginecológico",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "gestas",
+                "label": "Gesta",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "para",
+                "label": "Para",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "cesareas",
+                "label": "Cesáreas",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "abortos",
+                "label": "Abortos",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "semanasgestacion",
+                "label": "Semanas de gestación",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "fechaparto",
+                "label": "Fecha probable de parto",
+                "type": "input",
+                "inputType": "date",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "controlprenatal",
+                "label": "Control prenatal",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "Si",
+                    "No"
+                ],
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "riesgo",
+                "label": "Embarazo de alto riesgo",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "Si",
+                    "No"
+                ],
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "horainiciocontracciones",
+                "label": "Hora de inicio de contracciones",
+                "type": "input",
+                "inputType": "time",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "frecuenciacontracciones",
+                "label": "Frecuencia de contracciones (Minutos)",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "datospos",
+                "type": "text",
+                "text": "Datos posparto",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "horanacimiento",
+                "label": "Hora de nacimiento",
+                "type": "input",
+                "inputType": "time",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "placenta",
+                "label": "Placenta expulsada",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "Si",
+                    "No"
+                ],
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "datosproducto",
+                "label": "Datos del producto",
+                "type": "text",
+                "text": "Datos del producto",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "prodstatus",
+                "label": "Producto",
+                "type": "select",
+                "options": [
+                    "Vivo",
+                    "Muerto"
+                ],
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "prodsexo",
+                "label": "Sexo",
+                "type": "select",
+                "options": [
+                    "Femenino",
+                    "Masculino"
+                ],
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "apgar",
+                "type": "text",
+                "text": "Apgar",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "apgar1",
+                "label": "1 Minuto",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "apgar5",
+                "label": "5 Minutos",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "apgar10",
+                "label": "10 Minutos",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "silverman",
+                "type": "text",
+                "text": "Silverman",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "silv10",
+                "label": "10 Minutos",
+                "type": "input",
+                "inputType": "number",
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "camposervicio"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "camposervicio",
+                            "value": "Gineco Obstétrico"
+                        }
+                    ]
+                }
+            }
+        ],
+        "Tratamiento": [
+            {
+                "name": "tratamiento",
+                "type": "text",
+                "text": "Tratamiento"
+            },
+            {
+                "name": "manejovia",
+                "type": "text",
+                "text": "Manejo de vía aérea"
+            },
+            {
+                "name": "aspiracion",
+                "label": "Aspiración",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "Sí",
+                    "No"
+                ]
+            },
+            {
+                "name": "manejoviaaeriacheck",
+                "label": "Manejo de vía aérea",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No necesitó",
+                    "Manual",
+                    "Mecánico",
+                    "Transtraqueal"
+                ]
+            },
+            {
+                "name": "dispositivoapertura",
+                "label": "Dispositivo de apertura",
+                "type": "input",
+                "inputType": "text",
+                "options": [
+                    "No aplica",
+                    "Cánula nasofaríngea",
+                    "Cánula orofaríngea",
+                    "Disp. Supraglótico",
+                    "Tubo endotraqueal",
+                    "VTP / Cánula traqueos"
+                ]
+            },
+            {
+                "name": "intubacion",
+                "type": "text",
+                "text": "Intubación"
+            },
+            {
+                "name": "horaintubacion",
+                "label": "Hora del procedimiento",
+                "type": "input",
+                "inputType": "time"
+            },
+            {
+                "name": "diametrointubacion",
+                "label": "Diámetro interno del tubo",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "insercionintubacion",
+                "label": "Profundidad de inserción (cm)",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "intentosintubacion",
+                "label": "Número de intentos",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "sri",
+                "label": "SRI",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No",
+                    "Sí"
+                ]
+            },
+            {
+                "name": "asistenciaventilatoria",
+                "type": "text",
+                "text": "Asistencia ventilatoria"
+            },
+            {
+                "name": "dispositivoav",
+                "label": "Dispositivo",
+                "type": "select",
+                "options": [
+                    "Bolsa Válvula Mascarilla",
+                    "CPAP",
+                    "Ventilador mecánico"
+                ]
+            },
+            {
+                "name": "frecuenciaav",
+                "label": "Frecuencia",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "volumenav",
+                "label": "Volúmen",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "modalidadventilatoria",
+                "label": "Modalidad ventilatoria",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "oxigenoterapia",
+                "label": "Oxigenoterapia",
+                "type": "input",
+                "inputType": "text",
+                "options": [
+                    "Puntas nasales",
+                    "Mascarilla simple",
+                    "Mascarilla con reservorio",
+                    "Nebulizador",
+                    "CPAP"
+                ]
+            },
+            {
+                "name": "lpm",
+                "label": "Litros por minuto",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "decompresionpleural",
+                "type": "text",
+                "text": "Decompresión Pleural"
+            },
+            {
+                "name": "dp",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No",
+                    "Sí"
+                ]
+            },
+            {
+                "name": "hemitorax",
+                "label": "Hemitorax",
+                "type": "select",
+                "options": [
+                    "No necesitó",
+                    "Derecho",
+                    "Izquierdo"
+                ]
+            },
+            {
+                "name": "calibre",
+                "label": "Calibre",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "controlhemorrogias",
+                "type": "text",
+                "text": "Control de hemorragias"
+            },
+            {
+                "name": "controldehemorragiasselect",
+                "label": "Control de hemorragias",
+                "type": "input",
+                "inputType": "text",
+                "options": [
+                    "No necesitó",
+                    "Presión directa",
+                    "Vendaje compresivo",
+                    "Agente coagulante",
+                    "Empaque de herida",
+                    "Torniquete",
+                    "Agente hemostático"
+                ]
+            },
+            {
+                "name": "horacolocacionhemorragias",
+                "label": "Hora de colocación",
+                "type": "input",
+                "inputType": "time"
+            },
+            {
+                "name": "acessocirculatoria",
+                "type": "text",
+                "text": "Acceso circulatorio"
+            },
+            {
+                "name": "viadeaccesoselect",
+                "label": "Vía de acceso",
+                "type": "select",
+                "options": [
+                    "No necesitó",
+                    "Intravascular periférico",
+                    "Intranoseo"
+                ]
+            },
+            {
+                "name": "zonacolocacion",
+                "label": "Zona de colocación",
+                "type": "input",
+                "inputType": "text",
+                "options": [
+                    "Mano",
+                    "Antercobital",
+                    "Yugular externo",
+                    "Tibia proximal",
+                    "Tibia distal",
+                    "Húmero",
+                    "Esternon"
+                ],
+                "allowOwnOptions": true
+            },
+            {
+                "name": "colocacionacessocirculatorio",
+                "label": "Hora de colocación",
+                "type": "input",
+                "inputType": "time"
+            },
+            {
+                "name": "calibreaccesocirculatorio",
+                "label": "Calibre",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "volumeninfundido",
+                "label": "Volúmen infundido",
+                "type": "input",
+                "inputType": "number"
+            },
+            {
+                "name": "tiposolucion",
+                "label": "Tipo de solución",
+                "type": "multiple",
+                "inputType": "checkbox",
+                "options": [
+                    "HARTMANN",
+                    "NaCl 0.9%",
+                    "Glucosa 5%",
+                    "Mixta",
+                    "Otras"
+                ]
+            },
+            {
+                "name": "tiposolucionextra",
+                "label": "Especifique: ",
+                "type": "input",
+                "inputType": "text",
+                "multiple": true,
+                "allowOwnOptions": true,
+                "display_on": {
+                    "includes": [
+                        {
+                            "name": "tiposolucion",
+                            "value": "Otras"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "intervenciones",
+                "type": "text",
+                "text": "Intervenciones"
+            },
+            {
+                "name": "controlcervical",
+                "label": "Control cervical",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No",
+                    "Sí"
+                ]
+            },
+            {
+                "name": "inmovilizacion",
+                "label": "Inmovilización de extremidades",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No",
+                    "Sí"
+                ]
+            },
+            {
+                "name": "empaquetamiento",
+                "label": "Empaquetamiento",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No",
+                    "Sí"
+                ]
+            },
+            {
+                "name": "curacion",
+                "label": "Curación / Vendaje",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No",
+                    "Sí"
+                ]
+            },
+            {
+                "name": "medicamentotupla",
+                "label": "Medicamentos",
+                "type": "tuple",
+                "tuple": [
+                    {
+                        "name": "horameds",
+                        "label": "Hora",
+                        "type": "input",
+                        "inputType": "time"
+                    },
+                    {
+                        "name": "medicamentostup",
+                        "label": "Medicamento",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "dosismeds",
+                        "label": "Dósis",
+                        "type": "input",
+                        "inputType": "text"
+                    },
+                    {
+                        "name": "viaadministracion",
+                        "label": "Vía de administración",
+                        "type": "input",
+                        "inputType": "text"
+                    }
+                ]
+            },
+            {
+                "name": "terapiaelectrica",
+                "label": "Terapia eléctrica",
+                "type": "tuple",
+                "tuple": [
+                    {
+                        "name": "terapiaelectricacheckbox",
+                        "label": "Tipo de solución",
+                        "type": "multiple",
+                        "inputType": "radio",
+                        "options": [
+                            "Desfribilación",
+                            "Cardioversión",
+                            "Marcapasos transcutáneo"
+                        ]
+                    },
+                    {
+                        "name": "descargas",
+                        "label": "Descargas",
+                        "type": "input",
+                        "inputType": "number"
+                    },
+                    {
+                        "name": "joules",
+                        "label": "Joules",
+                        "type": "input",
+                        "inputType": "number"
+                    },
+                    {
+                        "name": "ma",
+                        "label": "Miliamperios (mA)",
+                        "type": "input",
+                        "inputType": "number"
+                    },
+                    {
+                        "name": "frecuenciaterapiaelectrica",
+                        "label": "Frecuencia",
+                        "type": "input",
+                        "inputType": "number"
+                    }
+                ]
+            }
+        ],
+        "Resultados": [
+            {
+                "name": "resultados",
+                "type": "text",
+                "text": "Resultados"
+            },
+            {
+                "name": "resultadoemergencia",
+                "type": "text",
+                "text": "Resultado de la emergencia"
+            },
+            {
+                "name": "resultadoemergenciacheckbox",
+                "label": "Resultado de la emergencia",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "No amerita",
+                    "Traslado",
+                    "Se niega",
+                    "Cadáver en el lugar"
+                ]
+            },
+            {
+                "name": "trasladomultiple",
+                "label": "Traslado",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "Hospital",
+                    "Domicilio",
+                    "Helicóptero",
+                    "Ambulancia"
+                ]
+            },
+            {
+                "name": "hospitaltraslado",
+                "label": "Hospital de traslado",
+                "type": "input",
+                "inputType": "text",
+                "options": [
+                    "ISSSTE",
+                    "ISSSTECALI",
+                    "HGR 1",
+                    "HGR 20",
+                    "HGR 7",
+                    "HG Tijuana",
+                    "HG Rosarito",
+                    "HG Tecate"
+                ],
+                "allowOwnOptions": true,
+                "display_on": {
+                    "notEmpty": [
+                        {
+                            "name": "trasladomultiple"
+                        }
+                    ],
+                    "equalTo": [
+                        {
+                            "name": "trasladomultiple",
+                            "value": "Hospital"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "denominacion",
+                "label": "Denominación / Matrícula",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "foliorecepcion",
+                "label": "Folio médico",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "medico",
+                "label": "Médico responsable",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "prioridadfinal",
+                "label": "Prioridad final",
+                "type": "multiple",
+                "inputType": "radio",
+                "options": [
+                    "Verde",
+                    "Amarilla",
+                    "Roja",
+                    "Negra"
+                ]
+            },
+            {
+                "name": "firmaConsentimiento",
+                "label": "Consentimiento informado",
+                "secondaryLabel": "Firma del paciente",
+                "text": "Declaró haber recibido oportunamente información completa y adecuada sobre mi cuadro clínico y los procedimientos diagnósticos y/o terapéuticos qué se realizarán los riesgos que esto pueda presentar y las alternativas disponibles. A si mismo. Declaró haber comprendido la información proporcionada y que he tenido la oportunidad de fórmula mis preguntas y dudas. Las que han sido contestadas y aclaradas a mi entera satisfacción por lo anteriormente expuesto. Declaró mi consentimiento para ser sometido al tratamiento y a las acciones que el equipo TUM/TAMP considere necesarias en caso de surgir situaciones no esperadas o complicaciones, es expresado en forma libre e informada.",
+                "type": "drawingboard",
+                "display_on": {
+                    "isEmpty": [
+                        {
+                            "name": "firmaPacienteAtencion"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "firmaPacienteAtencion",
+                "label": "Negativa a recibir atención / Ser trasladado eximiente de responsabilidad",
+                "secondaryLabel": "Firma del paciente",
+                "text": "Declaró que no aceptó las recomendaciones del personal de la ambulancia o vehículo de primer contacto de bomberos tijuana en cuanto al (tratamiento) y o traslado a un hospital, por lo que eximo a la dirección de bomberos tijuana y a dichas personas de toda responsabilidad que pudiera derivar al haberse respetado y cumplido mi decisión.",
+                "type": "drawingboard",
+                "display_on": {
+                    "isEmpty": [
+                        {
+                            "name": "firmaConsentimiento"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "testigotitulo",
+                "type": "text",
+                "text": "Testigo"
+            },
+            {
+                "name": "alternate",
+                "label": "Nombre del testigo",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "parentesco",
+                "label": "Parentesco",
+                "type": "input",
+                "inputType": "text"
+            },
+            {
+                "name": "firmaTestigo",
+                "label": "",
+                "secondaryLabel": "Firma del testigo",
+                "text": "",
+                "type": "drawingboard"
+            },
+            {
+                "name": "nombreRecibe",
+                "label": "Nombre de quien recibe",
+                "type": "input",
+                "inputType": "text",
+                "display_on": {
+                    "isEmpty": [
+                        {
+                            "name": "firmaPacienteAtencion"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "firmaRecibe",
+                "label": "",
+                "secondaryLabel": "Firma de Médico / Enfermero / Responsable que recibe",
+                "text": "",
+                "type": "drawingboard",
+                "display_on": {
+                    "isEmpty": [
+                        {
+                            "name": "firmaPacienteAtencion"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "filler",
+                "label": "Nombre del responsable de la atención",
+                "type": "input",
+                "inputType": "text",
+                "options": [
+                    "{filler}"
+                ]
+            },
+            {
+                "name": "firmaBomberoAtencion",
+                "label": "",
+                "secondaryLabel": "Firma del Responsable de la Atención",
+                "text": "",
+                "type": "drawingboard"
+            },
+            {
+                "name": "observacionesFinales",
+                "label": "Resúmen / Observaciones finales",
+                "type": "textarea",
+                "rows": 5
+            }
+        ]
+    },
+    "restrictions": {
+        "notEmpty": [
+            {
+                "name": "firmaBomberoAtencion",
+                "message": "La firma es obligatoria"
+            },
+            {
+                "name": "firmaPacienteAtencion",
+                "value": "firmaConsentimiento",
+                "message": "La firma es obligatoria"
+            },
+            {
+                "name": "firmaConsentimiento",
+                "value": "firmaPacienteAtencion",
+                "message": "La firma es obligatoria"
+            },
+            {
+                "name": "firmaRecibe",
+                "value": "firmaPacienteAtencion",
+                "message": "La firma es obligatoria"
+            },
+            {
+                "name": "patient",
+                "message": "El nombre del paciente es obligatorio"
+            },
+            {
+                "name": "date",
+                "message": "La fecha es obligatoria"
+            },
+            {
+                "name": "campoturno",
+                "message": "El turno es obligatorio"
+            },
+            {
+                "name": "campoestacion",
+                "message": "La estación es obligatoria"
+            },
+            {
+                "name": "camposervicio",
+                "message": "El tipo de servicio es obligatorio"
+            },
+            {
+                "name": "campollamada",
+                "message": "La hora de llamada es obligatoria"
+            },
+            {
+                "name": "salida",
+                "message": "La hora de salida es obligatoria"
+            },
+            {
+                "name": "llegada",
+                "message": "La hora de llegada es obligatoria"
+            },
+            {
+                "name": "calle",
+                "message": "La ubicación es obligatoria"
+            },
+            {
+                "name": "colonia",
+                "message": "La colonia es obligatoria"
+            },
+            {
+                "name": "municipio",
+                "message": "El municipio es obligatorio"
+            },
+            {
+                "name": "jefe",
+                "message": "El jefe de servicio es obligatorio"
+            },
+            {
+                "name": "maquinista",
+                "message": "El maquinista es obligatorio"
+            },
+            {
+                "name": "CONCIENCIA",
+                "message": "El nivel de conciencia es obligatorio"
+            },
+            {
+                "name": "historico_sv",
+                "subname": "hora",
+                "message": "La hora de los signos vitales es obligatoria"
+            },
+            {
+                "name": "resultadoemergenciacheckbox",
+                "message": "El resultado de la emergencia es obligatorio"
+            },
+            {
+                "name": "filler",
+                "message": "El nombre del bombero que firma es obligatorio"
+            }
+        ],
+        "lessThan": [
+            {
+                "name": "glasgowmeasure",
+                "value": 16,
+                "message": "Valor máximo válido es 15."
+            }
+        ],
+        "greaterThan": [
+            {
+                "name": "glasgowmeasure",
+                "value": 2,
+                "message": "Valor mínimo válido es 3."
+            },
+            {
+                "name": "edad",
+                "value": 0,
+                "message": "La edad debe ser mayor a 0"
+            }
+        ]
+    }
+}
