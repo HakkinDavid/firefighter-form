@@ -78,7 +78,8 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'Formularios Recientes',
@@ -100,7 +101,33 @@ class _HomeState extends State<Home> {
                             ),
                             Expanded(
                               child: FormList(
-                                formsList: forms
+                                formsList: forms,
+                                placeholder: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      CupertinoIcons.doc,
+                                      size: 64,
+                                      color: CupertinoColors.systemGrey,
+                                    ),
+                                    SizedBox(height: 16),
+                                    Text(
+                                      'No hay formularios',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: CupertinoColors.secondaryLabel,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      'Toca el botón + para crear uno',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: CupertinoColors.tertiaryLabel,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
