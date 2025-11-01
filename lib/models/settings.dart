@@ -45,18 +45,19 @@ class Settings {
     // Maybe check with regex that the id format is correct
     _userId = userId;
   }
+
   set role(int role) {
-    _role = (role >= 0 && role <= 2)
-        ? role
-        : 0;
+    _role = (role >= 0 && role <= 2) ? role : 0;
   }
 
   Map<String, FirefighterUser> _userCache = {};
   List<ServiceForm> _formsQueue = [];
   List<ServiceForm> _formsList = [];
 
-  final StreamController<List<ServiceForm>> _formsStreamController = StreamController<List<ServiceForm>>.broadcast();
-  Stream<List<ServiceForm>> get formsListStream => _formsStreamController.stream;
+  final StreamController<List<ServiceForm>> _formsStreamController =
+      StreamController<List<ServiceForm>>.broadcast();
+  Stream<List<ServiceForm>> get formsListStream =>
+      _formsStreamController.stream;
 
   Map<String, FirefighterUser> get userCache => _userCache;
   List<ServiceForm> get formsQueue => _formsQueue;
@@ -64,6 +65,7 @@ class Settings {
   set userCache(Map<String, FirefighterUser> userCache) {
     _userCache = userCache;
   }
+
   set formsQueue(List<ServiceForm> formsQueue) {
     _formsQueue = formsQueue;
   }
@@ -74,7 +76,8 @@ class Settings {
   FirefighterUser? get watcher => _userCache[self?.watchedByUserId ?? ""];
 
   List<ServiceForm> get formsList {
-    final combined = _formsQueue +
+    final combined =
+        _formsQueue +
         (_formsList..retainWhere(
           (fl) => _formsQueue.indexWhere((fq) => fq.id == fl.id) == -1,
         ));
@@ -83,65 +86,76 @@ class Settings {
   }
 
   Map<String, dynamic> Function() mapAccessor(String accessed, {String? id}) {
-    switch(accessed) {
-      case 'userData': {
-        return () {
-          Map<String, dynamic> map = {
-            'userId': Settings.instance.userId,
-            'role': Settings.instance.role,
-          };
-          return map;
-        };
-      }
-      case 'userCache': {
-        return () {
-          Map<String, dynamic> map = Settings.instance.userCache.map(
-                (key, value) => MapEntry(key, value.toJson()),
-          );
-          return map;
-        };
-      }
-      case 'formsQueue': {
-        if (id != null) {
+    switch (accessed) {
+      case 'userData':
+        {
           return () {
-            Map<String, dynamic> map = Settings.instance.formsQueue
-                .firstWhere((f) => f.id == id).toJson();
+            Map<String, dynamic> map = {
+              'userId': Settings.instance.userId,
+              'role': Settings.instance.role,
+            };
             return map;
           };
-        } else {
+        }
+      case 'userCache':
+        {
+          return () {
+            Map<String, dynamic> map = Settings.instance.userCache.map(
+              (key, value) => MapEntry(key, value.toJson()),
+            );
+            return map;
+          };
+        }
+      case 'formsQueue':
+        {
+          if (id != null) {
+            return () {
+              Map<String, dynamic> map = Settings.instance.formsQueue
+                  .firstWhere((f) => f.id == id)
+                  .toJson();
+              return map;
+            };
+          } else {
+            return () {
+              Map<String, dynamic> map = {};
+              return map;
+            };
+          }
+        }
+      default:
+        {
           return () {
             Map<String, dynamic> map = {};
             return map;
           };
         }
-      }
-      default: {
-        return () {
-          Map<String, dynamic> map = {};
-          return map;
-        };
-      }
     }
   }
 
   Future<void> setUser() async {
     setUserId();
-    await getUser();
-    _role = self!.role;
+    try {
+      await fetchUser();
+      _role = self!.role;
 
-    String directory = await getSettingsDirectoryRoute();
+      String directory = await getSettingsDirectoryRoute();
 
-    Map<String, dynamic> Function() userDataAccessor = mapAccessor('userData');
-    ServiceReliabilityEngineer.instance.enqueueWriteTask(
+      Map<String, dynamic> Function() userDataAccessor = mapAccessor(
+        'userData',
+      );
+      ServiceReliabilityEngineer.instance.enqueueWriteTask(
         '$directory/user_data.json',
-        userDataAccessor
-    );
+        userDataAccessor,
+      );
 
-    Map<String, dynamic> Function() userCacheAccessor = mapAccessor('userCache');
-    ServiceReliabilityEngineer.instance.enqueueWriteTask(
+      Map<String, dynamic> Function() userCacheAccessor = mapAccessor(
+        'userCache',
+      );
+      ServiceReliabilityEngineer.instance.enqueueWriteTask(
         '$directory/user_cache.json',
-        userCacheAccessor
-    );
+        userCacheAccessor,
+      );
+    } catch (_) {}
   }
 
   Future<void> setForms() async {
@@ -164,9 +178,8 @@ class Settings {
     return _userCache[pUserId]!;
   }
 
-  Future<FirefighterUser> getUser({String? pUserId}) async {
+  Future<FirefighterUser> fetchUser({String? pUserId}) async {
     pUserId ??= _userId!;
-    if (_userCache.containsKey(pUserId)) return _userCache[pUserId]!;
     final nameRecord = await Supabase.instance.client
         .from('user_name')
         .select('id, given, surname1, surname2')
@@ -368,11 +381,11 @@ class Settings {
     String directory = await getSettingsDirectoryRoute();
     Map<String, dynamic> Function() formAccessor = mapAccessor(
       'formsQueue',
-      id: form.id
+      id: form.id,
     );
     ServiceReliabilityEngineer.instance.enqueueWriteTask(
-        '$directory/forms/${form.id}.json',
-        formAccessor
+      '$directory/forms/${form.id}.json',
+      formAccessor,
     );
     ServiceReliabilityEngineer.instance.enqueueTasks({"SyncForms"});
     _formsStreamController.add(formsList);
@@ -383,8 +396,8 @@ class Settings {
 
     String directory = await getSettingsDirectoryRoute();
     ServiceReliabilityEngineer.instance.enqueueWriteTask(
-        '$directory/forms/$id.json',
-        null
+      '$directory/forms/$id.json',
+      null,
     );
 
     _formsStreamController.add(formsList);
