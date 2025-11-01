@@ -140,21 +140,10 @@ class Settings {
 
       String directory = await getSettingsDirectoryRoute();
 
-      Map<String, dynamic> Function() userDataAccessor = mapAccessor(
-        'userData',
-      );
-      ServiceReliabilityEngineer.instance.enqueueWriteTask(
-        '$directory/user_data.json',
-        userDataAccessor,
-      );
-
-      Map<String, dynamic> Function() userCacheAccessor = mapAccessor(
-        'userCache',
-      );
-      ServiceReliabilityEngineer.instance.enqueueWriteTask(
-        '$directory/user_cache.json',
-        userCacheAccessor,
-      );
+      ServiceReliabilityEngineer.instance.enqueueWriteTasks([
+        ('$directory/user_data.json', mapAccessor('userData')),
+        ('$directory/user_cache.json', mapAccessor('userCache')),
+      ]);
     } catch (_) {
       ServiceReliabilityEngineer.instance.enqueueTasks({"SetUser"});
     }
@@ -381,14 +370,14 @@ class Settings {
     }
 
     String directory = await getSettingsDirectoryRoute();
-    Map<String, dynamic> Function() formAccessor = mapAccessor(
-      'formsQueue',
-      id: form.id,
-    );
-    ServiceReliabilityEngineer.instance.enqueueWriteTask(
-      '$directory/forms/${form.id}.json',
-      formAccessor,
-    );
+
+    ServiceReliabilityEngineer.instance.enqueueWriteTasks([
+      (
+        '$directory/forms/${form.id}.json',
+        mapAccessor('formsQueue', id: form.id),
+      ),
+    ]);
+
     ServiceReliabilityEngineer.instance.enqueueTasks({"SyncForms"});
     _formsStreamController.add(formsList);
   }
@@ -397,10 +386,9 @@ class Settings {
     _formsQueue.removeWhere((f) => f.id == id);
 
     String directory = await getSettingsDirectoryRoute();
-    ServiceReliabilityEngineer.instance.enqueueWriteTask(
-      '$directory/forms/$id.json',
-      null,
-    );
+    ServiceReliabilityEngineer.instance.enqueueWriteTasks([
+      ('$directory/forms/$id.json', null),
+    ]);
 
     _formsStreamController.add(formsList);
   }
