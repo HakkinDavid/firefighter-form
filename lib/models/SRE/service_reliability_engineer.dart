@@ -57,7 +57,7 @@ class ServiceReliabilityEngineer {
     );
     _tasksRepository["SetUser"] = Task(
       heuristic: ConnectionHeuristic(),
-      duty: Settings.instance.setUser
+      duty: Settings.instance.setUser,
     );
 
     enqueueTasks({"LoadFromDisk", "SyncForms"});
@@ -134,15 +134,22 @@ class ServiceReliabilityEngineer {
     });
   }
 
-  void enqueueWriteTask(
-    String path,
-    Map<String, dynamic> Function()? accessor,
+  void enqueueWriteTasks(
+    List<(String, Map<String, dynamic> Function()?)> writeTasks,
   ) {
+    int writeIndex = 0;
     Logging(
-      "Recibiendo solicitud de ${accessor != null ? "escritura" : "eliminación"} para ruta ${path.replaceRange(0, path.length - 30, '...')}.",
-      caller: "SRE (enqueueWriteTask)",
+      "Recibiendo ${writeTasks.length} solicitudes para SaveToDisk...",
+      caller: "SRE (enqueueWriteTasks)",
     );
-    _writeQueue.add((path, accessor));
+    for (var writeTask in writeTasks) {
+      Logging(
+        "[$writeIndex] ${writeTask.$2 != null ? "Escritura" : "Eliminación"} para ruta ${writeTask.$1.replaceRange(0, writeTask.$1.length - 30, '...')}.",
+        caller: "SRE (enqueueWriteTasks)",
+      );
+      _writeQueue.add((writeTask.$1, writeTask.$2));
+      writeIndex++;
+    }
     enqueueTasks({"SaveToDisk"});
   }
 
