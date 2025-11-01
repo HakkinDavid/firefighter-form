@@ -197,6 +197,8 @@ class _SearchState extends State<Search> {
                             children: [
                               // Search Text Field
                               CupertinoTextField(
+                                style: TextStyle(color: Settings.instance.colors.primary),
+                                placeholderStyle: TextStyle(color: Settings.instance.colors.disabled),
                                 controller: _searchController,
                                 placeholder:
                                     'Folio, etiquetas, estado o responsable',
