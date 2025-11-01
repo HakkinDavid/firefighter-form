@@ -232,8 +232,14 @@ class _SearchState extends State<Search> {
                                         vertical: 8,
                                       ),
                                       color: _startDate != null
-                                          ? Settings.instance.colors.primaryBright
-                                          : Settings.instance.colors.primaryContrast,
+                                          ? Settings
+                                                .instance
+                                                .colors
+                                                .primaryBright
+                                          : Settings
+                                                .instance
+                                                .colors
+                                                .primaryContrast,
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -280,8 +286,14 @@ class _SearchState extends State<Search> {
                                         vertical: 8,
                                       ),
                                       color: _endDate != null
-                                          ? Settings.instance.colors.primaryBright
-                                          : Settings.instance.colors.primaryContrast,
+                                          ? Settings
+                                                .instance
+                                                .colors
+                                                .primaryBright
+                                          : Settings
+                                                .instance
+                                                .colors
+                                                .primaryContrast,
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -361,7 +373,37 @@ class _SearchState extends State<Search> {
                         ),
                         const SizedBox(height: 16),
                         // Add the FormList component here
-                        Expanded(child: FormList(formsList: forms)),
+                        Expanded(
+                          child: FormList(
+                            formsList: forms,
+                            placeholder: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  CupertinoIcons.search,
+                                  size: 64,
+                                  color: CupertinoColors.systemGrey,
+                                ),
+                                SizedBox(height: 16),
+                                Text(
+                                  'Sin resultados',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: CupertinoColors.secondaryLabel,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Intenta cambiar los parámetros de búsqueda',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: CupertinoColors.tertiaryLabel,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     );
                   },
