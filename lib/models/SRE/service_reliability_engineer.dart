@@ -44,7 +44,7 @@ class ServiceReliabilityEngineer {
       dependsOn: {"LoadFromDisk"},
     );
 
-    enqueueTasks({"LoadFromDisk"});
+    enqueueTasks({"LoadFromDisk", "SyncForms"});
   }
 
   void enqueueTasks(Iterable<String> requestedTasks) {
