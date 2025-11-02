@@ -1,5 +1,3 @@
-drop table if exists template, filled_in, dict_form_status;
-
 create table dict_form_status (
     id smallserial primary key,
     name text UNIQUE NOT NULL

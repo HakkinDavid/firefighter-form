@@ -1,5 +1,3 @@
-drop table if exists dict_roles;
-
 -- Diccionario para tipos de usuario (roles)
 CREATE TABLE dict_roles (
     id           smallserial PRIMARY KEY,

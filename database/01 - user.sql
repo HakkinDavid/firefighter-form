@@ -1,6 +1,3 @@
--- Limpieza previa
-drop table if exists user_name, user_role, user_hierarchy;
-
 -- Datos básicos
 create table user_name (
   id uuid primary key references auth.users(id) on delete cascade,
