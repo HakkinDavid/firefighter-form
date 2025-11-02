@@ -9,6 +9,6 @@ class DiskHeuristic extends Heuristic {
     if (lastWriteTime < 1000) return true;
 
     Duration timeElapsed = DateTime.now().difference(lastWriteTimestamp);
-    return timeElapsed.inMilliseconds > (5000 * lastWriteTime);
+    return timeElapsed.inMilliseconds > (5 * lastWriteTime);
   }
 }
