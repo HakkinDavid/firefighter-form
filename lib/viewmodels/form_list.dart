@@ -166,7 +166,7 @@ class _FormListState extends State<FormList> {
                       SizedBox(height: 2),
                       Text(
                         Settings.instance
-                            .getUserOrFail(pUserId: form.filler)
+                            .getUserOrFail(form.filler)
                             .fullName,
                         style: TextStyle(
                           fontSize: 13,

@@ -435,6 +435,6 @@ class _CanvasPainter extends CustomPainter {
 
 extension ColorToCssString on Color {
   String toCssString() {
-    return '#${value.toRadixString(16).padLeft(8, '0').substring(2)}';
+    return '#${toARGB32().toRadixString(16).padLeft(8, '0').substring(2)}';
   }
 }

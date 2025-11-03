@@ -51,7 +51,7 @@ class _SearchState extends State<Search> {
 
   bool _userMatchesSearch(ServiceForm element, String searchText) {
     try {
-      final creator = Settings.instance.getUserOrFail(pUserId: element.filler);
+      final creator = Settings.instance.getUserOrFail(element.filler);
       return creator.fullName.toLowerCase().contains(searchText);
     } catch (e) {
       return false;
@@ -355,7 +355,7 @@ class _SearchState extends State<Search> {
                                     CupertinoButton(
                                       onPressed: _clearDateFilters,
                                       padding: EdgeInsets.zero,
-                                      minSize: 0,
+                                      minimumSize: Size(0, 0),
                                       child: Text(
                                         'Limpiar',
                                         style: TextStyle(

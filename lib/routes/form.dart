@@ -122,7 +122,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
       if (options[i] is String) {
         options[i] = (options[i] as String).replaceAll(
           '{filler}',
-          Settings.instance.getUserOrFail(pUserId: widget.form.filler).fullName,
+          Settings.instance.getUserOrFail(widget.form.filler).fullName,
         );
       }
     }

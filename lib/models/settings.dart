@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
 import 'package:bomberos/models/form.dart';
+import 'package:bomberos/models/logging.dart';
 import 'package:bomberos/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
@@ -137,14 +138,13 @@ class Settings {
     try {
       await fetchUser();
       _role = self!.role;
-
       String directory = await getSettingsDirectoryRoute();
-
       ServiceReliabilityEngineer.instance.enqueueWriteTasks([
         ('$directory/user_data.json', mapAccessor('userData')),
         ('$directory/user_cache.json', mapAccessor('userCache')),
       ]);
-    } catch (_) {
+    } catch (e) {
+      Logging("Error: $e", caller: "Settings (setUser)", attentionLevel: 3);
       ServiceReliabilityEngineer.instance.enqueueTasks({"SetUser"});
     }
   }
@@ -165,7 +165,7 @@ class Settings {
     _userId = Supabase.instance.client.auth.currentUser!.id;
   }
 
-  FirefighterUser getUserOrFail({String? pUserId}) {
+  FirefighterUser getUserOrFail(String pUserId) {
     return _userCache[pUserId]!;
   }
 
@@ -436,6 +436,8 @@ class Settings {
       }
       ServiceReliabilityEngineer.instance.enqueueTasks({"SetForms"});
       _formsStreamController.add(formsList);
-    } catch (error) {}
+    } catch (error) {
+      // no importa si no se borra, mejor para nosotros.
+    }
   }
 }

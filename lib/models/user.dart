@@ -2,7 +2,7 @@ class FirefighterUser {
   String id;
   String givenName;
   String firstSurname;
-  String secondSurname;
+  String? secondSurname;
   int role;
   String? watchedByUserId;
   Set<String> watchesUsersId = {};
@@ -17,7 +17,7 @@ class FirefighterUser {
     this.watchesUsersId = const {}
   });
 
-  String get fullName => "$givenName $firstSurname $secondSurname";
+  String get fullName => "$givenName $firstSurname${secondSurname != null ? " $secondSurname" : ""}";
 
   Map<String, dynamic> toJson() {
     return {
