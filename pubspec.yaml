@@ -70,11 +70,11 @@ flutter:
   assets:
     - assets/icon.png
     - assets/bomberos.png
-    - assets/icon-background.png
-    - assets/icon-foreground.png
-    - assets/icon-only.png
-    - assets/splash-dark.png
-    - assets/splash.png
+    # - assets/icon-background.png
+    # - assets/icon-foreground.png
+    # - assets/icon-only.png
+    # - assets/splash-dark.png
+    # - assets/splash.png
     - assets/tijuana.png
     - assets/frap.json
   #   - images/a_dot_burr.jpeg
@@ -111,7 +111,7 @@ flutter_launcher_icons:
   remove_alpha_ios: true
   image_path: "assets/icon.png" # Path to your icon image
   # Optional: For adaptive icons on Android
-  # adaptive_icon_foreground: "assets/icon/foreground.png"
-  # adaptive_icon_background: "#FFFFFF" # Or an image path
+  adaptive_icon_foreground: "assets/icon-foreground.png"
+  adaptive_icon_background: "assets/icon-background.png" # Or an image path
   # Optional: For monochrome adaptive icons on Android 13+
   # adaptive_icon_monochrome: "assets/icon/monochrome.png"
