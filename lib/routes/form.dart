@@ -675,6 +675,10 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
             label != '' ? label : (field['secondaryLabel'] ?? 'Firma / Dibujo'),
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
+          Text(
+            field['text'] != '' ? field['text'] : "",
+            style: TextStyle(fontWeight: FontWeight.w200),
+          ),
           SizedBox(height: 8),
           ServiceCanvas(
             readOnly: !widget.form.canEditForm,
