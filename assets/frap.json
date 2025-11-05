@@ -1766,7 +1766,7 @@
                 "name": "firmaConsentimiento",
                 "label": "Consentimiento informado",
                 "secondaryLabel": "Firma del paciente",
-                "text": "Declaro haber recibido oportunamente información completa y adecuada sobre mi cuadro clínico y los procedimientos diagnósticos y/o terapéuticos qué se realizarán los riesgos que esto pueda presentar y las alternativas disponibles. A si mismo. Declaro haber comprendido la información proporcionada y que he tenido la oportunidad de formular mis preguntas y dudas. Las que han sido contestadas y aclaradas a mi entera satisfacción por lo anteriormente expuesto. Declaro mi consentimiento para ser sometido al tratamiento y a las acciones que el equipo TUM/TAMP considere necesarias en caso de surgir situaciones no esperadas o complicaciones, es expresado en forma libre e informada.",
+                "text": "Declaro haber recibido oportunamente información completa y adecuada sobre mi cuadro clínico, así como sobre los procedimientos diagnósticos y/o terapéuticos que se realizarán, los riesgos que estos puedan presentar y las alternativas disponibles. Asimismo, declaro haber comprendido la información proporcionada y haber tenido la oportunidad de formular mis preguntas y dudas, las cuales han sido respondidas y aclaradas a mi entera satisfacción. Por lo anteriormente expuesto, otorgo mi consentimiento para ser sometido al tratamiento y a las acciones que el equipo TUM/TAMP considere necesarias en caso de surgir situaciones no esperadas o complicaciones, expresando dicho consentimiento de forma libre e informada.",
                 "type": "drawingboard",
                 "displayOn": {
                     "isEmpty": [
@@ -1780,7 +1780,7 @@
                 "name": "firmaPacienteAtencion",
                 "label": "Negativa a recibir atención / Ser trasladado eximiente de responsabilidad",
                 "secondaryLabel": "Firma del paciente",
-                "text": "Declaro que no acepto las recomendaciones del personal de la ambulancia o vehículo de primer contacto de bomberos tijuana en cuanto al (tratamiento) y o traslado a un hospital, por lo que eximo a la dirección de bomberos tijuana y a dichas personas de toda responsabilidad que pudiera derivar al haberse respetado y cumplido mi decisión.",
+                "text": "Declaro que no acepto las recomendaciones del personal de la ambulancia o del vehículo de primer contacto del Cuerpo de Bomberos Tijuana respecto al tratamiento y/o traslado a un hospital. Por lo tanto, eximo a la Dirección de Bomberos Tijuana y al citado personal de toda responsabilidad que pudiera derivarse de haberse respetado y cumplido mi decisión.",
                 "type": "drawingboard",
                 "displayOn": {
                     "isEmpty": [
