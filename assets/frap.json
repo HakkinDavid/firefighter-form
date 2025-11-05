@@ -40,9 +40,23 @@
                     "Estación 15",
                     "Estación 16",
                     "Estación 17",
-                    "Estación 18"
-                ],
-                "allowOwnOptions": true
+                    "Estación 18",
+                    "Otra"
+                ]
+            },
+            {
+                "name": "campoestacionotra",
+                "type": "input",
+                "inputType": "text",
+                "label": "Especifique la estación",
+                "displayOn": {
+                    "includes": [
+                        {
+                            "name": "campoestacion",
+                            "value": "Otra"
+                        }
+                    ]
+                }
             },
             {
                 "name": "campounidad",
@@ -53,9 +67,23 @@
                     "Ambulancia 1",
                     "Ambulancia 2",
                     "Ambulancia 3",
-                    "Ambulancia 4"
-                ],
-                "allowOwnOptions": true
+                    "Ambulancia 4",
+                    "Otra"
+                ]
+            },
+            {
+                "name": "campounidadotra",
+                "type": "input",
+                "inputType": "text",
+                "label": "Especifique la unidad",
+                "displayOn": {
+                    "includes": [
+                        {
+                            "name": "campounidad",
+                            "value": "Otra"
+                        }
+                    ]
+                }
             },
             {
                 "name": "date",
@@ -65,8 +93,9 @@
             },
             {
                 "name": "cronometria",
-                "type": "text",
-                "text": "Cronometría (Hora)"
+                "text": "Cronometría (Hora)",
+                "type": "input",
+                "inputType": "time"
             },
             {
                 "name": "camposervicio",
@@ -155,9 +184,23 @@
                     "Ensenada",
                     "San Quintín",
                     "Mexicali",
-                    "San Felipe"
-                ],
-                "allowOwnOptions": true
+                    "San Felipe",
+                    "Otro"
+                ]
+            },
+            {
+                "name": "municipiootro",
+                "type": "input",
+                "inputType": "text",
+                "label": "Especifique el municipio",
+                "displayOn": {
+                    "includes": [
+                        {
+                            "name": "municipio",
+                            "value": "Otro"
+                        }
+                    ]
+                }
             },
             {
                 "name": "estado",
@@ -205,8 +248,7 @@
                 "label": "Auxiliares",
                 "type": "input",
                 "inputType": "text",
-                "multiple": true,
-                "allowOwnOptions": true
+                "multiple": true
             }
         ],
         "Paciente": [
@@ -229,9 +271,23 @@
                 "multiple": false,
                 "options": [
                     "Mujer",
-                    "Hombre"
-                ],
-                "allowOwnOptions": true
+                    "Hombre",
+                    "Otro"
+                ]
+            },
+            {
+                "name": "generootro",
+                "type": "input",
+                "inputType": "text",
+                "label": "Especifique el género",
+                "displayOn": {
+                    "includes": [
+                        {
+                            "name": "genero",
+                            "value": "Otro"
+                        }
+                    ]
+                }
             },
             {
                 "name": "edad",
@@ -252,9 +308,23 @@
                     "HGR 7",
                     "HG Tijuana",
                     "HG Rosarito",
-                    "HG Tecate"
-                ],
-                "allowOwnOptions": true
+                    "HG Tecate",
+                    "Otro"
+                ]
+            },
+            {
+                "name": "serviciomedicootro",
+                "type": "input",
+                "inputType": "text",
+                "label": "Especifique el servicio médico",
+                "displayOn": {
+                    "includes": [
+                        {
+                            "name": "serviciomedico",
+                            "value": "Otro"
+                        }
+                    ]
+                }
             },
             {
                 "name": "domiciliopaciente",
@@ -297,9 +367,23 @@
                     "Ensenada",
                     "San Quintín",
                     "Mexicali",
-                    "San Felipe"
-                ],
-                "allowOwnOptions": true
+                    "San Felipe",
+                    "Otro"
+                ]
+            },
+            {
+                "name": "municipiopacienteotro",
+                "type": "input",
+                "inputType": "text",
+                "label": "Especifique el municipio del paciente",
+                "displayOn": {
+                    "includes": [
+                        {
+                            "name": "municipiopaciente",
+                            "value": "Otro"
+                        }
+                    ]
+                }
             },
             {
                 "name": "estadopaciente",
@@ -717,7 +801,7 @@
                 "name": "gineco",
                 "type": "text",
                 "text": "Ginecológico",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -736,7 +820,7 @@
                 "label": "Gesta",
                 "type": "input",
                 "inputType": "number",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -755,7 +839,7 @@
                 "label": "Para",
                 "type": "input",
                 "inputType": "number",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -774,7 +858,7 @@
                 "label": "Cesáreas",
                 "type": "input",
                 "inputType": "number",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -793,7 +877,7 @@
                 "label": "Abortos",
                 "type": "input",
                 "inputType": "number",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -812,7 +896,7 @@
                 "label": "Semanas de gestación",
                 "type": "input",
                 "inputType": "number",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -831,7 +915,7 @@
                 "label": "Fecha probable de parto",
                 "type": "input",
                 "inputType": "date",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -854,7 +938,7 @@
                     "Si",
                     "No"
                 ],
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -877,7 +961,7 @@
                     "Si",
                     "No"
                 ],
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -896,7 +980,7 @@
                 "label": "Hora de inicio de contracciones",
                 "type": "input",
                 "inputType": "time",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -915,7 +999,7 @@
                 "label": "Frecuencia de contracciones (Minutos)",
                 "type": "input",
                 "inputType": "number",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -933,7 +1017,7 @@
                 "name": "datospos",
                 "type": "text",
                 "text": "Datos posparto",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -952,7 +1036,7 @@
                 "label": "Hora de nacimiento",
                 "type": "input",
                 "inputType": "time",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -975,7 +1059,7 @@
                     "Si",
                     "No"
                 ],
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -994,7 +1078,7 @@
                 "label": "Datos del producto",
                 "type": "text",
                 "text": "Datos del producto",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -1016,7 +1100,7 @@
                     "Vivo",
                     "Muerto"
                 ],
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -1038,7 +1122,7 @@
                     "Femenino",
                     "Masculino"
                 ],
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -1056,7 +1140,7 @@
                 "name": "apgar",
                 "type": "text",
                 "text": "Apgar",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -1075,7 +1159,7 @@
                 "label": "1 Minuto",
                 "type": "input",
                 "inputType": "number",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -1094,7 +1178,7 @@
                 "label": "5 Minutos",
                 "type": "input",
                 "inputType": "number",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -1113,7 +1197,7 @@
                 "label": "10 Minutos",
                 "type": "input",
                 "inputType": "number",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -1131,7 +1215,7 @@
                 "name": "silverman",
                 "type": "text",
                 "text": "Silverman",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -1150,7 +1234,7 @@
                 "label": "10 Minutos",
                 "type": "input",
                 "inputType": "number",
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "camposervicio"
@@ -1386,9 +1470,23 @@
                     "Tibia proximal",
                     "Tibia distal",
                     "Húmero",
-                    "Esternon"
-                ],
-                "allowOwnOptions": true
+                    "Esternon",
+                    "Otra"
+                ]
+            },
+            {
+                "name": "zonacolocacionotro",
+                "type": "input",
+                "inputType": "text",
+                "label": "Especifique la zona de colocación",
+                "displayOn": {
+                    "includes": [
+                        {
+                            "name": "zonacolocacion",
+                            "value": "Otra"
+                        }
+                    ]
+                }
             },
             {
                 "name": "colocacionacessocirculatorio",
@@ -1423,12 +1521,11 @@
             },
             {
                 "name": "tiposolucionextra",
-                "label": "Especifique: ",
+                "label": "Especifique el tipo de solución",
                 "type": "input",
                 "inputType": "text",
                 "multiple": true,
-                "allowOwnOptions": true,
-                "display_on": {
+                "displayOn": {
                     "includes": [
                         {
                             "name": "tiposolucion",
@@ -1604,10 +1701,10 @@
                     "HGR 7",
                     "HG Tijuana",
                     "HG Rosarito",
-                    "HG Tecate"
+                    "HG Tecate",
+                    "Otro"
                 ],
-                "allowOwnOptions": true,
-                "display_on": {
+                "displayOn": {
                     "notEmpty": [
                         {
                             "name": "trasladomultiple"
@@ -1617,6 +1714,20 @@
                         {
                             "name": "trasladomultiple",
                             "value": "Hospital"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "hospitaltrasladootro",
+                "type": "input",
+                "inputType": "text",
+                "label": "Especifique el hospital de traslado",
+                "displayOn": {
+                    "includes": [
+                        {
+                            "name": "hospitaltraslado",
+                            "value": "Otro"
                         }
                     ]
                 }
@@ -1657,7 +1768,7 @@
                 "secondaryLabel": "Firma del paciente",
                 "text": "Declaró haber recibido oportunamente información completa y adecuada sobre mi cuadro clínico y los procedimientos diagnósticos y/o terapéuticos qué se realizarán los riesgos que esto pueda presentar y las alternativas disponibles. A si mismo. Declaró haber comprendido la información proporcionada y que he tenido la oportunidad de fórmula mis preguntas y dudas. Las que han sido contestadas y aclaradas a mi entera satisfacción por lo anteriormente expuesto. Declaró mi consentimiento para ser sometido al tratamiento y a las acciones que el equipo TUM/TAMP considere necesarias en caso de surgir situaciones no esperadas o complicaciones, es expresado en forma libre e informada.",
                 "type": "drawingboard",
-                "display_on": {
+                "displayOn": {
                     "isEmpty": [
                         {
                             "name": "firmaPacienteAtencion"
@@ -1671,7 +1782,7 @@
                 "secondaryLabel": "Firma del paciente",
                 "text": "Declaró que no aceptó las recomendaciones del personal de la ambulancia o vehículo de primer contacto de bomberos tijuana en cuanto al (tratamiento) y o traslado a un hospital, por lo que eximo a la dirección de bomberos tijuana y a dichas personas de toda responsabilidad que pudiera derivar al haberse respetado y cumplido mi decisión.",
                 "type": "drawingboard",
-                "display_on": {
+                "displayOn": {
                     "isEmpty": [
                         {
                             "name": "firmaConsentimiento"
@@ -1708,7 +1819,7 @@
                 "label": "Nombre de quien recibe",
                 "type": "input",
                 "inputType": "text",
-                "display_on": {
+                "displayOn": {
                     "isEmpty": [
                         {
                             "name": "firmaPacienteAtencion"
@@ -1722,7 +1833,7 @@
                 "secondaryLabel": "Firma de Médico / Enfermero / Responsable que recibe",
                 "text": "",
                 "type": "drawingboard",
-                "display_on": {
+                "displayOn": {
                     "isEmpty": [
                         {
                             "name": "firmaPacienteAtencion"
@@ -1843,6 +1954,38 @@
             {
                 "name": "filler",
                 "message": "El nombre del bombero que firma es obligatorio"
+            },
+            {
+                "name": "municipiootro",
+                "message": "Especificar el municipio es obligatorio"
+            },
+            {
+                "name": "generootro",
+                "message": "Especificar el género es obligatorio"
+            },
+            {
+                "name": "serviciomedicootro",
+                "message": "Especificar el servicio médico es obligatorio"
+            },
+            {
+                "name": "municipiopacienteotro",
+                "message": "Especificar el municipio corresponde al paciente es obligatorio"
+            },
+            {
+                "name": "zonacolocacionotro",
+                "message": "Especificar la zona de colocación es obligatorio"
+            },
+            {
+                "name": "hospitaltrasladootro",
+                "message": "Especificar el hospital de traslado es obligatorio"
+            },
+            {
+                "name": "campoestacionotra",
+                "message": "Especificar la estación es obligatorio"
+            },
+            {
+                "name": "campounidadotra",
+                "message": "Especificar la unidad es obligatorio"
             }
         ],
         "lessThan": [
