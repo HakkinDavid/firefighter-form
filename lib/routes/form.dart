@@ -112,10 +112,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     }
   }
 
-  List<dynamic>? formatOptions(
-    List<dynamic>? originalOptions, {
-    bool allowOwnOptions = false,
-  }) {
+  List<dynamic>? formatOptions(List<dynamic>? originalOptions) {
     if (originalOptions == null) return null;
     final options = List<dynamic>.from(originalOptions);
     for (int i = 0; i < options.length; i++) {
@@ -126,7 +123,6 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
         );
       }
     }
-    if (allowOwnOptions) options.add("Otro");
     return options;
   }
 
@@ -136,9 +132,10 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     final dynamic value = widget.form.content[field['name']];
     final List<dynamic>? options = formatOptions(
       field['options'] as List<dynamic>?,
-      allowOwnOptions: field['allowOwnOptions'] == true,
     );
     final Set<String> errors = widget.form.errors[field['name']] ?? <String>{};
+
+    if (!widget.form.shouldDisplay(field)) return SizedBox.shrink();
 
     Widget fieldWidget;
 
@@ -414,45 +411,12 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                     ),
                                   ),
                                   onPressed: () async {
-                                    if (options[pickedIndex] == "Otro") {
-                                      await showCupertinoDialog(
-                                        context: context,
-                                        builder: (context) =>
-                                            CupertinoAlertDialog(
-                                              title: Text(label),
-                                              content: CupertinoTextField(
-                                                placeholder: "Otra opción",
-                                                controller:
-                                                    TextEditingController(),
-                                                onChanged: (otherValue) {
-                                                  setState(() {
-                                                    widget.form.set(
-                                                      field['name'],
-                                                      otherValue.isNotEmpty
-                                                          ? otherValue
-                                                          : null,
-                                                    );
-                                                  });
-                                                },
-                                              ),
-                                              actions: [
-                                                CupertinoDialogAction(
-                                                  child: Text("Aceptar"),
-                                                  onPressed: () => Navigator.of(
-                                                    context,
-                                                  ).pop(),
-                                                ),
-                                              ],
-                                            ),
+                                    setState(() {
+                                      widget.form.set(
+                                        field['name'],
+                                        options[pickedIndex],
                                       );
-                                    } else {
-                                      setState(() {
-                                        widget.form.set(
-                                          field['name'],
-                                          options[pickedIndex],
-                                        );
-                                      });
-                                    }
+                                    });
                                     if (!mounted) return;
                                     Navigator.of(context).pop();
                                   },
@@ -563,44 +527,12 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                   ),
                                 ),
                                 onPressed: () async {
-                                  if (options[pickedIndex] == "Otro") {
-                                    await showCupertinoDialog(
-                                      context: context,
-                                      builder: (context) =>
-                                          CupertinoAlertDialog(
-                                            title: Text(label),
-                                            content: CupertinoTextField(
-                                              placeholder: "Otra opción",
-                                              controller:
-                                                  TextEditingController(),
-                                              onChanged: (otherValue) {
-                                                setState(() {
-                                                  widget.form.set(
-                                                    field['name'],
-                                                    otherValue.isNotEmpty
-                                                        ? otherValue
-                                                        : null,
-                                                  );
-                                                });
-                                              },
-                                            ),
-                                            actions: [
-                                              CupertinoDialogAction(
-                                                child: Text("Aceptar"),
-                                                onPressed: () =>
-                                                    Navigator.of(context).pop(),
-                                              ),
-                                            ],
-                                          ),
+                                  setState(() {
+                                    widget.form.set(
+                                      field['name'],
+                                      options[pickedIndex],
                                     );
-                                  } else {
-                                    setState(() {
-                                      widget.form.set(
-                                        field['name'],
-                                        options[pickedIndex],
-                                      );
-                                    });
-                                  }
+                                  });
                                   if (!mounted) return;
                                   Navigator.of(context).pop();
                                 },
