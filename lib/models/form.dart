@@ -1,4 +1,3 @@
-import 'package:bomberos/models/logging.dart';
 import 'package:bomberos/models/pdf_renderer.dart';
 import 'package:bomberos/models/settings.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +6,7 @@ import 'package:uuid/uuid.dart';
 
 class ServiceForm {
   Map<String, dynamic> _template = const {};
+  final Map<String, (String, int)> _reference = {};
   List<String> _sectionKeys = const [];
   final Map<String, Set<String>> _errors = {};
 
@@ -24,7 +24,6 @@ class ServiceForm {
   List<String> get sectionKeys => _sectionKeys;
   Map<String, dynamic> get content => _content;
   Map<String, dynamic> get errors => _errors;
-  final Map<String, bool> _invisibleFields = {};
 
   String get filler => _filler;
   int get status => _status;
@@ -59,8 +58,11 @@ class ServiceForm {
     final sections = _template['fields'] as Map<String, dynamic>;
     _sectionKeys = sections.keys.toList();
     for (var section in _sectionKeys) {
+      int fieldIndex = 0;
       for (var field in sections[section]) {
         _content[field['name']] ??= getDefaultValue(field);
+        _reference[field['name']] = (section, fieldIndex);
+        fieldIndex++;
       }
     }
     _isLoaded = true;
@@ -70,6 +72,10 @@ class ServiceForm {
     if (!canEditForm) return;
     if (newValue != _content[fieldName]) _edited = true;
     _content[fieldName] = newValue;
+    _clearErrors(fieldName);
+  }
+
+  void _clearErrors(String fieldName) {
     _errors.remove(fieldName);
   }
 
@@ -134,9 +140,8 @@ class ServiceForm {
         final fieldName = field['name'];
         final value = _content[fieldName];
         bool passed = true;
-        if (_invisibleFields[fieldName] ?? false) {
-          Logging("Ignorando errores de campo invisible $fieldName");
-          _errors[fieldName] = <String>{};
+        if (!shouldDisplay(getFieldFromReference(fieldName))) {
+          _clearErrors(fieldName);
           continue;
         }
         switch (key) {
@@ -211,9 +216,11 @@ class ServiceForm {
       willDisplay = willDisplay && fieldIncludes(fieldReference);
     }
 
-    if (!willDisplay) _invisibleFields[field['name']] = true;
-
     return willDisplay;
+  }
+
+  Map<String, dynamic> getFieldFromReference(String fieldName) {
+    return _template['fields'][_reference[fieldName]!.$1][_reference[fieldName]!.$2];
   }
 
   Map<String, dynamic> toJson({bool asUpload = false}) {
