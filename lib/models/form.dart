@@ -164,7 +164,36 @@ class ServiceForm {
                 ? double.parse(value.toString()) > field['value']
                 : true;
             break;
-          // ...add more cases as needed...
+          case 'regexOnlyLetters':
+            if (value != null && value.toString().isNotEmpty) {
+              final regex = RegExp(r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ\s]+$');
+              passed = regex.hasMatch(value.toString());
+            }
+            break;
+          case 'regexOnlyNumbers':
+            if (value != null && value.toString().isNotEmpty) {
+              final regex = RegExp(r'^[0-9]+$');
+              passed = regex.hasMatch(value.toString());
+            }
+            break;
+          case 'regexPhoneNumber':
+            if (value != null && value.toString().isNotEmpty) {
+              final regex = RegExp(r'^\d{10}$');
+              passed = regex.hasMatch(value.toString());
+            }
+            break;
+          case 'regexEmail':
+            if (value != null && value.toString().isNotEmpty) {
+              final regex = RegExp(r'^[\w\.\-]+@([\w\-]+\.)+[A-Za-z]{2,4}$');
+              passed = regex.hasMatch(value.toString());
+            }
+            break;
+          case 'regexAlphanumeric':
+            if (value != null && value.toString().isNotEmpty) {
+              final regex = RegExp(r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ0-9\s.,#°\-]+$');
+              passed = regex.hasMatch(value.toString());
+            }
+            break;
           default:
             passed = true;
         }
