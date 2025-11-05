@@ -170,7 +170,7 @@
                 "name": "codigopostal",
                 "label": "Código Postal",
                 "type": "input",
-                "inputType": "text"
+                "inputType": "number"
             },
             {
                 "name": "municipio",
@@ -353,7 +353,7 @@
                 "name": "codigopostalpaciente",
                 "label": "Código Postal",
                 "type": "input",
-                "inputType": "text"
+                "inputType": "number"
             },
             {
                 "name": "municipiopaciente",
@@ -2005,6 +2005,196 @@
                 "name": "edad",
                 "value": 0,
                 "message": "La edad debe ser mayor a 0"
+            }
+        ],
+        "regexOnlyLetters": [
+            {
+                "name": "patient",
+                "message": "El nombre del paciente solo puede contener letras y espacios."
+            },
+            {
+                "name": "jefe",
+                "message": "El nombre del jefe solo puede contener letras y espacios."
+            },
+            {
+                "name": "maquinista",
+                "message": "El nombre del maquinista solo puede contener letras y espacios."
+            },
+            {
+                "name": "alternate",
+                "message": "El nombre del testigo solo puede contener letras y espacios."
+            },
+            {
+                "name": "nombreRecibe",
+                "message": "El nombre del que recibe solo puede contener letras y espacios."
+            },
+            {
+                "name": "municipiootro",
+                "message": "El nombre del municipio solo puede contener letras y espacios."
+            },
+            {
+                "name": "municipiopacienteotro",
+                "message": "El nombre del municipio del paciente solo puede contener letras y espacios."
+            },
+            {
+                "name": "colonia",
+                "message": "El nombre de la colonia solo puede contener letras y espacios."
+            },
+            {
+                "name": "coloniapaciente",
+                "message": "El nombre de la colonia del paciente solo puede contener letras y espacios."
+            },
+            {
+                "name": "generootro",
+                "message": "El género debe contener solo letras y espacios."
+            },
+            {
+                "name": "zonacolocacionotro",
+                "message": "La zona de colocación debe contener solo letras y espacios."
+            }
+        ],
+        "regexOnlyNumbers": [
+            {
+                "name": "edad",
+                "message": "La edad debe contener solo números."
+            },
+            {
+                "name": "codigopostal",
+                "message": "El código postal debe contener solo números."
+            },
+            {
+                "name": "codigopostalpaciente",
+                "message": "El código postal del paciente debe contener solo números."
+            },
+            {
+                "name": "frecuenciacontracciones",
+                "message": "La frecuencia de contracciones debe ser numérica."
+            },
+            {
+                "name": "frecuenciaav",
+                "message": "La frecuencia debe ser numérica."
+            },
+            {
+                "name": "glasgowmeasure",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "gestas",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "para",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "cesareas",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "abortos",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "semanasgestacion",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "apgar1",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "apgar5",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "apgar10",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "silv10",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "diametrointubacion",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "insercionintubacion",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "intentosintubacion",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "volumenav",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "lpm",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "calibre",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "calibreaccesocirculatorio",
+                "message": "Debe ser numérico."
+            },
+            {
+                "name": "volumeninfundido",
+                "message": "Debe ser numérico."
+            }
+        ],
+        "regexPhoneNumber": [
+            {
+                "name": "telefono",
+                "message": "El número telefónico debe tener 10 dígitos numéricos."
+            },
+            {
+                "name": "telefonopaciente",
+                "message": "El teléfono del paciente debe tener 10 dígitos numéricos."
+            }
+        ],
+        "regexEmail": [
+            {
+                "name": "correopaciente",
+                "message": "El correo del paciente debe tener un formato válido."
+            }
+        ],
+        "regexAlphanumeric": [
+            {
+                "name": "calle",
+                "message": "La calle solo puede contener letras, números y espacios."
+            },
+            {
+                "name": "callepaciente",
+                "message": "La calle del paciente solo puede contener letras, números y espacios."
+            },
+            {
+                "name": "esquina",
+                "message": "La esquina solo puede contener letras, números y espacios."
+            },
+            {
+                "name": "esquinapaciente",
+                "message": "La esquina del paciente solo puede contener letras, números y espacios."
+            },
+            {
+                "name": "campoestacionotra",
+                "message": "Debe contener solo letras, números y espacios."
+            },
+            {
+                "name": "campounidadotra",
+                "message": "Debe contener solo letras, números y espacios."
+            },
+            {
+                "name": "serviciomedicootro",
+                "message": "Debe contener solo letras, números y espacios."
+            },
+            {
+                "name": "hospitaltrasladootro",
+                "message": "Debe contener solo letras, números y espacios."
             }
         ]
     }
