@@ -1,3 +1,4 @@
+import 'package:bomberos/models/logging.dart';
 import 'package:bomberos/models/pdf_renderer.dart';
 import 'package:bomberos/models/settings.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,6 +24,7 @@ class ServiceForm {
   List<String> get sectionKeys => _sectionKeys;
   Map<String, dynamic> get content => _content;
   Map<String, dynamic> get errors => _errors;
+  final Map<String, bool> _invisibleFields = {};
 
   String get filler => _filler;
   int get status => _status;
@@ -87,7 +89,12 @@ class ServiceForm {
 
   Future<void> render() async {
     if (!_isLoaded) await load();
-    await ServicePDF.generate(formId: _id!, template: _template, formData: content, ignoreEmptyFields: true);
+    await ServicePDF.generate(
+      formId: _id!,
+      template: _template,
+      formData: content,
+      ignoreEmptyFields: true,
+    );
   }
 
   dynamic getDefaultValue(Map<String, dynamic> field) {
@@ -127,6 +134,11 @@ class ServiceForm {
         final fieldName = field['name'];
         final value = _content[fieldName];
         bool passed = true;
+        if (_invisibleFields[fieldName] ?? false) {
+          Logging("Ignorando errores de campo invisible $fieldName");
+          _errors[fieldName] = <String>{};
+          continue;
+        }
         switch (key) {
           case 'notEmpty':
             passed = value != null && value.toString().trim().isNotEmpty;
@@ -157,6 +169,51 @@ class ServiceForm {
         }
       }
     });
+  }
+
+  bool fieldNotEmpty(Map<String, dynamic> fieldReference) {
+    return _content[fieldReference['name']]?.isNotEmpty ?? false;
+  }
+
+  bool fieldIsEmpty(Map<String, dynamic> fieldReference) {
+    return _content[fieldReference['name']]?.isEmpty ?? true;
+  }
+
+  bool fieldEqualsTo(Map<String, dynamic> fieldReference) {
+    return _content[fieldReference['name']] == fieldReference['value'];
+  }
+
+  bool fieldIncludes(Map<String, dynamic> fieldReference) {
+    return _content[fieldReference['name']]?.contains(
+          fieldReference['value'],
+        ) ??
+        false;
+  }
+
+  bool shouldDisplay(Map<String, dynamic> field) {
+    final List<dynamic> notEmpty = field['displayOn']?['notEmpty'] ?? [];
+    final List<dynamic> isEmpty = field['displayOn']?['isEmpty'] ?? [];
+    final List<dynamic> equalsTo = field['displayOn']?['equalsTo'] ?? [];
+    final List<dynamic> includes = field['displayOn']?['includes'] ?? [];
+
+    bool willDisplay = true;
+
+    for (var fieldReference in notEmpty) {
+      willDisplay = willDisplay && fieldNotEmpty(fieldReference);
+    }
+    for (var fieldReference in isEmpty) {
+      willDisplay = willDisplay && fieldIsEmpty(fieldReference);
+    }
+    for (var fieldReference in equalsTo) {
+      willDisplay = willDisplay && fieldEqualsTo(fieldReference);
+    }
+    for (var fieldReference in includes) {
+      willDisplay = willDisplay && fieldIncludes(fieldReference);
+    }
+
+    if (!willDisplay) _invisibleFields[field['name']] = true;
+
+    return willDisplay;
   }
 
   Map<String, dynamic> toJson({bool asUpload = false}) {
