@@ -317,7 +317,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                   Expanded(
                     child: CupertinoTextField(
                       placeholder: "$label ${i + 1}",
-                      controller: TextEditingController(text: value[i] ?? ''),
+                      controller: TextEditingController(text: value[i] ?? '')..selection = TextSelection.collapsed(offset: value[i].length),
                       onChanged: (val) {
                         setState(() {
                           value[i] = val;
