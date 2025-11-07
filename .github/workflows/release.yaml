@@ -105,11 +105,15 @@ jobs:
         run: |
           TAG="v$(date +'%y.%m.%d')"
           echo "🧾 Recolectando commits del día ${TAG#v}..."
-          MSG=$(git log --pretty=format:"- %s" --since="$(date +'%Y-%m-%d 00:00:00')" --until="$(date +'%Y-%m-%d 23:59:59')" | tr -d '\r' | head -c 10000)
+          MSG=$(git log --pretty=format:"- %s" --since="$(date +'%Y-%m-%d 00:00:00')" --until="$(date +'%Y-%m-%d 23:59:59')" | tr -d '\r')
           if [ -z "$MSG" ]; then
             MSG=$(git log -1 --pretty=format:"- %s")
           fi
-          echo "message=${MSG}" >> $GITHUB_OUTPUT
+          {
+            echo 'message<<EOF'
+            echo "$MSG"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
 
       - name: 🏷️ Set release variables
         id: vars
