@@ -148,18 +148,40 @@ class ServiceReliabilityEngineer {
   }
 
   Future<void> _isUpdateAvailable() async {
-    if (_platform == null) return;
+    if (_platform == null) {
+      Logging(
+        "El dispositivo no es Android. Saliendo de la función...",
+        caller: "SRE (_isUpdateAvailable)",
+      );
+      return;
+    }
 
     final availabilityMap = await _platform!.invokeMethod('isUpdateAvailable');
     if (availabilityMap['available'] == true) {
+      Logging(
+        "Se encontró una actualización nueva. Encolando SaveToDisk y UpdateNow.",
+        caller: "SRE (_isUpdateAvailable)",
+        attentionLevel: 1,
+      );
       enqueueTasks({"SaveToDisk", "UpdateNow"});
     }
   }
 
   Future<void> _updateNow() async {
-    if (_platform == null) return;
+    if (_platform == null) {
+      Logging(
+        "El dispositivo no es Android. Saliendo de la función...",
+        caller: "SRE (_updateNow)",
+      );
+      return;
+    }
 
     await _platform!.invokeMethod('updateNow');
+    Logging(
+      "Actualización finalizada.",
+      caller: "SRE (_updateNow)",
+      attentionLevel: 1,
+    );
   }
 
   void enqueueWriteTasks(
