@@ -51,18 +51,18 @@ jobs:
       - name: 🔐 Decode and configure keystore
         run: |
           mkdir -p android/app
-          echo "$KEYSTORE_BASE64" | base64 --decode > android/app/release-keystore.jks
+          echo "$KEYSTORE_BASE64" | base64 --decode > android/app/release-keystore
 
           cat > android/key.properties <<EOF
           storePassword=$KEYSTORE_PASSWORD
           keyPassword=$KEY_PASSWORD
           keyAlias=$KEY_ALIAS
-          storeFile=release-keystore.jks
+          storeFile=release-keystore
           EOF
 
       - name: 🧪 Validate keystore integrity
         run: |
-          if ! keytool -list -keystore android/app/release-keystore.jks -storepass "$KEYSTORE_PASSWORD" -alias "$KEY_ALIAS" > /dev/null 2>&1; then
+          if ! keytool -list -keystore android/app/release-keystore -storepass "$KEYSTORE_PASSWORD" -alias "$KEY_ALIAS" > /dev/null 2>&1; then
             echo "❌ El archivo de keystore no es válido o está dañado."
             exit 1
           else
