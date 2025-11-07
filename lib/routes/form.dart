@@ -317,7 +317,10 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                   Expanded(
                     child: CupertinoTextField(
                       placeholder: "$label ${i + 1}",
-                      controller: TextEditingController(text: value[i] ?? '')..selection = TextSelection.collapsed(offset: value[i].length),
+                      controller: TextEditingController(text: value[i] ?? '')
+                        ..selection = TextSelection.collapsed(
+                          offset: value[i].length,
+                        ),
                       onChanged: (val) {
                         setState(() {
                           value[i] = val;
@@ -675,10 +678,11 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
             label != '' ? label : (field['secondaryLabel'] ?? 'Firma / Dibujo'),
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
-          Text(
-            field['text'] != '' ? field['text'] : "",
-            style: TextStyle(fontWeight: FontWeight.w200),
-          ),
+          if (field['text'] != null)
+            Text(
+              field['text'] != '' ? field['text'] : "",
+              style: TextStyle(fontWeight: FontWeight.w200),
+            ),
           SizedBox(height: 8),
           ServiceCanvas(
             readOnly: !widget.form.canEditForm,
