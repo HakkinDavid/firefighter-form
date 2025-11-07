@@ -60,6 +60,15 @@ jobs:
           storeFile=release-keystore.jks
           EOF
 
+      - name: 🧪 Validate keystore integrity
+        run: |
+          if ! keytool -list -keystore android/app/release-keystore.jks -storepass "$KEYSTORE_PASSWORD" -alias "$KEY_ALIAS" > /dev/null 2>&1; then
+            echo "❌ El archivo de keystore no es válido o está dañado."
+            exit 1
+          else
+            echo "✅ Keystore válido y legible."
+          fi
+
       - name: 🏗️ Build signed release APK
         run: flutter build apk --release
 
