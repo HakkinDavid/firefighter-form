@@ -10,10 +10,11 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import android.content.pm.PackageManager
 
 class MainActivity : FlutterActivity() {
   private val CHANNEL = "mx.cetys.bomberos/low_level"
-  private var update: UpdateFeatures? = null
+  private var release: UpdateFeatures? = null
   private val autoUpdaterManager = AutoUpdaterManager(this)
 
   override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
@@ -22,29 +23,33 @@ class MainActivity : FlutterActivity() {
       call,
       result ->
       if (call.method == "isUpdateAvailable") {
-        val updateData = HashMap<String, Any>()
+        val packageInfo = packageManager.getPackageInfo(packageName, 0)
+        val appVersion = packageInfo.versionName
+        val releaseData = HashMap<String, Any>()
         lifecycleScope.launch {
           withContext(Dispatchers.IO) {
-            update =
+            release =
               autoUpdaterManager.checkForUpdate(
                 JSONfileURL =
                   "https://github.com/HakkinDavid/firefighter-form/releases/latest/download/metadata.json"
               )
           }
         }
-        if (update == null) {
-          updateData["available"] = false
+        if (release == null) {
+          releaseData["available"] = false
+          releaseData["current_version"] = appVersion!!
         } else {
-          updateData["available"] = true
-          updateData["latest_version"] = update!!.latestversion
-          updateData["changelog"] = update!!.changelog
-          updateData["apk_url"] = update!!.apk_url
+          releaseData["available"] = true
+          releaseData["current_version"] = appVersion!!
+          releaseData["latest_version"] = release!!.latestversion
+          releaseData["changelog"] = release!!.changelog
+          releaseData["apk_url"] = release!!.apk_url
         }
-        result.success(updateData)
+        result.success(releaseData)
       } else if (call.method == "updateNow") {
         lifecycleScope.launch {
           withContext(Dispatchers.IO) {
-            autoUpdaterManager.downloadapk(this@MainActivity, update!!.apk_url, "bomberos") {
+            autoUpdaterManager.downloadapk(this@MainActivity, release!!.apk_url, "bomberos") {
                 
             }
           }
