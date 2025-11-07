@@ -177,11 +177,11 @@ class ServiceReliabilityEngineer {
       return;
     }
 
-    await _platform!.invokeMethod('updateNow');
+    await _platform!.invokeMethod('updateApp');
     Logging(
-      "Actualización finalizada.",
+      "Actualización descargada. Delegando responsabilidad al usuario.",
       caller: "SRE (_updateApp)",
-      attentionLevel: 1,
+      attentionLevel: 3,
     );
   }
 

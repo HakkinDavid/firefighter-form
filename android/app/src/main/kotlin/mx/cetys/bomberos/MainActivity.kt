@@ -45,7 +45,7 @@ class MainActivity : FlutterActivity() {
             result.success(releaseData)
           }
         }
-      } else if (call.method == "updateNow") {
+      } else if (call.method == "updateApp") {
         lifecycleScope.launch {
           withContext(Dispatchers.IO) {
             autoUpdaterManager.downloadapk(
