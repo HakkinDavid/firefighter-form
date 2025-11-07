@@ -1,3 +1,7 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -27,7 +31,7 @@ android {
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        versionName = getVersionNameFromDate()
     }
 
     buildTypes {
@@ -46,4 +50,9 @@ flutter {
 dependencies {
     implementation ("com.github.CSAbhiOnline:AutoUpdater:1.0.1")
     implementation("org.slf4j:slf4j-simple:2.0.12")
+}
+
+fun getVersionNameFromDate(): String {
+    val dateFormat = SimpleDateFormat("yy.MM.dd", Locale.getDefault())
+    return dateFormat.format(Date())
 }
