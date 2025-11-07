@@ -62,7 +62,7 @@ jobs:
 
       - name: 🧪 Validate keystore integrity
         run: |
-          if ! keytool -list -keystore android/app/release-keystore -storepass "$KEYSTORE_PASSWORD" -alias "$KEY_ALIAS" > /dev/null 2>&1; then
+          if ! keytool -list -keystore android/app/release-keystore -storetype pkcs12 -storepass "$KEYSTORE_PASSWORD" -alias "$KEY_ALIAS" > /dev/null 2>&1; then
             echo "❌ El archivo de keystore no es válido o está dañado."
             exit 1
           else
