@@ -18,46 +18,74 @@ class MainActivity : FlutterActivity() {
 
   override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
     super.configureFlutterEngine(flutterEngine)
+
     MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler {
       call,
       result ->
-      if (call.method == "isUpdateAvailable") {
-        val packageInfo = packageManager.getPackageInfo(packageName, 0)
-        val appVersion = packageInfo.versionName
-        val releaseData = HashMap<String, Any>()
-        lifecycleScope.launch {
-          withContext(Dispatchers.IO) {
-            release =
-              autoUpdaterManager.checkForUpdate(
-                JSONfileURL =
-                  "https://github.com/HakkinDavid/firefighter-form/releases/latest/download/metadata.json"
-              )
-            if (release == null) {
-              releaseData["available"] = false
-              releaseData["current_version"] = appVersion!!
-            } else {
-              releaseData["available"] = true
-              releaseData["current_version"] = appVersion!!
-              releaseData["latest_version"] = release!!.latestversion
-              releaseData["changelog"] = release!!.changelog
-              releaseData["apk_url"] = release!!.apk_url
+      when (call.method) {
+        "isUpdateAvailable" -> {
+          lifecycleScope.launch {
+            try {
+              val packageInfo = packageManager.getPackageInfo(packageName, 0)
+              val appVersion = packageInfo.versionName
+
+              release =
+                withContext(Dispatchers.IO) {
+                  autoUpdaterManager.checkForUpdate(
+                    JSONfileURL =
+                      "https://github.com/HakkinDavid/firefighter-form/releases/latest/download/metadata.json"
+                  )
+                }
+
+              val releaseData =
+                HashMap<String, Any>().apply {
+                  put("current_version", appVersion!!)
+                  if (release == null) {
+                    put("available", false)
+                  } else {
+                    put("available", true)
+                    put("latest_version", release!!.latestversion)
+                    put("changelog", release!!.changelog)
+                    put("apk_url", release!!.apk_url)
+                  }
+                }
+
+              result.success(releaseData)
+            } catch (e: Exception) {
+              result.error("UPDATE_ERROR", e.localizedMessage, null)
             }
-            result.success(releaseData)
           }
         }
-      } else if (call.method == "updateApp") {
-        lifecycleScope.launch {
-          withContext(Dispatchers.IO) {
-            autoUpdaterManager.downloadapk(
-              this@MainActivity,
-              release!!.apk_url,
-              "bomberos-android-release-v${release!!.latestversion}",
-            ) {}
-            result.success(true)
+
+        "updateApp" -> {
+          lifecycleScope.launch {
+            try {
+              val rel = release
+              if (rel == null) {
+                result.error(
+                  "NO_RELEASE",
+                  "No se ha verificado una actualización previamente.",
+                  null,
+                )
+                return@launch
+              }
+
+              withContext(Dispatchers.IO) {
+                autoUpdaterManager.downloadapk(
+                  this@MainActivity,
+                  rel.apk_url,
+                  "bomberos-android-release-v${rel.latestversion}",
+                ) {}
+              }
+
+              result.success(true)
+            } catch (e: Exception) {
+              result.error("DOWNLOAD_ERROR", e.localizedMessage, null)
+            }
           }
         }
-      } else {
-        result.notImplemented()
+
+        else -> result.notImplemented()
       }
     }
   }
