@@ -50,7 +50,7 @@ class ServiceReliabilityEngineer {
       heuristic: ConnectionHeuristic(),
       duty: _isUpdateAvailable,
     );
-    _tasksRepository["UpdateNow"] = Task(
+    _tasksRepository["UpdateApp"] = Task(
       heuristic: ConnectionHeuristic(),
       duty: _updateApp,
       dependsOn: {"SaveToDisk"},
@@ -73,7 +73,7 @@ class ServiceReliabilityEngineer {
       duty: Settings.instance.setUser,
     );
 
-    enqueueTasks({"IsUpdateAvailable", "LoadFromDisk", "SyncForms"});
+    enqueueTasks({"LoadFromDisk", "SyncForms", "IsUpdateAvailable"});
 
     ServiceReliabilityEngineer.startTimer();
   }
@@ -96,8 +96,6 @@ class ServiceReliabilityEngineer {
       _tasksRepository[requested]?.setAsPending();
       _tasksQueue.add(requested);
     }
-
-    _processQueue();
   }
 
   void _processQueue() async {
@@ -157,14 +155,16 @@ class ServiceReliabilityEngineer {
     }
 
     final releaseMap = await _platform!.invokeMethod('isUpdateAvailable');
-    Logging(releaseMap, caller: "SRE (_isUpdateAvailable)", attentionLevel: 1);
     if (releaseMap['available'] == true) {
       Logging(
-        "Se encontró una actualización nueva. Encolando SaveToDisk y UpdateNow.",
+        "Se encontró la versión v${releaseMap['latest_version']} (actual v${releaseMap['current_version']}). Encolando SaveToDisk y UpdateApp.",
         caller: "SRE (_isUpdateAvailable)",
-        attentionLevel: 1,
+        attentionLevel: 3,
       );
-      enqueueTasks({"SaveToDisk", "UpdateNow"});
+      enqueueTasks({"SaveToDisk", "UpdateApp"});
+    }
+    else {
+      Logging("No se encontraron actualizaciones del app. La versión actual es v${releaseMap['current_version']}.", caller: "SRE (_isUpdateAvailable)");
     }
   }
 
