@@ -5,6 +5,9 @@ on:
     branches:
       - stable
 
+permissions:
+  contents: write
+
 jobs:
   build-release:
     name: Build and Release APK
