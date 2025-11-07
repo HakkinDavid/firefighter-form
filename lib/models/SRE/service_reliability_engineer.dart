@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:bomberos/models/logging.dart' show Logging;
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/models/user.dart';
@@ -25,8 +26,9 @@ class ServiceReliabilityEngineer {
   final List<(String, Map<String, dynamic> Function()?)> _writeQueue = [];
   final _busy = Mutex();
 
-  static Timer? _timer;
+  static const _platform = MethodChannel('mx.cetys.bomberos/low_level');
 
+  static Timer? _timer;
   static Function get startTimer => () {
     if (_timer != null) {
       _timer!.cancel();
@@ -41,6 +43,15 @@ class ServiceReliabilityEngineer {
     _tasksRepository["SaveToDisk"] = Task(
       heuristic: DiskHeuristic(),
       duty: _saveToDisk,
+    );
+    _tasksRepository["IsUpdateAvailable"] = Task(
+      heuristic: ConnectionHeuristic(),
+      duty: _isUpdateAvailable,
+    );
+    _tasksRepository["UpdateNow"] = Task(
+      heuristic: ConnectionHeuristic(),
+      duty: _updateNow,
+      dependsOn: {"SaveToDisk"},
     );
     _tasksRepository["LoadFromDisk"] = Task(
       heuristic: DiskHeuristic(),
@@ -60,7 +71,7 @@ class ServiceReliabilityEngineer {
       duty: Settings.instance.setUser,
     );
 
-    enqueueTasks({"LoadFromDisk", "SyncForms"});
+    enqueueTasks({"IsUpdateAvailable", "LoadFromDisk", "SyncForms"});
 
     ServiceReliabilityEngineer.startTimer();
   }
@@ -132,6 +143,17 @@ class ServiceReliabilityEngineer {
       }
       await Future.delayed(Duration.zero);
     });
+  }
+
+  Future<void> _isUpdateAvailable() async {
+    final availabilityMap = await _platform.invokeMethod('isUpdateAvailable');
+    if (availabilityMap['available'] == true) {
+      ServiceReliabilityEngineer.instance.enqueueTasks({"SaveToDisk", "UpdateNow"});
+    }
+  }
+
+  Future<void> _updateNow() async {
+    await _platform.invokeMethod('updateNow');
   }
 
   void enqueueWriteTasks(
