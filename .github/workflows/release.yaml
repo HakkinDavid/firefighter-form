@@ -103,7 +103,12 @@ jobs:
       - name: 🧾 Get commit message
         id: commit
         run: |
-          MSG=$(git log -1 --pretty=%B | tr -d '\r' | head -c 500)
+          TAG="v$(date +'%y.%m.%d')"
+          echo "🧾 Recolectando commits del día ${TAG#v}..."
+          MSG=$(git log --pretty=format:"- %s" --since="$(date +'%Y-%m-%d 00:00:00')" --until="$(date +'%Y-%m-%d 23:59:59')" | tr -d '\r' | head -c 10000)
+          if [ -z "$MSG" ]; then
+            MSG=$(git log -1 --pretty=format:"- %s")
+          fi
           echo "message=${MSG}" >> $GITHUB_OUTPUT
 
       - name: 🏷️ Set release variables
