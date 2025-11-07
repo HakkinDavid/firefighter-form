@@ -157,6 +157,7 @@ class ServiceReliabilityEngineer {
     }
 
     final availabilityMap = await _platform!.invokeMethod('isUpdateAvailable');
+    Logging(availabilityMap, caller: "SRE (_isUpdateAvailable)", attentionLevel: 1);
     if (availabilityMap['available'] == true) {
       Logging(
         "Se encontró una actualización nueva. Encolando SaveToDisk y UpdateNow.",
