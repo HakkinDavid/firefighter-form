@@ -34,11 +34,16 @@ android {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // signingConfig = signingConfigs.getByName("debug")
         }
     }
 }
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    implementation ("com.github.CSAbhiOnline:AutoUpdater:1.0.1")
+    implementation("org.slf4j:slf4j-simple:2.0.12")
 }
