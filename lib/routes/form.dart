@@ -721,8 +721,8 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     } else if (type == 'tuple') {
       final tupleFields = field['tuple'] as List<dynamic>? ?? [];
       final tupleList = value.isEmpty
-          ? List.from(<Map<String, dynamic>>[])
-          : value as List<Map<String, dynamic>>;
+          ? List.from(<dynamic>[])
+          : value as List<dynamic>;
       fieldWidget = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -812,6 +812,10 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                                   setState(() {
                                                     tupleList[i][subfield['name']] =
                                                         "${pickedDuration.inHours.toString().padLeft(2, '0')}:${(pickedDuration.inMinutes % 60).toString().padLeft(2, '0')}";
+                                                    widget.form.set(
+                                                      field['name'],
+                                                      tupleList,
+                                                    );
                                                   });
                                                   Navigator.of(context).pop();
                                                 },
@@ -836,6 +840,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                               onChanged: (val) {
                                 setState(() {
                                   tupleList[i][subfield['name']] = val;
+                                  widget.form.set(field['name'], tupleList);
                                 });
                               },
                             ),
@@ -848,6 +853,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                       onPressed: () {
                         setState(() {
                           tupleList.removeAt(i);
+                          widget.form.set(field['name'], tupleList);
                         });
                       },
                     ),
@@ -863,6 +869,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                 tupleList.add({
                   for (var sub in tupleFields) sub['name'].toString(): '',
                 });
+                widget.form.set(field['name'], tupleList);
               });
             },
           ),
