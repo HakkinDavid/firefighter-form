@@ -52,7 +52,7 @@ class ServiceReliabilityEngineer {
     );
     _tasksRepository["UpdateNow"] = Task(
       heuristic: ConnectionHeuristic(),
-      duty: _updateNow,
+      duty: _updateApp,
       dependsOn: {"SaveToDisk"},
     );
     _tasksRepository["LoadFromDisk"] = Task(
@@ -156,9 +156,9 @@ class ServiceReliabilityEngineer {
       return;
     }
 
-    final availabilityMap = await _platform!.invokeMethod('isUpdateAvailable');
-    Logging(availabilityMap, caller: "SRE (_isUpdateAvailable)", attentionLevel: 1);
-    if (availabilityMap['available'] == true) {
+    final releaseMap = await _platform!.invokeMethod('isUpdateAvailable');
+    Logging(releaseMap, caller: "SRE (_isUpdateAvailable)", attentionLevel: 1);
+    if (releaseMap['available'] == true) {
       Logging(
         "Se encontró una actualización nueva. Encolando SaveToDisk y UpdateNow.",
         caller: "SRE (_isUpdateAvailable)",
@@ -168,11 +168,11 @@ class ServiceReliabilityEngineer {
     }
   }
 
-  Future<void> _updateNow() async {
+  Future<void> _updateApp() async {
     if (_platform == null) {
       Logging(
         "El dispositivo no es Android. Saliendo de la función...",
-        caller: "SRE (_updateNow)",
+        caller: "SRE (_updateApp)",
       );
       return;
     }
@@ -180,7 +180,7 @@ class ServiceReliabilityEngineer {
     await _platform!.invokeMethod('updateNow');
     Logging(
       "Actualización finalizada.",
-      caller: "SRE (_updateNow)",
+      caller: "SRE (_updateApp)",
       attentionLevel: 1,
     );
   }
