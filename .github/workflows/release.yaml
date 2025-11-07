@@ -19,6 +19,25 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 🔍 Inspect environment variables
+        run: |
+          echo "📏 Longitud de variables:"
+          echo "KEYSTORE_BASE64: $(echo -n \"$KEYSTORE_BASE64\" | wc -c) bytes"
+          echo "KEYSTORE_PASSWORD: $(echo -n \"$KEYSTORE_PASSWORD\" | wc -c) caracteres"
+          echo "KEY_PASSWORD: $(echo -n \"$KEY_PASSWORD\" | wc -c) caracteres"
+          echo "KEY_ALIAS: $(echo -n \"$KEY_ALIAS\" | wc -c) caracteres"
+
+          if [ -z \"$KEYSTORE_BASE64\" ] || [ -z \"$KEYSTORE_PASSWORD\" ] || [ -z \"$KEY_PASSWORD\" ] || [ -z \"$KEY_ALIAS\" ]; then
+            echo "❌ Alguna variable está vacía. Revisa los secretos configurados en el repositorio."
+            exit 1
+          fi
+
+          if [ $(echo -n \"$KEYSTORE_BASE64\" | wc -c) -lt 1000 ]; then
+            echo "⚠️ Advertencia: La variable KEYSTORE_BASE64 parece demasiado corta, puede estar incompleta."
+          else
+            echo "✅ Variables de entorno presentes y con tamaño adecuado."
+          fi
+
       - name: 💾 Cache Flutter packages
         uses: actions/cache@v4
         with:
@@ -51,7 +70,7 @@ jobs:
       - name: 🔐 Decode and configure keystore
         run: |
           mkdir -p android/app
-          echo "$KEYSTORE_BASE64" | base64 --decode > android/app/release-keystore
+          echo -n "$KEYSTORE_BASE64" | base64 --decode > android/app/release-keystore
 
           cat > android/key.properties <<EOF
           storePassword=$KEYSTORE_PASSWORD
@@ -60,6 +79,14 @@ jobs:
           storeFile=release-keystore
           storeType=pkcs12
           EOF
+
+      - name: 🧪 Verify keystore size
+        run: |
+          ls -lh android/app/release-keystore
+          if [ ! -s android/app/release-keystore ]; then
+            echo "❌ El keystore está vacío o no se decodificó correctamente."
+            exit 1
+          fi
 
       - name: 🧪 Validate keystore integrity
         run: |
