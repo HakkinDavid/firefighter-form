@@ -10,7 +10,6 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import android.content.pm.PackageManager
 
 class MainActivity : FlutterActivity() {
   private val CHANNEL = "mx.cetys.bomberos/low_level"
@@ -33,28 +32,30 @@ class MainActivity : FlutterActivity() {
                 JSONfileURL =
                   "https://github.com/HakkinDavid/firefighter-form/releases/latest/download/metadata.json"
               )
+            if (release == null) {
+              releaseData["available"] = false
+              releaseData["current_version"] = appVersion!!
+            } else {
+              releaseData["available"] = true
+              releaseData["current_version"] = appVersion!!
+              releaseData["latest_version"] = release!!.latestversion
+              releaseData["changelog"] = release!!.changelog
+              releaseData["apk_url"] = release!!.apk_url
+            }
+            result.success(releaseData)
           }
         }
-        if (release == null) {
-          releaseData["available"] = false
-          releaseData["current_version"] = appVersion!!
-        } else {
-          releaseData["available"] = true
-          releaseData["current_version"] = appVersion!!
-          releaseData["latest_version"] = release!!.latestversion
-          releaseData["changelog"] = release!!.changelog
-          releaseData["apk_url"] = release!!.apk_url
-        }
-        result.success(releaseData)
       } else if (call.method == "updateNow") {
         lifecycleScope.launch {
           withContext(Dispatchers.IO) {
-            autoUpdaterManager.downloadapk(this@MainActivity, release!!.apk_url, "bomberos") {
-                
-            }
+            autoUpdaterManager.downloadapk(
+              this@MainActivity,
+              release!!.apk_url,
+              "bomberos-android-release-v${release!!.latestversion}",
+            ) {}
+            result.success(true)
           }
         }
-        result.success(true)
       } else {
         result.notImplemented()
       }
