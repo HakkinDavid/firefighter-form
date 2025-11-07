@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:bomberos/models/logging.dart' show Logging;
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/models/user.dart';
@@ -25,8 +26,11 @@ class ServiceReliabilityEngineer {
   final List<(String, Map<String, dynamic> Function()?)> _writeQueue = [];
   final _busy = Mutex();
 
-  static Timer? _timer;
+  static final _platform = Platform.isAndroid
+      ? const MethodChannel('mx.cetys.bomberos/low_level')
+      : null;
 
+  static Timer? _timer;
   static Function get startTimer => () {
     if (_timer != null) {
       _timer!.cancel();
@@ -41,6 +45,15 @@ class ServiceReliabilityEngineer {
     _tasksRepository["SaveToDisk"] = Task(
       heuristic: DiskHeuristic(),
       duty: _saveToDisk,
+    );
+    _tasksRepository["IsUpdateAvailable"] = Task(
+      heuristic: ConnectionHeuristic(),
+      duty: _isUpdateAvailable,
+    );
+    _tasksRepository["UpdateApp"] = Task(
+      heuristic: ConnectionHeuristic(),
+      duty: _updateApp,
+      dependsOn: {"SaveToDisk"},
     );
     _tasksRepository["LoadFromDisk"] = Task(
       heuristic: DiskHeuristic(),
@@ -60,7 +73,7 @@ class ServiceReliabilityEngineer {
       duty: Settings.instance.setUser,
     );
 
-    enqueueTasks({"LoadFromDisk", "SyncForms"});
+    enqueueTasks({"LoadFromDisk", "SyncForms", "IsUpdateAvailable"});
 
     ServiceReliabilityEngineer.startTimer();
   }
@@ -83,8 +96,6 @@ class ServiceReliabilityEngineer {
       _tasksRepository[requested]?.setAsPending();
       _tasksQueue.add(requested);
     }
-
-    _processQueue();
   }
 
   void _processQueue() async {
@@ -132,6 +143,56 @@ class ServiceReliabilityEngineer {
       }
       await Future.delayed(Duration.zero);
     });
+  }
+
+  bool _compareReleaseVersions(String latest, String current) {
+    final latestList = latest.split('.').map((s) => int.parse(s)).toList();
+    final currentList = current.split('.').map((s) => int.parse(s)).toList();
+
+    // This will only work for the next 74 years
+    return latestList[0] > currentList[0] ||
+        (latestList[0] == currentList[0] && (latestList[1] > currentList[1] ||
+        (latestList[1] == currentList[1] && latestList[2] > currentList[2])));
+  }
+
+  Future<void> _isUpdateAvailable() async {
+    if (_platform == null) {
+      Logging(
+        "El dispositivo no es Android. Saliendo de la función...",
+        caller: "SRE (_isUpdateAvailable)",
+      );
+      return;
+    }
+
+    final releaseMap = await _platform!.invokeMethod('isUpdateAvailable');
+    if (releaseMap['available'] == true && _compareReleaseVersions(releaseMap['latest_version'], releaseMap['current_version'])) {
+      Logging(
+        "Se encontró la versión v${releaseMap['latest_version']} (actual v${releaseMap['current_version']}). Encolando SaveToDisk y UpdateApp.",
+        caller: "SRE (_isUpdateAvailable)",
+        attentionLevel: 3,
+      );
+      enqueueTasks({"SaveToDisk", "UpdateApp"});
+    }
+    else {
+      Logging("No se encontraron actualizaciones del app. La versión actual es v${releaseMap['current_version']}.", caller: "SRE (_isUpdateAvailable)");
+    }
+  }
+
+  Future<void> _updateApp() async {
+    if (_platform == null) {
+      Logging(
+        "El dispositivo no es Android. Saliendo de la función...",
+        caller: "SRE (_updateApp)",
+      );
+      return;
+    }
+
+    await _platform!.invokeMethod('updateApp');
+    Logging(
+      "Actualización descargada. Delegando responsabilidad al usuario.",
+      caller: "SRE (_updateApp)",
+      attentionLevel: 3,
+    );
   }
 
   void enqueueWriteTasks(
