@@ -58,7 +58,12 @@ jobs:
           keyPassword=$KEY_PASSWORD
           keyAlias=$KEY_ALIAS
           storeFile=release-keystore
+          storeType=pkcs12
           EOF
+
+      - name: 🧪 Validate keystore integrity
+        run: |
+          keytool -list -keystore android/app/release-keystore -storetype pkcs12 -storepass "$KEYSTORE_PASSWORD" -alias "$KEY_ALIAS"
 
       - name: 🏗️ Build signed release APK
         run: flutter build apk --release
