@@ -152,8 +152,10 @@ class ServiceReliabilityEngineer {
 
     // This will only work for the next 74 years
     return latestList[0] > currentList[0] ||
-        (latestList[0] == currentList[0] && (latestList[1] > currentList[1] ||
-        (latestList[1] == currentList[1] && latestList[2] > currentList[2])));
+        (latestList[0] == currentList[0] &&
+            (latestList[1] > currentList[1] ||
+                (latestList[1] == currentList[1] &&
+                    latestList[2] > currentList[2])));
   }
 
   Future<void> _isUpdateAvailable() async {
@@ -166,16 +168,22 @@ class ServiceReliabilityEngineer {
     }
 
     final releaseMap = await _platform!.invokeMethod('isUpdateAvailable');
-    if (releaseMap['available'] == true && _compareReleaseVersions(releaseMap['latest_version'], releaseMap['current_version'])) {
+    if (releaseMap['available'] == true &&
+        _compareReleaseVersions(
+          releaseMap['latest_version'],
+          releaseMap['current_version'],
+        )) {
       Logging(
         "Se encontró la versión v${releaseMap['latest_version']} (actual v${releaseMap['current_version']}). Encolando SaveToDisk y UpdateApp.",
         caller: "SRE (_isUpdateAvailable)",
         attentionLevel: 3,
       );
       enqueueTasks({"SaveToDisk", "UpdateApp"});
-    }
-    else {
-      Logging("No se encontraron actualizaciones del app. La versión actual es v${releaseMap['current_version']}.", caller: "SRE (_isUpdateAvailable)");
+    } else {
+      Logging(
+        "No se encontraron actualizaciones del app (available: ${releaseMap['available']}). La versión actual es v${releaseMap['current_version']}.",
+        caller: "SRE (_isUpdateAvailable)",
+      );
     }
   }
 
@@ -188,12 +196,18 @@ class ServiceReliabilityEngineer {
       return;
     }
 
-    await _platform!.invokeMethod('updateApp');
-    Logging(
-      "Actualización descargada. Delegando responsabilidad al usuario.",
-      caller: "SRE (_updateApp)",
-      attentionLevel: 3,
-    );
+    try {
+      await _platform!.invokeMethod('updateApp');
+      Logging(
+        "Actualización descargada. Delegando responsabilidad al usuario.",
+        caller: "SRE (_updateApp)",
+        attentionLevel: 3,
+      );
+    }
+    catch (e) {
+      Logging("Error actualizando app: $e", caller: "SRE (_updateApp)", attentionLevel: 3);
+    }
+
   }
 
   void enqueueWriteTasks(

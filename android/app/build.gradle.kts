@@ -1,6 +1,7 @@
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.Calendar
 
 plugins {
     id("com.android.application")
@@ -50,7 +51,7 @@ android {
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
-        versionName = getVersionNameFromDate()
+        versionName = getVersionNameFromDate(gradle.startParameter.taskNames.any { it.contains("Debug") })
     }
 
     buildTypes {
@@ -74,7 +75,13 @@ dependencies {
     implementation("org.slf4j:slf4j-simple:2.0.12")
 }
 
-fun getVersionNameFromDate(): String {
+fun getVersionNameFromDate(isDebug: Boolean = false): String {
+    val date = Date()
+    val calendar = Calendar.getInstance()
+    calendar.time = date
+    if (isDebug) {
+        calendar.add(Calendar.YEAR, -1)
+    }
     val dateFormat = SimpleDateFormat("yy.MM.dd", Locale.getDefault())
-    return dateFormat.format(Date())
+    return dateFormat.format(calendar.time)
 }
