@@ -1,0 +1,85 @@
+name: Flutter Release (Android)
+
+on:
+  push:
+    branches:
+      - stable
+
+jobs:
+  build-release:
+    name: Build and Release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧭 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ⚙️ Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.35.3"
+          channel: "stable"
+
+      - name: 🧰 Install dependencies
+        run: flutter pub get
+
+      - name: 🔐 Decode and configure keystore
+        run: |
+          mkdir -p android/app
+          echo "$KEYSTORE_BASE64" | base64 --decode > android/app/release-keystore.jks
+
+          cat > android/key.properties <<EOF
+          storePassword=$KEYSTORE_PASSWORD
+          keyPassword=$KEY_PASSWORD
+          keyAlias=$KEY_ALIAS
+          storeFile=app/release-keystore.jks
+          EOF
+
+      - name: 🏗️ Build signed release APK
+        run: flutter build apk --release
+
+      - name: 🧾 Get commit message
+        id: commit
+        run: |
+          MSG=$(git log -1 --pretty=%B | tr -d '\r' | head -c 500)
+          echo "message=${MSG}" >> $GITHUB_OUTPUT
+
+      - name: 🏷️ Set release variables
+        id: vars
+        run: |
+          TAG="v$(date +'%y.%m.%d')"
+          VERSION="${TAG#v}"
+          NAME="Formulario de Bomberos ${TAG}"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+
+      - name: 📦 Prepare release files
+        run: |
+          mkdir -p release
+          cp build/app/outputs/flutter-apk/app-release.apk release/bomberos-android-release.apk
+
+          cat <<EOF > release/metadata.json
+          {
+              "latest_version": "${{ steps.vars.outputs.version }}",
+              "changelog": "${{ steps.commit.outputs.message }}",
+              "apk_url": "https://github.com/HakkinDavid/firefighter-form/releases/latest/download/bomberos-android-release.apk"
+          }
+          EOF
+
+      - name: 🚀 Create or update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.vars.outputs.tag }}
+          name: ${{ steps.vars.outputs.name }}
+          body: "${{ steps.commit.outputs.message }}"
+          draft: false
+          prerelease: false
+          make_latest: true
+          files: |
+            release/bomberos-android-release.apk
+            release/metadata.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
