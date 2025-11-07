@@ -26,7 +26,9 @@ class ServiceReliabilityEngineer {
   final List<(String, Map<String, dynamic> Function()?)> _writeQueue = [];
   final _busy = Mutex();
 
-  static const _platform = MethodChannel('mx.cetys.bomberos/low_level');
+  static final _platform = Platform.isAndroid
+      ? const MethodChannel('mx.cetys.bomberos/low_level')
+      : null;
 
   static Timer? _timer;
   static Function get startTimer => () {
@@ -146,14 +148,18 @@ class ServiceReliabilityEngineer {
   }
 
   Future<void> _isUpdateAvailable() async {
-    final availabilityMap = await _platform.invokeMethod('isUpdateAvailable');
+    if (_platform == null) return;
+
+    final availabilityMap = await _platform!.invokeMethod('isUpdateAvailable');
     if (availabilityMap['available'] == true) {
-      ServiceReliabilityEngineer.instance.enqueueTasks({"SaveToDisk", "UpdateNow"});
+      enqueueTasks({"SaveToDisk", "UpdateNow"});
     }
   }
 
   Future<void> _updateNow() async {
-    await _platform.invokeMethod('updateNow');
+    if (_platform == null) return;
+
+    await _platform!.invokeMethod('updateNow');
   }
 
   void enqueueWriteTasks(
