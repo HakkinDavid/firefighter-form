@@ -96,6 +96,7 @@ class ServiceReliabilityEngineer {
       _tasksRepository[requested]?.setAsPending();
       _tasksQueue.add(requested);
     }
+    _processQueue();
   }
 
   void _processQueue() async {
