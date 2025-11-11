@@ -205,7 +205,9 @@ class _WelcomeState extends State<Welcome> {
 
                               // Email Field
                               CupertinoTextField(
-                                controller: _emailController,
+                                controller: !_isRecovering
+                                    ? _emailController
+                                    : _recoveryEmailController,
                                 placeholder: 'Correo electrónico',
                                 prefix: Padding(
                                   padding: const EdgeInsets.only(left: 12),
