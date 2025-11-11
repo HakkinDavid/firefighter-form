@@ -175,7 +175,8 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                                   mode: CupertinoDatePickerMode.date,
                                   initialDateTime: initial,
                                   minimumYear: 1900,
-                                  maximumYear: 2100,
+                                  maximumYear: now.year,
+                                  maximumDate: now,
                                   onDateTimeChanged: (picked) {
                                     pickedDate = picked;
                                   },
