@@ -1,3 +1,4 @@
+import 'package:bomberos/models/logging.dart' show Logging;
 import 'package:bomberos/models/pdf_renderer.dart';
 import 'package:bomberos/models/settings.dart';
 import 'package:flutter/cupertino.dart';
@@ -227,22 +228,26 @@ class ServiceForm {
   bool shouldDisplay(Map<String, dynamic> field) {
     final List<dynamic> notEmpty = field['displayOn']?['notEmpty'] ?? [];
     final List<dynamic> isEmpty = field['displayOn']?['isEmpty'] ?? [];
-    final List<dynamic> equalsTo = field['displayOn']?['equalsTo'] ?? [];
+    final List<dynamic> equalsTo = field['displayOn']?['equalTo'] ?? [];
     final List<dynamic> includes = field['displayOn']?['includes'] ?? [];
 
     bool willDisplay = true;
 
     for (var fieldReference in notEmpty) {
       willDisplay = willDisplay && fieldNotEmpty(fieldReference);
+      Logging("Updated willDisplay to $willDisplay after checking if ${fieldReference['name']} is not empty.", caller: "ServiceForm (shouldDisplay) [${field['name']}]");
     }
     for (var fieldReference in isEmpty) {
       willDisplay = willDisplay && fieldIsEmpty(fieldReference);
+      Logging("Updated willDisplay to $willDisplay after checking if ${fieldReference['name']} is empty.", caller: "ServiceForm (shouldDisplay) [${field['name']}]");
     }
     for (var fieldReference in equalsTo) {
       willDisplay = willDisplay && fieldEqualsTo(fieldReference);
+      Logging("Updated willDisplay to $willDisplay after checking if ${fieldReference['name']} equals to ${fieldReference['value']}.", caller: "ServiceForm (shouldDisplay) [${field['name']}]");
     }
     for (var fieldReference in includes) {
       willDisplay = willDisplay && fieldIncludes(fieldReference);
+      Logging("Updated willDisplay to $willDisplay after checking if ${fieldReference['name']} includes ${fieldReference['value']}.", caller: "ServiceForm (shouldDisplay) [${field['name']}]");
     }
 
     return willDisplay;
