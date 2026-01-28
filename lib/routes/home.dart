@@ -54,6 +54,7 @@ class _HomeState extends State<Home> {
                 Header(
                   username: Settings.instance.self?.fullName,
                   adminUsername: Settings.instance.watcher?.fullName,
+                  versionString: ServiceReliabilityEngineer.appVersion
                 ),
                 Expanded(
                   child: Container(

@@ -1,3 +1,4 @@
+import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/viewmodels/header.dart';
 import 'package:flutter/cupertino.dart';
@@ -146,6 +147,7 @@ class _WelcomeState extends State<Welcome> {
             Header(
               username: Settings.instance.self?.fullName,
               adminUsername: Settings.instance.watcher?.fullName,
+              versionString: ServiceReliabilityEngineer.appVersion,
             ),
             Expanded(
               child: Center(
