@@ -79,9 +79,9 @@ fun getVersionNameFromDate(isDebug: Boolean = false): String {
     val date = Date()
     val calendar = Calendar.getInstance()
     calendar.time = date
-    if (isDebug) {
-        calendar.add(Calendar.YEAR, -1)
-    }
+    // if (isDebug) {
+    //     calendar.add(Calendar.YEAR, -1)
+    // }
     val dateFormat = SimpleDateFormat("yy.MM.dd", Locale.getDefault())
     return dateFormat.format(calendar.time)
 }

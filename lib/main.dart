@@ -14,6 +14,7 @@ Future<void> main() async {
     anonKey: DatabaseSettings.anonKey,
   );
   ServiceReliabilityEngineer.instance.initialize();
+  await ServiceReliabilityEngineer.instance.fetchAppVersion();
   // Hasnt been moved to SRE yet
   await Settings.instance.updateTemplates();
   runApp(BomberosApp());

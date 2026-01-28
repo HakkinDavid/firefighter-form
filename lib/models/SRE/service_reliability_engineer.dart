@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:bomberos/models/logging.dart' show Logging;
 import 'package:bomberos/models/settings.dart';
@@ -29,6 +30,8 @@ class ServiceReliabilityEngineer {
   static final _platform = Platform.isAndroid
       ? const MethodChannel('mx.cetys.bomberos/low_level')
       : null;
+  
+  static String appVersion = "(?)";
 
   static Timer? _timer;
   static Function get startTimer => () {
@@ -40,6 +43,10 @@ class ServiceReliabilityEngineer {
       (t) => ServiceReliabilityEngineer.instance._processQueue(),
     );
   };
+
+  Future<void> fetchAppVersion() async {
+    appVersion = (await PackageInfo.fromPlatform()).version;
+  }
 
   void initialize() {
     _tasksRepository["SaveToDisk"] = Task(
@@ -203,11 +210,13 @@ class ServiceReliabilityEngineer {
         caller: "SRE (_updateApp)",
         attentionLevel: 3,
       );
+    } catch (e) {
+      Logging(
+        "Error actualizando app: $e",
+        caller: "SRE (_updateApp)",
+        attentionLevel: 3,
+      );
     }
-    catch (e) {
-      Logging("Error actualizando app: $e", caller: "SRE (_updateApp)", attentionLevel: 3);
-    }
-
   }
 
   void enqueueWriteTasks(

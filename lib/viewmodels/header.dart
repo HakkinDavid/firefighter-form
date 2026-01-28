@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 class Header extends StatefulWidget {
   final String? username;
   final String? adminUsername;
-  const Header({super.key, this.username, this.adminUsername});
+  final String versionString;
+  const Header({super.key, this.username, this.adminUsername, required this.versionString});
 
   @override
   State<Header> createState() => _HeaderState();
@@ -157,6 +158,15 @@ class _HeaderState extends State<Header> {
                             ],
                             Text(
                               "PARTE DE SERVICIO PREHOSPITALARIO",
+                              style: TextStyle(
+                                color: Settings.instance.colors.textOverPrimary,
+                                fontSize: 16,
+                                letterSpacing: 0.1,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              "v${widget.versionString}",
                               style: TextStyle(
                                 color: Settings.instance.colors.textOverPrimary,
                                 fontSize: 16,
