@@ -2219,5 +2219,13 @@
                 "message": "Debe contener solo letras, números y espacios."
             }
         ]
+    },
+    "order": {
+        "Servicio": 0,
+        "Paciente": 1,
+        "Primaria": 2,
+        "Secundaria": 3,
+        "Tratamiento": 4,
+        "Resultados": 5
     }
 }
