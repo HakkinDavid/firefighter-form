@@ -58,6 +58,10 @@ class ServiceForm {
     _template = await Settings.instance.getTemplate(_templateId);
     final sections = _template['fields'] as Map<String, dynamic>;
     _sectionKeys = sections.keys.toList();
+    if (_template['order'] is Map<String, dynamic>) {
+      final order = _template['order'] as Map<String, dynamic>;
+      _sectionKeys.sort((a, b) => (order[a] ?? 0).compareTo(order[b] ?? 0));
+    }
     for (var section in _sectionKeys) {
       int fieldIndex = 0;
       for (var field in sections[section]) {
@@ -235,26 +239,39 @@ class ServiceForm {
 
     for (var fieldReference in notEmpty) {
       willDisplay = willDisplay && fieldNotEmpty(fieldReference);
-      Logging("Updated willDisplay to $willDisplay after checking if ${fieldReference['name']} is not empty.", caller: "ServiceForm (shouldDisplay) [${field['name']}]");
+      Logging(
+        "Updated willDisplay to $willDisplay after checking if ${fieldReference['name']} is not empty.",
+        caller: "ServiceForm (shouldDisplay) [${field['name']}]",
+      );
     }
     for (var fieldReference in isEmpty) {
       willDisplay = willDisplay && fieldIsEmpty(fieldReference);
-      Logging("Updated willDisplay to $willDisplay after checking if ${fieldReference['name']} is empty.", caller: "ServiceForm (shouldDisplay) [${field['name']}]");
+      Logging(
+        "Updated willDisplay to $willDisplay after checking if ${fieldReference['name']} is empty.",
+        caller: "ServiceForm (shouldDisplay) [${field['name']}]",
+      );
     }
     for (var fieldReference in equalsTo) {
       willDisplay = willDisplay && fieldEqualsTo(fieldReference);
-      Logging("Updated willDisplay to $willDisplay after checking if ${fieldReference['name']} equals to ${fieldReference['value']}.", caller: "ServiceForm (shouldDisplay) [${field['name']}]");
+      Logging(
+        "Updated willDisplay to $willDisplay after checking if ${fieldReference['name']} equals to ${fieldReference['value']}.",
+        caller: "ServiceForm (shouldDisplay) [${field['name']}]",
+      );
     }
     for (var fieldReference in includes) {
       willDisplay = willDisplay && fieldIncludes(fieldReference);
-      Logging("Updated willDisplay to $willDisplay after checking if ${fieldReference['name']} includes ${fieldReference['value']}.", caller: "ServiceForm (shouldDisplay) [${field['name']}]");
+      Logging(
+        "Updated willDisplay to $willDisplay after checking if ${fieldReference['name']} includes ${fieldReference['value']}.",
+        caller: "ServiceForm (shouldDisplay) [${field['name']}]",
+      );
     }
 
     return willDisplay;
   }
 
   Map<String, dynamic> getFieldFromReference(String fieldName) {
-    return _template['fields'][_reference[fieldName]!.$1][_reference[fieldName]!.$2];
+    return _template['fields'][_reference[fieldName]!.$1][_reference[fieldName]!
+        .$2];
   }
 
   Map<String, dynamic> toJson({bool asUpload = false}) {
