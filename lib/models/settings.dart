@@ -6,6 +6,7 @@ import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/logging.dart';
 import 'package:bomberos/models/user.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -50,6 +51,15 @@ class Settings {
   set role(int role) {
     _role = (role >= 0 && role <= 2) ? role : 0;
   }
+
+  bool _allowDebugging = kDebugMode;
+
+  set allowDebugging(bool state) {
+    _allowDebugging = state;
+    Logging("${state ? "Activando" : "Desactivando"} depuración", caller: "Settings (allowDebugging)");
+  }
+
+  bool get allowDebugging => _allowDebugging;
 
   Map<String, FirefighterUser> _userCache = {};
   List<ServiceForm> _formsQueue = [];
@@ -288,7 +298,7 @@ class Settings {
           if (tId != null && tId > (newest ?? 0)) newest = tId;
         }
       } else {
-        await updateTemplates();
+        await fetchTemplate();
       }
 
       return newest;
@@ -332,11 +342,24 @@ class Settings {
     return '${(await getApplicationDocumentsDirectory()).path}/settings';
   }
 
-  Future<void> updateTemplates() async {
+  Future<void> refreshTemplates() async {
     try {
-      await fetchTemplate();
+      final directory = Directory(await getTemplatesDirectoryRoute());
+      if (await directory.exists()) {
+        await for (var t in directory.list()) {
+          String name = t.path.split('/').last.split('.').first;
+          int? tId = int.tryParse(name);
+          if (tId == null) continue;
+          await t.delete();
+          Logging(
+            "Plantilla v$tId.0 eliminada",
+            caller: "Settings (refreshTemplates)",
+          );
+          await fetchTemplate(id: tId);
+        }
+      }
     } catch (e) {
-      // yo cuando hago algo
+      // yo cuando no hago algo
     }
   }
 
@@ -354,6 +377,7 @@ class Settings {
     template ??= await getTemplateRecord(tId: id);
     await templateFile.create(recursive: true);
     await templateFile.writeAsString(jsonEncode(template['content']));
+    Logging("Plantilla v${template['id']}.0 descargada", caller: "Settings (fetchTemplate)");
   }
 
   // This will be an actual function later
