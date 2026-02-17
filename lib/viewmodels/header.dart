@@ -7,7 +7,12 @@ class Header extends StatefulWidget {
   final String? username;
   final String? adminUsername;
   final String versionString;
-  const Header({super.key, this.username, this.adminUsername, required this.versionString});
+  const Header({
+    super.key,
+    this.username,
+    this.adminUsername,
+    required this.versionString,
+  });
 
   @override
   State<Header> createState() => _HeaderState();
@@ -18,19 +23,26 @@ class _HeaderState extends State<Header> {
 
   void _goToSearch() async {
     await Navigator.pushNamed(context, '/search');
-    setState(() {
-      
-    });
+    setState(() {});
   }
+
+  void _goToPreferences() async {
+    await Navigator.pushNamed(context, '/preferences');
+    setState(() {});
+  }
+
   void _goBack() {
     Navigator.pop(context);
   }
 
   void _showUserMenu(BuildContext context, double contentWidth) {
-    final RenderBox button = _buttonKey.currentContext!.findRenderObject() as RenderBox;
+    final RenderBox button =
+        _buttonKey.currentContext!.findRenderObject() as RenderBox;
     final position = button.localToGlobal(Offset.zero);
     final buttonSize = button.size;
-    final double overlayWidth = (contentWidth/2) < 300 ? (contentWidth/2) : 300;
+    final double overlayWidth = (contentWidth / 2) < 300
+        ? (contentWidth / 2)
+        : 300;
 
     OverlayService.showOverlay(
       context: context,
@@ -138,7 +150,8 @@ class _HeaderState extends State<Header> {
                               Text(
                                 "AYUNTAMIENTO DE TIJUANA, B.C.",
                                 style: TextStyle(
-                                  color: Settings.instance.colors.textOverPrimary,
+                                  color:
+                                      Settings.instance.colors.textOverPrimary,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
                                   letterSpacing: 0.8,
@@ -148,7 +161,8 @@ class _HeaderState extends State<Header> {
                               Text(
                                 "DIRECCIÓN DE BOMBEROS TIJUANA",
                                 style: TextStyle(
-                                  color: Settings.instance.colors.textOverPrimary,
+                                  color:
+                                      Settings.instance.colors.textOverPrimary,
                                   fontSize: 14,
                                   letterSpacing: 0.5,
                                 ),
@@ -183,25 +197,45 @@ class _HeaderState extends State<Header> {
                                     key: _buttonKey,
                                     icon: const Icon(
                                       CupertinoIcons.person_crop_circle,
-                                      size: 30,),
+                                      size: 30,
+                                    ),
                                     padding: EdgeInsets.zero,
                                     color: Settings().colors.primaryContrast,
-                                    onPressed: () => _showUserMenu(context, contentWidth),
+                                    onPressed: () =>
+                                        _showUserMenu(context, contentWidth),
                                   ),
                                   const SizedBox(width: 12),
-                                  if (currentRoute != '/welcome' && currentRoute != '/')
+                                  if (currentRoute == '/home')
                                     IconButton(
                                       icon: Icon(
-                                        (currentRoute == '/home')
-                                            ? CupertinoIcons.search
-                                            : CupertinoIcons.arrow_left_circle,
+                                        CupertinoIcons.search,
                                         size: 30,
                                       ),
                                       padding: EdgeInsets.zero,
                                       color: Settings().colors.primaryContrast,
-                                      onPressed: (currentRoute == '/home')
-                                          ? _goToSearch
-                                          : _goBack,
+                                      onPressed: _goToSearch,
+                                    ),
+                                  if (currentRoute == '/home')
+                                    IconButton(
+                                      icon: Icon(
+                                        CupertinoIcons.settings,
+                                        size: 30,
+                                      ),
+                                      padding: EdgeInsets.zero,
+                                      color: Settings().colors.primaryContrast,
+                                      onPressed: _goToPreferences,
+                                    ),
+                                  if (currentRoute != '/home' &&
+                                      currentRoute != '/' &&
+                                      currentRoute != '/welcome')
+                                    IconButton(
+                                      icon: Icon(
+                                        CupertinoIcons.arrow_left_circle,
+                                        size: 30,
+                                      ),
+                                      padding: EdgeInsets.zero,
+                                      color: Settings().colors.primaryContrast,
+                                      onPressed: _goBack,
                                     ),
                                 ],
                               ),
