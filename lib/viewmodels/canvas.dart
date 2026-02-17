@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 /// Modelo para un punto en el trazo.
@@ -186,6 +187,41 @@ class ServiceCanvasController extends ChangeNotifier {
   String? get previousSvgData => _previousSvgData;
 }
 
+class _ImmediatePanRecognizer extends OneSequenceGestureRecognizer {
+  _ImmediatePanRecognizer({
+    required this.onStart,
+    required this.onUpdate,
+    required this.onEnd,
+  });
+
+  final void Function(Offset globalPosition) onStart;
+  final void Function(Offset globalPosition) onUpdate;
+  final VoidCallback onEnd;
+
+  @override
+  void addPointer(PointerDownEvent event) {
+    startTrackingPointer(event.pointer);
+    resolve(GestureDisposition.accepted);
+    onStart(event.position);
+  }
+
+  @override
+  void handleEvent(PointerEvent event) {
+    if (event is PointerMoveEvent) {
+      onUpdate(event.position);
+    } else if (event is PointerUpEvent || event is PointerCancelEvent) {
+      stopTrackingPointer(event.pointer);
+      onEnd();
+    }
+  }
+
+  @override
+  void didStopTrackingLastPointer(int pointer) {}
+
+  @override
+  String get debugDescription => '_ImmediatePanRecognizer';
+}
+
 /// Widget para dibujar o firmar sobre un fondo, con control externo y capas separadas,
 /// usando un viewBox absoluto fijo para mantener la escala y posición exacta.
 class ServiceCanvas extends StatefulWidget {
@@ -331,41 +367,42 @@ class _ServiceCanvasState extends State<ServiceCanvas> {
                           height: canvasHeight,
                         ),
                       if (!widget.readOnly)
-                        Listener(
+                        RawGestureDetector(
                           behavior: HitTestBehavior.opaque,
-                          onPointerDown: (_) {},
-                          onPointerMove: (_) {},
-                          onPointerUp: (_) {},
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onPanStart: widget.disabled
-                                ? null
-                                : (details) {
-                                    final renderBox = context.findRenderObject() as RenderBox;
-                                    final localPos = _globalToLocal(details.globalPosition, renderBox);
-                                    widget.controller.startNewStroke(localPos);
-                                  },
-                            onPanUpdate: widget.disabled
-                                ? null
-                                : (details) {
-                                    final renderBox = context.findRenderObject() as RenderBox;
-                                    final localPos = _globalToLocal(details.globalPosition, renderBox);
-                                    widget.controller.addPointToCurrentStroke(localPos);
-                                  },
-                            onPanEnd: widget.disabled
-                                ? null
-                                : (details) {
-                                    widget.controller.endCurrentStroke();
-                                  },
-                            child: SizedBox(
-                              width: canvasWidth,
-                              height: canvasHeight,
-                              child: CustomPaint(
-                                size: Size(canvasWidth, canvasHeight),
-                                painter: _CanvasPainter(
-                                  scale: scale,
-                                  currentStrokes: widget.controller.currentStrokes,
-                                ),
+                          gestures: {
+                            _ImmediatePanRecognizer:
+                                GestureRecognizerFactoryWithHandlers<_ImmediatePanRecognizer>(
+                              () => _ImmediatePanRecognizer(
+                                onStart: (globalPosition) {
+                                  if (widget.disabled) return;
+                                  final renderBox = context.findRenderObject() as RenderBox;
+                                  final localPos =
+                                      _globalToLocal(globalPosition, renderBox);
+                                  widget.controller.startNewStroke(localPos);
+                                },
+                                onUpdate: (globalPosition) {
+                                  if (widget.disabled) return;
+                                  final renderBox = context.findRenderObject() as RenderBox;
+                                  final localPos =
+                                      _globalToLocal(globalPosition, renderBox);
+                                  widget.controller.addPointToCurrentStroke(localPos);
+                                },
+                                onEnd: () {
+                                  if (widget.disabled) return;
+                                  widget.controller.endCurrentStroke();
+                                },
+                              ),
+                              (_ImmediatePanRecognizer instance) {},
+                            ),
+                          },
+                          child: SizedBox(
+                            width: canvasWidth,
+                            height: canvasHeight,
+                            child: CustomPaint(
+                              size: Size(canvasWidth, canvasHeight),
+                              painter: _CanvasPainter(
+                                scale: scale,
+                                currentStrokes: widget.controller.currentStrokes,
                               ),
                             ),
                           ),
