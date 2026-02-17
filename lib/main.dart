@@ -1,8 +1,10 @@
 import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
+import 'package:bomberos/routes/console.dart';
 import 'package:bomberos/routes/form.dart';
 import 'package:bomberos/routes/home.dart';
+import 'package:bomberos/routes/preferences.dart';
 import 'package:bomberos/routes/search.dart';
 import 'package:bomberos/routes/welcome.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,8 +17,6 @@ Future<void> main() async {
   );
   ServiceReliabilityEngineer.instance.initialize();
   await ServiceReliabilityEngineer.instance.fetchAppVersion();
-  // Hasnt been moved to SRE yet
-  await Settings.instance.updateTemplates();
   runApp(BomberosApp());
 }
 
@@ -26,9 +26,21 @@ class BomberosApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoApp(
       title: 'Servicios Digitales para Bomberos',
-      theme: CupertinoThemeData(primaryColor: Settings.instance.colors.primary, primaryContrastingColor: Settings.instance.colors.primaryContrast, textTheme: CupertinoTextThemeData(
-        primaryColor: CupertinoColors.black, pickerTextStyle: TextStyle(color: CupertinoColors.white, fontSize: 24), dateTimePickerTextStyle: TextStyle(color: CupertinoColors.white, fontSize: 24),
-      ),),
+      theme: CupertinoThemeData(
+        primaryColor: Settings.instance.colors.primary,
+        primaryContrastingColor: Settings.instance.colors.primaryContrast,
+        textTheme: CupertinoTextThemeData(
+          primaryColor: CupertinoColors.black,
+          pickerTextStyle: TextStyle(
+            color: CupertinoColors.white,
+            fontSize: 24,
+          ),
+          dateTimePickerTextStyle: TextStyle(
+            color: CupertinoColors.white,
+            fontSize: 24,
+          ),
+        ),
+      ),
       onGenerateRoute: (settings) {
         final arguments = settings.arguments as Map<String, dynamic>?;
         return CupertinoPageRoute(
@@ -48,6 +60,10 @@ class BomberosApp extends StatelessWidget {
                 return const Home();
               case '/search':
                 return const Search();
+              case '/preferences':
+                return const Preferences();
+              case '/console':
+                return const Console();
               case '/':
               case '/welcome':
               default:
