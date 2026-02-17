@@ -79,8 +79,16 @@ class ServiceReliabilityEngineer {
       heuristic: ConnectionHeuristic(),
       duty: Settings.instance.setUser,
     );
+    _tasksRepository["FetchTemplate"] = Task(
+      heuristic: ConnectionHeuristic(),
+      duty: Settings.instance.fetchTemplate
+    );
+    _tasksRepository["RefreshTemplates"] = Task(
+      heuristic: ConnectionHeuristic(),
+      duty: Settings.instance.refreshTemplates
+    );
 
-    enqueueTasks({"LoadFromDisk", "SyncForms", "IsUpdateAvailable"});
+    enqueueTasks({"LoadFromDisk", "SyncForms", "FetchTemplate", "IsUpdateAvailable"});
 
     ServiceReliabilityEngineer.startTimer();
   }
