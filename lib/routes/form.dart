@@ -948,107 +948,110 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     // Aplica restricciones en cada build
     widget.form.handleFieldRestrictions();
 
-    return CupertinoTabScaffold(
-      backgroundColor: Settings.instance.colors.background,
-      tabBar: CupertinoTabBar(
-        inactiveColor: Settings.instance.colors.primaryContrastDark,
-        activeColor: Settings.instance.colors.primaryContrast,
-        backgroundColor: Settings.instance.colors.primary,
-        items: [
-          for (final section in widget.form.sectionKeys)
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsetsGeometry.only(top: 6),
-                child: _sectionBarItemIcon(section),
-              ),
-              activeIcon: Padding(
-                padding: EdgeInsetsGeometry.only(top: 6),
-                child: _sectionBarItemIcon(section, active: true),
-              ),
-              label: section,
-            ),
-        ],
-      ),
-      tabBuilder: (context, index) {
-        final currentSection = widget.form.sectionKeys[index];
-        final fields = widget.form.sections[currentSection] as List<dynamic>;
-        return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            backgroundColor: Settings.instance.colors.primary,
-            automaticBackgroundVisibility: false,
-            padding: EdgeInsetsDirectional.only(bottom: 6),
-            middle: Column(
-              children: [
-                Text(
-                  "FRAP",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Settings.instance.colors.textOverPrimary,
-                  ),
+    return Form(
+      canPop: false,
+      child: CupertinoTabScaffold(
+        backgroundColor: Settings.instance.colors.background,
+        tabBar: CupertinoTabBar(
+          inactiveColor: Settings.instance.colors.primaryContrastDark,
+          activeColor: Settings.instance.colors.primaryContrast,
+          backgroundColor: Settings.instance.colors.primary,
+          items: [
+            for (final section in widget.form.sectionKeys)
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsetsGeometry.only(top: 6),
+                  child: _sectionBarItemIcon(section),
                 ),
-                Text(
-                  widget.form.id.substring(14),
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Settings.instance.colors.textOverPrimary,
-                  ),
+                activeIcon: Padding(
+                  padding: EdgeInsetsGeometry.only(top: 6),
+                  child: _sectionBarItemIcon(section, active: true),
                 ),
-              ],
-            ),
-            leading: CupertinoButton(
-              padding: EdgeInsets.only(bottom: 6),
-              alignment: AlignmentGeometry.centerRight,
-              onPressed: widget.form.canSaveForm ? _saveForm : _exitForm,
-              child: Icon(
-                widget.form.canSaveForm
-                    ? CupertinoIcons.back
-                    : CupertinoIcons.clear,
-                size: 28,
-                color: Settings.instance.colors.primaryContrast,
+                label: section,
               ),
-            ),
-            trailing: widget.form.canFinishForm
-                ? CupertinoButton(
-                    padding: EdgeInsets.only(bottom: 6),
-                    alignment: AlignmentGeometry.centerLeft,
-                    onPressed: _finishForm,
-                    child: Icon(
-                      CupertinoIcons.cloud_upload,
-                      size: 28,
-                      color: Settings.instance.colors.primaryContrast,
+          ],
+        ),
+        tabBuilder: (context, index) {
+          final currentSection = widget.form.sectionKeys[index];
+          final fields = widget.form.sections[currentSection] as List<dynamic>;
+          return CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              backgroundColor: Settings.instance.colors.primary,
+              automaticBackgroundVisibility: false,
+              padding: EdgeInsetsDirectional.only(bottom: 6),
+              middle: Column(
+                children: [
+                  Text(
+                    "FRAP",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Settings.instance.colors.textOverPrimary,
                     ),
-                  )
-                : (!widget.form.canEditForm && Settings.instance.role >= 1
-                      ? CupertinoButton(
-                          padding: EdgeInsets.only(bottom: 6),
-                          alignment: AlignmentGeometry.centerLeft,
-                          onPressed: () => {
-                            setState(() {
-                              widget.form.editOverride = true;
-                            }),
-                          },
-                          child: Icon(
-                            CupertinoIcons.pencil,
-                            size: 28,
-                            color: Settings.instance.colors.primaryContrast,
-                          ),
-                        )
-                      : null),
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: ListView.builder(
-                itemCount: fields.length,
-                itemBuilder: (context, idx) {
-                  final field = fields[idx];
-                  return buildField(field);
-                },
+                  ),
+                  Text(
+                    widget.form.id.substring(14),
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Settings.instance.colors.textOverPrimary,
+                    ),
+                  ),
+                ],
+              ),
+              leading: CupertinoButton(
+                padding: EdgeInsets.only(bottom: 6),
+                alignment: AlignmentGeometry.centerRight,
+                onPressed: widget.form.canSaveForm ? _saveForm : _exitForm,
+                child: Icon(
+                  widget.form.canSaveForm
+                      ? CupertinoIcons.back
+                      : CupertinoIcons.clear,
+                  size: 28,
+                  color: Settings.instance.colors.primaryContrast,
+                ),
+              ),
+              trailing: widget.form.canFinishForm
+                  ? CupertinoButton(
+                      padding: EdgeInsets.only(bottom: 6),
+                      alignment: AlignmentGeometry.centerLeft,
+                      onPressed: _finishForm,
+                      child: Icon(
+                        CupertinoIcons.cloud_upload,
+                        size: 28,
+                        color: Settings.instance.colors.primaryContrast,
+                      ),
+                    )
+                  : (!widget.form.canEditForm && Settings.instance.role >= 1
+                        ? CupertinoButton(
+                            padding: EdgeInsets.only(bottom: 6),
+                            alignment: AlignmentGeometry.centerLeft,
+                            onPressed: () => {
+                              setState(() {
+                                widget.form.editOverride = true;
+                              }),
+                            },
+                            child: Icon(
+                              CupertinoIcons.pencil,
+                              size: 28,
+                              color: Settings.instance.colors.primaryContrast,
+                            ),
+                          )
+                        : null),
+            ),
+            child: SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: ListView.builder(
+                  itemCount: fields.length,
+                  itemBuilder: (context, idx) {
+                    final field = fields[idx];
+                    return buildField(field);
+                  },
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
