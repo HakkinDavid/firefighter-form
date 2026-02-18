@@ -70,24 +70,24 @@ class _PreferencesState extends State<Preferences> {
                 ),
                 SizedBox(width: 8),
                 if (fields[idx]['type'] == 'button')
-                  CupertinoButton(
-                    onPressed: () {
-                      setState(() {
-                        fields[idx]['status'] = () => true;
-                        fields[idx]['action']();
-                        fields[idx]['status'] = () => false;
-                      });
-                    },
-                    padding: EdgeInsets.all(6),
-                    minimumSize: Size(0, 0),
-                    child: fields[idx]['status']()
-                        ? CupertinoActivityIndicator()
-                        : Icon(
+                  fields[idx]['status']()
+                      ? CupertinoActivityIndicator()
+                      : CupertinoButton(
+                          onPressed: () {
+                            setState(() {
+                              fields[idx]['status'] = () => true;
+                              fields[idx]['action']();
+                              fields[idx]['status'] = () => false;
+                            });
+                          },
+                          padding: EdgeInsets.all(6),
+                          minimumSize: Size(0, 0),
+                          child: Icon(
                             fields[idx]['icon'],
                             size: 40,
                             color: Settings.instance.colors.primaryContrast,
                           ),
-                  ),
+                        ),
                 if (fields[idx]['type'] == 'switch')
                   CupertinoSwitch(
                     value: fields[idx]['status'](),
