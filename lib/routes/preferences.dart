@@ -29,7 +29,6 @@ class _PreferencesState extends State<Preferences> {
     {
       "title": "Modo depuración",
       "type": "switch",
-      "icon": CupertinoIcons.refresh_circled_solid,
       "action": (v) =>
           Settings.instance.allowDebugging = !Settings.instance.allowDebugging,
       "status": () => Settings.instance.allowDebugging,
