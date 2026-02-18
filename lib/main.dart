@@ -25,6 +25,7 @@ class BomberosApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
+      navigatorKey: Settings.instance.navigatorKey,
       title: 'Servicios Digitales para Bomberos',
       theme: CupertinoThemeData(
         primaryColor: Settings.instance.colors.primary,

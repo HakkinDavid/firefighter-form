@@ -37,6 +37,8 @@ class Settings {
     return instance;
   }
 
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   String? _userId;
   int _role = 0;
 
