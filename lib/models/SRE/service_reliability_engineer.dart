@@ -124,7 +124,7 @@ class ServiceReliabilityEngineer {
   }
 
   void _processQueue() async {
-    if (_tasksQueue.isEmpty) return;
+    if (_tasksQueue.isEmpty || _busy.isLocked) return;
 
     _tasksRepository.forEach((taskId, processedTask) async {
       if (_tasksQueue.contains(taskId)) {
