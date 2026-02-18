@@ -29,9 +29,6 @@ class ServiceReliabilityEngineer {
   final List<(String, Map<String, dynamic> Function()?)> _writeQueue = [];
   final _busy = Mutex();
 
-  int updateAvailable = 0;
-  late BuildContext welcomeContext;
-
   static final _platform = Platform.isAndroid
       ? const MethodChannel('mx.cetys.bomberos/low_level')
       : null;
@@ -194,86 +191,90 @@ class ServiceReliabilityEngineer {
           releaseMap['current_version'],
         )) {
       Logging(
-        "Se encontró la versión v${releaseMap['latest_version']} (actual v${releaseMap['current_version']}). Pidiendo permiso al usuario para actualizar.",
+        "Se encontró la versión v${releaseMap['latest_version']} (actual v${releaseMap['current_version']}). Llamando _askForUserPermission.",
         caller: "SRE (_isUpdateAvailable)",
         attentionLevel: 3,
       );
-      updateAvailable = 1;
+      _askForUserPermission();
     } else {
       Logging(
         "No se encontraron actualizaciones del app (available: ${releaseMap['available']}). La versión actual es v${releaseMap['current_version']}.",
         caller: "SRE (_isUpdateAvailable)",
       );
-      updateAvailable = 2;
     }
   }
 
-  void askForUserPermission({BuildContext? context}) async {
-    if (context != null) {
-      welcomeContext = context;
-    }
+  void _askForUserPermission() async {
+    final navKey = Settings.instance.navigatorKey;
+    final navState = navKey.currentState;
 
-    if (updateAvailable == 0) {
+    // This might not be necessary, but just in case
+    if (navState == null || navState.overlay == null) {
       Future.delayed(Duration(milliseconds: 100), () {
-        askForUserPermission();
+        _askForUserPermission();
       });
       return;
     }
 
-    if (updateAvailable == 1) {
-      final screenSize = MediaQuery.of(welcomeContext).size;
-      final positionX = screenSize.width / 2;
-      final positionY = screenSize.height - 190;
+    final screenSize = MediaQuery.of(navKey.currentContext!).size;
+    final positionX = screenSize.width / 2;
+    final positionY = screenSize.height - 190;
 
-      Logging(
-        "Mostrando alerta de actualización.",
-        caller: "SRE (askForUserPermission)",
-        attentionLevel: 2,
-      );
+    Logging(
+      "Mostrando alerta de actualización.",
+      caller: "SRE (_askForUserPermission)",
+      attentionLevel: 2,
+    );
 
-      OverlayService.showOverlay(
-        context: welcomeContext,
-        position: Offset(positionX, positionY),
-        buttonSize: Size.zero,
-        overlayWidth: screenSize.width - 10,
-        overlayPadding: 10,
-        borderRadius: 8,
-        tapToClose: false,
-        overlayContent: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "Se encontró una versión más reciente de la aplicación, ¿actualizar ahora?",
-                style: TextStyle(
-                  color: Settings.instance.colors.textOverPrimary,
-                  fontSize: 14,
+    OverlayService.showOverlay(
+      position: Offset(positionX, positionY),
+      buttonSize: Size.zero,
+      overlayWidth: screenSize.width - 10,
+      overlayPadding: 10,
+      borderRadius: 8,
+      tapToClose: false,
+      overlayContent: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              "Se encontró una versión más reciente de la aplicación, ¿actualizar ahora?",
+              style: TextStyle(
+                color: Settings.instance.colors.textOverPrimary,
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CupertinoButton(
+                  onPressed: OverlayService.closeCurrentOverlay,
+                  color: CupertinoColors.systemGrey,
+                  child: const Text('Más tarde'),
                 ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CupertinoButton(
-                    onPressed: OverlayService.closeCurrentOverlay,
-                    color: CupertinoColors.systemGrey,
-                    child: const Text('Más tarde'),
-                  ),
-                  CupertinoButton(
-                    onPressed: () => enqueueTasks({"SaveToDisk", "UpdateApp"}),
-                    color: Settings.instance.colors.primaryContrastDark,
-                    child: const Text('Actualizar'),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                CupertinoButton(
+                  onPressed: () {
+                    Logging(
+                      "El usuario aceptó la actualización. Encolando SaveToDisk y UpdateApp.",
+                      caller: "SRE (_askForUserPermission)",
+                      attentionLevel: 3,
+                    );
+                    OverlayService.closeCurrentOverlay();
+                    enqueueTasks({"SaveToDisk", "UpdateApp"});
+                    },
+                  color: Settings.instance.colors.primaryContrastDark,
+                  child: const Text('Actualizar'),
+                ),
+              ],
+            ),
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
 
   Future<void> _updateApp() async {

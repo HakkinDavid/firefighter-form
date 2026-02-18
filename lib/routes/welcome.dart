@@ -30,12 +30,6 @@ class _WelcomeState extends State<Welcome> {
   String _errorMessage = '';
 
   @override
-  void initState() {
-    super.initState();
-    ServiceReliabilityEngineer.instance.askForUserPermission(context: context);
-  }
-
-  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
