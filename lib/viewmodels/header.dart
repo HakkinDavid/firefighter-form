@@ -204,7 +204,7 @@ class _HeaderState extends State<Header> {
                                         _showUserMenu(contentWidth),
                                   ),
                                   const SizedBox(width: 12),
-                                  if (currentRoute == '/home')
+                                  if (currentRoute == '/home') ...[
                                     IconButton(
                                       icon: Icon(
                                         CupertinoIcons.search,
@@ -214,7 +214,7 @@ class _HeaderState extends State<Header> {
                                       color: Settings().colors.primaryContrast,
                                       onPressed: _goToSearch,
                                     ),
-                                  if (currentRoute == '/home')
+                                    const SizedBox(width: 12),
                                     IconButton(
                                       icon: Icon(
                                         CupertinoIcons.settings,
@@ -224,6 +224,7 @@ class _HeaderState extends State<Header> {
                                       color: Settings().colors.primaryContrast,
                                       onPressed: _goToPreferences,
                                     ),
+                                  ],
                                   if (currentRoute != '/home' &&
                                       currentRoute != '/' &&
                                       currentRoute != '/welcome')
