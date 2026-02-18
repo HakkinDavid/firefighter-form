@@ -58,6 +58,7 @@ class ServiceReliabilityEngineer {
     _tasksRepository["IsUpdateAvailable"] = Task(
       heuristic: ConnectionHeuristic(),
       duty: _isUpdateAvailable,
+      dependsOn: {"LoadFromDisk"},
     );
     _tasksRepository["UpdateApp"] = Task(
       heuristic: ConnectionHeuristic(),
