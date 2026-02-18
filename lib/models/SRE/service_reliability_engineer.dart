@@ -35,7 +35,7 @@ class ServiceReliabilityEngineer {
   static final _platform = Platform.isAndroid
       ? const MethodChannel('mx.cetys.bomberos/low_level')
       : null;
-  
+
   static String appVersion = "(?)";
 
   static Timer? _timer;
@@ -84,16 +84,22 @@ class ServiceReliabilityEngineer {
       heuristic: ConnectionHeuristic(),
       duty: Settings.instance.setUser,
     );
-    _tasksRepository["FetchTemplate"] = Task(
+    _tasksRepository["UpdateTemplate"] = Task(
       heuristic: ConnectionHeuristic(),
-      duty: Settings.instance.fetchTemplate
+      duty: Settings.instance.updateTemplate,
+      dependsOn: {"LoadFromDisk"},
     );
     _tasksRepository["RefreshTemplates"] = Task(
       heuristic: ConnectionHeuristic(),
-      duty: Settings.instance.refreshTemplates
+      duty: Settings.instance.refreshTemplates,
     );
 
-    enqueueTasks({"LoadFromDisk", "SyncForms", "FetchTemplate", "IsUpdateAvailable"});
+    enqueueTasks({
+      "LoadFromDisk",
+      "SyncForms",
+      "UpdateTemplate",
+      "IsUpdateAvailable",
+    });
 
     ServiceReliabilityEngineer.startTimer();
   }

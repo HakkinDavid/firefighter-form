@@ -146,8 +146,8 @@ class Settings {
   }
 
   Future<void> setUser() async {
-    setUserId();
     try {
+      setUserId();
       await fetchUser();
       _role = self!.role;
       String directory = await getSettingsDirectoryRoute();
@@ -162,15 +162,19 @@ class Settings {
   }
 
   Future<void> setForms() async {
-    final formRecords = await Supabase.instance.client
-        .from('filled_in')
-        .select('*');
-    _formsList = formRecords
-        .asMap()
-        .map((key, value) => MapEntry(key, ServiceForm.fromJson(value)))
-        .values
-        .toList();
-    _formsStreamController.add(formsList);
+    try {
+      final formRecords = await Supabase.instance.client
+          .from('filled_in')
+          .select('*');
+      _formsList = formRecords
+          .asMap()
+          .map((key, value) => MapEntry(key, ServiceForm.fromJson(value)))
+          .values
+          .toList();
+      _formsStreamController.add(formsList);
+    } catch (e) {
+      // yo cuando no hago nada
+    }
   }
 
   void setUserId() {
@@ -282,7 +286,11 @@ class Settings {
   }
 
   Future<Map<String, dynamic>> getTemplate(int id) async {
-    if (!(await isTemplateAvailable(id))) await fetchTemplate(id: id);
+    if (!(await isTemplateAvailable(id))) {
+      final template = await fetchTemplate(id: id);
+      ServiceReliabilityEngineer.instance.enqueueWriteTasks([template]);
+      return template.$2();
+    }
     File templateFile = File(await getTemplateRoute(id));
 
     return json.decode(await templateFile.readAsString());
@@ -300,7 +308,7 @@ class Settings {
           if (tId != null && tId > (newest ?? 0)) newest = tId;
         }
       } else {
-        await fetchTemplate();
+        ServiceReliabilityEngineer.instance.enqueueTasks({"UpdateTemplate"});
       }
 
       return newest;
@@ -348,38 +356,50 @@ class Settings {
     try {
       final directory = Directory(await getTemplatesDirectoryRoute());
       if (await directory.exists()) {
+        final List<(String, Map<String, dynamic> Function()?)>
+        templateRefreshTasks = [];
         await for (var t in directory.list()) {
           String name = t.path.split('/').last.split('.').first;
           int? tId = int.tryParse(name);
           if (tId == null) continue;
-          await t.delete();
-          Logging(
-            "Plantilla v$tId.0 eliminada",
-            caller: "Settings (refreshTemplates)",
-          );
-          await fetchTemplate(id: tId);
+          templateRefreshTasks.addAll([
+            (t.path, null),
+            await fetchTemplate(id: tId),
+          ]);
         }
+        ServiceReliabilityEngineer.instance.enqueueWriteTasks(
+          templateRefreshTasks,
+        );
       }
     } catch (e) {
       // yo cuando no hago algo
     }
   }
 
-  Future<void> fetchTemplate({int? id}) async {
-    late final File templateFile;
-    Map<String, dynamic>? template;
+  Future<(String, Map<String, dynamic> Function())> fetchTemplate({
+    int? id,
+  }) async {
+    late final String templateRoute;
+    late final Map<String, dynamic> template;
 
     if (id != null) {
-      templateFile = File(await getTemplateRoute(id));
+      template = await getTemplateRecord(tId: id);
+      templateRoute = await getTemplateRoute(id);
     } else {
       template = await getTemplateRecord();
-      templateFile = File(await getTemplateRoute(template['id']));
+      templateRoute = await getTemplateRoute(template['id']);
     }
-    if (await templateFile.exists()) return;
-    template ??= await getTemplateRecord(tId: id);
-    await templateFile.create(recursive: true);
-    await templateFile.writeAsString(jsonEncode(template['content']));
-    Logging("Plantilla v${template['id']}.0 descargada", caller: "Settings (fetchTemplate)");
+    return (templateRoute, () => template['content'] as Map<String, dynamic>);
+  }
+
+  Future<void> updateTemplate() async {
+    try {
+      final template = await fetchTemplate();
+      if (await File(template.$1).exists()) return;
+      ServiceReliabilityEngineer.instance.enqueueWriteTasks([template]);
+    } catch (e) {
+      // yo cuando hago algo
+    }
   }
 
   // This will be an actual function later
