@@ -6,7 +6,6 @@ import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/logging.dart';
 import 'package:bomberos/models/user.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -52,11 +51,14 @@ class Settings {
     _role = (role >= 0 && role <= 2) ? role : 0;
   }
 
-  bool _allowDebugging = kDebugMode;
+  bool _allowDebugging = false;
 
   set allowDebugging(bool state) {
     _allowDebugging = state;
-    Logging("${state ? "Activando" : "Desactivando"} depuración", caller: "Settings (allowDebugging)");
+    Logging(
+      "${state ? "Activando" : "Desactivando"} depuración",
+      caller: "Settings (allowDebugging)",
+    );
   }
 
   bool get allowDebugging => _allowDebugging;
