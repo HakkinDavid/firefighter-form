@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:bomberos/models/logging.dart' show Logging;
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/models/user.dart';
 import 'package:bomberos/models/form.dart';
+import 'package:bomberos/viewmodels/overlay_service.dart';
 import 'Heuristic/connection_heuristic.dart';
 import 'Heuristic/disk_heuristic.dart';
 import 'Task/task.dart';
@@ -26,6 +28,9 @@ class ServiceReliabilityEngineer {
   final List<String> _tasksQueue = [];
   final List<(String, Map<String, dynamic> Function()?)> _writeQueue = [];
   final _busy = Mutex();
+
+  int updateAvailable = 0;
+  late BuildContext welcomeContext;
 
   static final _platform = Platform.isAndroid
       ? const MethodChannel('mx.cetys.bomberos/low_level')
@@ -189,15 +194,84 @@ class ServiceReliabilityEngineer {
           releaseMap['current_version'],
         )) {
       Logging(
-        "Se encontró la versión v${releaseMap['latest_version']} (actual v${releaseMap['current_version']}). Encolando SaveToDisk y UpdateApp.",
+        "Se encontró la versión v${releaseMap['latest_version']} (actual v${releaseMap['current_version']}). Pidiendo permiso al usuario para actualizar.",
         caller: "SRE (_isUpdateAvailable)",
         attentionLevel: 3,
       );
-      enqueueTasks({"SaveToDisk", "UpdateApp"});
+      updateAvailable = 1;
     } else {
       Logging(
         "No se encontraron actualizaciones del app (available: ${releaseMap['available']}). La versión actual es v${releaseMap['current_version']}.",
         caller: "SRE (_isUpdateAvailable)",
+      );
+      updateAvailable = 2;
+    }
+  }
+
+  void askForUserPermission({BuildContext? context}) async {
+    if (context != null) {
+      welcomeContext = context;
+    }
+
+    if (updateAvailable == 0) {
+      Future.delayed(Duration(milliseconds: 100), () {
+        askForUserPermission();
+      });
+      return;
+    }
+
+    if (updateAvailable == 1) {
+      final screenSize = MediaQuery.of(welcomeContext).size;
+      final positionX = screenSize.width / 2;
+      final positionY = screenSize.height - 190;
+
+      Logging(
+        "Mostrando alerta de actualización.",
+        caller: "SRE (askForUserPermission)",
+        attentionLevel: 2,
+      );
+
+      OverlayService.showOverlay(
+        context: welcomeContext,
+        position: Offset(positionX, positionY),
+        buttonSize: Size.zero,
+        overlayWidth: screenSize.width - 10,
+        overlayPadding: 10,
+        borderRadius: 8,
+        tapToClose: false,
+        overlayContent: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "Se encontró una versión más reciente de la aplicación, ¿actualizar ahora?",
+                style: TextStyle(
+                  color: Settings.instance.colors.textOverPrimary,
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CupertinoButton(
+                    onPressed: OverlayService.closeCurrentOverlay,
+                    color: CupertinoColors.systemGrey,
+                    child: const Text('Más tarde'),
+                  ),
+                  CupertinoButton(
+                    onPressed: () => enqueueTasks({"SaveToDisk", "UpdateApp"}),
+                    color: Settings.instance.colors.primaryContrastDark,
+                    child: const Text('Actualizar'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       );
     }
   }
