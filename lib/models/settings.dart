@@ -158,8 +158,7 @@ class Settings {
         ('$directory/user_cache.json', mapAccessor('userCache')),
       ]);
     } catch (e) {
-      Logging("Error: $e", caller: "Settings (setUser)", attentionLevel: 3);
-      ServiceReliabilityEngineer.instance.enqueueTasks({"SetUser"});
+      // nada
     }
   }
 
