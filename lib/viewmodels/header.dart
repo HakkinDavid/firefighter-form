@@ -35,7 +35,7 @@ class _HeaderState extends State<Header> {
     Navigator.pop(context);
   }
 
-  void _showUserMenu(BuildContext context, double contentWidth) {
+  void _showUserMenu(double contentWidth) {
     final RenderBox button =
         _buttonKey.currentContext!.findRenderObject() as RenderBox;
     final position = button.localToGlobal(Offset.zero);
@@ -45,7 +45,6 @@ class _HeaderState extends State<Header> {
         : 300;
 
     OverlayService.showOverlay(
-      context: context,
       position: position,
       buttonSize: buttonSize,
       overlayWidth: overlayWidth,
@@ -202,7 +201,7 @@ class _HeaderState extends State<Header> {
                                     padding: EdgeInsets.zero,
                                     color: Settings().colors.primaryContrast,
                                     onPressed: () =>
-                                        _showUserMenu(context, contentWidth),
+                                        _showUserMenu(contentWidth),
                                   ),
                                   const SizedBox(width: 12),
                                   if (currentRoute == '/home')

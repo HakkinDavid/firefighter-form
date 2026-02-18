@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:bomberos/models/settings.dart';
 
 // Handles entry and disposal of the overlay
 class OverlayService {
   static OverlayEntry? _currentOverlayEntry;
 
   static void showOverlay({
-    required BuildContext context,
     required Offset position,
     required Size buttonSize,
     required Widget overlayContent,
@@ -19,7 +19,7 @@ class OverlayService {
     // Close existing overlay if open
     closeCurrentOverlay();
 
-    final overlayState = Overlay.of(context);
+    final overlayState = Settings.instance.navigatorKey.currentState?.overlay;
 
     _currentOverlayEntry = OverlayEntry(
       builder: (context) => OverlayObject(
@@ -34,7 +34,7 @@ class OverlayService {
       ),
     );
 
-    overlayState.insert(_currentOverlayEntry!);
+    overlayState?.insert(_currentOverlayEntry!);
   }
 
   static void closeCurrentOverlay() {
