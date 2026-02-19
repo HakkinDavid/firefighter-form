@@ -2,6 +2,7 @@ import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/viewmodels/header.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 class Preferences extends StatefulWidget {
   const Preferences({super.key});
@@ -25,6 +26,7 @@ class _PreferencesState extends State<Preferences> {
         "RefreshTemplates",
       ]),
       "status": () => false,
+      "available": () => true,
     },
     {
       "title": "Modo depuración",
@@ -33,6 +35,28 @@ class _PreferencesState extends State<Preferences> {
           Settings.instance.allowDebugging = !Settings.instance.allowDebugging,
       "status": () => Settings.instance.allowDebugging,
       "route": () => Settings.instance.allowDebugging ? "/console" : null,
+      "available": () => true,
+    },
+    {
+      "title": "Editor de plantilla",
+      "type": "menu",
+      "icon": CupertinoIcons.square_pencil_fill,
+      "route": () => "/maker",
+      "available": () => Settings.instance.role == 2 && kDebugMode,
+    },
+    {
+      "title": "Panel de usuarios",
+      "type": "menu",
+      "icon": CupertinoIcons.person_fill,
+      "route": () => "/user_panel",
+      "available": () => true && kDebugMode,
+    },
+    {
+      "title": "Estadísticas",
+      "type": "menu",
+      "icon": CupertinoIcons.graph_square_fill,
+      "route": () => "/statistics",
+      "available": () => Settings.instance.role >= 1 && kDebugMode,
     },
   ];
 
@@ -97,6 +121,12 @@ class _PreferencesState extends State<Preferences> {
                       });
                     },
                   ),
+                if (fields[idx]['type'] == 'menu')
+                  Icon(
+                    fields[idx]['icon'],
+                    size: 40,
+                    color: Settings.instance.colors.primaryContrast,
+                  ),
               ],
             ),
           ],
@@ -124,16 +154,18 @@ class _PreferencesState extends State<Preferences> {
                 child: ListView.builder(
                   itemCount: fields.length,
                   itemBuilder: (context, idx) {
-                    return CupertinoButton(
-                      onPressed: () {
-                        if (fields[idx]['route'] is Function &&
-                            fields[idx]['route']() != null) {
+                    if (fields[idx]['route'] is Function &&
+                        fields[idx]['route']() != null) {
+                      return CupertinoButton(
+                        onPressed: () {
                           Navigator.pushNamed(context, fields[idx]['route']());
-                        }
-                      },
-                      padding: EdgeInsets.zero,
-                      child: buildField(idx),
-                    );
+                        },
+                        padding: EdgeInsets.zero,
+                        child: buildField(idx),
+                      );
+                    } else {
+                      return buildField(idx);
+                    }
                   },
                 ),
               ),
