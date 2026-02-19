@@ -17,7 +17,7 @@ class _PreferencesState extends State<Preferences> {
     super.dispose();
   }
 
-  final List<Map<String, dynamic>> fields = [
+  final List<Map<String, dynamic>> optionsTemplate = [
     {
       "title": "Refrescar plantillas",
       "type": "button",
@@ -42,23 +42,31 @@ class _PreferencesState extends State<Preferences> {
       "type": "menu",
       "icon": CupertinoIcons.square_pencil_fill,
       "route": () => "/maker",
-      "available": () => Settings.instance.role == 2 && kDebugMode,
+      "available": () =>
+          Settings.instance.role == 2 &&
+          kDebugMode, // TODO: Una vez terminadas estas secciones del app, remover la bandera de modo Debug para acceder
     },
     {
       "title": "Panel de usuarios",
       "type": "menu",
       "icon": CupertinoIcons.person_fill,
       "route": () => "/user_panel",
-      "available": () => true && kDebugMode,
+      "available": () =>
+          true &&
+          kDebugMode, // TODO: Una vez terminadas estas secciones del app, remover la bandera de modo Debug para acceder
     },
     {
       "title": "Estadísticas",
       "type": "menu",
       "icon": CupertinoIcons.graph_square_fill,
       "route": () => "/statistics",
-      "available": () => Settings.instance.role >= 1 && kDebugMode,
+      "available": () =>
+          Settings.instance.role >= 1 &&
+          kDebugMode, // TODO: Una vez terminadas estas secciones del app, remover la bandera de modo Debug para acceder
     },
   ];
+
+  List<Map<String, dynamic>> options = const [];
 
   Widget buildField(int idx) {
     return Container(
@@ -80,7 +88,7 @@ class _PreferencesState extends State<Preferences> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        fields[idx]['title'],
+                        options[idx]['title'],
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -93,37 +101,37 @@ class _PreferencesState extends State<Preferences> {
                   ),
                 ),
                 SizedBox(width: 8),
-                if (fields[idx]['type'] == 'button')
-                  fields[idx]['status']()
+                if (options[idx]['type'] == 'button')
+                  options[idx]['status']()
                       ? CupertinoActivityIndicator()
                       : CupertinoButton(
                           onPressed: () {
                             setState(() {
-                              fields[idx]['status'] = () => true;
-                              fields[idx]['action']();
-                              fields[idx]['status'] = () => false;
+                              options[idx]['status'] = () => true;
+                              options[idx]['action']();
+                              options[idx]['status'] = () => false;
                             });
                           },
                           padding: EdgeInsets.all(6),
                           minimumSize: Size(0, 0),
                           child: Icon(
-                            fields[idx]['icon'],
+                            options[idx]['icon'],
                             size: 40,
                             color: Settings.instance.colors.primaryContrast,
                           ),
                         ),
-                if (fields[idx]['type'] == 'switch')
+                if (options[idx]['type'] == 'switch')
                   CupertinoSwitch(
-                    value: fields[idx]['status'](),
+                    value: options[idx]['status'](),
                     onChanged: (v) {
                       setState(() {
-                        fields[idx]['action'](v);
+                        options[idx]['action'](v);
                       });
                     },
                   ),
-                if (fields[idx]['type'] == 'menu')
+                if (options[idx]['type'] == 'menu')
                   Icon(
-                    fields[idx]['icon'],
+                    options[idx]['icon'],
                     size: 40,
                     color: Settings.instance.colors.primaryContrast,
                   ),
@@ -137,6 +145,9 @@ class _PreferencesState extends State<Preferences> {
 
   @override
   Widget build(BuildContext context) {
+    if (options.isEmpty) {
+      options = List.of(optionsTemplate.where((x) => x['available']()));
+    }
     return CupertinoPageScaffold(
       navigationBar: null,
       backgroundColor: Settings.instance.colors.primary,
@@ -152,13 +163,13 @@ class _PreferencesState extends State<Preferences> {
               child: Container(
                 color: Settings.instance.colors.background,
                 child: ListView.builder(
-                  itemCount: fields.length,
+                  itemCount: options.length,
                   itemBuilder: (context, idx) {
-                    if (fields[idx]['route'] is Function &&
-                        fields[idx]['route']() != null) {
+                    if (options[idx]['route'] is Function &&
+                        options[idx]['route']() != null) {
                       return CupertinoButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, fields[idx]['route']());
+                          Navigator.pushNamed(context, options[idx]['route']());
                         },
                         padding: EdgeInsets.zero,
                         child: buildField(idx),
