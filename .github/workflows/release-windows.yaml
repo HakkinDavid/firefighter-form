@@ -1,0 +1,64 @@
+name: Flutter Release (Windows)
+
+on:
+  push:
+    branches:
+      - stable
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    name: Build and Release Windows
+    runs-on: windows-latest
+
+    steps:
+      - name: 🧭 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 💾 Cache Flutter packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: ⚙️ Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.35.3"
+          channel: "stable"
+
+      - name: 🧰 Install dependencies
+        run: flutter pub get
+
+      - name: 🏗️ Build Windows release
+        run: flutter build windows --release --build-name=$(date +'%y.%m.%d')
+
+      - name: 🏷️ Set release variables
+        id: vars
+        run: |
+          TAG="v$(date +'%y.%m.%d')"
+          VERSION="${TAG#v}"
+          NAME="Formulario de Bomberos ${TAG}"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+
+      - name: 📦 Prepare release files
+        run: |
+          mkdir -p release
+          cp build/windows/x64/runner/Release/*.exe release/bomberos-windows-release.exe
+
+      - name: 📤 Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-${{ steps.vars.outputs.version }}
+          path: release/bomberos-windows-release.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

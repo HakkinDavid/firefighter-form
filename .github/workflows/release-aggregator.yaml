@@ -1,0 +1,86 @@
+name: Release Aggregator
+
+on:
+  workflow_run:
+    workflows:
+      - Flutter Release (Android)
+      - Flutter Release (Windows)
+    types:
+      - completed
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧭 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: 🧾 Get commit message
+        id: commit
+        run: |
+          TAG="v$(date +'%y.%m.%d')"
+          echo "🧾 Recolectando commits del día ${TAG#v}..."
+          MSG=$(git log --pretty=format:"- %s" --since="$(date +'%Y-%m-%d 00:00:00')" --until="$(date +'%Y-%m-%d 23:59:59')" | tr -d '\r')
+          if [ -z "$MSG" ]; then
+            MSG=$(git log -1 --pretty=format:"- %s")
+          fi
+          {
+            echo 'message<<EOF'
+            echo "$MSG"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
+
+      - name: 🏷️ Calculate version
+        id: vars
+        run: |
+          TAG="v$(date +'%y.%m.%d')"
+          VERSION="${TAG#v}"
+          NAME="Formulario de Bomberos ${TAG}"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+
+      - name: 📥 Download Android artifact (if exists)
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: android-${{ steps.vars.outputs.version }}
+          path: artifacts/android
+
+      - name: 📥 Download Windows artifact (if exists)
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-${{ steps.vars.outputs.version }}
+          path: artifacts/windows
+
+      - name: 📦 Collect files
+        run: |
+          mkdir -p release
+
+          if [ -d artifacts/android ]; then
+            cp artifacts/android/* release/ || true
+          fi
+
+          if [ -d artifacts/windows ]; then
+            cp artifacts/windows/* release/ || true
+          fi
+
+      - name: 🚀 Create or update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.vars.outputs.tag }}
+          name: ${{ steps.vars.outputs.name }}
+          draft: false
+          prerelease: false
+          make_latest: true
+          files: release/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
