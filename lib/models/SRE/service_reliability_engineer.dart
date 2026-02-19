@@ -41,7 +41,7 @@ class ServiceReliabilityEngineer {
       _timer!.cancel();
     }
     _timer = Timer.periodic(
-      const Duration(seconds: 5),
+      const Duration(seconds: 1),
       (t) => ServiceReliabilityEngineer.instance._processQueue(),
     );
   };
