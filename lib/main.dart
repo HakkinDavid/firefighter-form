@@ -4,8 +4,11 @@ import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
 import 'package:bomberos/routes/console.dart';
 import 'package:bomberos/routes/form.dart';
 import 'package:bomberos/routes/home.dart';
+import 'package:bomberos/routes/maker.dart';
 import 'package:bomberos/routes/preferences.dart';
 import 'package:bomberos/routes/search.dart';
+import 'package:bomberos/routes/statistics.dart';
+import 'package:bomberos/routes/user_panel.dart';
 import 'package:bomberos/routes/welcome.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -65,6 +68,12 @@ class BomberosApp extends StatelessWidget {
                 return const Preferences();
               case '/console':
                 return const Console();
+              case '/maker':
+                return const ServiceTemplateMaker();
+              case '/user_panel':
+                return const UserPanel();
+              case '/statistics':
+                return const StatisticsPanel();
               case '/':
               case '/welcome':
               default:
