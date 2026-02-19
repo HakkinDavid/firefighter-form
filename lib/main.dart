@@ -8,7 +8,7 @@ import 'package:bomberos/routes/maker.dart';
 import 'package:bomberos/routes/preferences.dart';
 import 'package:bomberos/routes/search.dart';
 import 'package:bomberos/routes/statistics.dart';
-import 'package:bomberos/routes/user_panel.dart';
+import 'package:bomberos/routes/users_panel.dart';
 import 'package:bomberos/routes/welcome.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -70,8 +70,8 @@ class BomberosApp extends StatelessWidget {
                 return const Console();
               case '/maker':
                 return const ServiceTemplateMaker();
-              case '/user_panel':
-                return const UserPanel();
+              case '/users_panel':
+                return const UsersPanel();
               case '/statistics':
                 return const StatisticsPanel();
               case '/':

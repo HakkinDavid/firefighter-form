@@ -3,14 +3,14 @@ import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/viewmodels/header.dart';
 import 'package:flutter/cupertino.dart';
 
-class UserPanel extends StatefulWidget {
-  const UserPanel({super.key});
+class UsersPanel extends StatefulWidget {
+  const UsersPanel({super.key});
 
   @override
-  State<UserPanel> createState() => _UserPanelState();
+  State<UsersPanel> createState() => _UsersPanelState();
 }
 
-class _UserPanelState extends State<UserPanel> {
+class _UsersPanelState extends State<UsersPanel> {
   @override
   void dispose() {
     super.dispose();

@@ -50,7 +50,7 @@ class _PreferencesState extends State<Preferences> {
       "title": "Panel de usuarios",
       "type": "menu",
       "icon": CupertinoIcons.person_fill,
-      "route": () => "/user_panel",
+      "route": () => "/users_panel",
       "available": () =>
           true &&
           kDebugMode, // TODO: Una vez terminadas estas secciones del app, remover la bandera de modo Debug para acceder
