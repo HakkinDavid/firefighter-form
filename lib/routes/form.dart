@@ -325,6 +325,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                       onChanged: (val) {
                         setState(() {
                           value[i] = val;
+                          widget.form.set(field['name'], value);
                         });
                       },
                     ),
@@ -335,6 +336,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                     onPressed: () {
                       setState(() {
                         value.removeAt(i);
+                        widget.form.set(field['name'], value);
                       });
                     },
                   ),
@@ -346,6 +348,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
               onPressed: () {
                 setState(() {
                   value.add('');
+                  widget.form.set(field['name'], value);
                 });
               },
             ),
