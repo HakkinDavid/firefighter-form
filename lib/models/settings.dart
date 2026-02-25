@@ -100,6 +100,41 @@ class Settings {
     return combined;
   }
 
+  List<FirefighterUser> getUserScope() {
+    // TODO: Logica para obtener supervisados
+    final currentUser = self;
+    if (currentUser == null) return [];
+    
+    // Por ahora filtra de userCache en vez de actual database query
+    return _userCache.values
+        .where((user) => user.watchedByUserId == currentUser.id)
+        .toList();
+  }
+
+  Future<void> updateUserRole(String userId, bool promote) async {
+    // Simple function for now
+    final action = promote ? 'Promover' : 'Degradar';
+    Logging(
+      "$action user: $userId",
+      caller: "Settings.updateUserRole",
+    );
+    
+    // Únicamente actualiza el cache ((FOR NOW))
+    final user = _userCache[userId];
+    if (user != null) {
+      if (promote && user.role < 2) {
+        Logging('^ Acción ${action.toLowerCase()} sería aplicada al usuario ${user.fullName} de su rol ${user.role} a ${user.role + 1}');
+      } else if (!promote && user.role > 1) {
+        Logging('v Acción ${action.toLowerCase()} sería aplicada al usuario ${user.fullName} de su rol ${user.role} a ${user.role - 1}');
+      } else if (!promote && user.role == 1) {
+         Logging(
+          'ALERTA: No se puede degradar al usuario ${user.fullName}: ya se encuentra en el rol default (Bombero)',
+          caller: "Settings.demoteUser",
+        );
+      }
+    }
+  }
+
   Map<String, dynamic> Function() mapAccessor(String accessed, {String? id}) {
     switch (accessed) {
       case 'userData':
