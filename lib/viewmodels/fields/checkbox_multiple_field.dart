@@ -43,7 +43,7 @@ class _NumberInputFieldState extends InputFieldState {
                     } else {
                       widget.value.remove(opt);
                     }
-                    widget.formSet(widget.value);
+                    widget.formSet(widget.field['name'], widget.value);
                   });
                 },
               ),
