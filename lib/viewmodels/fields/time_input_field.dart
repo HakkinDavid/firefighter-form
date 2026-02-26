@@ -37,6 +37,7 @@ class _TimeInputFieldState extends InputFieldState {
             CupertinoButton(
               child: Icon(CupertinoIcons.clock_solid),
               onPressed: () async {
+                if (!widget.canEditForm) return;
                 Duration initialDuration = widget.value != ''
                     ? Duration(
                         hours: int.tryParse(widget.value.split(":")[0]) ?? 0,

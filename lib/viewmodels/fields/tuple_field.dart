@@ -63,6 +63,7 @@ class _NumberInputFieldState extends InputFieldState {
                               CupertinoButton(
                                 child: Icon(CupertinoIcons.clock_solid),
                                 onPressed: () async {
+                                  if (!widget.canEditForm) return;
                                   Duration initialDuration = subValue != ''
                                       ? Duration(
                                           hours:
@@ -131,12 +132,14 @@ class _NumberInputFieldState extends InputFieldState {
                           )
                         else
                           CupertinoTextField(
+                            readOnly: !widget.canEditForm,
                             placeholder: subfield['label'] ?? subfield['name'],
                             controller: TextEditingController(text: subValue)
                               ..selection = TextSelection.collapsed(
                                 offset: subValue.length,
                               ),
                             onChanged: (val) {
+                              if (!widget.canEditForm) return;
                               widget.setFormState(() {
                                 tupleList[i][subfield['name']] = val;
                                 widget.formSet(widget.field['name'], tupleList);
@@ -150,6 +153,7 @@ class _NumberInputFieldState extends InputFieldState {
                     padding: EdgeInsets.zero,
                     child: Icon(CupertinoIcons.delete, size: 20),
                     onPressed: () {
+                      if (!widget.canEditForm) return;
                       widget.setFormState(() {
                         tupleList.removeAt(i);
                         widget.formSet(widget.field['name'], tupleList);
@@ -164,6 +168,7 @@ class _NumberInputFieldState extends InputFieldState {
         CupertinoButton(
           child: Text('Agregar'),
           onPressed: () {
+            if (!widget.canEditForm) return;
             widget.setFormState(() {
               tupleList.add({
                 for (var sub in tupleFields) sub['name'].toString(): '',

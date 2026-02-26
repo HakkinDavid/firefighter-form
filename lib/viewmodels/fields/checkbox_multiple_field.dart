@@ -38,6 +38,7 @@ class _NumberInputFieldState extends InputFieldState {
               CupertinoSwitch(
                 value: widget.value.contains(opt),
                 onChanged: (val) {
+                  if (!widget.canEditForm) return;
                   widget.setFormState(() {
                     if (val) {
                       widget.value.add(opt);

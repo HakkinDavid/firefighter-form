@@ -24,10 +24,12 @@ class _NumberInputFieldState extends InputFieldState {
       children: [
         Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
         CupertinoTextField(
+          readOnly: !widget.canEditForm,
           placeholder: label,
           controller: TextEditingController(text: widget.value)
             ..selection = TextSelection.collapsed(offset: widget.value.length),
           onChanged: (val) {
+            if (!widget.canEditForm) return;
             widget.setFormState(() {
               widget.formSet(widget.field['name'], val);
             });

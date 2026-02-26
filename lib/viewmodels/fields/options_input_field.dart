@@ -38,6 +38,7 @@ class _OptionsInputFieldState extends InputFieldState {
             Expanded(
               child: GestureDetector(
                 onTap: () async {
+                  if (!widget.canEditForm) return;
                   int selected = options.indexOf(widget.value);
                   int pickedIndex = selected;
                   await showCupertinoModalPopup(

@@ -35,6 +35,7 @@ class _NumberInputFieldState extends InputFieldState {
         ...options.map(
           (opt) => GestureDetector(
             onTap: () {
+              if (!widget.canEditForm) return;
               widget.setFormState(() {
                 widget.formSet(widget.field['name'], opt);
               });

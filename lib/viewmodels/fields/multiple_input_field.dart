@@ -29,12 +29,14 @@ class _MultipleInputFieldState extends InputFieldState {
             children: [
               Expanded(
                 child: CupertinoTextField(
+                  readOnly: !widget.canEditForm,
                   placeholder: "$label ${i + 1}",
                   controller: TextEditingController(text: widget.value[i] ?? '')
                     ..selection = TextSelection.collapsed(
                       offset: widget.value[i].length,
                     ),
                   onChanged: (val) {
+                    if (!widget.canEditForm) return;
                     widget.setFormState(() {
                       widget.value[i] = val;
                       widget.formSet(widget.field['name'], widget.value);
@@ -46,6 +48,7 @@ class _MultipleInputFieldState extends InputFieldState {
                 padding: EdgeInsets.zero,
                 child: Icon(CupertinoIcons.delete, size: 20),
                 onPressed: () {
+                  if (!widget.canEditForm) return;
                   widget.setFormState(() {
                     widget.value.removeAt(i);
                     widget.formSet(widget.field['name'], widget.value);
@@ -58,6 +61,7 @@ class _MultipleInputFieldState extends InputFieldState {
         CupertinoButton(
           child: Text('Agregar'),
           onPressed: () {
+            if (!widget.canEditForm) return;
             widget.setFormState(() {
               widget.value.add('');
               widget.formSet(widget.field['name'], widget.value);

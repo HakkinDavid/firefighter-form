@@ -22,13 +22,11 @@ abstract class InputField extends StatefulWidget {
 }
 
 class InputFieldState extends State<InputField> {
-  // late final String type;
   late final String label;
 
   @override
   void initState() {
     super.initState();
-    // type = widget.field['type'];
     label = widget.field['label'] ?? '';
   }
 

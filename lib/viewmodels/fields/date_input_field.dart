@@ -37,9 +37,10 @@ class _DateInputFieldState extends InputFieldState {
             CupertinoButton(
               child: Text(widget.value == '' ? 'Seleccionar fecha' : 'Cambiar'),
               onPressed: () async {
+                if (!widget.canEditForm) return;
                 DateTime now = DateTime.now();
                 DateTime initial = now;
-                if (widget.value != '' && widget.canEditForm) {
+                if (widget.value != '') {
                   initial = DateTime.tryParse(widget.value) ?? now;
                 }
                 DateTime pickedDate = initial;
