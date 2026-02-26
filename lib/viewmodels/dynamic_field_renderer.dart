@@ -180,6 +180,7 @@ class DynamicFieldRenderer extends StatelessWidget {
                   .map(
                     (e) => Text(
                       e,
+                      style: TextStyle(
                         color: CupertinoColors.systemRed,
                         fontSize: 12,
                       ),
