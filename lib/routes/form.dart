@@ -139,7 +139,6 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
 
   Widget buildField(Map<String, dynamic> field) {
     final String type = field['type'];
-    final dynamic value = widget.form.content[field['name']];
     final Set<String> errors = widget.form.errors[field['name']] ?? <String>{};
 
     if (!widget.form.shouldDisplay(field)) return SizedBox.shrink();
@@ -150,7 +149,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
       if (field['inputType'] == 'date') {
         fieldWidget = DateInputField(
           field: field,
-          value: value,
+          value: widget.form.content[field['name']],
           formSet: widget.form.set,
           setFormState: setState,
           canEditForm: widget.form.canEditForm,
@@ -159,7 +158,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
       } else if (field['inputType'] == 'time') {
         fieldWidget = TimeInputField(
           field: field,
-          value: value,
+          value: widget.form.content[field['name']],
           formSet: widget.form.set,
           setFormState: setState,
           canEditForm: widget.form.canEditForm,
@@ -168,7 +167,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
       } else if (field['multiple'] == true) {
         fieldWidget = MultipleInputField(
           field: field,
-          value: value,
+          value: widget.form.content[field['name']],
           formSet: widget.form.set,
           setFormState: setState,
           canEditForm: widget.form.canEditForm,
@@ -177,7 +176,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
       } else if (field['inputType'] == 'number') {
         fieldWidget = NumberInputField(
           field: field,
-          value: value,
+          value: widget.form.content[field['name']],
           formSet: widget.form.set,
           setFormState: setState,
           canEditForm: widget.form.canEditForm,
@@ -188,7 +187,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
           field['options'].isNotEmpty) {
         fieldWidget = OptionsInputField(
           field: field,
-          value: value,
+          value: widget.form.content[field['name']],
           formSet: widget.form.set,
           setFormState: setState,
           canEditForm: widget.form.canEditForm,
@@ -197,7 +196,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
       } else {
         fieldWidget = TextInputField(
           field: field,
-          value: value,
+          value: widget.form.content[field['name']],
           formSet: widget.form.set,
           setFormState: setState,
           canEditForm: widget.form.canEditForm,
@@ -207,7 +206,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     } else if (type == 'select') {
       fieldWidget = SelectField(
         field: field,
-        value: value,
+        value: widget.form.content[field['name']],
         formSet: widget.form.set,
         setFormState: setState,
         canEditForm: widget.form.canEditForm,
@@ -216,7 +215,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     } else if (type == 'textarea') {
       fieldWidget = TextAreaField(
         field: field,
-        value: value,
+        value: widget.form.content[field['name']],
         formSet: widget.form.set,
         setFormState: setState,
         canEditForm: widget.form.canEditForm,
@@ -226,7 +225,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
       if (field['inputType'] == 'checkbox') {
         fieldWidget = CheckboxMultipleField(
           field: field,
-          value: value,
+          value: widget.form.content[field['name']],
           formSet: widget.form.set,
           setFormState: setState,
           canEditForm: widget.form.canEditForm,
@@ -235,7 +234,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
       } else if (field['inputType'] == 'radio') {
         fieldWidget = RadioMultipleField(
           field: field,
-          value: value,
+          value: widget.form.content[field['name']],
           formSet: widget.form.set,
           setFormState: setState,
           canEditForm: widget.form.canEditForm,
@@ -247,7 +246,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     } else if (type == 'drawingboard') {
       fieldWidget = DrawingBoardField(
         field: field,
-        value: value,
+        value: widget.form.content[field['name']],
         formSet: widget.form.set,
         setFormState: setState,
         canEditForm: widget.form.canEditForm,
@@ -256,7 +255,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     } else if (type == 'tuple') {
       fieldWidget = TupleField(
         field: field,
-        value: value,
+        value: widget.form.content[field['name']],
         formSet: widget.form.set,
         setFormState: setState,
         canEditForm: widget.form.canEditForm,
@@ -265,7 +264,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     } else if (type == 'text') {
       fieldWidget = TextDisplayField(
         field: field,
-        value: value,
+        value: widget.form.content[field['name']],
         formSet: widget.form.set,
         setFormState: setState,
         canEditForm: widget.form.canEditForm,
