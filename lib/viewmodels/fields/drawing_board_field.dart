@@ -8,6 +8,7 @@ class DrawingBoardField extends InputField {
     required super.field,
     required super.value,
     required super.formSet,
+    required super.setFormState,
     required super.canEditForm,
     required super.formatOptions,
   });
@@ -50,7 +51,7 @@ class _NumberInputFieldState extends InputFieldState {
                 child: Icon(CupertinoIcons.clear, size: 20),
                 onPressed: () {
                   myCanvasController.clear();
-                  setState(() {
+                  widget.setFormState(() {
                     widget.formSet(widget.field['name'], null);
                   });
                 },
@@ -60,7 +61,7 @@ class _NumberInputFieldState extends InputFieldState {
                 child: Icon(CupertinoIcons.check_mark, size: 20),
                 onPressed: () async {
                   final data = await myCanvasController.exportAsSvg();
-                  setState(() {
+                  widget.setFormState(() {
                     widget.formSet(widget.field['name'], data);
                   });
                 },

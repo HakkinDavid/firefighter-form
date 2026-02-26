@@ -7,6 +7,7 @@ class MultipleInputField extends InputField {
     required super.field,
     required super.value,
     required super.formSet,
+    required super.setFormState,
     required super.canEditForm,
     required super.formatOptions,
   });
@@ -34,7 +35,7 @@ class _MultipleInputFieldState extends InputFieldState {
                       offset: widget.value[i].length,
                     ),
                   onChanged: (val) {
-                    setState(() {
+                    widget.setFormState(() {
                       widget.value[i] = val;
                       widget.formSet(widget.field['name'], widget.value);
                     });
@@ -45,7 +46,7 @@ class _MultipleInputFieldState extends InputFieldState {
                 padding: EdgeInsets.zero,
                 child: Icon(CupertinoIcons.delete, size: 20),
                 onPressed: () {
-                  setState(() {
+                  widget.setFormState(() {
                     widget.value.removeAt(i);
                     widget.formSet(widget.field['name'], widget.value);
                   });
@@ -57,7 +58,7 @@ class _MultipleInputFieldState extends InputFieldState {
         CupertinoButton(
           child: Text('Agregar'),
           onPressed: () {
-            setState(() {
+            widget.setFormState(() {
               widget.value.add('');
               widget.formSet(widget.field['name'], widget.value);
             });

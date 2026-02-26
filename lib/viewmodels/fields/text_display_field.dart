@@ -7,6 +7,7 @@ class TextDisplayField extends InputField {
     required super.field,
     required super.value,
     required super.formSet,
+    required super.setFormState,
     required super.canEditForm,
     required super.formatOptions,
   });

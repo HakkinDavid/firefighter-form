@@ -7,6 +7,7 @@ class CheckboxMultipleField extends InputField {
     required super.field,
     required super.value,
     required super.formSet,
+    required super.setFormState,
     required super.canEditForm,
     required super.formatOptions,
   });
@@ -37,7 +38,7 @@ class _NumberInputFieldState extends InputFieldState {
               CupertinoSwitch(
                 value: widget.value.contains(opt),
                 onChanged: (val) {
-                  setState(() {
+                  widget.setFormState(() {
                     if (val) {
                       widget.value.add(opt);
                     } else {

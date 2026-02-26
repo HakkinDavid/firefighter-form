@@ -9,6 +9,7 @@ class TupleField extends InputField {
     required super.field,
     required super.value,
     required super.formSet,
+    required super.setFormState,
     required super.canEditForm,
     required super.formatOptions,
   });
@@ -108,7 +109,7 @@ class _NumberInputFieldState extends InputFieldState {
                                                 ),
                                               ),
                                               onPressed: () {
-                                                setState(() {
+                                                widget.setFormState(() {
                                                   tupleList[i][subfield['name']] =
                                                       "${pickedDuration.inHours.toString().padLeft(2, '0')}:${(pickedDuration.inMinutes % 60).toString().padLeft(2, '0')}";
                                                   widget.formSet(
@@ -136,7 +137,7 @@ class _NumberInputFieldState extends InputFieldState {
                                 offset: subValue.length,
                               ),
                             onChanged: (val) {
-                              setState(() {
+                              widget.setFormState(() {
                                 tupleList[i][subfield['name']] = val;
                                 widget.formSet(widget.field['name'], tupleList);
                               });
@@ -149,7 +150,7 @@ class _NumberInputFieldState extends InputFieldState {
                     padding: EdgeInsets.zero,
                     child: Icon(CupertinoIcons.delete, size: 20),
                     onPressed: () {
-                      setState(() {
+                      widget.setFormState(() {
                         tupleList.removeAt(i);
                         widget.formSet(widget.field['name'], tupleList);
                       });
@@ -163,7 +164,7 @@ class _NumberInputFieldState extends InputFieldState {
         CupertinoButton(
           child: Text('Agregar'),
           onPressed: () {
-            setState(() {
+            widget.setFormState(() {
               tupleList.add({
                 for (var sub in tupleFields) sub['name'].toString(): '',
               });

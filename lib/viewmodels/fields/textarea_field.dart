@@ -7,6 +7,7 @@ class TextAreaField extends InputField {
     required super.field,
     required super.value,
     required super.formSet,
+    required super.setFormState,
     required super.canEditForm,
     required super.formatOptions,
   });
@@ -28,7 +29,7 @@ class _NumberInputFieldState extends InputFieldState {
             ..selection = TextSelection.collapsed(offset: widget.value.length),
           maxLines: widget.field['rows'] ?? 3,
           onChanged: (val) {
-            setState(() {
+            widget.setFormState(() {
               widget.formSet(widget.field['name'], val);
             });
           },

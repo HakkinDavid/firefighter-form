@@ -8,6 +8,7 @@ class OptionsInputField extends InputField {
     required super.field,
     required super.value,
     required super.formSet,
+    required super.setFormState,
     required super.canEditForm,
     required super.formatOptions,
   });
@@ -70,7 +71,7 @@ class _OptionsInputFieldState extends InputFieldState {
                                 ),
                               ),
                               onPressed: () async {
-                                setState(() {
+                                widget.setFormState(() {
                                   widget.formSet(
                                     widget.field['name'],
                                     options[pickedIndex],
@@ -113,7 +114,7 @@ class _OptionsInputFieldState extends InputFieldState {
                 padding: EdgeInsets.zero,
                 child: Icon(CupertinoIcons.clear, size: 20),
                 onPressed: () {
-                  setState(() {
+                  widget.setFormState(() {
                     widget.formSet(widget.field['name'], '');
                   });
                 },

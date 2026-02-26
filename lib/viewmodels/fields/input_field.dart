@@ -4,6 +4,7 @@ abstract class InputField extends StatefulWidget {
   final Map<String, dynamic> field;
   final dynamic value;
   final Function formSet;
+  final Function setFormState;
   final Function formatOptions;
   final bool canEditForm;
   const InputField({
@@ -11,6 +12,7 @@ abstract class InputField extends StatefulWidget {
     required this.field,
     required this.value,
     required this.formSet,
+    required this.setFormState,
     required this.formatOptions,
     required this.canEditForm,
   });
@@ -32,7 +34,6 @@ class InputFieldState extends State<InputField> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     throw UnimplementedError();
   }
 }

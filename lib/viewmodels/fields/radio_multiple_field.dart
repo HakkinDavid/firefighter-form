@@ -7,6 +7,7 @@ class RadioMultipleField extends InputField {
     required super.field,
     required super.value,
     required super.formSet,
+    required super.setFormState,
     required super.canEditForm,
     required super.formatOptions,
   });
@@ -34,7 +35,7 @@ class _NumberInputFieldState extends InputFieldState {
         ...options.map(
           (opt) => GestureDetector(
             onTap: () {
-              setState(() {
+              widget.setFormState(() {
                 widget.formSet(widget.field['name'], opt);
               });
             },
@@ -59,7 +60,7 @@ class _NumberInputFieldState extends InputFieldState {
             padding: EdgeInsets.zero,
             child: Icon(CupertinoIcons.clear, size: 20),
             onPressed: () {
-              setState(() {
+              widget.setFormState(() {
                 widget.formSet(widget.field['name'], '');
               });
             },

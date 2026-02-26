@@ -152,6 +152,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
           field: field,
           value: value,
           formSet: widget.form.set,
+          setFormState: setState,
           canEditForm: widget.form.canEditForm,
           formatOptions: formatOptions,
         );
@@ -160,6 +161,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
           field: field,
           value: value,
           formSet: widget.form.set,
+          setFormState: setState,
           canEditForm: widget.form.canEditForm,
           formatOptions: formatOptions,
         );
@@ -168,6 +170,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
           field: field,
           value: value,
           formSet: widget.form.set,
+          setFormState: setState,
           canEditForm: widget.form.canEditForm,
           formatOptions: formatOptions,
         );
@@ -176,6 +179,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
           field: field,
           value: value,
           formSet: widget.form.set,
+          setFormState: setState,
           canEditForm: widget.form.canEditForm,
           formatOptions: formatOptions,
         );
@@ -186,6 +190,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
           field: field,
           value: value,
           formSet: widget.form.set,
+          setFormState: setState,
           canEditForm: widget.form.canEditForm,
           formatOptions: formatOptions,
         );
@@ -194,6 +199,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
           field: field,
           value: value,
           formSet: widget.form.set,
+          setFormState: setState,
           canEditForm: widget.form.canEditForm,
           formatOptions: formatOptions,
         );
@@ -203,6 +209,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
         field: field,
         value: value,
         formSet: widget.form.set,
+        setFormState: setState,
         canEditForm: widget.form.canEditForm,
         formatOptions: formatOptions,
       );
@@ -211,6 +218,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
         field: field,
         value: value,
         formSet: widget.form.set,
+        setFormState: setState,
         canEditForm: widget.form.canEditForm,
         formatOptions: formatOptions,
       );
@@ -220,6 +228,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
           field: field,
           value: value,
           formSet: widget.form.set,
+          setFormState: setState,
           canEditForm: widget.form.canEditForm,
           formatOptions: formatOptions,
         );
@@ -228,6 +237,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
           field: field,
           value: value,
           formSet: widget.form.set,
+          setFormState: setState,
           canEditForm: widget.form.canEditForm,
           formatOptions: formatOptions,
         );
@@ -239,6 +249,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
         field: field,
         value: value,
         formSet: widget.form.set,
+        setFormState: setState,
         canEditForm: widget.form.canEditForm,
         formatOptions: formatOptions,
       );
@@ -247,6 +258,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
         field: field,
         value: value,
         formSet: widget.form.set,
+        setFormState: setState,
         canEditForm: widget.form.canEditForm,
         formatOptions: formatOptions,
       );
@@ -255,6 +267,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
         field: field,
         value: value,
         formSet: widget.form.set,
+        setFormState: setState,
         canEditForm: widget.form.canEditForm,
         formatOptions: formatOptions,
       );

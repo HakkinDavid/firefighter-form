@@ -7,6 +7,7 @@ class TextInputField extends InputField {
     required super.field,
     required super.value,
     required super.formSet,
+    required super.setFormState,
     required super.canEditForm,
     required super.formatOptions,
   });
@@ -27,7 +28,7 @@ class _NumberInputFieldState extends InputFieldState {
           controller: TextEditingController(text: widget.value)
             ..selection = TextSelection.collapsed(offset: widget.value.length),
           onChanged: (val) {
-            setState(() {
+            widget.setFormState(() {
               widget.formSet(widget.field['name'], val);
             });
           },
