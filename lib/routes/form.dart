@@ -1,7 +1,18 @@
 import 'package:bomberos/models/form.dart';
-import 'package:bomberos/viewmodels/canvas.dart';
+import 'package:bomberos/viewmodels/fields/checkbox_multiple_field.dart';
+import 'package:bomberos/viewmodels/fields/date_input_field.dart';
+import 'package:bomberos/viewmodels/fields/drawing_board_field.dart';
+import 'package:bomberos/viewmodels/fields/multiple_input_field.dart';
+import 'package:bomberos/viewmodels/fields/number_input_field.dart';
+import 'package:bomberos/viewmodels/fields/options_input_field.dart';
+import 'package:bomberos/viewmodels/fields/radio_multiple_field.dart';
+import 'package:bomberos/viewmodels/fields/select_field.dart';
+import 'package:bomberos/viewmodels/fields/text_display_field.dart';
+import 'package:bomberos/viewmodels/fields/text_input_field.dart';
+import 'package:bomberos/viewmodels/fields/textarea_field.dart';
+import 'package:bomberos/viewmodels/fields/time_input_field.dart';
+import 'package:bomberos/viewmodels/fields/tuple_field.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show Colors, Card;
 import 'package:bomberos/models/settings.dart';
 
 class DynamicFormPage extends StatefulWidget {
@@ -128,11 +139,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
 
   Widget buildField(Map<String, dynamic> field) {
     final String type = field['type'];
-    final String label = field['label'] ?? '';
     final dynamic value = widget.form.content[field['name']];
-    final List<dynamic>? options = formatOptions(
-      field['options'] as List<dynamic>?,
-    );
     final Set<String> errors = widget.form.errors[field['name']] ?? <String>{};
 
     if (!widget.form.shouldDisplay(field)) return SizedBox.shrink();
@@ -141,751 +148,115 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
 
     if (type == 'input') {
       if (field['inputType'] == 'date') {
-        fieldWidget = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
-            SizedBox(height: 4),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    value == '' ? 'Sin seleccionar' : value.toString(),
-                  ),
-                ),
-                CupertinoButton(
-                  child: Text(value == '' ? 'Seleccionar fecha' : 'Cambiar'),
-                  onPressed: () async {
-                    DateTime now = DateTime.now();
-                    DateTime initial = now;
-                    if (value != '' && widget.form.canEditForm) {
-                      initial = DateTime.tryParse(value) ?? now;
-                    }
-                    DateTime pickedDate = initial;
-                    await showCupertinoModalPopup(
-                      context: context,
-                      builder: (_) => SafeArea(
-                        child: Container(
-                          color: Settings.instance.colors.primary,
-                          height: 300,
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: CupertinoDatePicker(
-                                  mode: CupertinoDatePickerMode.date,
-                                  initialDateTime: initial,
-                                  minimumYear: 1900,
-                                  maximumYear: now.year,
-                                  maximumDate: now,
-                                  onDateTimeChanged: (picked) {
-                                    pickedDate = picked;
-                                  },
-                                ),
-                              ),
-                              CupertinoButton(
-                                child: Text(
-                                  'Confirmar',
-                                  style: TextStyle(
-                                    color: Settings
-                                        .instance
-                                        .colors
-                                        .primaryContrast,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    widget.form.set(
-                                      field['name'],
-                                      pickedDate.toIso8601String().split(
-                                        'T',
-                                      )[0],
-                                    );
-                                  });
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                if (value != '' && widget.form.canEditForm)
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    child: Icon(CupertinoIcons.clear, size: 20),
-                    onPressed: () {
-                      setState(() {
-                        widget.form.set(field['name'], '');
-                      });
-                    },
-                  ),
-              ],
-            ),
-          ],
+        fieldWidget = DateInputField(
+          field: field,
+          value: value,
+          formSet: widget.form.set,
+          canEditForm: widget.form.canEditForm,
+          formatOptions: formatOptions,
         );
       } else if (field['inputType'] == 'time') {
-        fieldWidget = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
-            SizedBox(height: 4),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    value == '' ? 'Sin seleccionar' : value.toString(),
-                  ),
-                ),
-                CupertinoButton(
-                  child: Icon(CupertinoIcons.clock_solid),
-                  onPressed: () async {
-                    Duration initialDuration = value != ''
-                        ? Duration(
-                            hours: int.tryParse(value.split(":")[0]) ?? 0,
-                            minutes: int.tryParse(value.split(":")[1]) ?? 0,
-                          )
-                        : Duration();
-                    Duration pickedDuration = initialDuration;
-                    await showCupertinoModalPopup(
-                      context: context,
-                      builder: (_) => SafeArea(
-                        child: Container(
-                          color: Settings.instance.colors.primary,
-                          height: 300,
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: CupertinoTimerPicker(
-                                  mode: CupertinoTimerPickerMode.hm,
-                                  initialTimerDuration: initialDuration,
-                                  onTimerDurationChanged: (duration) {
-                                    pickedDuration = duration;
-                                  },
-                                ),
-                              ),
-                              CupertinoButton(
-                                child: Text(
-                                  'Confirmar',
-                                  style: TextStyle(
-                                    color: Settings
-                                        .instance
-                                        .colors
-                                        .primaryContrast,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    widget.form.set(
-                                      field['name'],
-                                      "${pickedDuration.inHours.toString().padLeft(2, '0')}:${(pickedDuration.inMinutes % 60).toString().padLeft(2, '0')}",
-                                    );
-                                  });
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                if (value != '' && widget.form.canEditForm)
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    child: Icon(CupertinoIcons.clear, size: 20),
-                    onPressed: () {
-                      setState(() {
-                        widget.form.set(field['name'], '');
-                      });
-                    },
-                  ),
-              ],
-            ),
-          ],
+        fieldWidget = TimeInputField(
+          field: field,
+          value: value,
+          formSet: widget.form.set,
+          canEditForm: widget.form.canEditForm,
+          formatOptions: formatOptions,
         );
       } else if (field['multiple'] == true) {
-        fieldWidget = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
-            ...List.generate(
-              (value as List).length,
-              (i) => Row(
-                children: [
-                  Expanded(
-                    child: CupertinoTextField(
-                      placeholder: "$label ${i + 1}",
-                      controller: TextEditingController(text: value[i] ?? '')
-                        ..selection = TextSelection.collapsed(
-                          offset: value[i].length,
-                        ),
-                      onChanged: (val) {
-                        setState(() {
-                          value[i] = val;
-                          widget.form.set(field['name'], value);
-                        });
-                      },
-                    ),
-                  ),
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    child: Icon(CupertinoIcons.delete, size: 20),
-                    onPressed: () {
-                      setState(() {
-                        value.removeAt(i);
-                        widget.form.set(field['name'], value);
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-            CupertinoButton(
-              child: Text('Agregar'),
-              onPressed: () {
-                setState(() {
-                  value.add('');
-                  widget.form.set(field['name'], value);
-                });
-              },
-            ),
-          ],
+        fieldWidget = MultipleInputField(
+          field: field,
+          value: value,
+          formSet: widget.form.set,
+          canEditForm: widget.form.canEditForm,
+          formatOptions: formatOptions,
         );
       } else if (field['inputType'] == 'number') {
-        fieldWidget = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
-            CupertinoTextField(
-              placeholder: label,
-              controller: TextEditingController(text: value)
-                ..selection = TextSelection.collapsed(offset: value.length),
-              keyboardType: TextInputType.number,
-              onChanged: (val) {
-                setState(() {
-                  widget.form.set(field['name'], val);
-                });
-              },
-            ),
-          ],
+        fieldWidget = NumberInputField(
+          field: field,
+          value: value,
+          formSet: widget.form.set,
+          canEditForm: widget.form.canEditForm,
+          formatOptions: formatOptions,
         );
-      } else if (options != null && options.isNotEmpty) {
-        fieldWidget = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () async {
-                      int selected = options.indexOf(value);
-                      int pickedIndex = selected;
-                      await showCupertinoModalPopup(
-                        context: context,
-                        builder: (_) => SafeArea(
-                          child: Container(
-                            color: Settings.instance.colors.primary,
-                            height: 250,
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  child: CupertinoPicker(
-                                    itemExtent: 32,
-                                    scrollController:
-                                        FixedExtentScrollController(
-                                          initialItem: selected,
-                                        ),
-                                    onSelectedItemChanged: (i) {
-                                      pickedIndex = i;
-                                    },
-                                    children: options
-                                        .map((o) => Text(o.toString()))
-                                        .toList(),
-                                  ),
-                                ),
-                                CupertinoButton(
-                                  child: Text(
-                                    'Confirmar',
-                                    style: TextStyle(
-                                      color: Settings
-                                          .instance
-                                          .colors
-                                          .primaryContrast,
-                                    ),
-                                  ),
-                                  onPressed: () async {
-                                    setState(() {
-                                      widget.form.set(
-                                        field['name'],
-                                        options[pickedIndex],
-                                      );
-                                    });
-                                    if (!mounted) return;
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(color: CupertinoColors.separator),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            value == '' ? 'Sin seleccionar' : value.toString(),
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          Icon(CupertinoIcons.chevron_down, size: 20),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                if (value != '' && widget.form.canEditForm)
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    child: Icon(CupertinoIcons.clear, size: 20),
-                    onPressed: () {
-                      setState(() {
-                        widget.form.set(field['name'], '');
-                      });
-                    },
-                  ),
-              ],
-            ),
-          ],
+      } else if (field['options'] != null &&
+          field['options'] is List<dynamic> &&
+          field['options'].isNotEmpty) {
+        fieldWidget = OptionsInputField(
+          field: field,
+          value: value,
+          formSet: widget.form.set,
+          canEditForm: widget.form.canEditForm,
+          formatOptions: formatOptions,
         );
       } else {
-        fieldWidget = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
-            CupertinoTextField(
-              placeholder: label,
-              controller: TextEditingController(text: value)
-                ..selection = TextSelection.collapsed(offset: value.length),
-              onChanged: (val) {
-                setState(() {
-                  widget.form.set(field['name'], val);
-                });
-              },
-            ),
-          ],
+        fieldWidget = TextInputField(
+          field: field,
+          value: value,
+          formSet: widget.form.set,
+          canEditForm: widget.form.canEditForm,
+          formatOptions: formatOptions,
         );
       }
     } else if (type == 'select') {
-      fieldWidget = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
-          Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: () async {
-                    int selected = options!.indexOf(value);
-                    int pickedIndex = selected;
-                    await showCupertinoModalPopup(
-                      context: context,
-                      builder: (_) => SafeArea(
-                        child: Container(
-                          color: Settings.instance.colors.primary,
-                          height: 250,
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: CupertinoPicker(
-                                  itemExtent: 32,
-                                  scrollController: FixedExtentScrollController(
-                                    initialItem: selected,
-                                  ),
-                                  onSelectedItemChanged: (i) {
-                                    pickedIndex = i;
-                                  },
-                                  children: options
-                                      .map((o) => Text(o.toString()))
-                                      .toList(),
-                                ),
-                              ),
-                              CupertinoButton(
-                                child: Text(
-                                  'Confirmar',
-                                  style: TextStyle(
-                                    color: Settings
-                                        .instance
-                                        .colors
-                                        .primaryContrast,
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  setState(() {
-                                    widget.form.set(
-                                      field['name'],
-                                      options[pickedIndex],
-                                    );
-                                  });
-                                  if (!mounted) return;
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: CupertinoColors.separator),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          value == '' ? 'Sin seleccionar' : value.toString(),
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Icon(CupertinoIcons.chevron_down, size: 20),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              if (value != '' && widget.form.canEditForm)
-                CupertinoButton(
-                  padding: EdgeInsets.zero,
-                  child: Icon(CupertinoIcons.clear, size: 20),
-                  onPressed: () {
-                    setState(() {
-                      widget.form.set(field['name'], '');
-                    });
-                  },
-                ),
-            ],
-          ),
-        ],
+      fieldWidget = SelectField(
+        field: field,
+        value: value,
+        formSet: widget.form.set,
+        canEditForm: widget.form.canEditForm,
+        formatOptions: formatOptions,
       );
     } else if (type == 'textarea') {
-      fieldWidget = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
-          CupertinoTextField(
-            placeholder: label,
-            controller: TextEditingController(text: value)
-              ..selection = TextSelection.collapsed(offset: value.length),
-            maxLines: field['rows'] ?? 3,
-            onChanged: (val) {
-              setState(() {
-                widget.form.set(field['name'], val);
-              });
-            },
-          ),
-        ],
+      fieldWidget = TextAreaField(
+        field: field,
+        value: value,
+        formSet: widget.form.set,
+        canEditForm: widget.form.canEditForm,
+        formatOptions: formatOptions,
       );
     } else if (type == 'multiple') {
       if (field['inputType'] == 'checkbox') {
-        fieldWidget = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
-            ...options!.map(
-              (opt) => Row(
-                children: [
-                  CupertinoSwitch(
-                    value: value.contains(opt),
-                    onChanged: (val) {
-                      setState(() {
-                        if (val) {
-                          value.add(opt);
-                        } else {
-                          value.remove(opt);
-                        }
-                      });
-                    },
-                  ),
-                  SizedBox(width: 8),
-                  Text(opt),
-                ],
-              ),
-            ),
-          ],
+        fieldWidget = CheckboxMultipleField(
+          field: field,
+          value: value,
+          formSet: widget.form.set,
+          canEditForm: widget.form.canEditForm,
+          formatOptions: formatOptions,
         );
       } else if (field['inputType'] == 'radio') {
-        fieldWidget = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
-            ...options!.map(
-              (opt) => GestureDetector(
-                onTap: () {
-                  setState(() {
-                    widget.form.set(field['name'], opt);
-                  });
-                },
-                child: Row(
-                  children: [
-                    Icon(
-                      value == opt
-                          ? CupertinoIcons.circle_filled
-                          : CupertinoIcons.circle,
-                      color: value == opt
-                          ? CupertinoColors.activeBlue
-                          : CupertinoColors.inactiveGray,
-                    ),
-                    SizedBox(width: 8),
-                    Text(opt),
-                  ],
-                ),
-              ),
-            ),
-            if (value != '' && widget.form.canEditForm)
-              CupertinoButton(
-                padding: EdgeInsets.zero,
-                child: Icon(CupertinoIcons.clear, size: 20),
-                onPressed: () {
-                  setState(() {
-                    widget.form.set(field['name'], '');
-                  });
-                },
-              ),
-          ],
+        fieldWidget = RadioMultipleField(
+          field: field,
+          value: value,
+          formSet: widget.form.set,
+          canEditForm: widget.form.canEditForm,
+          formatOptions: formatOptions,
         );
       } else {
         fieldWidget = SizedBox.shrink();
       }
     } else if (type == 'drawingboard') {
-      final myCanvasController = ServiceCanvasController();
-      fieldWidget = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label != '' ? label : (field['secondaryLabel'] ?? 'Firma / Dibujo'),
-            style: TextStyle(fontWeight: FontWeight.w500),
-          ),
-          if (field['text'] != null)
-            Text(
-              field['text'] != '' ? field['text'] : "",
-              style: TextStyle(fontWeight: FontWeight.w200),
-            ),
-          SizedBox(height: 8),
-          ServiceCanvas(
-            readOnly: !widget.form.canEditForm,
-            controller: myCanvasController,
-            defaultData: value,
-            backgroundData: field['background'],
-          ),
-          if (widget.form.canEditForm)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                CupertinoButton(
-                  padding: EdgeInsets.zero,
-                  child: Icon(CupertinoIcons.clear, size: 20),
-                  onPressed: () {
-                    myCanvasController.clear();
-                    setState(() {
-                      widget.form.set(field['name'], null);
-                    });
-                  },
-                ),
-                CupertinoButton(
-                  padding: EdgeInsets.zero,
-                  child: Icon(CupertinoIcons.check_mark, size: 20),
-                  onPressed: () async {
-                    final data = await myCanvasController.exportAsSvg();
-                    setState(() {
-                      widget.form.set(field['name'], data);
-                    });
-                  },
-                ),
-              ],
-            ),
-        ],
+      fieldWidget = DrawingBoardField(
+        field: field,
+        value: value,
+        formSet: widget.form.set,
+        canEditForm: widget.form.canEditForm,
+        formatOptions: formatOptions,
       );
     } else if (type == 'tuple') {
-      final tupleFields = field['tuple'] as List<dynamic>? ?? [];
-      final tupleList = value.isEmpty
-          ? List.from(<dynamic>[])
-          : value as List<dynamic>;
-      fieldWidget = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label != '' ? label : 'Lista',
-            style: TextStyle(fontWeight: FontWeight.w500),
-          ),
-          ...List.generate(
-            tupleList.length,
-            (i) => Card(
-              color: Colors.white,
-              child: Padding(
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  children: [
-                    ...tupleFields.map((subfield) {
-                      final subValue = tupleList[i][subfield['name']] ?? '';
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            subfield['label'] ?? subfield['name'],
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          if (subfield['type'] == 'input' &&
-                              subfield['inputType'] == 'time')
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    subValue == ''
-                                        ? 'Sin seleccionar'
-                                        : subValue.toString(),
-                                  ),
-                                ),
-                                CupertinoButton(
-                                  child: Icon(CupertinoIcons.clock_solid),
-                                  onPressed: () async {
-                                    Duration initialDuration = subValue != ''
-                                        ? Duration(
-                                            hours:
-                                                int.tryParse(
-                                                  subValue.split(":")[0],
-                                                ) ??
-                                                0,
-                                            minutes:
-                                                int.tryParse(
-                                                  subValue.split(":")[1],
-                                                ) ??
-                                                0,
-                                          )
-                                        : Duration();
-                                    Duration pickedDuration = initialDuration;
-                                    await showCupertinoModalPopup(
-                                      context: context,
-                                      builder: (_) => SafeArea(
-                                        child: Container(
-                                          color:
-                                              Settings.instance.colors.primary,
-                                          height: 300,
-                                          child: Column(
-                                            children: [
-                                              Expanded(
-                                                child: CupertinoTimerPicker(
-                                                  mode: CupertinoTimerPickerMode
-                                                      .hm,
-                                                  initialTimerDuration:
-                                                      initialDuration,
-                                                  onTimerDurationChanged:
-                                                      (duration) {
-                                                        pickedDuration =
-                                                            duration;
-                                                      },
-                                                ),
-                                              ),
-                                              CupertinoButton(
-                                                child: Text(
-                                                  'Confirmar',
-                                                  style: TextStyle(
-                                                    color: Settings
-                                                        .instance
-                                                        .colors
-                                                        .primaryContrast,
-                                                  ),
-                                                ),
-                                                onPressed: () {
-                                                  setState(() {
-                                                    tupleList[i][subfield['name']] =
-                                                        "${pickedDuration.inHours.toString().padLeft(2, '0')}:${(pickedDuration.inMinutes % 60).toString().padLeft(2, '0')}";
-                                                    widget.form.set(
-                                                      field['name'],
-                                                      tupleList,
-                                                    );
-                                                  });
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            )
-                          else
-                            CupertinoTextField(
-                              placeholder:
-                                  subfield['label'] ?? subfield['name'],
-                              controller: TextEditingController(text: subValue)
-                                ..selection = TextSelection.collapsed(
-                                  offset: subValue.length,
-                                ),
-                              onChanged: (val) {
-                                setState(() {
-                                  tupleList[i][subfield['name']] = val;
-                                  widget.form.set(field['name'], tupleList);
-                                });
-                              },
-                            ),
-                        ],
-                      );
-                    }),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      child: Icon(CupertinoIcons.delete, size: 20),
-                      onPressed: () {
-                        setState(() {
-                          tupleList.removeAt(i);
-                          widget.form.set(field['name'], tupleList);
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          CupertinoButton(
-            child: Text('Agregar'),
-            onPressed: () {
-              setState(() {
-                tupleList.add({
-                  for (var sub in tupleFields) sub['name'].toString(): '',
-                });
-                widget.form.set(field['name'], tupleList);
-              });
-            },
-          ),
-        ],
+      fieldWidget = TupleField(
+        field: field,
+        value: value,
+        formSet: widget.form.set,
+        canEditForm: widget.form.canEditForm,
+        formatOptions: formatOptions,
       );
     } else if (type == 'text') {
-      fieldWidget = Padding(
-        padding: EdgeInsets.symmetric(vertical: 8),
-        child: Text(
-          field['text'] ?? '',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+      fieldWidget = TextDisplayField(
+        field: field,
+        value: value,
+        formSet: widget.form.set,
+        canEditForm: widget.form.canEditForm,
+        formatOptions: formatOptions,
       );
     } else {
       fieldWidget = SizedBox.shrink();
