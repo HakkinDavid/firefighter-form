@@ -1,7 +1,6 @@
 package mx.cetys.bomberos
 
 import AutoUpdaterManager
-import android.os.Environment
 import androidx.annotation.NonNull
 import androidx.lifecycle.lifecycleScope
 import com.example.autoupdater.UpdateFeatures
@@ -84,26 +83,6 @@ class MainActivity : FlutterActivity() {
               result.error("DOWNLOAD_ERROR", e.localizedMessage, null)
             }
           }
-        }
-
-        "deleteOldAPK" -> {
-            lifecycleScope.launch {
-                try {
-                    val count = 0
-                    val downloadsDir = Environment.DIRECTORY_DOWNLOADS
-
-                    downloadsDir.walk()
-                        .filter { it.isFile && it.name.startsWith("bomberos-") && it.extension == "apk" }
-                        .forEach { file ->
-                            file.delete()
-                            count++
-                        }
-
-                    result.success(count)
-                } catch (e: Exception) {
-                    result.error("DELETION_ERROR", e.localizedMessage, null)
-                }
-            }
         }
 
         else -> result.notImplemented()
