@@ -10,9 +10,13 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import java.net.URL
 
 class MainActivity : FlutterActivity() {
   private val CHANNEL = "mx.cetys.bomberos/low_level"
+  private val METADATA_URL =
+    "https://github.com/HakkinDavid/firefighter-form/releases/latest/download/metadata.json"
   private var release: UpdateFeatures? = null
   private val autoUpdaterManager = AutoUpdaterManager(this)
 
@@ -27,19 +31,17 @@ class MainActivity : FlutterActivity() {
           lifecycleScope.launch {
             try {
               val packageInfo = packageManager.getPackageInfo(packageName, 0)
-              val appVersion = packageInfo.versionName
+              val appVersion = packageInfo.versionName ?: ""
 
               release =
                 withContext(Dispatchers.IO) {
-                  autoUpdaterManager.checkForUpdate(
-                    JSONfileURL =
-                      "https://github.com/HakkinDavid/firefighter-form/releases/latest/download/metadata.json"
-                  )
+                  autoUpdaterManager.checkForUpdate(JSONfileURL = METADATA_URL)
+                    ?: fallbackCheckForUpdate(appVersion)
                 }
 
               val releaseData =
                 HashMap<String, Any>().apply {
-                  put("current_version", appVersion!!)
+                  put("current_version", appVersion)
                   if (release == null) {
                     put("available", false)
                   } else {
@@ -87,6 +89,24 @@ class MainActivity : FlutterActivity() {
 
         else -> result.notImplemented()
       }
+    }
+  }
+
+  private fun fallbackCheckForUpdate(currentVersion: String): UpdateFeatures? {
+    return try {
+      val metadataBody = URL(METADATA_URL).readText()
+      val metadata = JSONObject(metadataBody)
+      val latestVersion =
+        metadata.optString("latest_version").ifBlank { metadata.optString("latestversion") }
+      val apkUrl = metadata.optString("apk_url")
+      if (latestVersion.isBlank() || apkUrl.isBlank() || latestVersion == currentVersion) {
+        return null
+      }
+
+      val changelog = metadata.optString("changelog")
+      UpdateFeatures(changelog, apkUrl, latestVersion)
+    } catch (_: Exception) {
+      null
     }
   }
 }

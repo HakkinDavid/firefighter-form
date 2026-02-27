@@ -130,13 +130,15 @@ jobs:
           mkdir -p release
           cp build/app/outputs/flutter-apk/app-release.apk release/bomberos-android-release.apk
 
-          cat <<EOF > release/metadata.json
-          {
-              "latest_version": "${{ steps.vars.outputs.version }}",
-              "changelog": "${{ steps.commit.outputs.message }}",
-              "apk_url": "https://github.com/HakkinDavid/firefighter-form/releases/latest/download/bomberos-android-release.apk"
-          }
-          EOF
+          jq -n \
+            --arg latest_version "${{ steps.vars.outputs.version }}" \
+            --arg changelog "${{ steps.commit.outputs.message }}" \
+            --arg apk_url "https://github.com/HakkinDavid/firefighter-form/releases/latest/download/bomberos-android-release.apk" \
+            '{
+              latest_version: $latest_version,
+              changelog: $changelog,
+              apk_url: $apk_url
+            }' > release/metadata.json
 
       - name: 📤 Upload Android artifacts
         uses: actions/upload-artifact@v4
