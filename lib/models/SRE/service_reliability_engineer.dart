@@ -91,16 +91,11 @@ class ServiceReliabilityEngineer {
       heuristic: ConnectionHeuristic(),
       duty: Settings.instance.refreshTemplates,
     );
-    _tasksRepository["DeleteOldAPK"] = Task(
-      heuristic: DiskHeuristic(),
-      duty: _deleteOldAPK,
-    );
 
     enqueueTasks({
       "LoadFromDisk",
       "SyncForms",
       "UpdateTemplate",
-      "DeleteOldAPK",
       "IsUpdateAvailable",
     });
 
@@ -309,31 +304,6 @@ class ServiceReliabilityEngineer {
       Logging(
         "Error actualizando app: $e",
         caller: "SRE (_updateApp)",
-        attentionLevel: 3,
-      );
-    }
-  }
-
-  Future<void> _deleteOldAPK() async {
-    if (_platform == null) {
-      Logging(
-        "El dispositivo no es Android. Saliendo de la función...",
-        caller: "SRE (_deleteOldAPK)",
-      );
-      return;
-    }
-
-    try {
-      final count = await _platform!.invokeMethod('deleteOldAPK');
-      Logging(
-        "$count APKs anteriores han sido eliminados.",
-        caller: "SRE (_deleteOldAPK)",
-        attentionLevel: 3,
-      );
-    } catch (e) {
-      Logging(
-        "Error eliminando APKs anteriores: $e",
-        caller: "SRE (_deleteOldAPK)",
         attentionLevel: 3,
       );
     }
