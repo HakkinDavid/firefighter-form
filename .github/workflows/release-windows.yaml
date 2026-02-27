@@ -43,12 +43,12 @@ jobs:
       - name: 🏷️ Set release variables
         id: vars
         run: |
-          TAG="v$(Get-Date -Format "yy.MM.dd")"
-          VERSION="${TAG#v}"
-          NAME="Formulario de Bomberos ${TAG}"
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "name=$NAME" >> $GITHUB_OUTPUT
+          $TAG = "v$(Get-Date -Format 'yy.MM.dd')"
+          $VERSION = $TAG.Substring(1)
+          $NAME = "Formulario de Bomberos $TAG"
+          echo "tag=$TAG" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          echo "version=$VERSION" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          echo "name=$NAME" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
 
       - name: 📦 Prepare release files
         run: |

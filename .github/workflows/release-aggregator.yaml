@@ -54,10 +54,10 @@ jobs:
             core.info(`android_run_id=${androidRunId || "missing"}`);
             core.info(`windows_run_id=${windowsRunId || "missing"}`);
 
-      - name: ⏸️ Wait for both platform workflows
-        if: ${{ steps.runs.outputs.android_run_id == '' || steps.runs.outputs.windows_run_id == '' }}
+      - name: ⏸️ Wait for platform workflows
+        if: ${{ steps.runs.outputs.android_run_id == '' && steps.runs.outputs.windows_run_id == '' }}
         run: |
-          echo "Aún no hay builds exitosos de Android y Windows para este commit."
+          echo "Aún no hay builds exitosos de Android o Windows para este commit."
           echo "Este run del aggregator se omite; se volverá a ejecutar al completar el otro workflow."
           exit 0
           
