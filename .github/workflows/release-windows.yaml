@@ -38,12 +38,12 @@ jobs:
         run: flutter pub get
 
       - name: 🏗️ Build Windows release
-        run: flutter build windows --release --build-name=$(date +'%y.%m.%d')
+        run: flutter build windows --release --build-name=$(Get-Date -Format "yy.MM.dd")
 
       - name: 🏷️ Set release variables
         id: vars
         run: |
-          TAG="v$(date +'%y.%m.%d')"
+          TAG="v$(Get-Date -Format "yy.MM.dd")"
           VERSION="${TAG#v}"
           NAME="Formulario de Bomberos ${TAG}"
           echo "tag=$TAG" >> $GITHUB_OUTPUT
