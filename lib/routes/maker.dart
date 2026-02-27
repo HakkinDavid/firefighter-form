@@ -125,7 +125,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
         actions: [
           CupertinoDialogAction(
             onPressed: () => Navigator.pop(context),
-            child: Text('OK'),
+            child: Text('Aceptar'),
           ),
         ],
       ),
@@ -517,7 +517,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                   SizedBox(height: 10),
                   CupertinoTextField(
                     controller: formNameController,
-                    placeholder: 'formname',
+                    placeholder: 'Nombre del formulario (formname)',
                     onChanged: (value) {
                       _template!['formname'] = value;
                       setState(() {});
@@ -527,7 +527,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                   Row(
                     children: [
                       Text(
-                        'Sections / order',
+                        'Secciones / orden',
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                       Spacer(),
@@ -553,7 +553,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                           setState(() {});
                           setModalState(() {});
                         },
-                        child: Text('+ Add Section'),
+                        child: Text('+ Agregar sección'),
                       ),
                     ],
                   ),
@@ -701,7 +701,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                           await _showRestrictionsEditor();
                           setModalState(() {});
                         },
-                        child: Text('Edit Restrictions'),
+                        child: Text('Editar restricciones'),
                       ),
                       Spacer(),
                       CupertinoButton.filled(
@@ -711,7 +711,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                           setState(() {});
                           Navigator.pop(context);
                         },
-                        child: Text('Done'),
+                        child: Text('Listo'),
                       ),
                     ],
                   ),
@@ -745,7 +745,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Restrictions',
+                  'Restricciones',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 12),
@@ -769,14 +769,16 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                         ),
                         child: Row(
                           children: [
-                            Expanded(child: Text('$rule (${items.length})')),
+                            Expanded(
+                              child: Text('Regla: $rule (${items.length})'),
+                            ),
                             CupertinoButton(
                               padding: EdgeInsets.zero,
                               onPressed: () async {
                                 await _showRestrictionRuleEditor(rule, items);
                                 setModalState(() {});
                               },
-                              child: Text('Edit'),
+                              child: Text('Editar'),
                             ),
                           ],
                         ),
@@ -792,7 +794,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                       setState(() {});
                       Navigator.pop(context);
                     },
-                    child: Text('Done'),
+                    child: Text('Listo'),
                   ),
                 ),
               ],
@@ -819,7 +821,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Rule: $rule',
+                  'Regla: $rule',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 10),
@@ -917,7 +919,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                         setState(() {});
                         setModalState(() {});
                       },
-                      child: Text('+ Add Restriction'),
+                      child: Text('+ Agregar restricción'),
                     ),
                     Spacer(),
                     CupertinoButton.filled(
@@ -926,7 +928,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                         setState(() {});
                         Navigator.pop(context);
                       },
-                      child: Text('Done'),
+                      child: Text('Listo'),
                     ),
                   ],
                 ),
@@ -966,30 +968,30 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Edit restriction item',
+                'Editar restricción',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 10),
               CupertinoTextField(
                 controller: nameController,
-                placeholder: 'name',
+                placeholder: 'Campo (name)',
               ),
               SizedBox(height: 8),
               if (_ruleNeedsValue(rule)) ...[
                 CupertinoTextField(
                   controller: valueController,
-                  placeholder: 'value',
+                  placeholder: 'Valor (value)',
                 ),
                 SizedBox(height: 8),
               ],
               CupertinoTextField(
                 controller: messageController,
-                placeholder: 'message',
+                placeholder: 'Mensaje (message)',
               ),
               SizedBox(height: 8),
               CupertinoTextField(
                 controller: subnameController,
-                placeholder: 'subname (optional)',
+                placeholder: 'Subcampo (subname, opcional)',
               ),
               Spacer(),
               Row(
@@ -1014,13 +1016,13 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                         setState(() {});
                         Navigator.pop(context);
                       },
-                      child: Text('Save'),
+                      child: Text('Guardar'),
                     ),
                   ),
                   SizedBox(width: 8),
                   CupertinoButton(
                     onPressed: () => Navigator.pop(context),
-                    child: Text('Cancel'),
+                    child: Text('Cancelar'),
                   ),
                 ],
               ),
@@ -1038,6 +1040,95 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
 
   bool _ruleNeedsValue(String rule) {
     return rule == 'lessThan' || rule == 'greaterThan';
+  }
+
+  String? _leyendaCondicional(Map<String, dynamic> field) {
+    final displayOn = field['displayOn'];
+    if (displayOn is! Map<String, dynamic>) return null;
+
+    final partes = <String>[];
+    final notEmpty = displayOn['notEmpty'] as List<dynamic>? ?? <dynamic>[];
+    final isEmpty = displayOn['isEmpty'] as List<dynamic>? ?? <dynamic>[];
+    final equalTo = displayOn['equalTo'] as List<dynamic>? ?? <dynamic>[];
+    final includes = displayOn['includes'] as List<dynamic>? ?? <dynamic>[];
+
+    for (final item in notEmpty) {
+      final name = (item['name'] ?? '').toString();
+      if (name.isNotEmpty) partes.add('$name no esté vacío');
+    }
+    for (final item in isEmpty) {
+      final name = (item['name'] ?? '').toString();
+      if (name.isNotEmpty) partes.add('$name esté vacío');
+    }
+    for (final item in equalTo) {
+      final name = (item['name'] ?? '').toString();
+      final value = (item['value'] ?? '').toString();
+      if (name.isNotEmpty) partes.add('$name sea "$value"');
+    }
+    for (final item in includes) {
+      final name = (item['name'] ?? '').toString();
+      final value = (item['value'] ?? '').toString();
+      if (name.isNotEmpty) partes.add('$name incluya "$value"');
+    }
+
+    if (partes.isEmpty) return null;
+    return 'Campo condicional: se muestra cuando ${partes.join(' y ')}.';
+  }
+
+  List<Map<String, dynamic>> _restriccionesDeCampo(String fieldName) {
+    if (_template == null) return <Map<String, dynamic>>[];
+    final restrictions = _template!['restrictions'];
+    if (restrictions is! Map<String, dynamic>) return <Map<String, dynamic>>[];
+
+    final resultados = <Map<String, dynamic>>[];
+    for (final rule in _dslRestrictionRules) {
+      final items = restrictions[rule];
+      if (items is! List<dynamic>) continue;
+      for (final item in items) {
+        if (item is! Map<String, dynamic>) continue;
+        if ((item['name'] ?? '').toString() != fieldName) continue;
+        resultados.add(<String, dynamic>{
+          'rule': rule,
+          'name': (item['name'] ?? '').toString(),
+          'message': (item['message'] ?? 'Campo inválido').toString(),
+          if (item.containsKey('value')) 'value': item['value'],
+          if (item.containsKey('subname')) 'subname': item['subname'],
+        });
+      }
+    }
+    return resultados;
+  }
+
+  Widget _bloqueRestricciones(List<Map<String, dynamic>> restricciones) {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(top: 8),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: CupertinoColors.systemGrey6.resolveFrom(context),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Restricciones del campo',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          SizedBox(height: 6),
+          ...restricciones.map((r) {
+            final rule = (r['rule'] ?? '').toString();
+            final value = r.containsKey('value')
+                ? ' | valor (value): ${r['value']}'
+                : '';
+            final subname = r.containsKey('subname')
+                ? ' | subcampo (subname): ${r['subname']}'
+                : '';
+            return Text('• $rule$value$subname\n  ${r['message']}');
+          }),
+        ],
+      ),
+    );
   }
 
   void _addField(String sectionKey, String type) {
@@ -1232,13 +1323,13 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Field Editor',
+                  'Editor de campo',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 10),
                 CupertinoTextField(
                   controller: nameController,
-                  placeholder: 'name',
+                  placeholder: 'Nombre interno (name)',
                 ),
                 SizedBox(height: 8),
                 GestureDetector(
@@ -1246,7 +1337,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                     await showCupertinoModalPopup<void>(
                       context: context,
                       builder: (context) => CupertinoActionSheet(
-                        title: Text('type'),
+                        title: Text('Tipo de campo (type)'),
                         actions: [
                           for (final type in _dslFieldTypes)
                             CupertinoActionSheetAction(
@@ -1301,7 +1392,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('type: $draftType'),
+                        Text('Tipo: $draftType'),
                         Icon(CupertinoIcons.chevron_down),
                       ],
                     ),
@@ -1311,13 +1402,13 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                 if (draftType != 'text' || draft.containsKey('label'))
                   CupertinoTextField(
                     controller: labelController,
-                    placeholder: 'label',
+                    placeholder: 'Etiqueta (label)',
                   ),
                 if (draftType == 'text' || draftType == 'drawingboard') ...[
                   SizedBox(height: 8),
                   CupertinoTextField(
                     controller: textController,
-                    placeholder: 'text',
+                    placeholder: 'Texto (text)',
                     maxLines: draftType == 'drawingboard' ? 5 : 3,
                   ),
                 ],
@@ -1331,7 +1422,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                       await showCupertinoModalPopup<void>(
                         context: context,
                         builder: (context) => CupertinoActionSheet(
-                          title: Text('inputType'),
+                          title: Text('Tipo de entrada (inputType)'),
                           actions: [
                             for (final inputType in choices)
                               CupertinoActionSheetAction(
@@ -1373,7 +1464,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                   SizedBox(height: 8),
                   Row(
                     children: [
-                      Text('multiple'),
+                      Text('Múltiple (multiple)'),
                       Spacer(),
                       CupertinoSwitch(
                         value: draftMultiple,
@@ -1389,7 +1480,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                   SizedBox(height: 8),
                   CupertinoTextField(
                     controller: rowsController,
-                    placeholder: 'rows',
+                    placeholder: 'Número de filas (rows)',
                     keyboardType: TextInputType.number,
                   ),
                 ],
@@ -1397,12 +1488,12 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                   SizedBox(height: 8),
                   CupertinoTextField(
                     controller: secondaryLabelController,
-                    placeholder: 'secondaryLabel',
+                    placeholder: 'Etiqueta secundaria (secondaryLabel)',
                   ),
                   SizedBox(height: 8),
                   CupertinoTextField(
                     controller: ratioController,
-                    placeholder: 'aspect_ratio (optional)',
+                    placeholder: 'aspect_ratio (opcional)',
                     keyboardType: TextInputType.numberWithOptions(
                       decimal: true,
                     ),
@@ -1410,7 +1501,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                   SizedBox(height: 8),
                   CupertinoTextField(
                     controller: backgroundController,
-                    placeholder: 'background (optional)',
+                    placeholder: 'Fondo (opcional)',
                     maxLines: 3,
                   ),
                 ],
@@ -1425,11 +1516,11 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                         draftOptions,
                         requiredAtLeastOne:
                             draftType == 'select' || draftType == 'multiple',
-                        title: 'options',
+                        title: 'Opciones (options)',
                       );
                       setModalState(() {});
                     },
-                    child: Text('Edit options (${draftOptions.length})'),
+                    child: Text('Editar opciones (${draftOptions.length})'),
                   ),
                 if (draftType == 'tuple')
                   CupertinoButton(
@@ -1438,7 +1529,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                       await _showTupleEditor(draftTuple);
                       setModalState(() {});
                     },
-                    child: Text('Edit tuple (${draftTuple.length})'),
+                    child: Text('Editar tupla (${draftTuple.length})'),
                   ),
                 CupertinoButton(
                   padding: EdgeInsets.zero,
@@ -1447,7 +1538,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                     setModalState(() {});
                   },
                   child: Text(
-                    'Edit displayOn (${_displayOnCount(draftDisplayOn)})',
+                    'Editar displayOn (${_displayOnCount(draftDisplayOn)})',
                   ),
                 ),
                 Spacer(),
@@ -1587,13 +1678,13 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                           setState(() {});
                           Navigator.pop(context);
                         },
-                        child: Text('Save'),
+                        child: Text('Guardar'),
                       ),
                     ),
                     SizedBox(width: 8),
                     CupertinoButton(
                       onPressed: () => Navigator.pop(context),
-                      child: Text('Cancel'),
+                      child: Text('Cancelar'),
                     ),
                   ],
                 ),
@@ -1649,7 +1740,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                         Expanded(
                           child: CupertinoTextField(
                             controller: controllers[idx],
-                            placeholder: 'Opcion ${idx + 1}',
+                            placeholder: 'Opción ${idx + 1}',
                           ),
                         ),
                         CupertinoButton(
@@ -1704,7 +1795,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                           controllers.add(TextEditingController());
                         });
                       },
-                      child: Text('+ Add Option'),
+                      child: Text('+ Agregar opción'),
                     ),
                     Spacer(),
                     CupertinoButton.filled(
@@ -1721,7 +1812,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                         }
                         Navigator.pop(context);
                       },
-                      child: Text('Done'),
+                      child: Text('Listo'),
                     ),
                   ],
                 ),
@@ -1763,7 +1854,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'displayOn',
+                  'Condiciones de visibilidad (displayOn)',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 10),
@@ -1797,7 +1888,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                   alignment: Alignment.centerRight,
                   child: CupertinoButton.filled(
                     onPressed: () => Navigator.pop(context),
-                    child: Text('Done'),
+                    child: Text('Listo'),
                   ),
                 ),
               ],
@@ -1834,7 +1925,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
               );
               onEdited();
             },
-            child: Text('Edit'),
+            child: Text('Editar'),
           ),
           CupertinoButton(
             padding: EdgeInsets.zero,
@@ -1842,7 +1933,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
               list.clear();
               onEdited();
             },
-            child: Text('Clear'),
+            child: Text('Limpiar'),
           ),
         ],
       ),
@@ -1931,12 +2022,12 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                         );
                         setModalState(() {});
                       },
-                      child: Text('+ Add Condition'),
+                      child: Text('+ Agregar condición'),
                     ),
                     Spacer(),
                     CupertinoButton.filled(
                       onPressed: () => Navigator.pop(context),
-                      child: Text('Done'),
+                      child: Text('Listo'),
                     ),
                   ],
                 ),
@@ -1970,19 +2061,19 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Condition item',
+                'Elemento de condición',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 10),
               CupertinoTextField(
                 controller: nameController,
-                placeholder: 'name',
+                placeholder: 'Campo (name)',
               ),
               if (requiresValue) ...[
                 SizedBox(height: 8),
                 CupertinoTextField(
                   controller: valueController,
-                  placeholder: 'value',
+                  placeholder: 'Valor (value)',
                 ),
               ],
               Spacer(),
@@ -1999,13 +2090,13 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                         }
                         Navigator.pop(context);
                       },
-                      child: Text('Save'),
+                      child: Text('Guardar'),
                     ),
                   ),
                   SizedBox(width: 8),
                   CupertinoButton(
                     onPressed: () => Navigator.pop(context),
-                    child: Text('Cancel'),
+                    child: Text('Cancelar'),
                   ),
                 ],
               ),
@@ -2032,7 +2123,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'tuple',
+                  'Tupla (tuple)',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 10),
@@ -2125,12 +2216,12 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                         await _showTupleSubfieldEditor(sub);
                         setModalState(() {});
                       },
-                      child: Text('+ Add Subfield'),
+                      child: Text('+ Agregar subcampo'),
                     ),
                     Spacer(),
                     CupertinoButton.filled(
                       onPressed: () => Navigator.pop(context),
-                      child: Text('Done'),
+                      child: Text('Listo'),
                     ),
                   ],
                 ),
@@ -2174,13 +2265,13 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Tuple subfield',
+                  'Subcampo de tupla',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 10),
                 CupertinoTextField(
                   controller: nameController,
-                  placeholder: 'name',
+                  placeholder: 'Nombre interno (name)',
                 ),
                 SizedBox(height: 8),
                 GestureDetector(
@@ -2188,7 +2279,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                     await showCupertinoModalPopup<void>(
                       context: context,
                       builder: (context) => CupertinoActionSheet(
-                        title: Text('type'),
+                        title: Text('Tipo de subcampo (type)'),
                         actions: [
                           for (final t in ['input', 'multiple', 'text'])
                             CupertinoActionSheetAction(
@@ -2229,7 +2320,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('type: $subType'),
+                        Text('Tipo: $subType'),
                         Icon(CupertinoIcons.chevron_down),
                       ],
                     ),
@@ -2238,13 +2329,13 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                 SizedBox(height: 8),
                 CupertinoTextField(
                   controller: labelController,
-                  placeholder: 'label',
+                  placeholder: 'Etiqueta (label)',
                 ),
                 if (subType == 'text') ...[
                   SizedBox(height: 8),
                   CupertinoTextField(
                     controller: textController,
-                    placeholder: 'text',
+                    placeholder: 'Texto (text)',
                   ),
                 ],
                 if (subType == 'input' || subType == 'multiple') ...[
@@ -2257,7 +2348,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                       await showCupertinoModalPopup<void>(
                         context: context,
                         builder: (context) => CupertinoActionSheet(
-                          title: Text('inputType'),
+                          title: Text('Tipo de entrada (inputType)'),
                           actions: [
                             for (final choice in choices)
                               CupertinoActionSheetAction(
@@ -2302,11 +2393,11 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                       await _showOptionsEditor(
                         draftOptions,
                         requiredAtLeastOne: subType == 'multiple',
-                        title: 'options',
+                        title: 'Opciones (options)',
                       );
                       setModalState(() {});
                     },
-                    child: Text('Edit options (${draftOptions.length})'),
+                    child: Text('Editar opciones (${draftOptions.length})'),
                   ),
                 Spacer(),
                 Row(
@@ -2340,13 +2431,13 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
 
                           Navigator.pop(context);
                         },
-                        child: Text('Save'),
+                        child: Text('Guardar'),
                       ),
                     ),
                     SizedBox(width: 8),
                     CupertinoButton(
                       onPressed: () => Navigator.pop(context),
-                      child: Text('Cancel'),
+                      child: Text('Cancelar'),
                     ),
                   ],
                 ),
@@ -2460,7 +2551,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
     if (sections.isEmpty) {
       return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text('Template Maker'),
+          middle: Text('Editor de Plantillas'),
           leading: CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: _showTemplateEditor,
@@ -2541,7 +2632,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                       padding: EdgeInsets.symmetric(vertical: 12),
                       child: CupertinoButton.filled(
                         onPressed: () => _showAddFieldActionSheet(sectionKey),
-                        child: Text('+ Add Field'),
+                        child: Text('+ Agregar campo'),
                       ),
                     );
                   }
@@ -2550,6 +2641,12 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                   final isSelected =
                       _selectedSection == sectionKey &&
                       _selectedFieldIndex == idx;
+
+                  final fieldName = (field['name'] ?? '').toString();
+                  final leyenda = _leyendaCondicional(field);
+                  final restricciones = fieldName.isEmpty
+                      ? <Map<String, dynamic>>[]
+                      : _restriccionesDeCampo(fieldName);
 
                   return EditorFieldWrapper(
                     selected: isSelected,
@@ -2569,11 +2666,31 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                     onDelete: () => _deleteField(sectionKey, idx),
                     onMoveUp: () => _moveField(sectionKey, idx, -1),
                     onMoveDown: () => _moveField(sectionKey, idx, 1),
-                    child: DynamicFieldRenderer(
-                      field: field,
-                      form: _previewForm,
-                      setFormState: setState,
-                      formatOptions: _formatOptions,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (leyenda != null)
+                          Container(
+                            width: double.infinity,
+                            margin: EdgeInsets.only(top: 4, bottom: 8),
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: CupertinoColors.systemGrey6.resolveFrom(
+                                context,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(leyenda),
+                          ),
+                        DynamicFieldRenderer(
+                          field: field,
+                          form: _previewForm,
+                          setFormState: setState,
+                          formatOptions: _formatOptions,
+                        ),
+                        if (restricciones.isNotEmpty)
+                          _bloqueRestricciones(restricciones),
+                      ],
                     ),
                   );
                 },
@@ -2674,10 +2791,10 @@ class _TemplatePreviewForm extends ServiceForm {
   Map<String, dynamic> get content => _previewContent;
 
   @override
-  Map<String, dynamic> get errors => _previewErrors;
+  Map<String, dynamic> get errors => <String, Set<String>>{};
 
   @override
-  bool get canEditForm => true;
+  bool get canEditForm => false;
 
   @override
   void set(String fieldName, dynamic newValue) {
@@ -2723,43 +2840,7 @@ class _TemplatePreviewForm extends ServiceForm {
 
   @override
   bool shouldDisplay(Map<String, dynamic> field) {
-    final List<dynamic> notEmpty =
-        field['displayOn']?['notEmpty'] ?? <dynamic>[];
-    final List<dynamic> isEmpty = field['displayOn']?['isEmpty'] ?? <dynamic>[];
-    final List<dynamic> equalTo = field['displayOn']?['equalTo'] ?? <dynamic>[];
-    final List<dynamic> includes =
-        field['displayOn']?['includes'] ?? <dynamic>[];
-
-    var visible = true;
-    for (final item in notEmpty) {
-      final refName = item['name'];
-      visible =
-          visible &&
-          ((_previewContent[refName]?.toString().isNotEmpty) ?? false);
-    }
-    for (final item in isEmpty) {
-      final refName = item['name'];
-      visible =
-          visible && ((_previewContent[refName]?.toString().isEmpty) ?? true);
-    }
-    for (final item in equalTo) {
-      final refName = item['name'];
-      final value = item['value'];
-      visible = visible && (_previewContent[refName] == value);
-    }
-    for (final item in includes) {
-      final refName = item['name'];
-      final value = item['value'];
-      final target = _previewContent[refName];
-      if (target is Iterable) {
-        visible = visible && target.contains(value);
-      } else if (target is String) {
-        visible = visible && target.contains(value?.toString() ?? '');
-      } else {
-        visible = false;
-      }
-    }
-    return visible;
+    return true;
   }
 
   void _evaluateRestrictions(Map<String, dynamic> template) {
