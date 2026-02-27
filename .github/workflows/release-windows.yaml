@@ -52,13 +52,24 @@ jobs:
 
       - name: 📦 Prepare release files
         run: |
-          mkdir -p release
-          cp build/windows/x64/runner/Release/*.exe release/bomberos-windows-release.exe
+          New-Item -ItemType Directory -Path release -Force | Out-Null
+          $sourceDir = "build/windows/x64/runner/Release"
+          if (-not (Test-Path $sourceDir)) {
+            Write-Error "No se encontró la carpeta de salida de Windows: $sourceDir"
+            exit 1
+          }
+
+          $zipPath = "release/bomberos-windows-release.zip"
+          if (Test-Path $zipPath) {
+            Remove-Item $zipPath -Force
+          }
+
+          Compress-Archive -Path "$sourceDir/*" -DestinationPath $zipPath
 
       - name: 📤 Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: windows-${{ steps.vars.outputs.version }}
-          path: release/bomberos-windows-release.exe
+          path: release/bomberos-windows-release.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
