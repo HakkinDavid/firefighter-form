@@ -309,6 +309,7 @@
                     "HG Tijuana",
                     "HG Rosarito",
                     "HG Tecate",
+                    "HG Zona Este",
                     "Otro"
                 ]
             },
@@ -1703,6 +1704,7 @@
                     "HG Tijuana",
                     "HG Rosarito",
                     "HG Tecate",
+                    "HG Zona Este",
                     "Otro"
                 ],
                 "displayOn": {
@@ -1848,8 +1850,23 @@
                 "type": "input",
                 "inputType": "text",
                 "options": [
-                    "{filler}"
+                    "{filler}",
+                    "Otro"
                 ]
+            },
+            {
+                "name": "fillerotro",
+                "type": "input",
+                "inputType": "text",
+                "label": "Especifique el responsable de la atención",
+                "displayOn": {
+                    "includes": [
+                        {
+                            "name": "filler",
+                            "value": "Otro"
+                        }
+                    ]
+                }
             },
             {
                 "name": "firmaBomberoAtencion",
@@ -1955,6 +1972,10 @@
             {
                 "name": "filler",
                 "message": "El nombre del bombero que firma es obligatorio"
+            },
+            {
+                "name": "fillerotro",
+                "message": "Especificar el bombero que firma es obligatorio"
             },
             {
                 "name": "municipiootro",
@@ -2198,5 +2219,13 @@
                 "message": "Debe contener solo letras, números y espacios."
             }
         ]
+    },
+    "order": {
+        "Servicio": 0,
+        "Paciente": 1,
+        "Primaria": 2,
+        "Secundaria": 3,
+        "Tratamiento": 4,
+        "Resultados": 5
     }
 }

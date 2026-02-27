@@ -37,6 +37,8 @@ class Settings {
     return instance;
   }
 
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   String? _userId;
   int _role = 0;
 
@@ -50,6 +52,18 @@ class Settings {
   set role(int role) {
     _role = (role >= 0 && role <= 2) ? role : 0;
   }
+
+  bool _allowDebugging = false;
+
+  set allowDebugging(bool state) {
+    _allowDebugging = state;
+    Logging(
+      "${state ? "Activando" : "Desactivando"} depuración",
+      caller: "Settings (allowDebugging)",
+    );
+  }
+
+  bool get allowDebugging => _allowDebugging;
 
   Map<String, FirefighterUser> _userCache = {};
   List<ServiceForm> _formsQueue = [];
@@ -84,6 +98,41 @@ class Settings {
         ));
     _formsStreamController.add(combined);
     return combined;
+  }
+
+  List<FirefighterUser> getUserScope() {
+    // TODO: Logica para obtener supervisados
+    final currentUser = self;
+    if (currentUser == null) return [];
+    
+    // Por ahora filtra de userCache en vez de actual database query
+    return _userCache.values
+        .where((user) => user.watchedByUserId == currentUser.id)
+        .toList();
+  }
+
+  Future<void> updateUserRole(String userId, bool promote) async {
+    // Simple function for now
+    final action = promote ? 'Promover' : 'Degradar';
+    Logging(
+      "$action user: $userId",
+      caller: "Settings.updateUserRole",
+    );
+    
+    // Únicamente actualiza el cache ((FOR NOW))
+    final user = _userCache[userId];
+    if (user != null) {
+      if (promote && user.role < 2) {
+        Logging('^ Acción ${action.toLowerCase()} sería aplicada al usuario ${user.fullName} de su rol ${user.role} a ${user.role + 1}');
+      } else if (!promote && user.role > 1) {
+        Logging('v Acción ${action.toLowerCase()} sería aplicada al usuario ${user.fullName} de su rol ${user.role} a ${user.role - 1}');
+      } else if (!promote && user.role == 1) {
+         Logging(
+          'ALERTA: No se puede degradar al usuario ${user.fullName}: ya se encuentra en el rol default (Bombero)',
+          caller: "Settings.demoteUser",
+        );
+      }
+    }
   }
 
   Map<String, dynamic> Function() mapAccessor(String accessed, {String? id}) {
@@ -134,8 +183,8 @@ class Settings {
   }
 
   Future<void> setUser() async {
-    setUserId();
     try {
+      setUserId();
       await fetchUser();
       _role = self!.role;
       String directory = await getSettingsDirectoryRoute();
@@ -144,21 +193,24 @@ class Settings {
         ('$directory/user_cache.json', mapAccessor('userCache')),
       ]);
     } catch (e) {
-      Logging("Error: $e", caller: "Settings (setUser)", attentionLevel: 3);
-      ServiceReliabilityEngineer.instance.enqueueTasks({"SetUser"});
+      // nada
     }
   }
 
   Future<void> setForms() async {
-    final formRecords = await Supabase.instance.client
-        .from('filled_in')
-        .select('*');
-    _formsList = formRecords
-        .asMap()
-        .map((key, value) => MapEntry(key, ServiceForm.fromJson(value)))
-        .values
-        .toList();
-    _formsStreamController.add(formsList);
+    try {
+      final formRecords = await Supabase.instance.client
+          .from('filled_in')
+          .select('*');
+      _formsList = formRecords
+          .asMap()
+          .map((key, value) => MapEntry(key, ServiceForm.fromJson(value)))
+          .values
+          .toList();
+      _formsStreamController.add(formsList);
+    } catch (e) {
+      // yo cuando no hago nada
+    }
   }
 
   void setUserId() {
@@ -270,7 +322,11 @@ class Settings {
   }
 
   Future<Map<String, dynamic>> getTemplate(int id) async {
-    if (!(await isTemplateAvailable(id))) await fetchTemplate(id: id);
+    if (!(await isTemplateAvailable(id))) {
+      final template = await fetchTemplate(id: id);
+      ServiceReliabilityEngineer.instance.enqueueWriteTasks([template]);
+      return template.$2();
+    }
     File templateFile = File(await getTemplateRoute(id));
 
     return json.decode(await templateFile.readAsString());
@@ -288,7 +344,7 @@ class Settings {
           if (tId != null && tId > (newest ?? 0)) newest = tId;
         }
       } else {
-        await updateTemplates();
+        ServiceReliabilityEngineer.instance.enqueueTasks({"UpdateTemplate"});
       }
 
       return newest;
@@ -332,28 +388,54 @@ class Settings {
     return '${(await getApplicationDocumentsDirectory()).path}/settings';
   }
 
-  Future<void> updateTemplates() async {
+  Future<void> refreshTemplates() async {
     try {
-      await fetchTemplate();
+      final directory = Directory(await getTemplatesDirectoryRoute());
+      if (await directory.exists()) {
+        final List<(String, Map<String, dynamic> Function()?)>
+        templateRefreshTasks = [];
+        await for (var t in directory.list()) {
+          String name = t.path.split('/').last.split('.').first;
+          int? tId = int.tryParse(name);
+          if (tId == null) continue;
+          templateRefreshTasks.addAll([
+            (t.path, null),
+            await fetchTemplate(id: tId),
+          ]);
+        }
+        ServiceReliabilityEngineer.instance.enqueueWriteTasks(
+          templateRefreshTasks,
+        );
+      }
     } catch (e) {
-      // yo cuando hago algo
+      // yo cuando no hago algo
     }
   }
 
-  Future<void> fetchTemplate({int? id}) async {
-    late final File templateFile;
-    Map<String, dynamic>? template;
+  Future<(String, Map<String, dynamic> Function())> fetchTemplate({
+    int? id,
+  }) async {
+    late final String templateRoute;
+    late final Map<String, dynamic> template;
 
     if (id != null) {
-      templateFile = File(await getTemplateRoute(id));
+      template = await getTemplateRecord(tId: id);
+      templateRoute = await getTemplateRoute(id);
     } else {
       template = await getTemplateRecord();
-      templateFile = File(await getTemplateRoute(template['id']));
+      templateRoute = await getTemplateRoute(template['id']);
     }
-    if (await templateFile.exists()) return;
-    template ??= await getTemplateRecord(tId: id);
-    await templateFile.create(recursive: true);
-    await templateFile.writeAsString(jsonEncode(template['content']));
+    return (templateRoute, () => template['content'] as Map<String, dynamic>);
+  }
+
+  Future<void> updateTemplate() async {
+    try {
+      final template = await fetchTemplate();
+      if (await File(template.$1).exists()) return;
+      ServiceReliabilityEngineer.instance.enqueueWriteTasks([template]);
+    } catch (e) {
+      // yo cuando hago algo
+    }
   }
 
   // This will be an actual function later

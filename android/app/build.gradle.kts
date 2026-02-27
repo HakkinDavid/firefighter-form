@@ -51,7 +51,7 @@ android {
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
-        versionName = getVersionNameFromDate(gradle.startParameter.taskNames.any { it.contains("Debug") })
+        versionName = flutter.versionName
     }
 
     buildTypes {
@@ -73,15 +73,4 @@ flutter {
 dependencies {
     implementation ("com.github.CSAbhiOnline:AutoUpdater:1.0.1")
     implementation("org.slf4j:slf4j-simple:2.0.12")
-}
-
-fun getVersionNameFromDate(isDebug: Boolean = false): String {
-    val date = Date()
-    val calendar = Calendar.getInstance()
-    calendar.time = date
-    // if (isDebug) {
-    //     calendar.add(Calendar.YEAR, -1)
-    // }
-    val dateFormat = SimpleDateFormat("yy.MM.dd", Locale.getDefault())
-    return dateFormat.format(calendar.time)
 }

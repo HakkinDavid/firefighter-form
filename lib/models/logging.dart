@@ -1,6 +1,7 @@
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names, avoid_print
 
-import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:bomberos/models/settings.dart' show Settings;
+import 'package:flutter/foundation.dart';
 
 class Logging {
   static DateTime lastLogTimestamp = DateTime(0);
@@ -23,18 +24,25 @@ class Logging {
     }
   }
 
+  static final List<String> logs = [];
+
+  static log(String line) {
+    if (kDebugMode) print(line);
+    if (Settings.instance.allowDebugging) logs.add(line);
+  }
+
   Logging(Object? o, {String? caller, int attentionLevel = 0}) {
-    if (kDebugMode) {
+    if (kDebugMode || Settings.instance.allowDebugging) {
       final rightNow = DateTime.now();
       if (rightNow.difference(lastLogTimestamp).inSeconds > 1) {
-        print(
+        log(
           "================================================================================",
         );
       }
       String printable =
           getAttention(attentionLevel) +
           (caller != null ? "[$caller] > $o" : "$o");
-      print(printable);
+      log(printable);
       lastLogTimestamp = rightNow;
     }
   }

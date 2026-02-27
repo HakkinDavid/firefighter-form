@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:bomberos/models/logging.dart' show Logging;
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/models/user.dart';
 import 'package:bomberos/models/form.dart';
+import 'package:bomberos/viewmodels/overlay_service.dart';
 import 'Heuristic/connection_heuristic.dart';
 import 'Heuristic/disk_heuristic.dart';
 import 'Task/task.dart';
@@ -30,7 +32,7 @@ class ServiceReliabilityEngineer {
   static final _platform = Platform.isAndroid
       ? const MethodChannel('mx.cetys.bomberos/low_level')
       : null;
-  
+
   static String appVersion = "(?)";
 
   static Timer? _timer;
@@ -39,7 +41,7 @@ class ServiceReliabilityEngineer {
       _timer!.cancel();
     }
     _timer = Timer.periodic(
-      const Duration(seconds: 5),
+      const Duration(seconds: 1),
       (t) => ServiceReliabilityEngineer.instance._processQueue(),
     );
   };
@@ -56,6 +58,7 @@ class ServiceReliabilityEngineer {
     _tasksRepository["IsUpdateAvailable"] = Task(
       heuristic: ConnectionHeuristic(),
       duty: _isUpdateAvailable,
+      dependsOn: {"LoadFromDisk"},
     );
     _tasksRepository["UpdateApp"] = Task(
       heuristic: ConnectionHeuristic(),
@@ -79,8 +82,22 @@ class ServiceReliabilityEngineer {
       heuristic: ConnectionHeuristic(),
       duty: Settings.instance.setUser,
     );
+    _tasksRepository["UpdateTemplate"] = Task(
+      heuristic: ConnectionHeuristic(),
+      duty: Settings.instance.updateTemplate,
+      dependsOn: {"LoadFromDisk"},
+    );
+    _tasksRepository["RefreshTemplates"] = Task(
+      heuristic: ConnectionHeuristic(),
+      duty: Settings.instance.refreshTemplates,
+    );
 
-    enqueueTasks({"LoadFromDisk", "SyncForms", "IsUpdateAvailable"});
+    enqueueTasks({
+      "LoadFromDisk",
+      "SyncForms",
+      "UpdateTemplate",
+      "IsUpdateAvailable",
+    });
 
     ServiceReliabilityEngineer.startTimer();
   }
@@ -107,7 +124,7 @@ class ServiceReliabilityEngineer {
   }
 
   void _processQueue() async {
-    if (_tasksQueue.isEmpty) return;
+    if (_tasksQueue.isEmpty || _busy.isLocked) return;
 
     _tasksRepository.forEach((taskId, processedTask) async {
       if (_tasksQueue.contains(taskId)) {
@@ -181,17 +198,90 @@ class ServiceReliabilityEngineer {
           releaseMap['current_version'],
         )) {
       Logging(
-        "Se encontró la versión v${releaseMap['latest_version']} (actual v${releaseMap['current_version']}). Encolando SaveToDisk y UpdateApp.",
+        "Se encontró la versión v${releaseMap['latest_version']} (actual v${releaseMap['current_version']}). Llamando _askForUserPermission.",
         caller: "SRE (_isUpdateAvailable)",
         attentionLevel: 3,
       );
-      enqueueTasks({"SaveToDisk", "UpdateApp"});
+      _askForUserPermission();
     } else {
       Logging(
         "No se encontraron actualizaciones del app (available: ${releaseMap['available']}). La versión actual es v${releaseMap['current_version']}.",
         caller: "SRE (_isUpdateAvailable)",
       );
     }
+  }
+
+  void _askForUserPermission() async {
+    final navKey = Settings.instance.navigatorKey;
+    final navState = navKey.currentState;
+
+    // This might not be necessary, but just in case
+    if (navState == null || navState.overlay == null) {
+      Future.delayed(Duration(milliseconds: 100), () {
+        _askForUserPermission();
+      });
+      return;
+    }
+
+    final screenSize = MediaQuery.of(navKey.currentContext!).size;
+    final positionX = screenSize.width / 2;
+    final positionY = screenSize.height - 190;
+
+    Logging(
+      "Mostrando alerta de actualización.",
+      caller: "SRE (_askForUserPermission)",
+      attentionLevel: 2,
+    );
+
+    OverlayService.showOverlay(
+      position: Offset(positionX, positionY),
+      buttonSize: Size.zero,
+      overlayWidth: screenSize.width - 10,
+      overlayPadding: 10,
+      borderRadius: 8,
+      tapToClose: false,
+      overlayContent: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              "Se encontró una versión más reciente de la aplicación, ¿actualizar ahora?",
+              style: TextStyle(
+                color: Settings.instance.colors.textOverPrimary,
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CupertinoButton(
+                  onPressed: OverlayService.closeCurrentOverlay,
+                  color: CupertinoColors.systemGrey,
+                  child: const Text('Más tarde'),
+                ),
+                CupertinoButton(
+                  onPressed: () {
+                    Logging(
+                      "El usuario aceptó la actualización. Encolando SaveToDisk y UpdateApp.",
+                      caller: "SRE (_askForUserPermission)",
+                      attentionLevel: 3,
+                    );
+                    OverlayService.closeCurrentOverlay();
+                    enqueueTasks({"SaveToDisk", "UpdateApp"});
+                    },
+                  color: Settings.instance.colors.primaryContrastDark,
+                  child: const Text('Actualizar'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _updateApp() async {
