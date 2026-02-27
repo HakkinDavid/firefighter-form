@@ -126,14 +126,18 @@ jobs:
           echo "name=$NAME" >> $GITHUB_OUTPUT
 
       - name: 📦 Prepare release files
+        env:
+          LATEST_VERSION: ${{ steps.vars.outputs.version }}
+          CHANGELOG: ${{ steps.commit.outputs.message }}
+          APK_URL: https://github.com/HakkinDavid/firefighter-form/releases/latest/download/bomberos-android-release.apk
         run: |
           mkdir -p release
           cp build/app/outputs/flutter-apk/app-release.apk release/bomberos-android-release.apk
 
           jq -n \
-            --arg latest_version "${{ steps.vars.outputs.version }}" \
-            --arg changelog "${{ steps.commit.outputs.message }}" \
-            --arg apk_url "https://github.com/HakkinDavid/firefighter-form/releases/latest/download/bomberos-android-release.apk" \
+            --arg latest_version "$LATEST_VERSION" \
+            --arg changelog "$CHANGELOG" \
+            --arg apk_url "$APK_URL" \
             '{
               latest_version: $latest_version,
               changelog: $changelog,
