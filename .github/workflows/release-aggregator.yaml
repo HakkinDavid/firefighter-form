@@ -54,15 +54,14 @@ jobs:
             core.info(`android_run_id=${androidRunId || "missing"}`);
             core.info(`windows_run_id=${windowsRunId || "missing"}`);
 
-      - name: ⏸️ Wait for both platform workflows
-        if: ${{ steps.runs.outputs.android_run_id == '' || steps.runs.outputs.windows_run_id == '' }}
+      - name: ⏸️ Skip when no platform build is available
+        if: ${{ steps.runs.outputs.android_run_id == '' && steps.runs.outputs.windows_run_id == '' }}
         run: |
-          echo "Aún no hay builds exitosos de Android y Windows para este commit."
-          echo "Este run del aggregator se omite; se volverá a ejecutar al completar el otro workflow."
+          echo "No hay builds exitosos de Android ni Windows para este commit."
           exit 0
           
       - name: 🧾 Get commit message
-        if: ${{ steps.runs.outputs.android_run_id != '' && steps.runs.outputs.windows_run_id != '' }}
+        if: ${{ steps.runs.outputs.android_run_id != '' || steps.runs.outputs.windows_run_id != '' }}
         id: commit
         run: |
           TAG="v$(date +'%y.%m.%d')"
@@ -78,7 +77,7 @@ jobs:
           } >> $GITHUB_OUTPUT
 
       - name: 🏷️ Calculate version
-        if: ${{ steps.runs.outputs.android_run_id != '' && steps.runs.outputs.windows_run_id != '' }}
+        if: ${{ steps.runs.outputs.android_run_id != '' || steps.runs.outputs.windows_run_id != '' }}
         id: vars
         run: |
           TAG="v$(date +'%y.%m.%d')"
@@ -89,7 +88,7 @@ jobs:
           echo "name=$NAME" >> $GITHUB_OUTPUT
 
       - name: 📥 Download Android artifact
-        if: ${{ steps.runs.outputs.android_run_id != '' && steps.runs.outputs.windows_run_id != '' }}
+        if: ${{ steps.runs.outputs.android_run_id != '' }}
         uses: actions/download-artifact@v4
         with:
           pattern: android-*
@@ -99,7 +98,7 @@ jobs:
           path: artifacts/android
 
       - name: 📥 Download Windows artifact
-        if: ${{ steps.runs.outputs.android_run_id != '' && steps.runs.outputs.windows_run_id != '' }}
+        if: ${{ steps.runs.outputs.windows_run_id != '' }}
         uses: actions/download-artifact@v4
         with:
           pattern: windows-*
@@ -109,7 +108,7 @@ jobs:
           path: artifacts/windows
 
       - name: 📦 Collect files
-        if: ${{ steps.runs.outputs.android_run_id != '' && steps.runs.outputs.windows_run_id != '' }}
+        if: ${{ steps.runs.outputs.android_run_id != '' || steps.runs.outputs.windows_run_id != '' }}
         run: |
           mkdir -p release
 
@@ -121,8 +120,16 @@ jobs:
             cp artifacts/windows/* release/ || true
           fi
 
+      - name: ✅ Check collected files
+        if: ${{ steps.runs.outputs.android_run_id != '' || steps.runs.outputs.windows_run_id != '' }}
+        id: files
+        run: |
+          count=$(find release -maxdepth 1 -type f | wc -l | tr -d ' ')
+          echo "count=$count" >> $GITHUB_OUTPUT
+          echo "Found $count file(s) in release/"
+
       - name: 🚀 Create or update GitHub Release
-        if: ${{ steps.runs.outputs.android_run_id != '' && steps.runs.outputs.windows_run_id != '' }}
+        if: ${{ steps.files.outputs.count != '0' }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.vars.outputs.tag }}
