@@ -13,7 +13,7 @@ Top-level object:
 - order: Map<String, int> (section ordering for tabs)
 - restrictions: Map<String, List<RestrictionItem>>
 
-Sectioning / ordering behavior:
+Sectioning and ordering behavior:
 - Sections are rendered as tabs in order sorted by order[section] ascending.
 - If a section key is missing in order, runtime fallback behaves like 0.
 - Each section value is an ordered array of fields; array position is render order.
@@ -527,7 +527,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                   Row(
                     children: [
                       Text(
-                        'Secciones / orden',
+                        'Secciones y orden',
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                       Spacer(),
@@ -1182,7 +1182,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
           'name': name,
           'type': 'drawingboard',
           'label': '',
-          'secondaryLabel': 'Firma / Dibujo',
+          'secondaryLabel': 'Firma o dibujo',
           'text': '',
         };
       case 'tuple':
