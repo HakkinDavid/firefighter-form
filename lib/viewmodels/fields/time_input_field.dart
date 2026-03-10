@@ -92,7 +92,7 @@ class _TimeInputFieldState extends InputFieldState {
                 child: Icon(CupertinoIcons.clear, size: 20),
                 onPressed: () {
                   widget.setFormState(() {
-                    widget.formSet(widget.field['name'], '');
+                    widget.formSet(widget.field['name'], null);
                   });
                 },
               ),

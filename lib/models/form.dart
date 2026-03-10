@@ -79,7 +79,8 @@ class ServiceForm {
 
   void set(String fieldName, dynamic newValue) {
     if (!canEditForm) return;
-    _content[fieldName] = newValue;
+    _content[fieldName] =
+        newValue ?? getDefaultValue(getFieldFromReference(fieldName));
     _clearErrors(fieldName);
   }
 
