@@ -217,11 +217,6 @@ class Settings {
     _userId = Supabase.instance.client.auth.currentUser!.id;
   }
 
-  @Deprecated('Use fetchUser(pUserId: ...) and await the result instead.')
-  FirefighterUser getUserOrFail(String pUserId) {
-    return _userCache[pUserId]!;
-  }
-
   Future<FirefighterUser> fetchUser({String? pUserId}) async {
     pUserId ??= _userId!;
     final nameRecord = await Supabase.instance.client
