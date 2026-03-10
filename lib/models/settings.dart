@@ -104,7 +104,7 @@ class Settings {
     // TODO: Logica para obtener supervisados
     final currentUser = self;
     if (currentUser == null) return [];
-    
+
     // Por ahora filtra de userCache en vez de actual database query
     return _userCache.values
         .where((user) => user.watchedByUserId == currentUser.id)
@@ -114,20 +114,21 @@ class Settings {
   Future<void> updateUserRole(String userId, bool promote) async {
     // Simple function for now
     final action = promote ? 'Promover' : 'Degradar';
-    Logging(
-      "$action user: $userId",
-      caller: "Settings.updateUserRole",
-    );
-    
+    Logging("$action user: $userId", caller: "Settings.updateUserRole");
+
     // Únicamente actualiza el cache ((FOR NOW))
     final user = _userCache[userId];
     if (user != null) {
       if (promote && user.role < 2) {
-        Logging('^ Acción ${action.toLowerCase()} sería aplicada al usuario ${user.fullName} de su rol ${user.role} a ${user.role + 1}');
+        Logging(
+          '^ Acción ${action.toLowerCase()} sería aplicada al usuario ${user.fullName} de su rol ${user.role} a ${user.role + 1}',
+        );
       } else if (!promote && user.role > 1) {
-        Logging('v Acción ${action.toLowerCase()} sería aplicada al usuario ${user.fullName} de su rol ${user.role} a ${user.role - 1}');
+        Logging(
+          'v Acción ${action.toLowerCase()} sería aplicada al usuario ${user.fullName} de su rol ${user.role} a ${user.role - 1}',
+        );
       } else if (!promote && user.role == 1) {
-         Logging(
+        Logging(
           'ALERTA: No se puede degradar al usuario ${user.fullName}: ya se encuentra en el rol default (Bombero)',
           caller: "Settings.demoteUser",
         );
@@ -439,8 +440,21 @@ class Settings {
   }
 
   // This will be an actual function later
-  Future<void> uploadTemplate() async {
-    return;
+  Future<bool> uploadTemplate(Map<String, dynamic> template) async {
+    try {
+      await Supabase.instance.client.rpc(
+        'upload_template',
+        params: {'p_template': template},
+      );
+      ServiceReliabilityEngineer.instance.enqueueTasks({"UpdateTemplate"});
+    } catch (error) {
+      if (!error.toString().contains('Postgrest')) {
+        return false;
+      } else {
+        rethrow;
+      }
+    }
+    return true;
   }
 
   Future<void> enqueueForm(ServiceForm form) async {
