@@ -2635,17 +2635,17 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CupertinoButton(
-                  padding: EdgeInsets.zero,
-                  onPressed: _showTemplateEditor,
-                  child: Icon(CupertinoIcons.slider_horizontal_3),
-                ),
                 if (_hasUnsavedChanges)
                   CupertinoButton(
                     padding: EdgeInsets.zero,
                     onPressed: _uploadTemplate,
-                    child: Icon(CupertinoIcons.check_mark_circled),
+                    child: Icon(CupertinoIcons.cloud_upload_fill, size: 28),
                   ),
+                CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: _showTemplateEditor,
+                  child: Icon(CupertinoIcons.slider_horizontal_3, size: 28),
+                ),
               ],
             ),
           ),
@@ -2695,7 +2695,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
               backgroundColor: Settings.instance.colors.primary,
               automaticBackgroundVisibility: false,
               middle: Text(
-                sectionKey,
+                "Editor de plantilla",
                 style: TextStyle(
                   color: Settings.instance.colors.textOverPrimary,
                 ),
@@ -2705,29 +2705,32 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                 onPressed: _handleExitPressed,
                 child: Icon(
                   CupertinoIcons.clear,
+                  size: 28,
                   color: Settings.instance.colors.primaryContrast,
                 ),
               ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: _showTemplateEditor,
-                    child: Icon(
-                      CupertinoIcons.slider_horizontal_3,
-                      color: Settings.instance.colors.primaryContrast,
-                    ),
-                  ),
                   if (_hasUnsavedChanges)
                     CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: _uploadTemplate,
                       child: Icon(
-                        CupertinoIcons.check_mark_circled,
+                        CupertinoIcons.cloud_upload,
+                        size: 28,
                         color: Settings.instance.colors.primaryContrast,
                       ),
                     ),
+                  CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: _showTemplateEditor,
+                    child: Icon(
+                      CupertinoIcons.slider_horizontal_3,
+                      size: 28,
+                      color: Settings.instance.colors.primaryContrast,
+                    ),
+                  ),
                 ],
               ),
             ),
