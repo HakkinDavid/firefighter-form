@@ -200,7 +200,8 @@ class Settings {
     try {
       final formRecords = await Supabase.instance.client
           .from('filled_in')
-          .select('*');
+          .select('*')
+          .order('filled_at');
       _formsList = formRecords
           .asMap()
           .map((key, value) => MapEntry(key, ServiceForm.fromJson(value)))

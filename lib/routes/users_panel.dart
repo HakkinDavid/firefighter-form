@@ -25,11 +25,11 @@ class _UsersPanelState extends State<UsersPanel> {
     // This should give us our supervisados
     _userScope = Settings.instance.getUserScope();
     
-    // Sort by role (Supervisors first, then Bomberos) and then by name
+    // Sort by role (Administradores, Supervisores, then Bomberos) and then by name
     // Could be an option to toggle later maybe
     _userScope.sort((a, b) {
       if (a.role != b.role) {
-        return b.role.compareTo(a.role); // Higher role first (2 > 1)
+        return b.role.compareTo(a.role); // Higher role first (2 > 1 > 0)
       }
       return a.fullName.compareTo(b.fullName);
     });
