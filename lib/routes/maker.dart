@@ -112,16 +112,27 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
     }
   }
 
-  Future<void> _validateTemplate() async {
-    if (_template == null) return;
+  Future<bool> _validateTemplate() async {
+    if (_template == null) return false;
     _normalizeTemplateInPlace(_template!);
     setState(() {});
+    if (!mounted) return false;
+    return true;
+  }
+
+  Future<void> _uploadTemplate() async {
+    if (!(await _validateTemplate())) return;
+    bool success = await Settings.instance.uploadTemplate(_template!);
     if (!mounted) return;
     await showCupertinoDialog<void>(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: Text('Plantilla válida'),
-        content: Text('La estructura actual cumple con el DSL de FRAP.'),
+        title: Text(success ? 'Plantilla cargada' : 'No cargada'),
+        content: Text(
+          success
+              ? 'La estructura actual cumple con el DSL de FRAP y fue correctamente enviada a la nube.'
+              : 'Hubo un problema al cargar la plantilla.',
+        ),
         actions: [
           CupertinoDialogAction(
             onPressed: () => Navigator.pop(context),
@@ -2614,7 +2625,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
             ),
             trailing: CupertinoButton(
               padding: EdgeInsets.zero,
-              onPressed: _validateTemplate,
+              onPressed: _uploadTemplate,
               child: Icon(
                 CupertinoIcons.check_mark_circled,
                 color: Settings.instance.colors.primaryContrast,
