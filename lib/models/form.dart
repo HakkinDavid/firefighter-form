@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bomberos/models/logging.dart' show Logging;
 import 'package:bomberos/models/pdf_renderer.dart';
 import 'package:bomberos/models/settings.dart';
@@ -18,7 +20,7 @@ class ServiceForm {
   final Map<String, dynamic> _content;
   final DateTime _filledAt;
 
-  bool _edited = false;
+  String _savedContentFingerprint = '';
 
   String get name => _template['formname'] ?? 'Formulario';
   Map<String, dynamic> get sections => _template['fields'];
@@ -33,7 +35,7 @@ class ServiceForm {
   String get id => _id!;
   int get templateId => _templateId;
 
-  bool get edited => _edited;
+  bool get edited => _fingerprintContent(_content) != _savedContentFingerprint;
 
   bool _isLoaded = false;
 
@@ -52,6 +54,7 @@ class ServiceForm {
     this._status,
   ) {
     _id ??= Uuid().v8(config: V8Options(DateTime.now(), null));
+    _savedContentFingerprint = _fingerprintContent(_content);
   }
 
   Future<void> load() async {
@@ -70,12 +73,12 @@ class ServiceForm {
         fieldIndex++;
       }
     }
+    _savedContentFingerprint = _fingerprintContent(_content);
     _isLoaded = true;
   }
 
   void set(String fieldName, dynamic newValue) {
     if (!canEditForm) return;
-    if (newValue != _content[fieldName]) _edited = true;
     _content[fieldName] = newValue;
     _clearErrors(fieldName);
   }
@@ -91,6 +94,7 @@ class ServiceForm {
       return;
     }
     await Settings.instance.enqueueForm(this);
+    _savedContentFingerprint = _fingerprintContent(_content);
   }
 
   Future<void> delete() async {
@@ -349,4 +353,24 @@ class ServiceForm {
       .whereType<String>()
       .where((t) => t.isNotEmpty && !t.startsWith('data:image'))
       .toList();
+
+  dynamic _canonicalizeJson(dynamic value) {
+    if (value is Map) {
+      final entries = value.entries.toList()
+        ..sort((a, b) => a.key.toString().compareTo(b.key.toString()));
+      final result = <String, dynamic>{};
+      for (final entry in entries) {
+        result[entry.key.toString()] = _canonicalizeJson(entry.value);
+      }
+      return result;
+    }
+    if (value is List) {
+      return value.map(_canonicalizeJson).toList();
+    }
+    return value;
+  }
+
+  String _fingerprintContent(Map<String, dynamic> content) {
+    return jsonEncode(_canonicalizeJson(content));
+  }
 }
