@@ -13,6 +13,40 @@ class UsersList extends StatefulWidget {
 }
 
 class _UsersListState extends State<UsersList> {
+  final Map<String, Future<FirefighterUser>> _userFetches = {};
+
+  Future<FirefighterUser> _getUserFuture(String userId) {
+    return _userFetches.putIfAbsent(
+      userId,
+      () => Settings.instance.fetchUser(pUserId: userId),
+    );
+  }
+
+  Widget _buildSupervisorName(String supervisorId) {
+    final cachedSupervisor = Settings.instance.userCache[supervisorId];
+    if (cachedSupervisor != null) {
+      return Text(
+        cachedSupervisor.fullName,
+        style: TextStyle(fontSize: 13, color: CupertinoColors.label),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      );
+    }
+
+    return FutureBuilder<FirefighterUser>(
+      future: _getUserFuture(supervisorId),
+      builder: (context, snapshot) {
+        final fullName = snapshot.data?.fullName ?? 'Cargando supervisor...';
+        return Text(
+          fullName,
+          style: TextStyle(fontSize: 13, color: CupertinoColors.label),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        );
+      },
+    );
+  }
+
   void onUserTap(FirefighterUser user) async {
     // Si es que queremos revisar detalles del usuario (view details)
     // await Navigator.pushNamed(context, '/user', arguments: user.toJson());
@@ -84,7 +118,7 @@ class _UsersListState extends State<UsersList> {
                 // Action buttons
                 Row(
                   children: [
-                    if (user.role < 1)
+                    if (user.role < 1 && user.role < Settings.instance.role)
                       // Promote button (up arrow)
                       CupertinoButton(
                         onPressed: () => onUpdateRoleButtonTap(user, true),
@@ -96,7 +130,7 @@ class _UsersListState extends State<UsersList> {
                           color: Settings.instance.colors.primaryBright,
                         ),
                       ),
-                    if (user.role > 0)
+                    if (user.role > 0 && user.role < Settings.instance.role)
                       // Demote button (down arrow)
                       CupertinoButton(
                         onPressed: () => onUpdateRoleButtonTap(user, false),
@@ -151,17 +185,7 @@ class _UsersListState extends State<UsersList> {
                         ),
                       if (user.watchedByUserId != null) SizedBox(height: 2),
                       if (user.watchedByUserId != null)
-                        Text(
-                          Settings.instance
-                              .getUserOrFail(user.watchedByUserId!)
-                              .fullName,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: CupertinoColors.label,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                        _buildSupervisorName(user.watchedByUserId!),
                     ],
                   ),
                 ),

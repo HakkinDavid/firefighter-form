@@ -13,21 +13,21 @@ class UsersPanel extends StatefulWidget {
 }
 
 class _UsersPanelState extends State<UsersPanel> {
-  List<FirefighterUser> _watchedUsers = [];
+  List<FirefighterUser> _userScope = [];
 
   @override
   void initState() {
     super.initState();
-    _loadWatchedUsers();
+    _loadUsers();
   }
 
-  void _loadWatchedUsers() {
+  void _loadUsers() {
     // This should give us our supervisados
-    _watchedUsers = Settings.instance.getUserScope();
+    _userScope = Settings.instance.getUserScope();
     
     // Sort by role (Supervisors first, then Bomberos) and then by name
     // Could be an option to toggle later maybe
-    _watchedUsers.sort((a, b) {
+    _userScope.sort((a, b) {
       if (a.role != b.role) {
         return b.role.compareTo(a.role); // Higher role first (2 > 1)
       }
@@ -58,8 +58,7 @@ class _UsersPanelState extends State<UsersPanel> {
               child: Container(
                 color: Settings.instance.colors.background,
                 child: UsersList(
-                  usersList: _watchedUsers,
-                  // users_list se encarga de mostrar si hay o no watchedUsers
+                  usersList: _userScope,
                 ),
               ),
             ),

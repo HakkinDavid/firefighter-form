@@ -106,15 +106,13 @@ class Settings {
     if (currentUser == null) return [];
 
     // Por ahora filtra de userCache en vez de actual database query
-    return _userCache.values
-        .where((user) => user.watchedByUserId == currentUser.id)
-        .toList();
+    return _userCache.values.toList();
   }
 
   Future<void> updateUserRole(String userId, bool promote) async {
     // Simple function for now
     final action = promote ? 'Promover' : 'Degradar';
-    Logging("$action user: $userId", caller: "Settings.updateUserRole");
+    Logging("$action user: $userId", caller: "Settings (updateUserRole)");
 
     // Únicamente actualiza el cache ((FOR NOW))
     final user = _userCache[userId];
@@ -218,6 +216,7 @@ class Settings {
     _userId = Supabase.instance.client.auth.currentUser!.id;
   }
 
+  @Deprecated('Use fetchUser(pUserId: ...) and await the result instead.')
   FirefighterUser getUserOrFail(String pUserId) {
     return _userCache[pUserId]!;
   }

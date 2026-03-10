@@ -1,5 +1,6 @@
 import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/settings.dart';
+import 'package:bomberos/models/user.dart';
 import 'package:flutter/cupertino.dart';
 
 class FormList extends StatefulWidget {
@@ -13,6 +14,40 @@ class FormList extends StatefulWidget {
 }
 
 class _FormListState extends State<FormList> {
+  final Map<String, Future<FirefighterUser>> _userFetches = {};
+
+  Future<FirefighterUser> _getUserFuture(String userId) {
+    return _userFetches.putIfAbsent(
+      userId,
+      () => Settings.instance.fetchUser(pUserId: userId),
+    );
+  }
+
+  Widget _buildResponsibleName(ServiceForm form) {
+    final cachedUser = Settings.instance.userCache[form.filler];
+    if (cachedUser != null) {
+      return Text(
+        cachedUser.fullName,
+        style: TextStyle(fontSize: 13, color: CupertinoColors.label),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      );
+    }
+
+    return FutureBuilder<FirefighterUser>(
+      future: _getUserFuture(form.filler),
+      builder: (context, snapshot) {
+        final fullName = snapshot.data?.fullName ?? 'Cargando responsable...';
+        return Text(
+          fullName,
+          style: TextStyle(fontSize: 13, color: CupertinoColors.label),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        );
+      },
+    );
+  }
+
   void onFormTap(ServiceForm form) async {
     await Navigator.pushNamed(context, '/form', arguments: form.toJson());
   }
@@ -164,17 +199,7 @@ class _FormListState extends State<FormList> {
                         ),
                       ),
                       SizedBox(height: 2),
-                      Text(
-                        Settings.instance
-                            .getUserOrFail(form.filler)
-                            .fullName,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: CupertinoColors.label,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      _buildResponsibleName(form),
                       if (form.tags.isNotEmpty) SizedBox(height: 2),
                       Text(
                         'Etiquetas:',
@@ -226,9 +251,7 @@ class _FormListState extends State<FormList> {
     return Container(
       color: Settings.instance.colors.background,
       child: widget.formsList.isEmpty
-          ? Center(
-              child: widget.placeholder
-            )
+          ? Center(child: widget.placeholder)
           : ListView.builder(
               itemCount: widget.formsList.length,
               itemBuilder: (context, index) {
