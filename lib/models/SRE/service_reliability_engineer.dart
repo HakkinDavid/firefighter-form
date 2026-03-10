@@ -174,7 +174,7 @@ class ServiceReliabilityEngineer {
     final latestList = latest.split('.').map((s) => int.parse(s)).toList();
     final currentList = current.split('.').map((s) => int.parse(s)).toList();
 
-    // This will only work for the next 74 years
+    // This will only work for the next 73 years
     return latestList[0] > currentList[0] ||
         (latestList[0] == currentList[0] &&
             (latestList[1] > currentList[1] ||
