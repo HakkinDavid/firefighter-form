@@ -4,7 +4,7 @@ create or replace function delete_filled_in (
 begin
   PERFORM only_supervisors();
 
-  DELETE FROM filled_in WHERE id = p_id AND (filler = auth.uid() OR is_under_my_watch(filler));
+  DELETE FROM filled_in WHERE id = p_id AND (filler = auth.uid() OR is_under_my_watch(filler) or is_admin());
 exception
   when others then
     raise;
