@@ -18,7 +18,7 @@ class _UsersListState extends State<UsersList> {
     // await Navigator.pushNamed(context, '/user', arguments: user.toJson());
   }
 
-    Future<void> onUpdateRoleButtonTap(FirefighterUser user, bool promote) async {
+  Future<void> onUpdateRoleButtonTap(FirefighterUser user, bool promote) async {
     // Promote = true or false, Promote o Demote desde Settings
     await Settings.instance.updateUserRole(user.id, promote);
   }
@@ -70,7 +70,7 @@ class _UsersListState extends State<UsersList> {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        _getRoleDisplayName(user.role),
+                        user.roleName,
                         style: TextStyle(
                           fontSize: 12,
                           color: _getRoleColor(user.role),
@@ -84,28 +84,30 @@ class _UsersListState extends State<UsersList> {
                 // Action buttons
                 Row(
                   children: [
-                    // Promote button (up arrow)
-                    CupertinoButton(
-                      onPressed: () => onUpdateRoleButtonTap(user, true),
-                      padding: EdgeInsets.all(6),
-                      minimumSize: Size(0, 0),
-                      child: Icon(
-                        CupertinoIcons.arrow_up_circle,
-                        size: 20,
-                        color: Settings.instance.colors.primary,
+                    if (user.role < 1)
+                      // Promote button (up arrow)
+                      CupertinoButton(
+                        onPressed: () => onUpdateRoleButtonTap(user, true),
+                        padding: EdgeInsets.all(6),
+                        minimumSize: Size(0, 0),
+                        child: Icon(
+                          CupertinoIcons.arrow_up_circle,
+                          size: 28,
+                          color: Settings.instance.colors.primaryBright,
+                        ),
                       ),
-                    ),
-                    // Demote button (down arrow)
-                    CupertinoButton(
-                      onPressed: () => onUpdateRoleButtonTap(user, false),
-                      padding: EdgeInsets.all(6),
-                      minimumSize: Size(0, 0),
-                      child: Icon(
-                        CupertinoIcons.arrow_down_circle,
-                        size: 20,
-                        color: CupertinoColors.systemRed,
+                    if (user.role > 0)
+                      // Demote button (down arrow)
+                      CupertinoButton(
+                        onPressed: () => onUpdateRoleButtonTap(user, false),
+                        padding: EdgeInsets.all(6),
+                        minimumSize: Size(0, 0),
+                        child: Icon(
+                          CupertinoIcons.arrow_down_circle,
+                          size: 28,
+                          color: Settings.instance.colors.primaryContrastDark,
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ],
@@ -163,22 +165,6 @@ class _UsersListState extends State<UsersList> {
                     ],
                   ),
                 ),
-                // Role badge
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: _getRoleColor(user.role).withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    _getRoleDisplayName(user.role),
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                      color: _getRoleColor(user.role),
-                    ),
-                  ),
-                ),
               ],
             ),
           ],
@@ -189,9 +175,11 @@ class _UsersListState extends State<UsersList> {
 
   Color _getRoleColor(int role) {
     switch (role) {
-      case 2: // Supervisor
+      case 2: // Administrador
+        return Settings.instance.colors.primaryContrastDark;
+      case 1: // Supervisor
         return Settings.instance.colors.primary;
-      case 1: // Bombero
+      case 0: // Bombero
         return Settings.instance.colors.primaryBright;
       default: // Unknown/other
         return CupertinoColors.systemGrey;
@@ -200,23 +188,14 @@ class _UsersListState extends State<UsersList> {
 
   IconData _getRoleIcon(int role) {
     switch (role) {
-      case 2: // Supervisor
-        return CupertinoIcons.person_alt_circle;
-      case 1: // Bombero
-        return CupertinoIcons.person_circle;
+      case 2: // Administrador
+        return CupertinoIcons.person_3_fill;
+      case 1: // Supervisor
+        return CupertinoIcons.person_2_fill;
+      case 0: // Bombero
+        return CupertinoIcons.person_fill;
       default: // Unknown/other
         return CupertinoIcons.person;
-    }
-  }
-
-  String _getRoleDisplayName(int role) {
-    switch (role) {
-      case 2:
-        return 'Supervisor';
-      case 1:
-        return 'Bombero';
-      default:
-        return 'Usuario';
     }
   }
 
@@ -226,7 +205,8 @@ class _UsersListState extends State<UsersList> {
       color: Settings.instance.colors.background,
       child: widget.usersList.isEmpty
           ? Center(
-              child: widget.placeholder ??
+              child:
+                  widget.placeholder ??
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

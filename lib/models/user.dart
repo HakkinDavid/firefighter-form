@@ -14,10 +14,17 @@ class FirefighterUser {
     required this.secondSurname,
     required this.role,
     this.watchedByUserId,
-    this.watchesUsersId = const {}
+    this.watchesUsersId = const {},
   });
 
-  String get fullName => "$givenName $firstSurname${secondSurname != null ? " $secondSurname" : ""}";
+  String get fullName =>
+      "$givenName $firstSurname${secondSurname != null ? " $secondSurname" : ""}";
+  String get roleName => switch (role) {
+    2 => "Administrador",
+    1 => "Supervisor",
+    0 => "Bombero",
+    _ => "Usuario",
+  };
 
   Map<String, dynamic> toJson() {
     return {
@@ -39,7 +46,11 @@ class FirefighterUser {
       secondSurname: json['secondSurname'],
       role: json['role'],
       watchedByUserId: json['watchedByUserId'],
-      watchesUsersId: (json['watchesUsersId'] as List<dynamic>?)?.map((e) => e as String).toSet() ?? {},
+      watchesUsersId:
+          (json['watchesUsersId'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toSet() ??
+          {},
     );
   }
 }

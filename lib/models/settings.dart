@@ -119,18 +119,18 @@ class Settings {
     // Únicamente actualiza el cache ((FOR NOW))
     final user = _userCache[userId];
     if (user != null) {
-      if (promote && user.role < 2) {
+      if (promote && user.role < 1) {
         Logging(
-          '^ Acción ${action.toLowerCase()} sería aplicada al usuario ${user.fullName} de su rol ${user.role} a ${user.role + 1}',
+          '^ Acción ${action.toLowerCase()} sería aplicada al ${user.roleName} ${user.fullName} de su rol ${user.role} a ${user.role + 1}',
         );
-      } else if (!promote && user.role > 1) {
+      } else if (!promote && user.role > 0) {
         Logging(
-          'v Acción ${action.toLowerCase()} sería aplicada al usuario ${user.fullName} de su rol ${user.role} a ${user.role - 1}',
+          'v Acción ${action.toLowerCase()} sería aplicada al ${user.roleName} ${user.fullName} de su rol ${user.role} a ${user.role - 1}',
         );
-      } else if (!promote && user.role == 1) {
+      } else if (!promote && user.role == 0) {
         Logging(
-          'ALERTA: No se puede degradar al usuario ${user.fullName}: ya se encuentra en el rol default (Bombero)',
-          caller: "Settings.demoteUser",
+          'ALERTA: No se puede degradar al ${user.roleName} ${user.fullName}: ya se encuentra en el rol default (Bombero)',
+          caller: "Settings (demoteUser)",
         );
       }
     }
