@@ -199,119 +199,10 @@ class Settings {
     _userId = Supabase.instance.client.auth.currentUser!.id;
   }
 
-  Future<FirefighterUser> fetchUser({
-    String? pUserId,
-    bool fetchUserWriteTask = true,
-  }) async {
+  Future<FirefighterUser> fetchUser({String? pUserId}) async {
     pUserId ??= _userId!;
-    final nameRecord = await Supabase.instance.client
-        .from('user_name')
-        .select('id, given, surname1, surname2')
-        .eq('id', pUserId)
-        .maybeSingle();
-
-    final roleRecord = await Supabase.instance.client
-        .from('user_role')
-        .select('id, value')
-        .eq('id', pUserId)
-        .maybeSingle();
-
-    if (nameRecord == null || roleRecord == null) throw Error();
-
-    final watchedByRecord = await Supabase.instance.client
-        .from('user_hierarchy')
-        .select('id, watched_by')
-        .eq('id', pUserId)
-        .maybeSingle();
-
-    final watchesRecord = await Supabase.instance.client
-        .from('user_hierarchy')
-        .select('id')
-        .eq('watched_by', pUserId);
-
-    Set<String> watchesUsersId = {};
-    for (var w in watchesRecord) {
-      watchesUsersId.add(w['id']);
-    }
-
-    final user = FirefighterUser(
-      id: pUserId,
-      givenName: nameRecord['given'],
-      firstSurname: nameRecord['surname1'],
-      secondSurname: nameRecord['surname2'],
-      role: roleRecord['value'],
-      watchedByUserId: watchedByRecord?['watched_by'],
-      watchesUsersId: watchesUsersId,
-    );
-    _userCache[pUserId] = user;
-
-    // Watcher User logic
-    if (watchedByRecord != null) {
-      final watcherId = watchedByRecord['watched_by'];
-
-      final watcherNameRecord = await Supabase.instance.client
-          .from('user_name')
-          .select('id, given, surname1, surname2')
-          .eq('id', watcherId)
-          .maybeSingle();
-
-      final watcherRoleRecord = await Supabase.instance.client
-          .from('user_role')
-          .select('id, value')
-          .eq('id', watcherId)
-          .maybeSingle();
-
-      if (watcherNameRecord != null) {
-        // If tables are correct
-        final watcherUser = FirefighterUser(
-          id: watcherId,
-          givenName: watcherNameRecord['given'],
-          firstSurname: watcherNameRecord['surname1'],
-          secondSurname: watcherNameRecord['surname2'],
-          role:
-              watcherRoleRecord?['value'] ??
-              0, // obviously wrong, check later (M-Alcantar October 9th 2025) // LMAO this backfired (HakkinDavid March 10th 2026)
-        );
-        _userCache[watcherId] = watcherUser;
-      }
-    }
-
-    // Subordinate Users logic
-    for (var wId in watchesUsersId) {
-      var underWatchNameRecord = await Supabase.instance.client
-          .from('user_name')
-          .select('id, given, surname1, surname2')
-          .eq('id', wId)
-          .maybeSingle();
-
-      var underWatchRoleRecord = await Supabase.instance.client
-          .from('user_role')
-          .select('id, value')
-          .eq('id', wId)
-          .maybeSingle();
-
-      if (underWatchNameRecord != null && underWatchRoleRecord != null) {
-        // If tables are correct
-        FirefighterUser underWatchUser = FirefighterUser(
-          id: wId,
-          givenName: underWatchNameRecord['given'],
-          firstSurname: underWatchNameRecord['surname1'],
-          secondSurname: underWatchNameRecord['surname2'],
-          role: underWatchRoleRecord['value'],
-          watchedByUserId: pUserId,
-        );
-        _userCache[wId] = underWatchUser;
-      }
-    }
-    _userCacheStreamController.add(_userCache);
-    if (fetchUserWriteTask) {
-      String directory = await getSettingsDirectoryRoute();
-      ServiceReliabilityEngineer.instance.enqueueWriteTasks([
-        ('$directory/user_data.json', mapAccessor('userData')),
-        ('$directory/user_cache.json', mapAccessor('userCache')),
-      ]);
-    }
-    return user;
+    await refreshUsers();
+    return _userCache[pUserId]!;
   }
 
   Future<bool> isTemplateAvailable(int id) async {
@@ -431,6 +322,7 @@ class Settings {
 
       final Map<String, Set<String>> watcherMapById = {};
       for (var hierarchyRecordX in userHierarchyRecord) {
+        if (hierarchyRecordX['watched_by'] == null) continue;
         watcherMapById.update(
           hierarchyRecordX['watched_by'],
           (watches) => watches..add(hierarchyRecordX['id']),
@@ -450,14 +342,17 @@ class Settings {
           watchesUsersId: watcherMapById[idX] ?? <String>{},
         );
       }
-
+      _userCacheStreamController.add(_userCache);
       String directory = await getSettingsDirectoryRoute();
       ServiceReliabilityEngineer.instance.enqueueWriteTasks([
-        ('$directory/user_data.json', mapAccessor('userData')),
         ('$directory/user_cache.json', mapAccessor('userCache')),
       ]);
     } catch (e) {
-      // yo cuando no hago algo
+      Logging(
+        "Error intentando refrescar usuarios: $e",
+        caller: "Settings (refreshUsers)",
+        attentionLevel: 3,
+      );
     }
   }
 
