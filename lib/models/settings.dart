@@ -40,17 +40,11 @@ class Settings {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   String? _userId;
-  int _role = 0;
 
   String get userId => _userId ?? '';
-  int get role => _role;
   set userId(String userId) {
     // Maybe check with regex that the id format is correct
     _userId = userId;
-  }
-
-  set role(int role) {
-    _role = (role >= 0 && role <= 2) ? role : 0;
   }
 
   bool _allowDebugging = false;
@@ -68,6 +62,12 @@ class Settings {
   Map<String, FirefighterUser> _userCache = {};
   List<ServiceForm> _formsQueue = [];
   List<ServiceForm> _formsList = [];
+
+  final StreamController<Map<String, FirefighterUser>>
+  _userCacheStreamController =
+      StreamController<Map<String, FirefighterUser>>.broadcast();
+  Stream<Map<String, FirefighterUser>> get userCacheStream =>
+      _userCacheStreamController.stream;
 
   final StreamController<List<ServiceForm>> _formsStreamController =
       StreamController<List<ServiceForm>>.broadcast();
@@ -98,11 +98,6 @@ class Settings {
         ));
     _formsStreamController.add(combined);
     return combined;
-  }
-
-  List<FirefighterUser> getUserScope() {
-    if (self == null) return [];
-    return _userCache.values.toList();
   }
 
   Future<void> setUserRole(String userId, int userRole) async {
@@ -137,7 +132,6 @@ class Settings {
           return () {
             Map<String, dynamic> map = {
               'userId': Settings.instance.userId,
-              'role': Settings.instance.role,
             };
             return map;
           };
@@ -181,12 +175,6 @@ class Settings {
     try {
       setUserId();
       await fetchUser();
-      _role = self!.role;
-      String directory = await getSettingsDirectoryRoute();
-      ServiceReliabilityEngineer.instance.enqueueWriteTasks([
-        ('$directory/user_data.json', mapAccessor('userData')),
-        ('$directory/user_cache.json', mapAccessor('userCache')),
-      ]);
     } catch (e) {
       // nada
     }
@@ -313,6 +301,12 @@ class Settings {
         _userCache[wId] = underWatchUser;
       }
     }
+    _userCacheStreamController.add(_userCache);
+    String directory = await getSettingsDirectoryRoute();
+    ServiceReliabilityEngineer.instance.enqueueWriteTasks([
+      ('$directory/user_data.json', mapAccessor('userData')),
+      ('$directory/user_cache.json', mapAccessor('userCache')),
+    ]);
     return user;
   }
 
