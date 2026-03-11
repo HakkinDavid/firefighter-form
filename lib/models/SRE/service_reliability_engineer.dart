@@ -345,14 +345,9 @@ class ServiceReliabilityEngineer {
           final Map<String, dynamic> userDataMap = jsonDecode(userDataString);
 
           Settings.instance.userId = userDataMap['userId'];
-          Settings.instance.role = userDataMap['role'] ?? 0;
 
           Logging(
             "Actualizado Settings.instance.userId: ${Settings.instance.userId}",
-            caller: "SRE (_loadFromDisk)",
-          );
-          Logging(
-            "Actualizado Settings.instance.role: ${Settings.instance.role}",
             caller: "SRE (_loadFromDisk)",
           );
         } else {
