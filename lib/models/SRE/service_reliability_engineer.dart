@@ -91,12 +91,18 @@ class ServiceReliabilityEngineer {
       heuristic: ConnectionHeuristic(),
       duty: Settings.instance.refreshTemplates,
     );
+    _tasksRepository["RefreshUsers"] = Task(
+      heuristic: ConnectionHeuristic(),
+      duty: Settings.instance.refreshUsers,
+      dependsOn: {"LoadFromDisk"},
+    );
 
     enqueueTasks({
       "LoadFromDisk",
       "SyncForms",
       "UpdateTemplate",
       "IsUpdateAvailable",
+      "RefreshUsers"
     });
 
     ServiceReliabilityEngineer.startTimer();
@@ -174,7 +180,7 @@ class ServiceReliabilityEngineer {
     final latestList = latest.split('.').map((s) => int.parse(s)).toList();
     final currentList = current.split('.').map((s) => int.parse(s)).toList();
 
-    // This will only work for the next 74 years
+    // This will only work for the next 73 years
     return latestList[0] > currentList[0] ||
         (latestList[0] == currentList[0] &&
             (latestList[1] > currentList[1] ||
@@ -345,14 +351,9 @@ class ServiceReliabilityEngineer {
           final Map<String, dynamic> userDataMap = jsonDecode(userDataString);
 
           Settings.instance.userId = userDataMap['userId'];
-          Settings.instance.role = userDataMap['role'] ?? 0;
 
           Logging(
             "Actualizado Settings.instance.userId: ${Settings.instance.userId}",
-            caller: "SRE (_loadFromDisk)",
-          );
-          Logging(
-            "Actualizado Settings.instance.role: ${Settings.instance.role}",
             caller: "SRE (_loadFromDisk)",
           );
         } else {

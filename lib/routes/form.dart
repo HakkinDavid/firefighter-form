@@ -13,6 +13,8 @@ class DynamicFormPage extends StatefulWidget {
 }
 
 class _DynamicFormPageState extends State<DynamicFormPage> {
+  String? _fillerFullName;
+
   IconData _sectionIcon(String section, {bool active = false}) {
     switch (section) {
       case 'Servicio':
@@ -83,6 +85,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
   void initState() {
     super.initState();
     _loadForm();
+    _loadFiller();
   }
 
   void _exitForm() {
@@ -111,14 +114,30 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
     }
   }
 
+  Future<void> _loadFiller() async {
+    try {
+      final cachedUser = Settings.instance.userCache[widget.form.filler];
+      final user =
+          cachedUser ??
+          await Settings.instance.fetchUser(pUserId: widget.form.filler);
+      if (!mounted) return;
+      setState(() {
+        _fillerFullName = user.fullName;
+      });
+    } catch (e) {
+      // ignore, placeholder replacement is optional
+    }
+  }
+
   List<dynamic>? formatOptions(List<dynamic>? originalOptions) {
     if (originalOptions == null) return null;
     final options = List<dynamic>.from(originalOptions);
+    final fillerFullName = _fillerFullName;
     for (int i = 0; i < options.length; i++) {
-      if (options[i] is String) {
+      if (options[i] is String && fillerFullName != null) {
         options[i] = (options[i] as String).replaceAll(
           '{filler}',
-          Settings.instance.getUserOrFail(widget.form.filler).fullName,
+          fillerFullName,
         );
       }
     }
@@ -229,7 +248,8 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                         color: Settings.instance.colors.primaryContrast,
                       ),
                     )
-                  : (!widget.form.canEditForm && Settings.instance.role >= 1
+                  : (!widget.form.canEditForm &&
+                            (Settings.instance.self?.hasSupervisorRights ?? false)
                         ? CupertinoButton(
                             padding: EdgeInsets.only(bottom: 6),
                             alignment: AlignmentGeometry.centerLeft,

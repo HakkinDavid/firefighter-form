@@ -14,6 +14,8 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   final _searchController = TextEditingController();
+  final Set<String> _loadingUsers = {};
+  final Map<String, String> _loadedUserNames = {};
   DateTime? _startDate;
   DateTime? _endDate;
 
@@ -51,11 +53,34 @@ class _SearchState extends State<Search> {
   }
 
   bool _userMatchesSearch(ServiceForm element, String searchText) {
+    final userId = element.filler;
+    final cachedUser = Settings.instance.userCache[userId];
+    if (cachedUser != null) {
+      return cachedUser.fullName.toLowerCase().contains(searchText);
+    }
+
+    final loadedUserName = _loadedUserNames[userId];
+    if (loadedUserName != null) {
+      return loadedUserName.toLowerCase().contains(searchText);
+    }
+
+    _fetchUserName(userId);
+    return false;
+  }
+
+  Future<void> _fetchUserName(String userId) async {
+    if (_loadingUsers.contains(userId)) return;
+    _loadingUsers.add(userId);
     try {
-      final creator = Settings.instance.getUserOrFail(element.filler);
-      return creator.fullName.toLowerCase().contains(searchText);
+      final fetchedUser = await Settings.instance.fetchUser(pUserId: userId);
+      if (!mounted) return;
+      setState(() {
+        _loadedUserNames[userId] = fetchedUser.fullName;
+      });
     } catch (e) {
-      return false;
+      // ignore and keep search resilient for missing user records
+    } finally {
+      _loadingUsers.remove(userId);
     }
   }
 
@@ -199,8 +224,12 @@ class _SearchState extends State<Search> {
                             children: [
                               // Search Text Field
                               CupertinoTextField(
-                                style: TextStyle(color: Settings.instance.colors.primary),
-                                placeholderStyle: TextStyle(color: Settings.instance.colors.disabled),
+                                style: TextStyle(
+                                  color: Settings.instance.colors.primary,
+                                ),
+                                placeholderStyle: TextStyle(
+                                  color: Settings.instance.colors.disabled,
+                                ),
                                 controller: _searchController,
                                 placeholder:
                                     'Folio, etiquetas, estado o responsable',

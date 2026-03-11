@@ -40,17 +40,11 @@ class Settings {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   String? _userId;
-  int _role = 0;
 
   String get userId => _userId ?? '';
-  int get role => _role;
   set userId(String userId) {
     // Maybe check with regex that the id format is correct
     _userId = userId;
-  }
-
-  set role(int role) {
-    _role = (role >= 0 && role <= 2) ? role : 0;
   }
 
   bool _allowDebugging = false;
@@ -68,6 +62,12 @@ class Settings {
   Map<String, FirefighterUser> _userCache = {};
   List<ServiceForm> _formsQueue = [];
   List<ServiceForm> _formsList = [];
+
+  final StreamController<Map<String, FirefighterUser>>
+  _userCacheStreamController =
+      StreamController<Map<String, FirefighterUser>>.broadcast();
+  Stream<Map<String, FirefighterUser>> get userCacheStream =>
+      _userCacheStreamController.stream;
 
   final StreamController<List<ServiceForm>> _formsStreamController =
       StreamController<List<ServiceForm>>.broadcast();
@@ -100,39 +100,29 @@ class Settings {
     return combined;
   }
 
-  List<FirefighterUser> getUserScope() {
-    // TODO: Logica para obtener supervisados
-    final currentUser = self;
-    if (currentUser == null) return [];
-    
-    // Por ahora filtra de userCache en vez de actual database query
-    return _userCache.values
-        .where((user) => user.watchedByUserId == currentUser.id)
-        .toList();
+  Future<void> setUserRole(String userId, int userRole) async {
+    await Supabase.instance.client.rpc(
+      'set_user_role',
+      params: {'p_user_id': userId, 'p_role_id': userRole},
+    );
+    FirefighterUser promotee = await fetchUser(pUserId: userId);
+    Logging(
+      "Se ha establecido ${promotee.fullName} como ${promotee.roleName}.",
+      caller: "Settings (setUserRole)",
+    );
   }
 
-  Future<void> updateUserRole(String userId, bool promote) async {
-    // Simple function for now
-    final action = promote ? 'Promover' : 'Degradar';
-    Logging(
-      "$action user: $userId",
-      caller: "Settings.updateUserRole",
+  Future<void> setUserHierarchy(String watchedId, String? watcherId) async {
+    await Supabase.instance.client.rpc(
+      'set_user_hierarchy',
+      params: {'p_watched_id': watchedId, 'p_watcher_id': watcherId},
     );
-    
-    // Únicamente actualiza el cache ((FOR NOW))
-    final user = _userCache[userId];
-    if (user != null) {
-      if (promote && user.role < 2) {
-        Logging('^ Acción ${action.toLowerCase()} sería aplicada al usuario ${user.fullName} de su rol ${user.role} a ${user.role + 1}');
-      } else if (!promote && user.role > 1) {
-        Logging('v Acción ${action.toLowerCase()} sería aplicada al usuario ${user.fullName} de su rol ${user.role} a ${user.role - 1}');
-      } else if (!promote && user.role == 1) {
-         Logging(
-          'ALERTA: No se puede degradar al usuario ${user.fullName}: ya se encuentra en el rol default (Bombero)',
-          caller: "Settings.demoteUser",
-        );
-      }
-    }
+    FirefighterUser watched = await fetchUser(pUserId: watchedId);
+    FirefighterUser watcher = await fetchUser(pUserId: watcherId);
+    Logging(
+      "Se ha establecido ${watcher.fullName} como tutelar de ${watched.fullName}.",
+      caller: "Settings (setUserHierarchy)",
+    );
   }
 
   Map<String, dynamic> Function() mapAccessor(String accessed, {String? id}) {
@@ -140,10 +130,7 @@ class Settings {
       case 'userData':
         {
           return () {
-            Map<String, dynamic> map = {
-              'userId': Settings.instance.userId,
-              'role': Settings.instance.role,
-            };
+            Map<String, dynamic> map = {'userId': Settings.instance.userId};
             return map;
           };
         }
@@ -186,12 +173,6 @@ class Settings {
     try {
       setUserId();
       await fetchUser();
-      _role = self!.role;
-      String directory = await getSettingsDirectoryRoute();
-      ServiceReliabilityEngineer.instance.enqueueWriteTasks([
-        ('$directory/user_data.json', mapAccessor('userData')),
-        ('$directory/user_cache.json', mapAccessor('userCache')),
-      ]);
     } catch (e) {
       // nada
     }
@@ -201,7 +182,8 @@ class Settings {
     try {
       final formRecords = await Supabase.instance.client
           .from('filled_in')
-          .select('*');
+          .select('*')
+          .order('filled_at');
       _formsList = formRecords
           .asMap()
           .map((key, value) => MapEntry(key, ServiceForm.fromJson(value)))
@@ -217,104 +199,10 @@ class Settings {
     _userId = Supabase.instance.client.auth.currentUser!.id;
   }
 
-  FirefighterUser getUserOrFail(String pUserId) {
-    return _userCache[pUserId]!;
-  }
-
   Future<FirefighterUser> fetchUser({String? pUserId}) async {
     pUserId ??= _userId!;
-    final nameRecord = await Supabase.instance.client
-        .from('user_name')
-        .select('id, given, surname1, surname2')
-        .eq('id', pUserId)
-        .maybeSingle();
-
-    final roleRecord = await Supabase.instance.client
-        .from('user_role')
-        .select('id, value')
-        .eq('id', pUserId)
-        .maybeSingle();
-
-    if (nameRecord == null || roleRecord == null) throw Error();
-
-    final watchedByRecord = await Supabase.instance.client
-        .from('user_hierarchy')
-        .select('id, watched_by')
-        .eq('id', pUserId)
-        .maybeSingle();
-
-    final watchesRecord = await Supabase.instance.client
-        .from('user_hierarchy')
-        .select('id')
-        .eq('watched_by', pUserId);
-
-    Set<String> watchesUsersId = {};
-    for (var w in watchesRecord) {
-      watchesUsersId.add(w['id']);
-    }
-
-    final user = FirefighterUser(
-      id: pUserId,
-      givenName: nameRecord['given'],
-      firstSurname: nameRecord['surname1'],
-      secondSurname: nameRecord['surname2'],
-      role: roleRecord['value'],
-      watchedByUserId: watchedByRecord?['watched_by'],
-      watchesUsersId: watchesUsersId,
-    );
-    _userCache[pUserId] = user;
-
-    // Watcher User logic
-    if (watchedByRecord != null) {
-      final watcherId = watchedByRecord['watched_by'];
-
-      final watcherNameRecord = await Supabase.instance.client
-          .from('user_name')
-          .select('id, given, surname1, surname2')
-          .eq('id', watcherId)
-          .maybeSingle();
-
-      if (watcherNameRecord != null) {
-        // If tables are correct
-        final watcherUser = FirefighterUser(
-          id: watcherId,
-          givenName: watcherNameRecord['given'],
-          firstSurname: watcherNameRecord['surname1'],
-          secondSurname: watcherNameRecord['surname2'],
-          role: roleRecord['value'] + 1, // obviously wrong, check later
-        );
-        _userCache[watcherId] = watcherUser;
-      }
-    }
-
-    // Subordinate Users logic
-    for (var wId in watchesUsersId) {
-      var underWatchNameRecord = await Supabase.instance.client
-          .from('user_name')
-          .select('id, given, surname1, surname2')
-          .eq('id', wId)
-          .maybeSingle();
-
-      var underWatchRoleRecord = await Supabase.instance.client
-          .from('user_role')
-          .select('id, value')
-          .eq('id', wId)
-          .maybeSingle();
-
-      if (underWatchNameRecord != null && underWatchRoleRecord != null) {
-        // If tables are correct
-        FirefighterUser underWatchUser = FirefighterUser(
-          id: wId,
-          givenName: underWatchNameRecord['given'],
-          firstSurname: underWatchNameRecord['surname1'],
-          secondSurname: underWatchNameRecord['surname2'],
-          role: underWatchRoleRecord['value'],
-          watchedByUserId: pUserId,
-        );
-        _userCache[wId] = underWatchUser;
-      }
-    }
-    return user;
+    await refreshUsers();
+    return _userCache[pUserId]!;
   }
 
   Future<bool> isTemplateAvailable(int id) async {
@@ -412,6 +300,62 @@ class Settings {
     }
   }
 
+  Future<void> refreshUsers() async {
+    try {
+      final userNamesRecord = await Supabase.instance.client
+          .from('user_name')
+          .select('*');
+
+      final userRolesMap =
+          (await Supabase.instance.client.from('user_role').select('*'))
+              .asMap()
+              .map((key, value) => MapEntry(value['id'], value['value']));
+
+      final userHierarchyRecord = await Supabase.instance.client
+          .from('user_hierarchy')
+          .select('*');
+
+      final watchedMapById = {
+        for (var element in userHierarchyRecord)
+          element['id']: element['watched_by'],
+      };
+
+      final Map<String, Set<String>> watcherMapById = {};
+      for (var hierarchyRecordX in userHierarchyRecord) {
+        if (hierarchyRecordX['watched_by'] == null) continue;
+        watcherMapById.update(
+          hierarchyRecordX['watched_by'],
+          (watches) => watches..add(hierarchyRecordX['id']),
+          ifAbsent: () => {hierarchyRecordX['id']},
+        );
+      }
+
+      for (var userNameRecordX in userNamesRecord) {
+        String idX = userNameRecordX['id'];
+        _userCache[idX] = FirefighterUser(
+          id: idX,
+          givenName: userNameRecordX['given'],
+          firstSurname: userNameRecordX['surname1'],
+          secondSurname: userNameRecordX['surname2'],
+          role: userRolesMap[idX],
+          watchedByUserId: watchedMapById[idX],
+          watchesUsersId: watcherMapById[idX] ?? <String>{},
+        );
+      }
+      _userCacheStreamController.add(_userCache);
+      String directory = await getSettingsDirectoryRoute();
+      ServiceReliabilityEngineer.instance.enqueueWriteTasks([
+        ('$directory/user_cache.json', mapAccessor('userCache')),
+      ]);
+    } catch (e) {
+      Logging(
+        "Error intentando refrescar usuarios: $e",
+        caller: "Settings (refreshUsers)",
+        attentionLevel: 3,
+      );
+    }
+  }
+
   Future<(String, Map<String, dynamic> Function())> fetchTemplate({
     int? id,
   }) async {
@@ -439,8 +383,21 @@ class Settings {
   }
 
   // This will be an actual function later
-  Future<void> uploadTemplate() async {
-    return;
+  Future<bool> uploadTemplate(Map<String, dynamic> template) async {
+    try {
+      await Supabase.instance.client.rpc(
+        'upload_template',
+        params: {'p_template': template},
+      );
+      ServiceReliabilityEngineer.instance.enqueueTasks({"UpdateTemplate"});
+    } catch (error) {
+      if (!error.toString().contains('Postgrest')) {
+        return false;
+      } else {
+        rethrow;
+      }
+    }
+    return true;
   }
 
   Future<void> enqueueForm(ServiceForm form) async {

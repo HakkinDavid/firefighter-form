@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/viewmodels/dynamic_field_renderer.dart';
@@ -13,7 +15,7 @@ Top-level object:
 - order: Map<String, int> (section ordering for tabs)
 - restrictions: Map<String, List<RestrictionItem>>
 
-Sectioning / ordering behavior:
+Sectioning and ordering behavior:
 - Sections are rendered as tabs in order sorted by order[section] ascending.
 - If a section key is missing in order, runtime fallback behaves like 0.
 - Each section value is an ordered array of fields; array position is render order.
@@ -84,6 +86,7 @@ class ServiceTemplateMaker extends StatefulWidget {
 class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
   Map<String, dynamic>? _template;
   String? _loadError;
+  String? _savedTemplateFingerprint;
 
   String? _selectedSection;
   int? _selectedFieldIndex;
@@ -104,6 +107,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
       _normalizeTemplateInPlace(loaded);
       setState(() {
         _template = loaded;
+        _savedTemplateFingerprint = _fingerprintTemplate(loaded);
       });
     } catch (_) {
       setState(() {
@@ -112,16 +116,30 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
     }
   }
 
-  Future<void> _validateTemplate() async {
-    if (_template == null) return;
+  Future<bool> _validateTemplate() async {
+    if (_template == null) return false;
     _normalizeTemplateInPlace(_template!);
     setState(() {});
+    if (!mounted) return false;
+    return true;
+  }
+
+  Future<void> _uploadTemplate() async {
+    if (!(await _validateTemplate())) return;
+    bool success = await Settings.instance.uploadTemplate(_template!);
+    if (success && _template != null) {
+      _savedTemplateFingerprint = _fingerprintTemplate(_template!);
+    }
     if (!mounted) return;
     await showCupertinoDialog<void>(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: Text('Plantilla válida'),
-        content: Text('La estructura actual cumple con el DSL de FRAP.'),
+        title: Text(success ? 'Plantilla cargada' : 'No cargada'),
+        content: Text(
+          success
+              ? 'La estructura actual cumple con el DSL de FRAP y fue correctamente enviada a la nube.'
+              : 'Hubo un problema al cargar la plantilla.',
+        ),
         actions: [
           CupertinoDialogAction(
             onPressed: () => Navigator.pop(context),
@@ -216,6 +234,61 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
     }
 
     _previewForm.syncFromTemplate(template);
+  }
+
+  dynamic _canonicalizeJson(dynamic value) {
+    if (value is Map<String, dynamic>) {
+      final sortedKeys = value.keys.toList()..sort();
+      final result = <String, dynamic>{};
+      for (final key in sortedKeys) {
+        result[key] = _canonicalizeJson(value[key]);
+      }
+      return result;
+    }
+    if (value is List<dynamic>) {
+      return value.map(_canonicalizeJson).toList();
+    }
+    return value;
+  }
+
+  String _fingerprintTemplate(Map<String, dynamic> template) {
+    final canonical = _canonicalizeJson(template);
+    return jsonEncode(canonical);
+  }
+
+  bool get _hasUnsavedChanges {
+    if (_template == null || _savedTemplateFingerprint == null) return false;
+    return _fingerprintTemplate(_template!) != _savedTemplateFingerprint;
+  }
+
+  Future<void> _handleExitPressed() async {
+    if (!_hasUnsavedChanges) {
+      if (mounted) Navigator.pop(context);
+      return;
+    }
+    final shouldDiscard = await showCupertinoDialog<bool>(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text('Descartar cambios'),
+        content: Text(
+          'Tienes cambios sin guardar. ¿Deseas salir y descartar los cambios?',
+        ),
+        actions: [
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () => Navigator.pop(context, true),
+            child: Text('Descartar y salir'),
+          ),
+          CupertinoDialogAction(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text('Cancelar'),
+          ),
+        ],
+      ),
+    );
+    if (shouldDiscard == true && mounted) {
+      Navigator.pop(context);
+    }
   }
 
   void _normalizeFieldInPlace(Map<String, dynamic> field) {
@@ -527,7 +600,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                   Row(
                     children: [
                       Text(
-                        'Secciones / orden',
+                        'Secciones y orden',
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                       Spacer(),
@@ -1182,7 +1255,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
           'name': name,
           'type': 'drawingboard',
           'label': '',
-          'secondaryLabel': 'Firma / Dibujo',
+          'secondaryLabel': 'Firma o dibujo',
           'text': '',
         };
       case 'tuple':
@@ -2549,156 +2622,197 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
     final sections = _orderedSections();
 
     if (sections.isEmpty) {
-      return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: Text('Editor de Plantillas'),
-          leading: CupertinoButton(
-            padding: EdgeInsets.zero,
-            onPressed: _showTemplateEditor,
-            child: Icon(CupertinoIcons.slider_horizontal_3),
+      return Form(
+        canPop: false,
+        child: CupertinoPageScaffold(
+          navigationBar: CupertinoNavigationBar(
+            middle: Text('Editor de Plantillas'),
+            leading: CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: _handleExitPressed,
+              child: Icon(CupertinoIcons.clear),
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (_hasUnsavedChanges)
+                  CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: _uploadTemplate,
+                    child: Icon(CupertinoIcons.cloud_upload_fill, size: 28),
+                  ),
+                CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: _showTemplateEditor,
+                  child: Icon(CupertinoIcons.slider_horizontal_3, size: 28),
+                ),
+              ],
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Center(
-            child: CupertinoButton.filled(
-              onPressed: _showTemplateEditor,
-              child: Text('Agregar primera sección'),
+          child: SafeArea(
+            child: Center(
+              child: CupertinoButton.filled(
+                onPressed: _showTemplateEditor,
+                child: Text('Agregar primera sección'),
+              ),
             ),
           ),
         ),
       );
     }
 
-    return CupertinoTabScaffold(
-      backgroundColor: Settings.instance.colors.background,
-      tabBar: CupertinoTabBar(
-        inactiveColor: Settings.instance.colors.primaryContrastDark,
-        activeColor: Settings.instance.colors.primaryContrast,
-        backgroundColor: Settings.instance.colors.primary,
-        items: [
-          for (final section in sections)
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.only(top: 6),
-                child: Icon(_sectionIcon(section)),
+    return Form(
+      canPop: false,
+      child: CupertinoTabScaffold(
+        backgroundColor: Settings.instance.colors.background,
+        tabBar: CupertinoTabBar(
+          inactiveColor: Settings.instance.colors.primaryContrastDark,
+          activeColor: Settings.instance.colors.primaryContrast,
+          backgroundColor: Settings.instance.colors.primary,
+          items: [
+            for (final section in sections)
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(top: 6),
+                  child: Icon(_sectionIcon(section)),
+                ),
+                activeIcon: Padding(
+                  padding: EdgeInsets.only(top: 6),
+                  child: Icon(_sectionIcon(section, active: true)),
+                ),
+                label: section,
               ),
-              activeIcon: Padding(
-                padding: EdgeInsets.only(top: 6),
-                child: Icon(_sectionIcon(section, active: true)),
-              ),
-              label: section,
-            ),
-        ],
-      ),
-      tabBuilder: (context, index) {
-        final sectionKey = sections[index];
-        final fields =
-            (_template!['fields'] as Map<String, dynamic>)[sectionKey]
-                as List<dynamic>;
+          ],
+        ),
+        tabBuilder: (context, index) {
+          final sectionKey = sections[index];
+          final fields =
+              (_template!['fields'] as Map<String, dynamic>)[sectionKey]
+                  as List<dynamic>;
 
-        return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            backgroundColor: Settings.instance.colors.primary,
-            automaticBackgroundVisibility: false,
-            middle: Text(
-              sectionKey,
-              style: TextStyle(color: Settings.instance.colors.textOverPrimary),
-            ),
-            leading: CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: _showTemplateEditor,
-              child: Icon(
-                CupertinoIcons.slider_horizontal_3,
-                color: Settings.instance.colors.primaryContrast,
+          return CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              backgroundColor: Settings.instance.colors.primary,
+              automaticBackgroundVisibility: false,
+              middle: Text(
+                "Editor de plantilla",
+                style: TextStyle(
+                  color: Settings.instance.colors.textOverPrimary,
+                ),
+              ),
+              leading: CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: _handleExitPressed,
+                child: Icon(
+                  CupertinoIcons.clear,
+                  size: 28,
+                  color: Settings.instance.colors.primaryContrast,
+                ),
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (_hasUnsavedChanges)
+                    CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: _uploadTemplate,
+                      child: Icon(
+                        CupertinoIcons.cloud_upload,
+                        size: 28,
+                        color: Settings.instance.colors.primaryContrast,
+                      ),
+                    ),
+                  CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: _showTemplateEditor,
+                    child: Icon(
+                      CupertinoIcons.slider_horizontal_3,
+                      size: 28,
+                      color: Settings.instance.colors.primaryContrast,
+                    ),
+                  ),
+                ],
               ),
             ),
-            trailing: CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: _validateTemplate,
-              child: Icon(
-                CupertinoIcons.check_mark_circled,
-                color: Settings.instance.colors.primaryContrast,
-              ),
-            ),
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: ListView.builder(
-                itemCount: fields.length + 1,
-                itemBuilder: (context, idx) {
-                  if (idx == fields.length) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      child: CupertinoButton.filled(
-                        onPressed: () => _showAddFieldActionSheet(sectionKey),
-                        child: Text('+ Agregar campo'),
+            child: SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: ListView.builder(
+                  itemCount: fields.length + 1,
+                  itemBuilder: (context, idx) {
+                    if (idx == fields.length) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        child: CupertinoButton.filled(
+                          onPressed: () => _showAddFieldActionSheet(sectionKey),
+                          child: Text('+ Agregar campo'),
+                        ),
+                      );
+                    }
+
+                    final field = fields[idx] as Map<String, dynamic>;
+                    final isSelected =
+                        _selectedSection == sectionKey &&
+                        _selectedFieldIndex == idx;
+
+                    final fieldName = (field['name'] ?? '').toString();
+                    final leyenda = _leyendaCondicional(field);
+                    final restricciones = fieldName.isEmpty
+                        ? <Map<String, dynamic>>[]
+                        : _restriccionesDeCampo(fieldName);
+
+                    return EditorFieldWrapper(
+                      selected: isSelected,
+                      onTap: () {
+                        setState(() {
+                          _selectedSection = sectionKey;
+                          _selectedFieldIndex = idx;
+                        });
+                      },
+                      onEdit: () async {
+                        setState(() {
+                          _selectedSection = sectionKey;
+                          _selectedFieldIndex = idx;
+                        });
+                        await _showFieldEditor(field);
+                      },
+                      onDelete: () => _deleteField(sectionKey, idx),
+                      onMoveUp: () => _moveField(sectionKey, idx, -1),
+                      onMoveDown: () => _moveField(sectionKey, idx, 1),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (leyenda != null)
+                            Container(
+                              width: double.infinity,
+                              margin: EdgeInsets.only(top: 4, bottom: 8),
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: CupertinoColors.systemGrey6.resolveFrom(
+                                  context,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(leyenda),
+                            ),
+                          DynamicFieldRenderer(
+                            field: field,
+                            form: _previewForm,
+                            setFormState: setState,
+                            formatOptions: _formatOptions,
+                          ),
+                          if (restricciones.isNotEmpty)
+                            _bloqueRestricciones(restricciones),
+                        ],
                       ),
                     );
-                  }
-
-                  final field = fields[idx] as Map<String, dynamic>;
-                  final isSelected =
-                      _selectedSection == sectionKey &&
-                      _selectedFieldIndex == idx;
-
-                  final fieldName = (field['name'] ?? '').toString();
-                  final leyenda = _leyendaCondicional(field);
-                  final restricciones = fieldName.isEmpty
-                      ? <Map<String, dynamic>>[]
-                      : _restriccionesDeCampo(fieldName);
-
-                  return EditorFieldWrapper(
-                    selected: isSelected,
-                    onTap: () {
-                      setState(() {
-                        _selectedSection = sectionKey;
-                        _selectedFieldIndex = idx;
-                      });
-                    },
-                    onEdit: () async {
-                      setState(() {
-                        _selectedSection = sectionKey;
-                        _selectedFieldIndex = idx;
-                      });
-                      await _showFieldEditor(field);
-                    },
-                    onDelete: () => _deleteField(sectionKey, idx),
-                    onMoveUp: () => _moveField(sectionKey, idx, -1),
-                    onMoveDown: () => _moveField(sectionKey, idx, 1),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (leyenda != null)
-                          Container(
-                            width: double.infinity,
-                            margin: EdgeInsets.only(top: 4, bottom: 8),
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: CupertinoColors.systemGrey6.resolveFrom(
-                                context,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(leyenda),
-                          ),
-                        DynamicFieldRenderer(
-                          field: field,
-                          form: _previewForm,
-                          setFormState: setState,
-                          formatOptions: _formatOptions,
-                        ),
-                        if (restricciones.isNotEmpty)
-                          _bloqueRestricciones(restricciones),
-                      ],
-                    ),
-                  );
-                },
+                  },
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

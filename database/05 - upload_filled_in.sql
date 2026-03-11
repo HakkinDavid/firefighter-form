@@ -27,7 +27,7 @@ begin
           content = p_content,
           filled_at = p_filled_at
       where id = p_id;
-    elsif is_supervisor() and (existing_filler = auth.uid() or is_under_my_watch(existing_filler)) then
+    elsif is_supervisor() and (existing_filler = auth.uid() or is_under_my_watch(existing_filler) or is_admin()) then
       update filled_in
       set
           status = 2,

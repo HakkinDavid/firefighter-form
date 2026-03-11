@@ -19,3 +19,6 @@ grant execute on function only_admins() to authenticated;
 grant execute on function upload_template(jsonb) to authenticated;
 grant execute on function upload_filled_in(uuid, int, smallint, jsonb, timestamp) to authenticated;
 grant execute on function delete_filled_in(uuid) to authenticated;
+
+grant execute on function set_user_role(uuid, smallint) to authenticated;
+grant execute on function set_user_hierarchy(uuid, uuid) to authenticated;
