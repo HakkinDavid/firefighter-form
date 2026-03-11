@@ -2,11 +2,22 @@ import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/models/user.dart';
 import 'package:flutter/cupertino.dart';
 
+typedef UserActionButtonsBuilder =
+    List<Widget> Function(BuildContext context, FirefighterUser user);
+
 class UsersList extends StatefulWidget {
   final List<FirefighterUser> usersList;
   final Widget? placeholder;
+  final Future<void> Function(FirefighterUser user)? onUserTap;
+  final UserActionButtonsBuilder? actionButtonsBuilder;
 
-  const UsersList({super.key, required this.usersList, this.placeholder});
+  const UsersList({
+    super.key,
+    required this.usersList,
+    this.placeholder,
+    this.onUserTap,
+    this.actionButtonsBuilder,
+  });
 
   @override
   State<UsersList> createState() => _UsersListState();
@@ -47,19 +58,10 @@ class _UsersListState extends State<UsersList> {
     );
   }
 
-  void onUserTap(FirefighterUser user) async {
-    // Si es que queremos revisar detalles del usuario (view details)
-    // await Navigator.pushNamed(context, '/user', arguments: user.toJson());
-  }
-
-  Future<void> onUpdateRoleButtonTap(FirefighterUser user, bool promote) async {
-    await Settings.instance.setUserRole(
-      user.id,
-      user.role + (promote ? 1 : -1),
-    );
-  }
-
   Widget _buildUserListItem(FirefighterUser user) {
+    final actionButtons =
+        widget.actionButtonsBuilder?.call(context, user) ?? const <Widget>[];
+
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -116,38 +118,8 @@ class _UsersListState extends State<UsersList> {
                     ],
                   ),
                 ),
-                if (Settings.instance.self?.hasAdministratorRights ?? false)
-                  SizedBox(width: 8),
-                // Action buttons
-                if (Settings.instance.self?.hasAdministratorRights ?? false)
-                  Row(
-                    children: [
-                      if (!user.isExclusivelyAdministrator)
-                        // Promote button (up arrow)
-                        CupertinoButton(
-                          onPressed: () => onUpdateRoleButtonTap(user, true),
-                          padding: EdgeInsets.all(6),
-                          minimumSize: Size(0, 0),
-                          child: Icon(
-                            CupertinoIcons.arrow_up_circle,
-                            size: 28,
-                            color: Settings.instance.colors.primaryBright,
-                          ),
-                        ),
-                      if (!user.isExclusivelyFirefighter)
-                        // Demote button (down arrow)
-                        CupertinoButton(
-                          onPressed: () => onUpdateRoleButtonTap(user, false),
-                          padding: EdgeInsets.all(6),
-                          minimumSize: Size(0, 0),
-                          child: Icon(
-                            CupertinoIcons.arrow_down_circle,
-                            size: 28,
-                            color: Settings.instance.colors.primaryContrastDark,
-                          ),
-                        ),
-                    ],
-                  ),
+                if (actionButtons.isNotEmpty) SizedBox(width: 8),
+                if (actionButtons.isNotEmpty) Row(children: actionButtons),
               ],
             ),
             SizedBox(height: 8),
@@ -265,10 +237,14 @@ class _UsersListState extends State<UsersList> {
           : ListView.builder(
               itemCount: widget.usersList.length,
               itemBuilder: (context, index) {
+                final user = widget.usersList[index];
+                if (widget.onUserTap == null) {
+                  return _buildUserListItem(user);
+                }
                 return CupertinoButton(
-                  onPressed: () => onUserTap(widget.usersList[index]),
+                  onPressed: () => widget.onUserTap!(user),
                   padding: EdgeInsets.zero,
-                  child: _buildUserListItem(widget.usersList[index]),
+                  child: _buildUserListItem(user),
                 );
               },
             ),
