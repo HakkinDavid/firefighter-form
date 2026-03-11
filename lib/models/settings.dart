@@ -124,7 +124,7 @@ class Settings {
   Future<void> setUserHierarchy(String watchedId, String watcherId) async {
     await Supabase.instance.client.rpc(
       'set_user_hierarchy',
-      params: {'p_user_id': watchedId, 'p_watcher_id': watcherId},
+      params: {'p_watched_id': watchedId, 'p_watcher_id': watcherId},
     );
     FirefighterUser watched = await fetchUser(pUserId: watchedId);
     FirefighterUser watcher = await fetchUser(pUserId: watcherId);
