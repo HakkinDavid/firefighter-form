@@ -101,9 +101,7 @@ class Settings {
   }
 
   List<FirefighterUser> getUserScope() {
-    // TODO: Logica para obtener supervisados
-    final currentUser = self;
-    if (currentUser == null) return [];
+    if (self == null) return [];
 
     // Por ahora filtra de userCache en vez de actual database query
     return _userCache.values.toList();
