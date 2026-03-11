@@ -26,6 +26,10 @@ class FirefighterUser {
     _ => "Usuario",
   };
 
+  bool get isFirefighter => role >= 0;
+  bool get isSupervisor => role >= 1;
+  bool get isAdministrator => role >= 2;
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,

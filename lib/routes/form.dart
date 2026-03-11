@@ -248,7 +248,8 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                         color: Settings.instance.colors.primaryContrast,
                       ),
                     )
-                  : (!widget.form.canEditForm && Settings.instance.role >= 1
+                  : (!widget.form.canEditForm &&
+                            (Settings.instance.self?.isSupervisor ?? false)
                         ? CupertinoButton(
                             padding: EdgeInsets.only(bottom: 6),
                             alignment: AlignmentGeometry.centerLeft,

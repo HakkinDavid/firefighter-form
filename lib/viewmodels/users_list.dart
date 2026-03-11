@@ -118,7 +118,7 @@ class _UsersListState extends State<UsersList> {
                 // Action buttons
                 Row(
                   children: [
-                    if (user.role < 1 && user.role < Settings.instance.role)
+                    if (Settings.instance.self?.isAdministrator ?? false)
                       // Promote button (up arrow)
                       CupertinoButton(
                         onPressed: () => onUpdateRoleButtonTap(user, true),
@@ -130,7 +130,7 @@ class _UsersListState extends State<UsersList> {
                           color: Settings.instance.colors.primaryBright,
                         ),
                       ),
-                    if (user.role > 0 && user.role < Settings.instance.role)
+                    if (Settings.instance.self?.isAdministrator ?? false)
                       // Demote button (down arrow)
                       CupertinoButton(
                         onPressed: () => onUpdateRoleButtonTap(user, false),

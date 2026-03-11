@@ -42,7 +42,7 @@ class _PreferencesState extends State<Preferences> {
       "type": "menu",
       "icon": CupertinoIcons.square_pencil_fill,
       "route": () => "/maker",
-      "available": () => Settings.instance.role == 2,
+      "available": () => Settings.instance.self?.isAdministrator ?? false,
     },
     {
       "title": "Panel de usuarios",
@@ -59,7 +59,7 @@ class _PreferencesState extends State<Preferences> {
       "icon": CupertinoIcons.graph_square_fill,
       "route": () => "/statistics",
       "available": () =>
-          Settings.instance.role >= 1 &&
+          (Settings.instance.self?.isSupervisor ?? false) &&
           kDebugMode, // TODO: Una vez terminadas estas secciones del app, remover la bandera de modo Debug para acceder
     },
   ];
