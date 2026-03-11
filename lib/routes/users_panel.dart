@@ -13,6 +13,8 @@ class UsersPanel extends StatefulWidget {
 }
 
 class _UsersPanelState extends State<UsersPanel> {
+  bool get _isAdmin => Settings.instance.self?.hasAdministratorRights ?? false;
+
   List<FirefighterUser> _sortedUsers(Iterable<FirefighterUser> users) {
     final sorted = users.toList();
     sorted.sort((a, b) {
@@ -28,6 +30,7 @@ class _UsersPanelState extends State<UsersPanel> {
     FirefighterUser user,
     bool promote,
   ) async {
+    if (!_isAdmin) return;
     await Settings.instance.setUserRole(
       user.id,
       user.role + (promote ? 1 : -1),
@@ -35,7 +38,7 @@ class _UsersPanelState extends State<UsersPanel> {
   }
 
   List<Widget> _buildRoleActionButtons(FirefighterUser user) {
-    if (!(Settings.instance.self?.hasAdministratorRights ?? false)) {
+    if (!_isAdmin) {
       return const <Widget>[];
     }
 
@@ -93,6 +96,7 @@ class _UsersPanelState extends State<UsersPanel> {
     FirefighterUser user,
     Map<String, FirefighterUser> usersMap,
   ) async {
+    if (!_isAdmin) return;
     final candidates = _sortedUsers(
       usersMap.values.where(
         (candidate) =>
@@ -138,6 +142,7 @@ class _UsersPanelState extends State<UsersPanel> {
     FirefighterUser user,
     Map<String, FirefighterUser> usersMap,
   ) async {
+    if (!_isAdmin) return;
     final candidates = _sortedUsers(
       usersMap.values.where(
         (candidate) =>
@@ -194,7 +199,7 @@ class _UsersPanelState extends State<UsersPanel> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Jerarquía de usuario',
+                            user.fullName,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
@@ -203,7 +208,7 @@ class _UsersPanelState extends State<UsersPanel> {
                           ),
                           SizedBox(height: 2),
                           Text(
-                            user.fullName,
+                            'Jerarquía',
                             style: TextStyle(
                               fontSize: 13,
                               color: CupertinoColors.secondaryLabel,
@@ -258,31 +263,35 @@ class _UsersPanelState extends State<UsersPanel> {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              CupertinoButton(
-                                onPressed: () =>
-                                    _showAddWatchedPicker(liveUser, usersMap),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 6,
-                                ),
-                                minimumSize: Size(0, 0),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      CupertinoIcons.add_circled,
-                                      size: 18,
-                                      color: Settings.instance.colors.primary,
-                                    ),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      'Agregar',
-                                      style: TextStyle(
+                              if (_isAdmin)
+                                CupertinoButton(
+                                  onPressed: () =>
+                                      _showAddWatchedPicker(liveUser, usersMap),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 6,
+                                  ),
+                                  minimumSize: Size(0, 0),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        CupertinoIcons.add_circled,
+                                        size: 18,
                                         color: Settings.instance.colors.primary,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        'Agregar',
+                                        style: TextStyle(
+                                          color:
+                                              Settings.instance.colors.primary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              else
+                                SizedBox(width: 8, height: 8),
                             ],
                           ),
                           SizedBox(height: 6),
@@ -298,23 +307,25 @@ class _UsersPanelState extends State<UsersPanel> {
                               child: UsersList(
                                 usersList: watchedUsers,
                                 onUserTap: null,
-                                actionButtonsBuilder: (context, watchedUser) =>
-                                    [
-                                      CupertinoButton(
-                                        onPressed: () =>
-                                            Settings.instance.setUserHierarchy(
-                                              watchedUser.id,
-                                              null,
-                                            ),
-                                        padding: EdgeInsets.all(6),
-                                        minimumSize: Size(0, 0),
-                                        child: Icon(
-                                          CupertinoIcons.trash,
-                                          size: 20,
-                                          color: CupertinoColors.systemRed,
-                                        ),
+                                actionButtonsBuilder: (context, watchedUser) {
+                                  if (!_isAdmin) return const <Widget>[];
+                                  return [
+                                    CupertinoButton(
+                                      onPressed: () =>
+                                          Settings.instance.setUserHierarchy(
+                                            watchedUser.id,
+                                            null,
+                                          ),
+                                      padding: EdgeInsets.all(6),
+                                      minimumSize: Size(0, 0),
+                                      child: Icon(
+                                        CupertinoIcons.trash,
+                                        size: 20,
+                                        color: CupertinoColors.systemRed,
                                       ),
-                                    ],
+                                    ),
+                                  ];
+                                },
                                 placeholder: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -355,53 +366,62 @@ class _UsersPanelState extends State<UsersPanel> {
                             ),
                             child: watcher == null
                                 ? Center(
-                                    child: CupertinoButton(
-                                      onPressed: () =>
-                                          _showReplaceWatcherPicker(
-                                            liveUser,
-                                            usersMap,
-                                          ),
-                                      child: Text('Asignar tutelar'),
-                                    ),
-                                  )
-                                : UsersList(
-                                    usersList: [watcher],
-                                    onUserTap: null,
-                                    actionButtonsBuilder:
-                                        (context, watchedBy) => [
-                                          CupertinoButton(
-                                            onPressed: () => Settings.instance
-                                                .setUserHierarchy(
-                                                  liveUser.id,
-                                                  null,
-                                                ),
-                                            padding: EdgeInsets.all(6),
-                                            minimumSize: Size(0, 0),
-                                            child: Icon(
-                                              CupertinoIcons
-                                                  .clear_circled_solid,
-                                              size: 20,
-                                              color: CupertinoColors.systemRed,
-                                            ),
-                                          ),
-                                          CupertinoButton(
+                                    child: _isAdmin
+                                        ? CupertinoButton(
                                             onPressed: () =>
                                                 _showReplaceWatcherPicker(
                                                   liveUser,
                                                   usersMap,
                                                 ),
-                                            padding: EdgeInsets.all(6),
-                                            minimumSize: Size(0, 0),
-                                            child: Icon(
-                                              CupertinoIcons.pencil_circle,
-                                              size: 20,
-                                              color: Settings
-                                                  .instance
-                                                  .colors
-                                                  .primary,
+                                            child: Text('Asignar tutelar'),
+                                          )
+                                        : Text(
+                                            'Sin tutelar asignado',
+                                            style: TextStyle(
+                                              color: CupertinoColors
+                                                  .secondaryLabel,
                                             ),
                                           ),
-                                        ],
+                                  )
+                                : UsersList(
+                                    usersList: [watcher],
+                                    onUserTap: null,
+                                    actionButtonsBuilder: (context, watchedBy) {
+                                      if (!_isAdmin) return const <Widget>[];
+                                      return [
+                                        CupertinoButton(
+                                          onPressed: () => Settings.instance
+                                              .setUserHierarchy(
+                                                liveUser.id,
+                                                null,
+                                              ),
+                                          padding: EdgeInsets.all(6),
+                                          minimumSize: Size(0, 0),
+                                          child: Icon(
+                                            CupertinoIcons.clear_circled_solid,
+                                            size: 20,
+                                            color: CupertinoColors.systemRed,
+                                          ),
+                                        ),
+                                        CupertinoButton(
+                                          onPressed: () =>
+                                              _showReplaceWatcherPicker(
+                                                liveUser,
+                                                usersMap,
+                                              ),
+                                          padding: EdgeInsets.all(6),
+                                          minimumSize: Size(0, 0),
+                                          child: Icon(
+                                            CupertinoIcons.pencil_circle,
+                                            size: 20,
+                                            color: Settings
+                                                .instance
+                                                .colors
+                                                .primary,
+                                          ),
+                                        ),
+                                      ];
+                                    },
                                   ),
                           ),
                         ],
