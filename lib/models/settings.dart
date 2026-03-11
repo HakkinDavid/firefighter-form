@@ -112,7 +112,7 @@ class Settings {
     );
   }
 
-  Future<void> setUserHierarchy(String watchedId, String watcherId) async {
+  Future<void> setUserHierarchy(String watchedId, String? watcherId) async {
     await Supabase.instance.client.rpc(
       'set_user_hierarchy',
       params: {'p_watched_id': watchedId, 'p_watcher_id': watcherId},
