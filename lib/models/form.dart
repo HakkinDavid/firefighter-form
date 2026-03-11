@@ -42,7 +42,7 @@ class ServiceForm {
   bool get isLoaded => _isLoaded;
 
   set editOverride(bool v) {
-    if ((Settings.instance.self?.isSupervisor ?? false) && v) _status = 0;
+    if ((Settings.instance.self?.hasSupervisorRights ?? false) && v) _status = 0;
   }
 
   ServiceForm(
@@ -302,7 +302,7 @@ class ServiceForm {
   }
 
   bool get canDeleteForm =>
-      status == 0 || (Settings.instance.self?.isSupervisor ?? false);
+      status == 0 || (Settings.instance.self?.hasSupervisorRights ?? false);
 
   bool get canEditForm => status == 0;
 

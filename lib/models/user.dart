@@ -26,9 +26,13 @@ class FirefighterUser {
     _ => "Usuario",
   };
 
-  bool get isFirefighter => role >= 0;
-  bool get isSupervisor => role >= 1;
-  bool get isAdministrator => role >= 2;
+  bool get hasFirefighterRights => role >= 0;
+  bool get hasSupervisorRights => role >= 1;
+  bool get hasAdministratorRights => role >= 2;
+
+  bool get isExclusivelyFirefighter => role == 0;
+  bool get isExclusivelySupervisor => role == 1;
+  bool get isExclusivelyAdministrator => role == 2;
 
   Map<String, dynamic> toJson() {
     return {

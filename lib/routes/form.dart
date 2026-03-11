@@ -249,7 +249,7 @@ class _DynamicFormPageState extends State<DynamicFormPage> {
                       ),
                     )
                   : (!widget.form.canEditForm &&
-                            (Settings.instance.self?.isSupervisor ?? false)
+                            (Settings.instance.self?.hasSupervisorRights ?? false)
                         ? CupertinoButton(
                             padding: EdgeInsets.only(bottom: 6),
                             alignment: AlignmentGeometry.centerLeft,
