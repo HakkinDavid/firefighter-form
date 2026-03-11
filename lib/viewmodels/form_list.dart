@@ -182,7 +182,7 @@ class _FormListState extends State<FormList> {
               ],
             ),
             SizedBox(height: 8),
-            // Second row: User and Supervisor information
+            // Second row: User and Tutelar information
             Row(
               children: [
                 // User information

@@ -22,11 +22,11 @@ class _UsersListState extends State<UsersList> {
     );
   }
 
-  Widget _buildSupervisorName(String supervisorId) {
-    final cachedSupervisor = Settings.instance.userCache[supervisorId];
-    if (cachedSupervisor != null) {
+  Widget _buildWatcherName(String watcherId) {
+    final cachedWatcher = Settings.instance.userCache[watcherId];
+    if (cachedWatcher != null) {
       return Text(
-        cachedSupervisor.fullName,
+        cachedWatcher.fullName,
         style: TextStyle(fontSize: 13, color: CupertinoColors.label),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -34,9 +34,9 @@ class _UsersListState extends State<UsersList> {
     }
 
     return FutureBuilder<FirefighterUser>(
-      future: _getUserFuture(supervisorId),
+      future: _getUserFuture(watcherId),
       builder: (context, snapshot) {
-        final fullName = snapshot.data?.fullName ?? 'Cargando supervisor...';
+        final fullName = snapshot.data?.fullName ?? 'Cargando tutelar...';
         return Text(
           fullName,
           style: TextStyle(fontSize: 13, color: CupertinoColors.label),
@@ -54,7 +54,10 @@ class _UsersListState extends State<UsersList> {
 
   Future<void> onUpdateRoleButtonTap(FirefighterUser user, bool promote) async {
     // Promote = true or false, Promote o Demote desde Settings
-    await Settings.instance.updateUserRole(user.id, promote);
+    await Settings.instance.setUserRole(
+      user.id,
+      user.role + (promote ? 1 : -1),
+    );
   }
 
   Widget _buildUserListItem(FirefighterUser user) {
@@ -185,7 +188,7 @@ class _UsersListState extends State<UsersList> {
                         ),
                       if (user.watchedByUserId != null) SizedBox(height: 2),
                       if (user.watchedByUserId != null)
-                        _buildSupervisorName(user.watchedByUserId!),
+                        _buildWatcherName(user.watchedByUserId!),
                     ],
                   ),
                 ),

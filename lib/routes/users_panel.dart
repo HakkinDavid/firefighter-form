@@ -22,7 +22,7 @@ class _UsersPanelState extends State<UsersPanel> {
   }
 
   void _loadUsers() {
-    // This should give us our supervisados and supervisor
+    // This should give us our tutelados and tutelar
     _userScope = Settings.instance.getUserScope();
     
     // Sort by role (Administradores, Supervisores, then Bomberos) and then by name

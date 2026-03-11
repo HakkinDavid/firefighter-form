@@ -63,7 +63,7 @@ class _HeaderState extends State<Header> {
             ),
             if (widget.adminUsername != null)
               Text(
-                "Supervisor: ${widget.adminUsername}",
+                "Tutelar: ${widget.adminUsername}",
                 style: TextStyle(
                   color: Settings.instance.colors.textOverPrimary,
                   fontSize: 14,
