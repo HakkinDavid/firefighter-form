@@ -130,9 +130,7 @@ class Settings {
       case 'userData':
         {
           return () {
-            Map<String, dynamic> map = {
-              'userId': Settings.instance.userId,
-            };
+            Map<String, dynamic> map = {'userId': Settings.instance.userId};
             return map;
           };
         }
@@ -201,7 +199,10 @@ class Settings {
     _userId = Supabase.instance.client.auth.currentUser!.id;
   }
 
-  Future<FirefighterUser> fetchUser({String? pUserId}) async {
+  Future<FirefighterUser> fetchUser({
+    String? pUserId,
+    bool fetchUserWriteTask = true,
+  }) async {
     pUserId ??= _userId!;
     final nameRecord = await Supabase.instance.client
         .from('user_name')
@@ -302,11 +303,13 @@ class Settings {
       }
     }
     _userCacheStreamController.add(_userCache);
-    String directory = await getSettingsDirectoryRoute();
-    ServiceReliabilityEngineer.instance.enqueueWriteTasks([
-      ('$directory/user_data.json', mapAccessor('userData')),
-      ('$directory/user_cache.json', mapAccessor('userCache')),
-    ]);
+    if (fetchUserWriteTask) {
+      String directory = await getSettingsDirectoryRoute();
+      ServiceReliabilityEngineer.instance.enqueueWriteTasks([
+        ('$directory/user_data.json', mapAccessor('userData')),
+        ('$directory/user_cache.json', mapAccessor('userCache')),
+      ]);
+    }
     return user;
   }
 
