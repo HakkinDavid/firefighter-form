@@ -102,8 +102,6 @@ class Settings {
 
   List<FirefighterUser> getUserScope() {
     if (self == null) return [];
-
-    // Por ahora filtra de userCache en vez de actual database query
     return _userCache.values.toList();
   }
 
@@ -268,14 +266,21 @@ class Settings {
           .eq('id', watcherId)
           .maybeSingle();
 
-      if (watcherNameRecord != null) {
+      final watcherRoleRecord = await Supabase.instance.client
+          .from('user_role')
+          .select('id, value')
+          .eq('id', watcherId)
+          .maybeSingle();
+
+      if (watcherNameRecord != null && watcherRoleRecord != null) {
         // If tables are correct
         final watcherUser = FirefighterUser(
           id: watcherId,
           givenName: watcherNameRecord['given'],
           firstSurname: watcherNameRecord['surname1'],
           secondSurname: watcherNameRecord['surname2'],
-          role: roleRecord['value'] + 1, // obviously wrong, check later
+          role:
+              watcherRoleRecord['value'], // obviously wrong, check later (M-Alcantar October 9th 2025) // LMAO this backfired (HakkinDavid March 10th 2026)
         );
         _userCache[watcherId] = watcherUser;
       }
