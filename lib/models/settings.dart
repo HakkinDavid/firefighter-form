@@ -261,7 +261,7 @@ class Settings {
           .eq('id', watcherId)
           .maybeSingle();
 
-      if (watcherNameRecord != null && watcherRoleRecord != null) {
+      if (watcherNameRecord != null) {
         // If tables are correct
         final watcherUser = FirefighterUser(
           id: watcherId,
@@ -269,7 +269,8 @@ class Settings {
           firstSurname: watcherNameRecord['surname1'],
           secondSurname: watcherNameRecord['surname2'],
           role:
-              watcherRoleRecord['value'], // obviously wrong, check later (M-Alcantar October 9th 2025) // LMAO this backfired (HakkinDavid March 10th 2026)
+              watcherRoleRecord?['value'] ??
+              0, // obviously wrong, check later (M-Alcantar October 9th 2025) // LMAO this backfired (HakkinDavid March 10th 2026)
         );
         _userCache[watcherId] = watcherUser;
       }
@@ -403,6 +404,58 @@ class Settings {
           templateRefreshTasks,
         );
       }
+    } catch (e) {
+      // yo cuando no hago algo
+    }
+  }
+
+  Future<void> refreshUsers() async {
+    try {
+      final userNamesRecord = await Supabase.instance.client
+          .from('user_name')
+          .select('*');
+
+      final userRolesMap =
+          (await Supabase.instance.client.from('user_role').select('*'))
+              .asMap()
+              .map((key, value) => MapEntry(value['id'], value['value']));
+
+      final userHierarchyRecord = await Supabase.instance.client
+          .from('user_hierarchy')
+          .select('*');
+
+      final watchedMapById = {
+        for (var element in userHierarchyRecord)
+          element['id']: element['watched_by'],
+      };
+
+      final Map<String, Set<String>> watcherMapById = {};
+      for (var hierarchyRecordX in userHierarchyRecord) {
+        watcherMapById.update(
+          hierarchyRecordX['watched_by'],
+          (watches) => watches..add(hierarchyRecordX['id']),
+          ifAbsent: () => {hierarchyRecordX['id']},
+        );
+      }
+
+      for (var userNameRecordX in userNamesRecord) {
+        String idX = userNameRecordX['id'];
+        _userCache[idX] = FirefighterUser(
+          id: idX,
+          givenName: userNameRecordX['given'],
+          firstSurname: userNameRecordX['surname1'],
+          secondSurname: userNameRecordX['surname2'],
+          role: userRolesMap[idX],
+          watchedByUserId: watchedMapById[idX],
+          watchesUsersId: watcherMapById[idX] ?? <String>{},
+        );
+      }
+
+      String directory = await getSettingsDirectoryRoute();
+      ServiceReliabilityEngineer.instance.enqueueWriteTasks([
+        ('$directory/user_data.json', mapAccessor('userData')),
+        ('$directory/user_cache.json', mapAccessor('userCache')),
+      ]);
     } catch (e) {
       // yo cuando no hago algo
     }
