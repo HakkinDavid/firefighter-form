@@ -53,7 +53,6 @@ class _UsersListState extends State<UsersList> {
   }
 
   Future<void> onUpdateRoleButtonTap(FirefighterUser user, bool promote) async {
-    // Promote = true or false, Promote o Demote desde Settings
     await Settings.instance.setUserRole(
       user.id,
       user.role + (promote ? 1 : -1),
@@ -117,36 +116,38 @@ class _UsersListState extends State<UsersList> {
                     ],
                   ),
                 ),
-                SizedBox(width: 8),
+                if (Settings.instance.self?.hasAdministratorRights ?? false)
+                  SizedBox(width: 8),
                 // Action buttons
-                Row(
-                  children: [
-                    if (Settings.instance.self?.isAdministrator ?? false)
-                      // Promote button (up arrow)
-                      CupertinoButton(
-                        onPressed: () => onUpdateRoleButtonTap(user, true),
-                        padding: EdgeInsets.all(6),
-                        minimumSize: Size(0, 0),
-                        child: Icon(
-                          CupertinoIcons.arrow_up_circle,
-                          size: 28,
-                          color: Settings.instance.colors.primaryBright,
+                if (Settings.instance.self?.hasAdministratorRights ?? false)
+                  Row(
+                    children: [
+                      if (!user.isExclusivelyAdministrator)
+                        // Promote button (up arrow)
+                        CupertinoButton(
+                          onPressed: () => onUpdateRoleButtonTap(user, true),
+                          padding: EdgeInsets.all(6),
+                          minimumSize: Size(0, 0),
+                          child: Icon(
+                            CupertinoIcons.arrow_up_circle,
+                            size: 28,
+                            color: Settings.instance.colors.primaryBright,
+                          ),
                         ),
-                      ),
-                    if (Settings.instance.self?.isAdministrator ?? false)
-                      // Demote button (down arrow)
-                      CupertinoButton(
-                        onPressed: () => onUpdateRoleButtonTap(user, false),
-                        padding: EdgeInsets.all(6),
-                        minimumSize: Size(0, 0),
-                        child: Icon(
-                          CupertinoIcons.arrow_down_circle,
-                          size: 28,
-                          color: Settings.instance.colors.primaryContrastDark,
+                      if (!user.isExclusivelyFirefighter)
+                        // Demote button (down arrow)
+                        CupertinoButton(
+                          onPressed: () => onUpdateRoleButtonTap(user, false),
+                          padding: EdgeInsets.all(6),
+                          minimumSize: Size(0, 0),
+                          child: Icon(
+                            CupertinoIcons.arrow_down_circle,
+                            size: 28,
+                            color: Settings.instance.colors.primaryContrastDark,
+                          ),
                         ),
-                      ),
-                  ],
-                ),
+                    ],
+                  ),
               ],
             ),
             SizedBox(height: 8),
@@ -179,7 +180,7 @@ class _UsersListState extends State<UsersList> {
                       if (user.watchedByUserId != null) SizedBox(height: 2),
                       if (user.watchedByUserId != null)
                         Text(
-                          'Supervisado por:',
+                          'Tutelado por:',
                           style: TextStyle(
                             fontSize: 11,
                             color: CupertinoColors.tertiaryLabel,
