@@ -109,29 +109,29 @@ class Settings {
     return _userCache.values.toList();
   }
 
-  Future<void> updateUserRole(String userId, bool promote) async {
-    // Simple function for now
-    final action = promote ? 'Promover' : 'Degradar';
-    Logging("$action user: $userId", caller: "Settings (updateUserRole)");
+  Future<void> setUserRole(String userId, int userRole) async {
+    await Supabase.instance.client.rpc(
+      'set_user_role',
+      params: {'p_user_id': userId, 'p_role_id': userRole},
+    );
+    FirefighterUser promotee = await fetchUser(pUserId: userId);
+    Logging(
+      "Se ha establecido ${promotee.fullName} como ${promotee.roleName}.",
+      caller: "Settings (setUserRole)",
+    );
+  }
 
-    // Únicamente actualiza el cache ((FOR NOW))
-    final user = _userCache[userId];
-    if (user != null) {
-      if (promote && user.role < 1) {
-        Logging(
-          '^ Acción ${action.toLowerCase()} sería aplicada al ${user.roleName} ${user.fullName} de su rol ${user.role} a ${user.role + 1}',
-        );
-      } else if (!promote && user.role > 0) {
-        Logging(
-          'v Acción ${action.toLowerCase()} sería aplicada al ${user.roleName} ${user.fullName} de su rol ${user.role} a ${user.role - 1}',
-        );
-      } else if (!promote && user.role == 0) {
-        Logging(
-          'ALERTA: No se puede degradar al ${user.roleName} ${user.fullName}: ya se encuentra en el rol default (Bombero)',
-          caller: "Settings (demoteUser)",
-        );
-      }
-    }
+  Future<void> setUserHierarchy(String watchedId, String watcherId) async {
+    await Supabase.instance.client.rpc(
+      'set_user_hierarchy',
+      params: {'p_user_id': watchedId, 'p_watcher_id': watcherId},
+    );
+    FirefighterUser watched = await fetchUser(pUserId: watchedId);
+    FirefighterUser watcher = await fetchUser(pUserId: watcherId);
+    Logging(
+      "Se ha establecido ${watcher.fullName} como tutelar de ${watched.fullName}.",
+      caller: "Settings (setUserHierarchy)",
+    );
   }
 
   Map<String, dynamic> Function() mapAccessor(String accessed, {String? id}) {
