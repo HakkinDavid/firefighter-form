@@ -13,26 +13,9 @@ class UsersPanel extends StatefulWidget {
 }
 
 class _UsersPanelState extends State<UsersPanel> {
-  List<FirefighterUser> _userScope = [];
-
   @override
   void initState() {
     super.initState();
-    _loadUsers();
-  }
-
-  void _loadUsers() {
-    // This should give us our tutelados and tutelar
-    _userScope = Settings.instance.getUserScope();
-    
-    // Sort by role (Administradores, Supervisores, then Bomberos) and then by name
-    // Could be an option to toggle later maybe
-    _userScope.sort((a, b) {
-      if (a.role != b.role) {
-        return b.role.compareTo(a.role); // Higher role first (2 > 1 > 0)
-      }
-      return a.fullName.compareTo(b.fullName);
-    });
   }
 
   @override
@@ -40,7 +23,6 @@ class _UsersPanelState extends State<UsersPanel> {
     super.dispose();
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -57,8 +39,19 @@ class _UsersPanelState extends State<UsersPanel> {
             Expanded(
               child: Container(
                 color: Settings.instance.colors.background,
-                child: UsersList(
-                  usersList: _userScope,
+                child: StreamBuilder<Map<String, FirefighterUser>>(
+                  stream: Settings.instance.userCacheStream,
+                  initialData: Settings.instance.userCache,
+                  builder: (context, snapshot) {
+                    final userScope = (snapshot.data ?? {}).values.toList();
+                    userScope.sort((a, b) {
+                      if (a.role != b.role) {
+                        return b.role.compareTo(a.role);
+                      }
+                      return a.fullName.compareTo(b.fullName);
+                    });
+                    return UsersList(usersList: userScope);
+                  },
                 ),
               ),
             ),
