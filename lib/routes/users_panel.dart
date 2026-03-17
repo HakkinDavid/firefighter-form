@@ -38,7 +38,7 @@ class _UsersPanelState extends State<UsersPanel> {
   }
 
   List<Widget> _buildRoleActionButtons(FirefighterUser user) {
-    if (!_isAdmin) {
+    if (!_isAdmin || user.id == Settings.instance.self!.id) {
       return const <Widget>[];
     }
 
