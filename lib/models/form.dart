@@ -163,7 +163,7 @@ class ServiceForm {
                 value != null &&
                     value != '' &&
                     double.tryParse(value.toString()) != null
-                ? double.parse(value.toString()) < field['value']
+                ? double.parse(value.toString()) < (double.tryParse(field['value']) ?? 0)
                 : true;
             break;
           case 'greaterThan':
@@ -171,7 +171,7 @@ class ServiceForm {
                 value != null &&
                     value != '' &&
                     double.tryParse(value.toString()) != null
-                ? double.parse(value.toString()) > field['value']
+                ? double.parse(value.toString()) > (double.tryParse(field['value']) ?? 0)
                 : true;
             break;
           case 'regexOnlyLetters':

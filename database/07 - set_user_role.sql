@@ -4,6 +4,10 @@ create or replace function set_user_role (
 ) returns void as $$
 begin
   PERFORM only_admins();
+  
+  IF p_user_id = auth.uid() THEN
+    RAISE EXCEPTION 'No autorizado: no puede establecer el propio rol';
+  END IF;
 
   update user_role set value = p_role_id where id = p_user_id;
 exception
