@@ -52,7 +52,13 @@
             {
                 "name": "edad",
                 "type": "input",
-                "label": "Edad",
+                "label": "Edad (años cumplidos)",
+                "inputType": "number"
+            },
+            {
+                "name": "edad_meses",
+                "type": "input",
+                "label": "Edad (meses adicionales)",
                 "inputType": "number"
             },
             {
@@ -1990,6 +1996,11 @@
                 "name": "glasgowmeasure",
                 "value": "16",
                 "message": "Valor máximo válido es 15."
+            },
+            {
+                "name": "edad_meses",
+                "value": "12",
+                "message": "Los meses de edad adicionales deben ser menor a 12."
             }
         ],
         "notEmpty": [
@@ -2130,7 +2141,12 @@
             {
                 "name": "edad",
                 "value": "-1",
-                "message": "La edad debe ser mayor o igual a 0"
+                "message": "La edad debe ser mayor o igual a 0."
+            },
+            {
+                "name": "edad_meses",
+                "value": "-1",
+                "message": "Los meses de edad adicionales deben ser mayor o igual a 0."
             }
         ],
         "regexOnlyLetters": [
