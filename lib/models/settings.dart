@@ -51,9 +51,11 @@ class Settings {
 
   set allowDebugging(bool state) {
     _allowDebugging = state;
+    ServiceReliabilityEngineer.instance.enqueueTasks(["RefreshUsers"]);
     Logging(
       "${state ? "Activando" : "Desactivando"} depuración",
       caller: "Settings (allowDebugging)",
+      attentionLevel: 2
     );
   }
 
@@ -130,7 +132,10 @@ class Settings {
       case 'userData':
         {
           return () {
-            Map<String, dynamic> map = {'userId': Settings.instance.userId};
+            Map<String, dynamic> map = {
+              'userId': Settings.instance.userId,
+              'allowDebugging': Settings.instance.allowDebugging,
+            };
             return map;
           };
         }
@@ -174,7 +179,11 @@ class Settings {
       setUserId();
       await fetchUser();
     } catch (e) {
-      // nada
+      Logging(
+        "Error intentando establecer usuario. Probablemente no hay una sesión activa.\n\t\t$e",
+        caller: "Settings (setUser)",
+        attentionLevel: 4,
+      );
     }
   }
 
@@ -191,7 +200,11 @@ class Settings {
           .toList();
       _formsStreamController.add(formsList);
     } catch (e) {
-      // yo cuando no hago nada
+      Logging(
+        "Error intentando actualizar formularios: $e",
+        caller: "Settings (setForms)",
+        attentionLevel: 2,
+      );
     }
   }
 
@@ -345,6 +358,7 @@ class Settings {
       _userCacheStreamController.add(_userCache);
       String directory = await getSettingsDirectoryRoute();
       ServiceReliabilityEngineer.instance.enqueueWriteTasks([
+        ('$directory/user_data.json', mapAccessor('userData')),
         ('$directory/user_cache.json', mapAccessor('userCache')),
       ]);
     } catch (e) {

@@ -42,7 +42,8 @@ class ServiceForm {
   bool get isLoaded => _isLoaded;
 
   set editOverride(bool v) {
-    if ((Settings.instance.self?.hasSupervisorRights ?? false) && v) _status = 0;
+    if ((Settings.instance.self?.hasSupervisorRights ?? false) && v)
+      _status = 0;
   }
 
   ServiceForm(
@@ -143,6 +144,7 @@ class ServiceForm {
   }
 
   // Restriction handler (minimal Dart port)
+  // TODO: dejar de copiar entre maker.dart y form.dart
   void handleFieldRestrictions() {
     if (_template['restrictions'] == null) return;
     _template['restrictions'].forEach((key, items) {
@@ -159,49 +161,55 @@ class ServiceForm {
             passed = value != null && value.toString().trim().isNotEmpty;
             break;
           case 'lessThan':
-            passed =
-                value != null &&
-                    value != '' &&
-                    double.tryParse(value.toString()) != null
-                ? double.parse(value.toString()) < (double.tryParse(field['value']) ?? 0)
-                : true;
+            final limit = double.tryParse((field['value'] ?? '').toString());
+            final actual = value == null
+                ? null
+                : double.tryParse(value.toString());
+            passed = (actual == null || limit == null) ? true : actual < limit;
             break;
           case 'greaterThan':
-            passed =
-                value != null &&
-                    value != '' &&
-                    double.tryParse(value.toString()) != null
-                ? double.parse(value.toString()) > (double.tryParse(field['value']) ?? 0)
-                : true;
+            final limit = double.tryParse((field['value'] ?? '').toString());
+            final actual = value == null
+                ? null
+                : double.tryParse(value.toString());
+            passed = (actual == null || limit == null) ? true : actual > limit;
             break;
           case 'regexOnlyLetters':
             if (value != null && value.toString().isNotEmpty) {
-              final regex = RegExp(r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ\s]+$');
-              passed = regex.hasMatch(value.toString());
+              passed = RegExp(
+                r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ\s\.]+$',
+              ).hasMatch(value.toString());
+            }
+            break;
+          case 'regexOnlyIntegers':
+            if (value != null && value.toString().isNotEmpty) {
+              passed = RegExp(r'^[0-9]+$').hasMatch(value.toString());
             }
             break;
           case 'regexOnlyNumbers':
             if (value != null && value.toString().isNotEmpty) {
-              final regex = RegExp(r'^[0-9]+$');
-              passed = regex.hasMatch(value.toString());
+              passed = RegExp(
+                r'^[0-9]+\.{0,1}[0-9]*$',
+              ).hasMatch(value.toString());
             }
             break;
           case 'regexPhoneNumber':
             if (value != null && value.toString().isNotEmpty) {
-              final regex = RegExp(r'^\d{10}$');
-              passed = regex.hasMatch(value.toString());
+              passed = RegExp(r'^\d{10}$').hasMatch(value.toString());
             }
             break;
           case 'regexEmail':
             if (value != null && value.toString().isNotEmpty) {
-              final regex = RegExp(r'^[\w\.\-]+@([\w\-]+\.)+[A-Za-z]{2,4}$');
-              passed = regex.hasMatch(value.toString());
+              passed = RegExp(
+                r'^[\w\.\-]+@([\w\-]+\.)+[A-Za-z]{2,4}$',
+              ).hasMatch(value.toString());
             }
             break;
           case 'regexAlphanumeric':
             if (value != null && value.toString().isNotEmpty) {
-              final regex = RegExp(r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ0-9\s.,#°\-]+$');
-              passed = regex.hasMatch(value.toString());
+              passed = RegExp(
+                r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ0-9\s\.,#°\-]+$',
+              ).hasMatch(value.toString());
             }
             break;
           default:

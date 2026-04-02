@@ -48,7 +48,7 @@ Renderer dispatch contract:
 
 Restrictions object:
 - rules: notEmpty, lessThan, greaterThan, regexOnlyLetters,
-  regexOnlyNumbers, regexPhoneNumber, regexEmail, regexAlphanumeric
+  regexOnlyNumbers, regexOnlyIntegers, regexPhoneNumber, regexEmail, regexAlphanumeric
 - item keys observed: name, value, message, subname
 */
 
@@ -70,6 +70,7 @@ const List<String> _dslRestrictionRules = <String>[
   'lessThan',
   'greaterThan',
   'regexOnlyLetters',
+  'regexOnlyIntegers',
   'regexOnlyNumbers',
   'regexPhoneNumber',
   'regexEmail',
@@ -2957,6 +2958,7 @@ class _TemplatePreviewForm extends ServiceForm {
     return true;
   }
 
+  // TODO: dejar de copiar entre maker.dart y form.dart
   void _evaluateRestrictions(Map<String, dynamic> template) {
     _previewErrors.clear();
     final restrictions = template['restrictions'] as Map<String, dynamic>?;
@@ -3003,13 +3005,20 @@ class _TemplatePreviewForm extends ServiceForm {
           case 'regexOnlyLetters':
             if (value != null && value.toString().isNotEmpty) {
               passed = RegExp(
-                r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ\s]+$',
+                r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ\s\.]+$',
               ).hasMatch(value.toString());
+            }
+            break;
+          case 'regexOnlyIntegers':
+            if (value != null && value.toString().isNotEmpty) {
+              passed = RegExp(r'^[0-9]+$').hasMatch(value.toString());
             }
             break;
           case 'regexOnlyNumbers':
             if (value != null && value.toString().isNotEmpty) {
-              passed = RegExp(r'^[0-9]+$').hasMatch(value.toString());
+              passed = RegExp(
+                r'^[0-9]+\.{0,1}[0-9]*$',
+              ).hasMatch(value.toString());
             }
             break;
           case 'regexPhoneNumber':
@@ -3027,7 +3036,7 @@ class _TemplatePreviewForm extends ServiceForm {
           case 'regexAlphanumeric':
             if (value != null && value.toString().isNotEmpty) {
               passed = RegExp(
-                r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ0-9\s.,#°\-]+$',
+                r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ0-9\s\.,#°\-]+$',
               ).hasMatch(value.toString());
             }
             break;

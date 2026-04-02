@@ -99,6 +99,7 @@ class ServiceReliabilityEngineer {
 
     enqueueTasks({
       "LoadFromDisk",
+      "SetUser",
       "SyncForms",
       "UpdateTemplate",
       "IsUpdateAvailable",
@@ -351,6 +352,7 @@ class ServiceReliabilityEngineer {
           final Map<String, dynamic> userDataMap = jsonDecode(userDataString);
 
           Settings.instance.userId = userDataMap['userId'];
+          Settings.instance.allowDebugging = userDataMap['allowDebugging'] ?? false;
 
           Logging(
             "Actualizado Settings.instance.userId: ${Settings.instance.userId}",
@@ -398,9 +400,10 @@ class ServiceReliabilityEngineer {
           );
         } else {
           Logging(
-            "No existe formsQueueDirectory",
+            "No existe formsQueueDirectory. Creando...",
             caller: "SRE (_loadFromDisk)",
           );
+          await formsQueueDirectory.create();
         }
 
         // Gather metrics for DiskHeuristic
