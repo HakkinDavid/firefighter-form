@@ -352,6 +352,7 @@ class ServiceReliabilityEngineer {
           final Map<String, dynamic> userDataMap = jsonDecode(userDataString);
 
           Settings.instance.userId = userDataMap['userId'];
+          Settings.instance.allowDebugging = userDataMap['allowDebugging'] ?? false;
 
           Logging(
             "Actualizado Settings.instance.userId: ${Settings.instance.userId}",
