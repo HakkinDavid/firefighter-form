@@ -169,9 +169,6 @@ class _WelcomeState extends State<Welcome> {
                           width: double.infinity,
                           child: CupertinoButton(
                             onPressed: () {
-                              ServiceReliabilityEngineer.instance.enqueueTasks([
-                                "SetUser",
-                              ]);
                               if (context.mounted) {
                                 Navigator.pushReplacementNamed(
                                   context,

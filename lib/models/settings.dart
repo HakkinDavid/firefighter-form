@@ -174,7 +174,11 @@ class Settings {
       setUserId();
       await fetchUser();
     } catch (e) {
-      // nada
+      Logging(
+        "Error intentando establecer usuario. Probablemente no hay una sesión activa.\n\t\t$e",
+        caller: "Settings (setUser)",
+        attentionLevel: 4,
+      );
     }
   }
 
@@ -345,6 +349,7 @@ class Settings {
       _userCacheStreamController.add(_userCache);
       String directory = await getSettingsDirectoryRoute();
       ServiceReliabilityEngineer.instance.enqueueWriteTasks([
+        ('$directory/user_data.json', mapAccessor('userData')),
         ('$directory/user_cache.json', mapAccessor('userCache')),
       ]);
     } catch (e) {

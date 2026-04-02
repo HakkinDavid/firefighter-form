@@ -99,6 +99,7 @@ class ServiceReliabilityEngineer {
 
     enqueueTasks({
       "LoadFromDisk",
+      "SetUser",
       "SyncForms",
       "UpdateTemplate",
       "IsUpdateAvailable",
@@ -398,9 +399,10 @@ class ServiceReliabilityEngineer {
           );
         } else {
           Logging(
-            "No existe formsQueueDirectory",
+            "No existe formsQueueDirectory. Creando...",
             caller: "SRE (_loadFromDisk)",
           );
+          await formsQueueDirectory.create();
         }
 
         // Gather metrics for DiskHeuristic
