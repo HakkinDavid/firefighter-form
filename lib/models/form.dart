@@ -144,6 +144,7 @@ class ServiceForm {
   }
 
   // Restriction handler (minimal Dart port)
+  // TODO: dejar de copiar entre maker.dart y form.dart
   void handleFieldRestrictions() {
     if (_template['restrictions'] == null) return;
     _template['restrictions'].forEach((key, items) {
