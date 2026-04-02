@@ -2136,50 +2136,50 @@
         "regexOnlyLetters": [
             {
                 "name": "patient",
-                "message": "El nombre del paciente solo puede contener letras y espacios."
+                "message": "El nombre del paciente solo puede contener letras, puntos y espacios."
             },
             {
                 "name": "jefe",
-                "message": "El nombre del jefe solo puede contener letras y espacios."
+                "message": "El nombre del jefe solo puede contener letras, puntos y espacios."
             },
             {
                 "name": "maquinista",
-                "message": "El nombre del maquinista solo puede contener letras y espacios."
+                "message": "El nombre del maquinista solo puede contener letras, puntos y espacios."
             },
             {
                 "name": "alternate",
-                "message": "El nombre del testigo solo puede contener letras y espacios."
+                "message": "El nombre del testigo solo puede contener letras, puntos y espacios."
             },
             {
                 "name": "nombreRecibe",
-                "message": "El nombre del que recibe solo puede contener letras y espacios."
+                "message": "El nombre del que recibe solo puede contener letras, puntos y espacios."
             },
             {
                 "name": "municipiootro",
-                "message": "El nombre del municipio solo puede contener letras y espacios."
+                "message": "El nombre del municipio solo puede contener letras, puntos y espacios."
             },
             {
                 "name": "municipiopacienteotro",
-                "message": "El nombre del municipio del paciente solo puede contener letras y espacios."
+                "message": "El nombre del municipio del paciente solo puede contener letras, puntos y espacios."
             },
             {
                 "name": "colonia",
-                "message": "El nombre de la colonia solo puede contener letras y espacios."
+                "message": "El nombre de la colonia solo puede contener letras, puntos y espacios."
             },
             {
                 "name": "coloniapaciente",
-                "message": "El nombre de la colonia del paciente solo puede contener letras y espacios."
+                "message": "El nombre de la colonia del paciente solo puede contener letras, puntos y espacios."
             },
             {
                 "name": "generootro",
-                "message": "El género debe contener solo letras y espacios."
+                "message": "El género debe contener solo letras, puntos y espacios."
             },
             {
                 "name": "zonacolocacionotro",
-                "message": "La zona de colocación debe contener solo letras y espacios."
+                "message": "La zona de colocación debe contener solo letras, puntos y espacios."
             }
         ],
-        "regexOnlyNumbers": [
+        "regexOnlyIntegers": [
             {
                 "name": "edad",
                 "message": "La edad debe contener solo números."
@@ -2191,7 +2191,9 @@
             {
                 "name": "codigopostalpaciente",
                 "message": "El código postal del paciente debe contener solo números."
-            },
+            }
+        ],
+        "regexOnlyNumbers": [
             {
                 "name": "frecuenciacontracciones",
                 "message": "La frecuencia de contracciones debe ser numérica."
@@ -2286,35 +2288,35 @@
         "regexAlphanumeric": [
             {
                 "name": "calle",
-                "message": "La calle solo puede contener letras, números y espacios."
+                "message": "La calle solo puede contener letras, números, puntos y espacios."
             },
             {
                 "name": "callepaciente",
-                "message": "La calle del paciente solo puede contener letras, números y espacios."
+                "message": "La calle del paciente solo puede contener letras, números, puntos y espacios."
             },
             {
                 "name": "esquina",
-                "message": "La esquina solo puede contener letras, números y espacios."
+                "message": "La esquina solo puede contener letras, números, puntos y espacios."
             },
             {
                 "name": "esquinapaciente",
-                "message": "La esquina del paciente solo puede contener letras, números y espacios."
+                "message": "La esquina del paciente solo puede contener letras, números, puntos y espacios."
             },
             {
                 "name": "campoestacionotra",
-                "message": "Debe contener solo letras, números y espacios."
+                "message": "Debe contener solo letras, números, puntos y espacios."
             },
             {
                 "name": "campounidadotra",
-                "message": "Debe contener solo letras, números y espacios."
+                "message": "Debe contener solo letras, números, puntos y espacios."
             },
             {
                 "name": "serviciomedicootro",
-                "message": "Debe contener solo letras, números y espacios."
+                "message": "Debe contener solo letras, números, puntos y espacios."
             },
             {
                 "name": "hospitaltrasladootro",
-                "message": "Debe contener solo letras, números y espacios."
+                "message": "Debe contener solo letras, números, puntos y espacios."
             }
         ]
     }
