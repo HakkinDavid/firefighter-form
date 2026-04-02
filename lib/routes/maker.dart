@@ -3015,7 +3015,9 @@ class _TemplatePreviewForm extends ServiceForm {
             break;
           case 'regexOnlyNumbers':
             if (value != null && value.toString().isNotEmpty) {
-              passed = RegExp(r'^[0-9]+\.{0,1}[0-9]+$').hasMatch(value.toString());
+              passed = RegExp(
+                r'^[0-9]+\.{0,1}[0-9]*$',
+              ).hasMatch(value.toString());
             }
             break;
           case 'regexPhoneNumber':
