@@ -1,0 +1,47 @@
+digraph FacadeUML {
+  graph [
+    fontname="Helvetica",
+    rankdir=TB,
+    splines=polyline,
+    nodesep=0.45,
+    ranksep=0.75,
+    bgcolor="white"
+  ];
+
+  node [
+    shape=record,
+    fontname="Helvetica",
+    fontsize=10,
+    margin="0.06,0.04"
+  ];
+
+  edge [
+    fontname="Helvetica",
+    fontsize=9,
+    arrowsize=0.7
+  ];
+
+  settings [label="{Settings|punto único de acceso a servicios de la app\lcolors\lnavigatorKey\lcaché de usuarios/formularios\lrutas a almacenamiento local\layudas RPC\lflujos\l|getTemplate()\lrefreshTemplates()\lrefreshUsers()\lenqueueForm()\ldequeueForm()\luploadForm()\luploadTemplate()\lsyncForms()\ldeleteForm()\l}"];
+  overlay_service [label="{OverlayService|API simple para overlays\lcurrentOverlayEntry\l|showOverlay()\lcloseCurrentOverlay()\l}"];
+  overlay_object [label="{OverlayObject|envoltura visual del overlay\l|build()\l}"];
+  pdf [label="{ServicePDF|punto único de entrada para generación de PDF\l|generate()\l}"];
+  sre [label="{ServiceReliabilityEngineer|orquesta tareas de sincronización / disco / actualización\l|enqueueTasks()\lenqueueWriteTasks()\l_loadFromDisk()\l_saveToDisk()\l_askForUserPermission()\l}"];
+  db [label="{DatabaseSettings|constantes de conexión con Supabase\l|host\lurl\lanonKey\l}"];
+  colors [label="{ColorsSettings|paleta global del tema\l|primary\lprimaryContrast\lprimaryBright\l... \l}"];
+  form_list [label="{FormList|usa Settings y ServicePDF como servicios de alto nivel\l|build()\l}"];
+  preferences [label="{Preferences|usa Settings y ServiceReliabilityEngineer como servicios\l|build()\l}"];
+  app [label="{Aplicación (contexto)|main.dart\lroutes/*\lviewmodels/*\lmodels/*\l|consume APIs simples en lugar de subsistemas\l}"];
+
+  settings -> overlay_service [arrowhead="vee", style="dashed", label="delega el overlay"];
+  overlay_service -> overlay_object [arrowhead="vee", style="dashed", label="construye"];
+  settings -> pdf [arrowhead="vee", style="dashed", label="delega el renderizado"];
+  settings -> sre [arrowhead="vee", style="dashed", label="delega sincronización / disco"];
+  settings -> db [arrowhead="vee", style="dashed", label="lee información de conexión"];
+  settings -> colors [arrowhead="vee", style="dashed", label="lee información del tema"];
+  form_list -> settings [arrowhead="vee", style="dashed", label="API de alto nivel"];
+  preferences -> settings [arrowhead="vee", style="dashed", label="API de alto nivel"];
+  preferences -> sre [arrowhead="vee", style="dashed", label="API de alto nivel"];
+  app -> settings [arrowhead="vee", penwidth=1.2, label="acceso unificado"];
+  app -> overlay_service [arrowhead="vee", penwidth=1.2, label="fachada del overlay"];
+  app -> pdf [arrowhead="vee", penwidth=1.2, label="fachada de exportación"];
+}

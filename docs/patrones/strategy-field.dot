@@ -1,0 +1,79 @@
+digraph StrategyUML {
+  graph [
+    fontname="Helvetica",
+    rankdir=TB,
+    splines=polyline,
+    nodesep=0.45,
+    ranksep=0.75,
+    bgcolor="white"
+  ];
+
+  node [
+    shape=record,
+    fontname="Helvetica",
+    fontsize=10,
+    margin="0.06,0.04"
+  ];
+
+  edge [
+    fontname="Helvetica",
+    fontsize=9,
+    arrowsize=0.7
+  ];
+
+  subgraph cluster_field_strategies {
+    label="Estrategias de renderizado de campos";
+    labelloc="t";
+    style="rounded";
+    color="#b59dd8";
+
+    renderer [label="{DynamicFieldRenderer|build()\ldespacha según el tipo de campo\l|crea widgets especializados\l}"];
+    input [label="{InputField (abstracta)|field\lvalue\lformSet\lsetFormState\lformatOptions\lcanEditForm\l|createState()\l}"];
+    text [label="{TextInputField|build()\l}"];
+    number [label="{NumberInputField|build()\l}"];
+    date [label="{DateInputField|build()\l}"];
+    time [label="{TimeInputField|build()\l}"];
+    select [label="{SelectField|initState()\lbuild()\l}"];
+    options [label="{OptionsInputField|initState()\lbuild()\l}"];
+    multiple [label="{MultipleInputField|build()\l}"];
+    checkbox [label="{CheckboxMultipleField|initState()\lbuild()\l}"];
+    radio [label="{RadioMultipleField|initState()\lbuild()\l}"];
+    textarea [label="{TextAreaField|build()\l}"];
+    drawing [label="{DrawingBoardField|build()\l}"];
+    tuple [label="{TupleField|build()\l}"];
+    display [label="{TextDisplayField|build()\l}"];
+
+    input -> text [arrowhead="empty", label="base"];
+    input -> number [arrowhead="empty", label="base"];
+    input -> date [arrowhead="empty", label="base"];
+    input -> time [arrowhead="empty", label="base"];
+    input -> select [arrowhead="empty", label="base"];
+    input -> options [arrowhead="empty", label="base"];
+    input -> multiple [arrowhead="empty", label="base"];
+    input -> checkbox [arrowhead="empty", label="base"];
+    input -> radio [arrowhead="empty", label="base"];
+    input -> textarea [arrowhead="empty", label="base"];
+    input -> drawing [arrowhead="empty", label="base"];
+    input -> tuple [arrowhead="empty", label="base"];
+    input -> display [arrowhead="empty", label="base"];
+
+    renderer -> text [arrowhead="vee", style="dashed", label="entrada/texto"];
+    renderer -> number [arrowhead="vee", style="dashed", label="entrada/número"];
+    renderer -> date [arrowhead="vee", style="dashed", label="entrada/fecha"];
+    renderer -> time [arrowhead="vee", style="dashed", label="entrada/hora"];
+    renderer -> options [arrowhead="vee", style="dashed", label="entrada/opciones"];
+    renderer -> select [arrowhead="vee", style="dashed", label="selección"];
+    renderer -> multiple [arrowhead="vee", style="dashed", label="entrada múltiple"];
+    renderer -> checkbox [arrowhead="vee", style="dashed", label="múltiple/checkbox"];
+    renderer -> radio [arrowhead="vee", style="dashed", label="múltiple/radio"];
+    renderer -> textarea [arrowhead="vee", style="dashed", label="área de texto"];
+    renderer -> drawing [arrowhead="vee", style="dashed", label="lienzo de dibujo"];
+    renderer -> tuple [arrowhead="vee", style="dashed", label="tupla"];
+    renderer -> display [arrowhead="vee", style="dashed", label="texto"];
+  }
+
+  app [label="{Aplicación (contexto)|main.dart\lroutes/*\lviewmodels/*\lmodels/*\l|elige rutas de ejecución y renderizado según el contexto\l}"];
+
+  app -> renderer [arrowhead="vee", penwidth=1.2, label="despacho por esquema de campo"];
+  app -> input [arrowhead="vee", penwidth=1.2, label="familia de campos especializados"];
+}
