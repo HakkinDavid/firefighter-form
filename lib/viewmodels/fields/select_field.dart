@@ -14,10 +14,10 @@ class SelectField extends InputField {
   });
 
   @override
-  State<InputField> createState() => _NumberInputFieldState();
+  State<InputField> createState() => _SelectFieldState();
 }
 
-class _NumberInputFieldState extends InputFieldState {
+class _SelectFieldState extends InputFieldState {
   late final List<dynamic> options;
 
   @override

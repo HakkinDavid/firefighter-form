@@ -5,6 +5,7 @@ import 'package:bomberos/viewmodels/fields/drawing_board_field.dart';
 import 'package:bomberos/viewmodels/fields/multiple_input_field.dart';
 import 'package:bomberos/viewmodels/fields/number_input_field.dart';
 import 'package:bomberos/viewmodels/fields/options_input_field.dart';
+import 'package:bomberos/viewmodels/fields/predictive_text_select_field.dart';
 import 'package:bomberos/viewmodels/fields/radio_multiple_field.dart';
 import 'package:bomberos/viewmodels/fields/select_field.dart';
 import 'package:bomberos/viewmodels/fields/text_display_field.dart';
@@ -96,14 +97,25 @@ class DynamicFieldRenderer extends StatelessWidget {
         );
       }
     } else if (type == 'select') {
-      fieldWidget = SelectField(
-        field: field,
-        value: form.content[field['name']],
-        formSet: form.set,
-        setFormState: setFormState,
-        canEditForm: form.canEditForm,
-        formatOptions: formatOptions,
-      );
+      if (field['inputType'] == 'text') {
+        fieldWidget = PredictiveTextSelectField(
+          field: field,
+          value: form.content[field['name']],
+          formSet: form.set,
+          setFormState: setFormState,
+          canEditForm: form.canEditForm,
+          formatOptions: formatOptions,
+        );
+      } else {
+        fieldWidget = SelectField(
+          field: field,
+          value: form.content[field['name']],
+          formSet: form.set,
+          setFormState: setFormState,
+          canEditForm: form.canEditForm,
+          formatOptions: formatOptions,
+        );
+      }
     } else if (type == 'textarea') {
       fieldWidget = TextAreaField(
         field: field,

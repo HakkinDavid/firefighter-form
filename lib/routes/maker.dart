@@ -39,7 +39,7 @@ displayOn conditional visibility:
 
 Renderer dispatch contract:
 - input: date -> time -> multiple==true -> number -> options -> text input
-- select -> SelectField
+- select: text input = PredictiveTextSelectField -> else SelectField
 - textarea -> TextAreaField
 - multiple: checkbox/radio only
 - drawingboard -> DrawingBoardField
@@ -334,6 +334,9 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
         break;
       case 'select':
         field['label'] = (field['label'] ?? '').toString();
+        if (field.containsKey('inputType') && field['inputType'] != 'text') {
+          field.remove('inputType');
+        }
         if (field['options'] is! List<dynamic>) {
           field['options'] = <dynamic>['Opcion 1'];
         }
@@ -417,7 +420,8 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
 
   void _normalizeTupleSubfieldInPlace(Map<String, dynamic> sub) {
     var type = (sub['type'] ?? 'input').toString();
-    if (type != 'input' && type != 'multiple' && type != 'text') {
+    if (type != 'input' && type != 'select' && type != 'multiple' &&
+        type != 'text') {
       type = 'input';
     }
     sub['type'] = type;
@@ -431,6 +435,17 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
       sub['label'] = (sub['label'] ?? '').toString();
       if (sub.containsKey('options') && sub['options'] is! List<dynamic>) {
         sub.remove('options');
+      }
+    } else if (type == 'select') {
+      sub['label'] = (sub['label'] ?? '').toString();
+      if (sub.containsKey('inputType') && sub['inputType'] != 'text') {
+        sub.remove('inputType');
+      }
+      if (sub['options'] is! List<dynamic>) {
+        sub['options'] = <dynamic>['Opcion 1'];
+      }
+      if ((sub['options'] as List<dynamic>).isEmpty) {
+        (sub['options'] as List<dynamic>).add('Opcion 1');
       }
     } else if (type == 'multiple') {
       final inputType = (sub['inputType'] ?? 'radio').toString();

@@ -15,10 +15,10 @@ class TupleField extends InputField {
   });
 
   @override
-  State<InputField> createState() => _NumberInputFieldState();
+  State<InputField> createState() => _TupleFieldState();
 }
 
-class _NumberInputFieldState extends InputFieldState {
+class _TupleFieldState extends InputFieldState {
   @override
   Widget build(BuildContext context) {
     final tupleFields = widget.field['tuple'] as List<dynamic>? ?? [];
