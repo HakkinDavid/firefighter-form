@@ -76,7 +76,9 @@ class Settings {
   Stream<List<ServiceForm>> get formsListStream =>
       _formsStreamController.stream;
 
+  // ignore: unnecessary_getters_setters
   Map<String, FirefighterUser> get userCache => _userCache;
+  // ignore: unnecessary_getters_setters
   List<ServiceForm> get formsQueue => _formsQueue;
   // Direct setters for now
   set userCache(Map<String, FirefighterUser> userCache) {
@@ -492,5 +494,30 @@ class Settings {
     } catch (error) {
       // no importa si no se borra, mejor para nosotros.
     }
+  }
+
+  Future<Map<String, int>> loadInitialStock() async {
+    try {
+      final dir = await getSettingsDirectoryRoute();
+      final file = File('$dir/initial_stock.json');
+      if (await file.exists()) {
+        final content = await file.readAsString();
+        final Map<String, dynamic> decoded = jsonDecode(content);
+        return decoded.map((key, val) => MapEntry(key, int.tryParse(val.toString()) ?? 0));
+      }
+    } catch (_) {}
+    return {};
+  }
+
+  Future<void> saveInitialStock(Map<String, int> stock) async {
+    try {
+      final dir = await getSettingsDirectoryRoute();
+      final file = File('$dir/initial_stock.json');
+      if (!await file.parent.exists()) {
+        await file.parent.create(recursive: true);
+      }
+      final encoded = jsonEncode(stock.map((key, val) => MapEntry(key, val.toString())));
+      await file.writeAsString(encoded);
+    } catch (_) {}
   }
 }
