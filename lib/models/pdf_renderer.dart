@@ -354,6 +354,102 @@ class ServicePDF {
       filterWidgets.add(pw.SizedBox(height: 12));
     }
 
+    // Build a vector horizontal bar chart for the PDF report
+    final List<pw.Widget> chartWidgets = [];
+    if (rows.isNotEmpty) {
+      chartWidgets.add(
+        pw.Text(
+          "GRÁFICO DE DISTRIBUCIÓN (TOP 6):",
+          style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10, color: primaryColor),
+        ),
+      );
+      chartWidgets.add(pw.SizedBox(height: 8));
+
+      // Parse chart data from table rows
+      final List<MapEntry<String, double>> chartData = [];
+      for (final row in rows) {
+        if (row.length >= 2) {
+          final name = row[0];
+          final val = double.tryParse(row[1]) ?? 0.0;
+          chartData.add(MapEntry(name, val));
+        }
+      }
+      
+      // Sort descending
+      chartData.sort((a, b) => b.value.compareTo(a.value));
+
+      final total = chartData.fold<double>(0.0, (sum, e) => sum + e.value);
+      final double maxVal = chartData.isEmpty
+          ? 1.0
+          : chartData.map((e) => e.value).reduce((a, b) => a > b ? a : b);
+
+      // Take top 6
+      final topData = chartData.take(6).toList();
+
+      for (final entry in topData) {
+        final percentage = total > 0 ? (entry.value / total) * 100 : 0.0;
+        final barFactor = maxVal > 0 ? (entry.value / maxVal) : 0.0;
+
+        chartWidgets.add(
+          pw.Padding(
+            padding: const pw.EdgeInsets.symmetric(vertical: 3.0),
+            child: pw.Row(
+              children: [
+                pw.SizedBox(
+                  width: 140,
+                  child: pw.Text(
+                    entry.key,
+                    style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold),
+                    maxLines: 1,
+                  ),
+                ),
+                pw.SizedBox(width: 12),
+                pw.Expanded(
+                  child: pw.Container(
+                    height: 8,
+                    decoration: pw.BoxDecoration(
+                      color: PdfColors.grey200,
+                      borderRadius: pw.BorderRadius.circular(4),
+                    ),
+                    child: pw.Row(
+                      children: [
+                        if (barFactor > 0)
+                          pw.Expanded(
+                            flex: (barFactor * 1000).toInt(),
+                            child: pw.Container(
+                              height: 8,
+                              decoration: pw.BoxDecoration(
+                                color: primaryColor,
+                                borderRadius: pw.BorderRadius.circular(4),
+                              ),
+                            ),
+                          ),
+                        if (1 - barFactor > 0)
+                          pw.Expanded(
+                            flex: ((1 - barFactor) * 1000).toInt(),
+                            child: pw.SizedBox(),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+                pw.SizedBox(width: 12),
+                pw.SizedBox(
+                  width: 70,
+                  child: pw.Text(
+                    "${entry.value.toStringAsFixed(0)} (${percentage.toStringAsFixed(1)}%)",
+                    style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: PdfColors.grey700),
+                    textAlign: pw.TextAlign.right,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+      chartWidgets.add(pw.SizedBox(height: 20));
+    }
+
     final tableWidget = pw.TableHelper.fromTextArray(
       headers: headers,
       data: rows,
@@ -426,6 +522,7 @@ class ServicePDF {
           header,
           pw.SizedBox(height: 16),
           ...filterWidgets,
+          ...chartWidgets,
           tableWidget,
           signatureSection,
         ],

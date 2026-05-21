@@ -6,6 +6,8 @@ import 'package:bomberos/models/pdf_renderer.dart';
 import 'package:bomberos/viewmodels/canvas.dart';
 import 'package:flutter/cupertino.dart';
 
+enum ChartType { bar, pie, none }
+
 class StatisticsPanel extends StatefulWidget {
   const StatisticsPanel({super.key});
 
@@ -18,9 +20,9 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
   Map<String, dynamic> _options = {};
   String? _selectedCatalogKey;
   String? _selectedFilterField; // e.g. field internal name
-  String? _selectedFilterValue = 'Todos';
-  final Map<String, int> _initialStock = {};
+  final Set<String> _selectedFilterValues = {'Todos'};
   List<Map<String, dynamic>> _filterFieldsList = [];
+  ChartType _selectedChartType = ChartType.bar;
 
   @override
   void initState() {
@@ -37,7 +39,6 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
       await Future.wait(
         forms.map((f) => f.isLoaded ? Future.value() : f.load()),
       );
-
 
       // Extract catalogs options map from first available form template
       if (forms.isNotEmpty) {
@@ -79,7 +80,8 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
       }
 
       _selectedFilterField = null; // default to no filter
-      _selectedFilterValue = 'Todos';
+      _selectedFilterValues.clear();
+      _selectedFilterValues.add('Todos');
     } catch (_) {}
 
     setState(() => _loading = false);
@@ -100,6 +102,191 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
     return list;
   }
 
+  String _normalize(String input) {
+    var s = input.toLowerCase();
+    s = s.replaceAll(RegExp(r'[áàäâ]'), 'a');
+    s = s.replaceAll(RegExp(r'[éèëê]'), 'e');
+    s = s.replaceAll(RegExp(r'[íìïî]'), 'i');
+    s = s.replaceAll(RegExp(r'[óòöô]'), 'o');
+    s = s.replaceAll(RegExp(r'[úùüû]'), 'u');
+    s = s.replaceAll(RegExp(r'[ñ]'), 'n');
+    s = s.replaceAll(RegExp(r'[^a-z0-9]'), '');
+    return s;
+  }
+
+  Future<void> _showPredictiveSelector({
+    required String title,
+    required List<Map<String, dynamic>> items,
+    required bool isMultiSelect,
+    required Set<dynamic> currentSelection,
+    required ValueChanged<Set<dynamic>> onSelectionChanged,
+  }) async {
+    final searchController = TextEditingController();
+    final tempSelection = Set<dynamic>.from(currentSelection);
+
+    await showCupertinoModalPopup<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            final query = searchController.text;
+            final normalizedQuery = _normalize(query);
+
+            final filteredItems = items.where((item) {
+              if (normalizedQuery.isEmpty) return true;
+              final normalizedLabel = _normalize(item['label'] ?? '');
+              return normalizedLabel.contains(normalizedQuery);
+            }).toList();
+
+            final primaryColor = Settings.instance.colors.primary;
+            final contrastColor = Settings.instance.colors.primaryContrast;
+
+            return SafeArea(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.75,
+                decoration: BoxDecoration(
+                  color: contrastColor,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    // Modal Header
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            title,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: CupertinoColors.black,
+                            ),
+                          ),
+                          CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              if (isMultiSelect) {
+                                onSelectionChanged(tempSelection);
+                              }
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              isMultiSelect ? 'Hecho' : 'Cerrar',
+                              style: TextStyle(
+                                color: primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Search Field
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      child: CupertinoSearchTextField(
+                        controller: searchController,
+                        placeholder: 'Buscar...',
+                        onChanged: (val) {
+                          setModalState(() {});
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    // Items List
+                    Expanded(
+                      child: filteredItems.isEmpty
+                          ? const Center(
+                              child: Text(
+                                'No se encontraron resultados',
+                                style: TextStyle(color: CupertinoColors.secondaryLabel),
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: filteredItems.length,
+                              itemBuilder: (context, index) {
+                                final item = filteredItems[index];
+                                final itemId = item['id'];
+                                final itemLabel = item['label'] as String;
+                                final isSelected = tempSelection.contains(itemId);
+
+                                return CupertinoButton(
+                                  padding: EdgeInsets.zero,
+                                  onPressed: () {
+                                    if (isMultiSelect) {
+                                      setModalState(() {
+                                        if (isSelected) {
+                                          tempSelection.remove(itemId);
+                                        } else {
+                                          tempSelection.add(itemId);
+                                        }
+                                      });
+                                    } else {
+                                      onSelectionChanged({itemId});
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: CupertinoColors.systemGrey6,
+                                          width: 0.5,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        if (isMultiSelect) ...[
+                                          Icon(
+                                            isSelected
+                                                ? CupertinoIcons.checkmark_square_fill
+                                                : CupertinoIcons.square,
+                                            color: isSelected ? primaryColor : CupertinoColors.systemGrey4,
+                                            size: 20,
+                                          ),
+                                          const SizedBox(width: 12),
+                                        ],
+                                        Expanded(
+                                          child: Text(
+                                            itemLabel,
+                                            style: const TextStyle(
+                                              fontSize: 15,
+                                              color: CupertinoColors.black,
+                                            ),
+                                          ),
+                                        ),
+                                        if (!isMultiSelect && isSelected)
+                                          Icon(
+                                            CupertinoIcons.checkmark,
+                                            color: primaryColor,
+                                            size: 18,
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+    searchController.dispose();
+  }
+
   Map<String, double> _calculateAggregatedCounts() {
     final forms = Settings.instance.formsList;
     final Map<String, double> counts = {};
@@ -115,13 +302,15 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
       }
     }
 
-    // Filter forms according to selectedFilterField and selectedFilterValue
+    // Filter forms according to selectedFilterField and selectedFilterValues
     final List<ServiceForm> filteredForms = forms.where((form) {
-      if (_selectedFilterField == null || _selectedFilterValue == 'Todos') {
+      if (_selectedFilterField == null ||
+          _selectedFilterValues.contains('Todos') ||
+          _selectedFilterValues.isEmpty) {
         return true;
       }
       final val = form.content[_selectedFilterField];
-      return val?.toString().trim() == _selectedFilterValue;
+      return _selectedFilterValues.contains(val?.toString().trim());
     }).toList();
 
     // Sum quantities from tuple numeric subfields or count regular fields
@@ -269,7 +458,7 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: CupertinoColors.systemGrey.withOpacity(0.1),
+                    color: CupertinoColors.systemGrey.withValues(alpha: 0.1),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -288,26 +477,22 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                       GestureDetector(
                         onTap: () async {
                           final keys = _options.keys.toList();
-                          await showCupertinoModalPopup<void>(
-                            context: context,
-                            builder: (context) => CupertinoActionSheet(
-                              title: const Text('Seleccionar catálogo objetivo'),
-                              actions: keys.map((key) {
-                                return CupertinoActionSheetAction(
-                                  onPressed: () {
-                                    setState(() {
-                                      _selectedCatalogKey = key;
-                                    });
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(key.toUpperCase()),
-                                );
-                              }).toList(),
-                              cancelButton: CupertinoActionSheetAction(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('Cancelar'),
-                              ),
-                            ),
+                          final items = keys.map((k) => {'id': k, 'label': k.toUpperCase()}).toList();
+                          await _showPredictiveSelector(
+                            title: 'Seleccionar catálogo objetivo',
+                            items: items,
+                            isMultiSelect: false,
+                            currentSelection: _selectedCatalogKey != null ? {_selectedCatalogKey} : {},
+                            onSelectionChanged: (newSelection) {
+                              if (newSelection.isNotEmpty) {
+                                setState(() {
+                                  _selectedCatalogKey = newSelection.first as String;
+                                  _selectedFilterField = null;
+                                  _selectedFilterValues.clear();
+                                  _selectedFilterValues.add('Todos');
+                                });
+                              }
+                            },
                           );
                         },
                         child: Container(
@@ -344,39 +529,23 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                       const Spacer(),
                       GestureDetector(
                         onTap: () async {
-                          await showCupertinoModalPopup<void>(
-                            context: context,
-                            builder: (context) => CupertinoActionSheet(
-                              title: const Text('Seleccionar campo para filtrar'),
-                              actions: [
-                                CupertinoActionSheetAction(
-                                  onPressed: () {
-                                    setState(() {
-                                      _selectedFilterField = null;
-                                      _selectedFilterValue = 'Todos';
-                                    });
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text('NINGUNO (Todos los registros)'),
-                                ),
-                                ..._filterFieldsList.map((f) {
-                                  return CupertinoActionSheetAction(
-                                    onPressed: () {
-                                      setState(() {
-                                        _selectedFilterField = f['name'];
-                                        _selectedFilterValue = 'Todos';
-                                      });
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(f['label']),
-                                  );
-                                }),
-                              ],
-                              cancelButton: CupertinoActionSheetAction(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('Cancelar'),
-                              ),
-                            ),
+                          final items = <Map<String, dynamic>>[
+                            {'id': null, 'label': 'NINGUNO (Todos los registros)'}
+                          ];
+                          items.addAll(_filterFieldsList.map((f) => {'id': f['name'], 'label': f['label']}));
+
+                          await _showPredictiveSelector(
+                            title: 'Seleccionar campo para filtrar',
+                            items: items,
+                            isMultiSelect: false,
+                            currentSelection: {_selectedFilterField},
+                            onSelectionChanged: (newSelection) {
+                              setState(() {
+                                _selectedFilterField = newSelection.first;
+                                _selectedFilterValues.clear();
+                                _selectedFilterValues.add('Todos');
+                              });
+                            },
                           );
                         },
                         child: Container(
@@ -406,7 +575,7 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                   ),
                   if (_selectedFilterField != null) ...[
                     const SizedBox(height: 10),
-                    // Row 3: Filter Value selector
+                    // Row 3: Filter Value selector (Multi-select)
                     Row(
                       children: [
                         const Text(
@@ -417,26 +586,32 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                         GestureDetector(
                           onTap: () async {
                             final vals = _getFilterValues();
-                            await showCupertinoModalPopup<void>(
-                              context: context,
-                              builder: (context) => CupertinoActionSheet(
-                                title: const Text('Seleccionar valor de filtro'),
-                                actions: vals.map((v) {
-                                  return CupertinoActionSheetAction(
-                                    onPressed: () {
-                                      setState(() {
-                                        _selectedFilterValue = v;
-                                      });
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(v),
-                                  );
-                                }).toList(),
-                                cancelButton: CupertinoActionSheetAction(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text('Cancelar'),
-                                ),
-                              ),
+                            final items = vals.map((v) => {'id': v, 'label': v}).toList();
+
+                            await _showPredictiveSelector(
+                              title: 'Seleccionar valores de filtro',
+                              items: items,
+                              isMultiSelect: true,
+                              currentSelection: _selectedFilterValues,
+                              onSelectionChanged: (newSelection) {
+                                setState(() {
+                                  final set = newSelection.map((e) => e.toString()).toSet();
+                                  if (set.contains('Todos') && !_selectedFilterValues.contains('Todos')) {
+                                    _selectedFilterValues.clear();
+                                    _selectedFilterValues.add('Todos');
+                                  } else {
+                                    _selectedFilterValues.clear();
+                                    _selectedFilterValues.addAll(set);
+                                    if (_selectedFilterValues.length > 1 &&
+                                        _selectedFilterValues.contains('Todos')) {
+                                      _selectedFilterValues.remove('Todos');
+                                    }
+                                    if (_selectedFilterValues.isEmpty) {
+                                      _selectedFilterValues.add('Todos');
+                                    }
+                                  }
+                                });
+                              },
                             );
                           },
                           child: Container(
@@ -447,9 +622,16 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                             ),
                             child: Row(
                               children: [
-                                Text(
-                                  _selectedFilterValue ?? 'Todos',
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                ConstrainedBox(
+                                  constraints: const BoxConstraints(maxWidth: 160),
+                                  child: Text(
+                                    _selectedFilterValues.contains('Todos')
+                                        ? 'Todos'
+                                        : _selectedFilterValues.join(', '),
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                                 const SizedBox(width: 4),
                                 const Icon(CupertinoIcons.chevron_down, size: 14),
@@ -463,6 +645,60 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                 ],
               ),
             ),
+            // Chart Selection Control
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              child: SizedBox(
+                width: double.infinity,
+                child: CupertinoSegmentedControl<ChartType>(
+                  groupValue: _selectedChartType,
+                  selectedColor: Settings.instance.colors.primary,
+                  borderColor: Settings.instance.colors.primary,
+                  onValueChanged: (val) => setState(() => _selectedChartType = val),
+                  children: const {
+                    ChartType.bar: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Text('Gráfico de Barras', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                    ),
+                    ChartType.pie: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Text('Gráfico de Pastel', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                    ),
+                    ChartType.none: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Text('Solo Tabla', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                    ),
+                  },
+                ),
+              ),
+            ),
+            // Chart Display Card
+            if (_selectedChartType != ChartType.none && countsList.isNotEmpty)
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: CupertinoColors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: CupertinoColors.systemGrey.withValues(alpha: 0.1),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: _selectedChartType == ChartType.bar
+                    ? HorizontalBarChart(
+                        data: countsList,
+                        total: totalCount,
+                        primaryColor: Settings.instance.colors.primary,
+                      )
+                    : DonutChart(
+                        data: countsList,
+                        total: totalCount,
+                      ),
+              ),
             // Aggregated Statistics Table View
             Expanded(
               child: Container(
@@ -512,45 +748,18 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                               textAlign: TextAlign.right,
                             ),
                           ),
-                          if (isSupplies) ...[
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                'Stock Inicial',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Settings.instance.colors.textOverPrimary,
-                                  fontSize: 16,
-                                ),
-                                textAlign: TextAlign.right,
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              'Porcentaje (%)',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Settings.instance.colors.textOverPrimary,
+                                fontSize: 16,
                               ),
+                              textAlign: TextAlign.right,
                             ),
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                'Existencia',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Settings.instance.colors.textOverPrimary,
-                                  fontSize: 16,
-                                ),
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                          ] else ...[
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                'Porcentaje (%)',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Settings.instance.colors.textOverPrimary,
-                                  fontSize: 16,
-                                ),
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                          ],
+                          ),
                         ],
                       ),
                     ),
@@ -609,73 +818,9 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                                             fontWeight: FontWeight.bold,
                                             color: CupertinoColors.black,
                                           ),
-                                          textAlign: TextAlign.right,
-                                        ),
-                                      ),
-                                      if (isSupplies) ...[
-                                        // Editable Initial Stock Cell
-                                        Expanded(
-                                          flex: 2,
-                                          child: Align(
-                                            alignment: Alignment.centerRight,
-                                            child: GestureDetector(
-                                              onTap: () => _editInitialStock(itemName),
-                                              child: Container(
-                                                padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8,
-                                                  vertical: 4,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: CupertinoColors.systemGrey6
-                                                      .resolveFrom(context),
-                                                  borderRadius: BorderRadius.circular(4),
-                                                ),
-                                                child: Row(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Text(
-                                                      (_initialStock[itemName] ?? 0).toString(),
-                                                      style: const TextStyle(
-                                                        fontSize: 15,
-                                                        fontWeight: FontWeight.bold,
-                                                        color: CupertinoColors.activeBlue,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 4),
-                                                    const Icon(
-                                                      CupertinoIcons.pencil,
-                                                      size: 12,
-                                                      color: CupertinoColors.activeBlue,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
+                                            textAlign: TextAlign.right,
                                           ),
                                         ),
-                                        // Calculated stock existence cell
-                                        Expanded(
-                                          flex: 2,
-                                          child: () {
-                                            final currentStock = _initialStock[itemName] ?? 0;
-                                            final remaining = currentStock - countVal;
-                                            final isNegative = remaining < 0;
-                                            return Text(
-                                              remaining.toStringAsFixed(
-                                                remaining == remaining.toInt() ? 0 : 1,
-                                              ),
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: isNegative
-                                                    ? CupertinoColors.systemRed
-                                                    : CupertinoColors.systemGreen,
-                                              ),
-                                              textAlign: TextAlign.right,
-                                            );
-                                          }(),
-                                        ),
-                                      ] else ...[
                                         // Percentages
                                         Expanded(
                                           flex: 2,
@@ -693,11 +838,10 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                                           }(),
                                         ),
                                       ],
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
+                                    ),
+                                  );
+                                },
+                              ),
                     ),
                   ],
                 ),
@@ -707,45 +851,6 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
         ),
       ),
     );
-  }
-
-  Future<void> _editInitialStock(String itemName) async {
-    final currentStockStr = (_initialStock[itemName] ?? 0).toString();
-    final controller = TextEditingController(text: currentStockStr);
-
-    await showCupertinoDialog<void>(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: const Text('Editar Stock Inicial'),
-        content: Padding(
-          padding: const EdgeInsets.only(top: 12.0),
-          child: CupertinoTextField(
-            controller: controller,
-            keyboardType: TextInputType.number,
-            placeholder: 'ej. 10',
-          ),
-        ),
-        actions: [
-          CupertinoDialogAction(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            onPressed: () async {
-              final newStock = int.tryParse(controller.text) ?? 0;
-              setState(() {
-                _initialStock[itemName] = newStock;
-              });
-              if (!context.mounted) return;
-              Navigator.pop(context);
-            },
-            child: const Text('Guardar'),
-          ),
-        ],
-      ),
-    );
-    controller.dispose();
   }
 
   Future<void> _exportPdfReport() async {
@@ -830,25 +935,15 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
     final isSupplies = _selectedCatalogKey == 'insumos';
 
     final title = isSupplies ? 'Reporte de Consumo e Inventario' : 'Reporte de Frecuencias de Catálogo';
-    final List<String> headers = isSupplies
-        ? ['INSUMO', 'CONSUMIDO', 'STOCK INICIAL', 'EXISTENCIA ACTUAL']
-        : ['ELEMENTO', 'FRECUENCIA', 'PORCENTAJE (%)'];
+    final List<String> headers = ['ELEMENTO / INSUMO', 'CANTIDAD / FRECUENCIA', 'PORCENTAJE (%)'];
 
     final List<List<String>> rows = [];
     for (final entry in countsList) {
       final itemName = entry.key;
       final val = entry.value;
       final valStr = val.toStringAsFixed(val == val.toInt() ? 0 : 1);
-
-      if (isSupplies) {
-        final initial = _initialStock[itemName] ?? 0;
-        final current = initial - val;
-        final currentStr = current.toStringAsFixed(current == current.toInt() ? 0 : 1);
-        rows.add([itemName, valStr, initial.toString(), currentStr]);
-      } else {
-        final pct = totalCount > 0 ? (val / totalCount) * 100 : 0.0;
-        rows.add([itemName, valStr, '${pct.toStringAsFixed(1)}%']);
-      }
+      final pct = totalCount > 0 ? (val / totalCount) * 100 : 0.0;
+      rows.add([itemName, valStr, '${pct.toStringAsFixed(1)}%']);
     }
 
     final Map<String, String> filters = {
@@ -860,7 +955,9 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
         orElse: () => {'label': _selectedFilterField},
       )['label'];
       filters['Filtrado Por'] = fieldLabel;
-      filters['Valor del Filtro'] = _selectedFilterValue ?? 'Todos';
+      filters['Valor del Filtro'] = _selectedFilterValues.contains('Todos')
+          ? 'Todos'
+          : _selectedFilterValues.join(', ');
     }
 
     await ServicePDF.generateInventoryReport(
@@ -871,4 +968,317 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
       signatureSvg: signatureSvg,
     );
   }
+}
+
+class HorizontalBarChart extends StatelessWidget {
+  final List<MapEntry<String, double>> data;
+  final double total;
+  final Color primaryColor;
+
+  const HorizontalBarChart({
+    super.key,
+    required this.data,
+    required this.total,
+    required this.primaryColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (data.isEmpty) {
+      return const Center(
+        child: Text(
+          'No hay datos para graficar',
+          style: TextStyle(color: CupertinoColors.secondaryLabel),
+        ),
+      );
+    }
+
+    final List<MapEntry<String, double>> displayData = [];
+    double othersSum = 0;
+    if (data.length <= 7) {
+      displayData.addAll(data);
+    } else {
+      displayData.addAll(data.take(6));
+      othersSum = data.skip(6).fold(0.0, (sum, entry) => sum + entry.value);
+      if (othersSum > 0) {
+        displayData.add(MapEntry('Otros', othersSum));
+      }
+    }
+
+    final double maxVal = displayData.isEmpty
+        ? 1.0
+        : displayData.map((e) => e.value).reduce((a, b) => a > b ? a : b);
+
+    return Column(
+      children: displayData.map((entry) {
+        final percentage = total > 0 ? (entry.value / total) * 100 : 0.0;
+        final barWidthFactor = maxVal > 0 ? (entry.value / maxVal) : 0.0;
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6.0),
+          child: Row(
+            children: [
+              // Label
+              Expanded(
+                flex: 3,
+                child: Text(
+                  entry.key,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: CupertinoColors.black,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 8),
+              // Bar Container
+              Expanded(
+                flex: 5,
+                child: Stack(
+                  children: [
+                    // Background track
+                    Container(
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: CupertinoColors.systemGrey6,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                    ),
+                    // Foreground bar with gradient
+                    FractionallySizedBox(
+                      widthFactor: barWidthFactor,
+                      child: Container(
+                        height: 14,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              primaryColor,
+                              primaryColor.withValues(alpha: 0.7),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(7),
+                          boxShadow: [
+                            BoxShadow(
+                              color: primaryColor.withValues(alpha: 0.2),
+                              blurRadius: 2,
+                              offset: const Offset(0, 1),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              // Value
+              SizedBox(
+                width: 70,
+                child: Text(
+                  '${entry.value.toStringAsFixed(0)} (${percentage.toStringAsFixed(1)}%)',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: CupertinoColors.secondaryLabel,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
+class DonutChart extends StatelessWidget {
+  final List<MapEntry<String, double>> data;
+  final double total;
+
+  const DonutChart({
+    super.key,
+    required this.data,
+    required this.total,
+  });
+
+  static final List<Color> _chartColors = [
+    const Color(0xFF0F172A), // Slate Dark
+    const Color(0xFF3B82F6), // Indigo/Blue
+    const Color(0xFF10B981), // Emerald
+    const Color(0xFFF59E0B), // Amber
+    const Color(0xFFEC4899), // Pink
+    const Color(0xFF8B5CF6), // Violet
+    const Color(0xFFEF4444), // Red
+    const Color(0xFF14B8A6), // Teal
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    if (data.isEmpty) {
+      return const Center(
+        child: Text(
+          'No hay datos para graficar',
+          style: TextStyle(color: CupertinoColors.secondaryLabel),
+        ),
+      );
+    }
+
+    final List<MapEntry<String, double>> displayData = [];
+    double othersSum = 0;
+    if (data.length <= 7) {
+      displayData.addAll(data);
+    } else {
+      displayData.addAll(data.take(6));
+      othersSum = data.skip(6).fold(0.0, (sum, entry) => sum + entry.value);
+      if (othersSum > 0) {
+        displayData.add(MapEntry('Otros', othersSum));
+      }
+    }
+
+    return Row(
+      children: [
+        // Donut circle
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            SizedBox(
+              width: 120,
+              height: 120,
+              child: CustomPaint(
+                painter: DonutChartPainter(
+                  data: displayData,
+                  colors: _chartColors,
+                  total: total,
+                ),
+              ),
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'TOTAL',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: CupertinoColors.secondaryLabel,
+                    letterSpacing: 1,
+                  ),
+                ),
+                Text(
+                  total.toStringAsFixed(0),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: CupertinoColors.black,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(width: 16),
+        // Legend List
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: List.generate(displayData.length, (index) {
+              final entry = displayData[index];
+              final percentage = total > 0 ? (entry.value / total) * 100 : 0.0;
+              final color = _chartColors[index % _chartColors.length];
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: color,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        entry.key,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: CupertinoColors.black,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${percentage.toStringAsFixed(1)}%',
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: CupertinoColors.secondaryLabel,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class DonutChartPainter extends CustomPainter {
+  final List<MapEntry<String, double>> data;
+  final List<Color> colors;
+  final double total;
+
+  DonutChartPainter({
+    required this.data,
+    required this.colors,
+    required this.total,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (total == 0) {
+      final paint = Paint()
+        ..color = CupertinoColors.systemGrey5
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 16;
+      canvas.drawCircle(size.center(Offset.zero), size.width / 2 - 8, paint);
+      return;
+    }
+
+    final double radius = size.width / 2;
+    final center = Offset(radius, radius);
+    final rect = Rect.fromCircle(center: center, radius: radius - 8);
+
+    double startAngle = -3.1415926535 / 2; // Start from top (-90 degrees)
+
+    for (int i = 0; i < data.length; i++) {
+      final entry = data[i];
+      if (entry.value == 0) continue;
+
+      final sweepAngle = (entry.value / total) * 2 * 3.1415926535;
+      final paint = Paint()
+        ..color = colors[i % colors.length]
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 16
+        ..strokeCap = StrokeCap.butt;
+
+      canvas.drawArc(rect, startAngle, sweepAngle, false, paint);
+      startAngle += sweepAngle;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant DonutChartPainter oldDelegate) => true;
 }
