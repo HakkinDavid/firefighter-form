@@ -267,4 +267,135 @@ class ServicePDF {
       await Printing.sharePdf(bytes: await pdf.save(), filename: '$formId.pdf');
     }
   }
+
+  static Future<void> generateInventoryReport({
+    required String title,
+    required List<String> headers,
+    required List<List<String>> rows,
+    required Map<String, String> filters,
+    bool preview = true,
+  }) async {
+    final pdf = pw.Document();
+
+    final images = <String, pw.MemoryImage>{};
+    try {
+      images['left_logo'] = pw.MemoryImage(
+        (await rootBundle.load('assets/tijuana.png')).buffer.asUint8List(),
+      );
+      images['right_logo'] = pw.MemoryImage(
+        (await rootBundle.load('assets/bomberos.png')).buffer.asUint8List(),
+      );
+    } catch (_) {}
+
+    final header = pw.Row(
+      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+      children: [
+        if (images['left_logo'] != null)
+          pw.Image(images['left_logo']!, width: 80),
+        pw.Expanded(
+          child: pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.center,
+            children: [
+              pw.Text(
+                "Ayuntamiento de Tijuana",
+                style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
+              ),
+              pw.Text("Dirección de Bomberos Tijuana", style: pw.TextStyle(fontSize: 14)),
+              pw.SizedBox(height: 4),
+              pw.Text(
+                title.toUpperCase(),
+                style: pw.TextStyle(
+                  fontSize: 12,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (images['right_logo'] != null)
+          pw.Image(images['right_logo']!, width: 80),
+      ],
+    );
+
+    final List<pw.Widget> filterWidgets = [];
+    if (filters.isNotEmpty) {
+      filterWidgets.add(pw.Text("Filtros Aplicados:", style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10)));
+      filters.forEach((key, val) {
+        filterWidgets.add(pw.Text("$key: $val", style: pw.TextStyle(fontSize: 9, color: PdfColors.grey700)));
+      });
+      filterWidgets.add(pw.SizedBox(height: 12));
+    }
+
+    final tableWidget = pw.TableHelper.fromTextArray(
+      headers: headers,
+      data: rows,
+      cellStyle: pw.TextStyle(fontSize: 9),
+      headerStyle: pw.TextStyle(
+        fontWeight: pw.FontWeight.bold,
+        color: PdfColors.white,
+        fontSize: 9,
+      ),
+      headerDecoration: pw.BoxDecoration(
+        color: PdfColor.fromHex("#FF5722"), // Primary brand color
+      ),
+      rowDecoration: const pw.BoxDecoration(
+        border: pw.Border(
+          bottom: pw.BorderSide(
+            color: PdfColors.grey300,
+            width: 0.5,
+          ),
+        ),
+      ),
+    );
+
+    final signatureSection = pw.Column(
+      children: [
+        pw.SizedBox(height: 40),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+          children: [
+            pw.Column(
+              children: [
+                pw.Container(width: 150, decoration: const pw.BoxDecoration(border: pw.Border(bottom: pw.BorderSide(color: PdfColors.black, width: 0.8)))),
+                pw.SizedBox(height: 4),
+                pw.Text("Firma del Supervisor", style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
+              ],
+            ),
+            pw.Column(
+              children: [
+                pw.Container(width: 150, decoration: const pw.BoxDecoration(border: pw.Border(bottom: pw.BorderSide(color: PdfColors.black, width: 0.8)))),
+                pw.SizedBox(height: 4),
+                pw.Text("Firma de Control de Almacén", style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+
+    pdf.addPage(
+      pw.MultiPage(
+        pageFormat: PdfPageFormat.letter,
+        margin: const pw.EdgeInsets.all(32),
+        build: (context) => [
+          header,
+          pw.SizedBox(height: 16),
+          ...filterWidgets,
+          tableWidget,
+          signatureSection,
+        ],
+      ),
+    );
+
+    // Save and open
+    final output = await getTemporaryDirectory();
+    final file = File("${output.path}/report_${DateTime.now().millisecondsSinceEpoch}.pdf");
+    await file.writeAsBytes(await pdf.save());
+
+    if (preview) {
+      await OpenFilex.open(file.path);
+    } else {
+      await Printing.sharePdf(bytes: await pdf.save(), filename: 'reporte.pdf');
+    }
+  }
 }
