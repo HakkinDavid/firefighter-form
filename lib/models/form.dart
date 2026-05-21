@@ -22,6 +22,7 @@ class ServiceForm {
 
   String _savedContentFingerprint = '';
 
+  Map<String, dynamic> get template => _template;
   String get name => _template['formname'] ?? 'Formulario';
   Map<String, dynamic> get sections => _template['fields'];
   List<String> get sectionKeys => _sectionKeys;
@@ -42,8 +43,9 @@ class ServiceForm {
   bool get isLoaded => _isLoaded;
 
   set editOverride(bool v) {
-    if ((Settings.instance.self?.hasSupervisorRights ?? false) && v)
+    if ((Settings.instance.self?.hasSupervisorRights ?? false) && v) {
       _status = 0;
+    }
   }
 
   ServiceForm(
