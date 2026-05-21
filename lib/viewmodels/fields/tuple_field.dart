@@ -2,6 +2,7 @@ import 'package:bomberos/models/settings.dart' show Settings;
 import 'package:bomberos/viewmodels/fields/input_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show Card;
+import 'package:flutter/services.dart';
 
 class TupleField extends InputField {
   const TupleField({
@@ -19,6 +20,18 @@ class TupleField extends InputField {
 }
 
 class _TupleFieldState extends InputFieldState {
+  String _normalize(String input) {
+    var s = input.toLowerCase();
+    s = s.replaceAll(RegExp(r'[áàäâ]'), 'a');
+    s = s.replaceAll(RegExp(r'[éèëê]'), 'e');
+    s = s.replaceAll(RegExp(r'[íìïî]'), 'i');
+    s = s.replaceAll(RegExp(r'[óòöô]'), 'o');
+    s = s.replaceAll(RegExp(r'[úùüû]'), 'u');
+    s = s.replaceAll(RegExp(r'[ñ]'), 'n');
+    s = s.replaceAll(RegExp(r'[^a-z0-9]'), '');
+    return s;
+  }
+
   @override
   Widget build(BuildContext context) {
     final tupleFields = widget.field['tuple'] as List<dynamic>? ?? [];
@@ -62,12 +75,13 @@ class _TupleFieldState extends InputFieldState {
                                         String searchText = '';
                                         return StatefulBuilder(
                                           builder: (BuildContext context, StateSetter popupState) {
-                                            final searchLower = searchText.trim().replaceAll(' ', '').toLowerCase();
+                                            final searchNormalized = _normalize(searchText);
                                             final rawOptions = subfield['options'] as List<dynamic>? ?? [];
-                                            final formattedOptions = widget.formatOptions(rawOptions);
+                                            final formattedOptions = widget.formatOptions(rawOptions) ?? const [];
                                             final filteredOptions = formattedOptions.where((opt) {
-                                              final optText = opt.toString().replaceAll(' ', '').toLowerCase();
-                                              return searchLower.isNotEmpty && optText.contains(searchLower);
+                                              if (searchNormalized.isEmpty) return true;
+                                              final optText = _normalize(opt.toString());
+                                              return optText.contains(searchNormalized);
                                             }).toList();
 
                                             return SafeArea(
@@ -260,6 +274,12 @@ class _TupleFieldState extends InputFieldState {
                           CupertinoTextField(
                             readOnly: !widget.canEditForm,
                             placeholder: subfield['label'] ?? subfield['name'],
+                            keyboardType: subfield['inputType'] == 'number'
+                                ? TextInputType.number
+                                : TextInputType.text,
+                            inputFormatters: subfield['inputType'] == 'number'
+                                ? [FilteringTextInputFormatter.digitsOnly]
+                                : null,
                             controller: TextEditingController(text: subValue)
                               ..selection = TextSelection.collapsed(
                                 offset: subValue.length,

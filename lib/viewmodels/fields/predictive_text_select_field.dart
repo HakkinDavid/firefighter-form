@@ -21,23 +21,29 @@ class _PredictiveTextSelectFieldState extends InputFieldState {
   final _searchController = TextEditingController();
   late final List<dynamic> options;
 
+  String _normalize(String input) {
+    var s = input.toLowerCase();
+    s = s.replaceAll(RegExp(r'[áàäâ]'), 'a');
+    s = s.replaceAll(RegExp(r'[éèëê]'), 'e');
+    s = s.replaceAll(RegExp(r'[íìïî]'), 'i');
+    s = s.replaceAll(RegExp(r'[óòöô]'), 'o');
+    s = s.replaceAll(RegExp(r'[úùüû]'), 'u');
+    s = s.replaceAll(RegExp(r'[ñ]'), 'n');
+    s = s.replaceAll(RegExp(r'[^a-z0-9]'), '');
+    return s;
+  }
+
   @override
   void initState() {
     super.initState();
-    options = widget.formatOptions(widget.field['options'] as List<dynamic>?);
+    options = widget.formatOptions(widget.field['options'] as List<dynamic>?) ?? const [];
   }
 
   bool matchesInput(dynamic option) {
-    final searchText = _searchController.text
-        .trim()
-        .replaceAll(' ', '')
-        .toLowerCase();
-
-    final optionText = option.toString()
-        .replaceAll(' ', '')
-        .toLowerCase();
-
-    return searchText.isNotEmpty && optionText.contains(searchText);
+    final searchText = _normalize(_searchController.text);
+    if (searchText.isEmpty) return true;
+    final optionText = _normalize(option.toString());
+    return optionText.contains(searchText);
   }
 
   @override

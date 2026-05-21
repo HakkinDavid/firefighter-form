@@ -23,7 +23,7 @@ class _NumberInputFieldState extends InputFieldState {
   void initState() {
     super.initState();
 
-    options = widget.formatOptions(widget.field['options'] as List<dynamic>?);
+    options = widget.formatOptions(widget.field['options'] as List<dynamic>?) ?? const [];
   }
 
   @override

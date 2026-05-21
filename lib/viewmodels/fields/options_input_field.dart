@@ -24,7 +24,7 @@ class _OptionsInputFieldState extends InputFieldState {
   void initState() {
     super.initState();
 
-    options = widget.formatOptions(widget.field['options'] as List<dynamic>?);
+    options = widget.formatOptions(widget.field['options'] as List<dynamic>?) ?? const [];
   }
 
   @override
@@ -40,6 +40,7 @@ class _OptionsInputFieldState extends InputFieldState {
                 onTap: () async {
                   if (!widget.canEditForm) return;
                   int selected = options.indexOf(widget.value);
+                  if (selected < 0) selected = 0;
                   int pickedIndex = selected;
                   await showCupertinoModalPopup(
                     context: context,
@@ -72,12 +73,14 @@ class _OptionsInputFieldState extends InputFieldState {
                                 ),
                               ),
                               onPressed: () async {
-                                widget.setFormState(() {
-                                  widget.formSet(
-                                    widget.field['name'],
-                                    options[pickedIndex],
-                                  );
-                                });
+                                if (options.isNotEmpty && pickedIndex >= 0 && pickedIndex < options.length) {
+                                  widget.setFormState(() {
+                                    widget.formSet(
+                                      widget.field['name'],
+                                      options[pickedIndex],
+                                    );
+                                  });
+                                }
                                 if (!mounted) return;
                                 Navigator.of(context).pop();
                               },
