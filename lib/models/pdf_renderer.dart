@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:bomberos/models/settings.dart' show Settings;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
@@ -66,7 +67,25 @@ class ServicePDF {
 
     final content = <pw.Widget>[header, pw.SizedBox(height: 16)];
 
-    final fields = (template['fields'] as Map).values.expand((v) => v).toList();
+    final Map<String, dynamic> fieldsMap = Map<String, dynamic>.from(template['fields'] as Map? ?? {});
+    final Map<String, dynamic> orderMap = Map<String, dynamic>.from(template['order'] as Map? ?? {});
+
+    final sectionKeys = fieldsMap.keys.toList();
+    sectionKeys.sort((a, b) {
+      final av = orderMap[a];
+      final bv = orderMap[b];
+      final ai = av is num ? av.toInt() : 0;
+      final bi = bv is num ? bv.toInt() : 0;
+      return ai.compareTo(bi);
+    });
+
+    final fields = <dynamic>[];
+    for (final section in sectionKeys) {
+      final list = fieldsMap[section];
+      if (list is List) {
+        fields.addAll(list);
+      }
+    }
 
     int numColumns = 4;
     int counter = 0;
@@ -273,9 +292,13 @@ class ServicePDF {
     required List<String> headers,
     required List<List<String>> rows,
     required Map<String, String> filters,
+    String? signatureSvg,
     bool preview = true,
   }) async {
     final pdf = pw.Document();
+
+    final primaryColor = PdfColor.fromInt(Settings.instance.colors.primary.toARGB32());
+    final accentColor = PdfColor.fromInt(Settings.instance.colors.primaryContrastDark.toARGB32());
 
     final images = <String, pw.MemoryImage>{};
     try {
@@ -301,12 +324,17 @@ class ServicePDF {
                 style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
               ),
               pw.Text("Dirección de Bomberos Tijuana", style: pw.TextStyle(fontSize: 14)),
-              pw.SizedBox(height: 4),
+              pw.Container(
+                margin: const pw.EdgeInsets.symmetric(vertical: 4),
+                height: 2,
+                color: accentColor,
+              ),
               pw.Text(
                 title.toUpperCase(),
                 style: pw.TextStyle(
                   fontSize: 12,
                   fontWeight: pw.FontWeight.bold,
+                  color: primaryColor,
                 ),
               ),
             ],
@@ -336,7 +364,7 @@ class ServicePDF {
         fontSize: 9,
       ),
       headerDecoration: pw.BoxDecoration(
-        color: PdfColor.fromHex("#FF5722"), // Primary brand color
+        color: primaryColor,
       ),
       rowDecoration: const pw.BoxDecoration(
         border: pw.Border(
@@ -348,27 +376,44 @@ class ServicePDF {
       ),
     );
 
+    pw.Widget? sigImageWidget;
+    if (signatureSvg != null && signatureSvg.isNotEmpty) {
+      try {
+        final decodedSvg = utf8.decode(
+          base64Decode(
+            signatureSvg.replaceAll(RegExp(r'data:image/svg\+xml;base64,'), ''),
+          ),
+        );
+        sigImageWidget = pw.SvgImage(svg: decodedSvg, height: 60);
+      } catch (_) {}
+    }
+
     final signatureSection = pw.Column(
       children: [
         pw.SizedBox(height: 40),
-        pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
-          children: [
-            pw.Column(
-              children: [
-                pw.Container(width: 150, decoration: const pw.BoxDecoration(border: pw.Border(bottom: pw.BorderSide(color: PdfColors.black, width: 0.8)))),
-                pw.SizedBox(height: 4),
-                pw.Text("Firma del Supervisor", style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
-              ],
-            ),
-            pw.Column(
-              children: [
-                pw.Container(width: 150, decoration: const pw.BoxDecoration(border: pw.Border(bottom: pw.BorderSide(color: PdfColors.black, width: 0.8)))),
-                pw.SizedBox(height: 4),
-                pw.Text("Firma de Control de Almacén", style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
-              ],
-            ),
-          ],
+        pw.Center(
+          child: pw.Column(
+            children: [
+              if (sigImageWidget != null) ...[
+                sigImageWidget,
+                pw.SizedBox(height: 8),
+              ] else
+                pw.SizedBox(height: 50),
+              pw.Container(
+                width: 200,
+                decoration: const pw.BoxDecoration(
+                  border: pw.Border(
+                    bottom: pw.BorderSide(color: PdfColors.black, width: 0.8),
+                  ),
+                ),
+              ),
+              pw.SizedBox(height: 4),
+              pw.Text(
+                "Firma del Responsable",
+                style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold),
+              ),
+            ],
+          ),
         ),
       ],
     );
