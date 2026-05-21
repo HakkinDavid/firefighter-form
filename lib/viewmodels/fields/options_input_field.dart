@@ -18,14 +18,7 @@ class OptionsInputField extends InputField {
 }
 
 class _OptionsInputFieldState extends InputFieldState {
-  late final List<dynamic> options;
-
-  @override
-  void initState() {
-    super.initState();
-
-    options = widget.formatOptions(widget.field['options'] as List<dynamic>?) ?? const [];
-  }
+  List<dynamic> get options => widget.formatOptions(widget.field['options'] as List<dynamic>?) ?? const [];
 
   @override
   Widget build(BuildContext context) {

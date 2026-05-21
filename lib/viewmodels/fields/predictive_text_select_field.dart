@@ -19,7 +19,7 @@ class PredictiveTextSelectField extends InputField {
 
 class _PredictiveTextSelectFieldState extends InputFieldState {
   final _searchController = TextEditingController();
-  late final List<dynamic> options;
+  List<dynamic> get options => widget.formatOptions(widget.field['options'] as List<dynamic>?) ?? const [];
 
   String _normalize(String input) {
     var s = input.toLowerCase();
@@ -31,12 +31,6 @@ class _PredictiveTextSelectFieldState extends InputFieldState {
     s = s.replaceAll(RegExp(r'[ñ]'), 'n');
     s = s.replaceAll(RegExp(r'[^a-z0-9]'), '');
     return s;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    options = widget.formatOptions(widget.field['options'] as List<dynamic>?) ?? const [];
   }
 
   bool matchesInput(dynamic option) {
