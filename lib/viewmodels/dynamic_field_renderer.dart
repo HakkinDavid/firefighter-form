@@ -29,58 +29,100 @@ class DynamicFieldRenderer extends StatelessWidget {
     required this.formatOptions,
   });
 
+  Map<String, dynamic> _resolveFieldOptions(Map<String, dynamic> originalField) {
+    final resolvedField = Map<String, dynamic>.from(originalField);
+
+    // 1. Resolve top-level field optionsFrom
+    if (resolvedField.containsKey('optionsFrom')) {
+      final catalogKey = resolvedField['optionsFrom'];
+      final catalog = form.template['options']?[catalogKey];
+      if (catalog is List) {
+        resolvedField['options'] = catalog
+            .map((item) => (item is Map) ? (item['name']?.toString() ?? '') : item.toString())
+            .toList();
+      }
+    }
+
+    // 2. Resolve nested tuple subfield optionsFrom
+    if (resolvedField['type'] == 'tuple' && resolvedField['tuple'] is List) {
+      final originalSubfields = resolvedField['tuple'] as List;
+      final resolvedSubfields = [];
+      for (final sub in originalSubfields) {
+        if (sub is Map) {
+          final resolvedSub = Map<String, dynamic>.from(sub);
+          if (resolvedSub.containsKey('optionsFrom')) {
+            final catalogKey = resolvedSub['optionsFrom'];
+            final catalog = form.template['options']?[catalogKey];
+            if (catalog is List) {
+              resolvedSub['options'] = catalog
+                  .map((item) => (item is Map) ? (item['name']?.toString() ?? '') : item.toString())
+                  .toList();
+            }
+          }
+          resolvedSubfields.add(resolvedSub);
+        } else {
+          resolvedSubfields.add(sub);
+        }
+      }
+      resolvedField['tuple'] = resolvedSubfields;
+    }
+
+    return resolvedField;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final String type = field['type'];
-    final Set<String> errors = form.errors[field['name']] ?? <String>{};
+    final Map<String, dynamic> resolvedField = _resolveFieldOptions(field);
+    final String type = resolvedField['type'];
+    final Set<String> errors = form.errors[resolvedField['name']] ?? <String>{};
 
-    if (!form.shouldDisplay(field)) return SizedBox.shrink();
+    if (!form.shouldDisplay(resolvedField)) return SizedBox.shrink();
 
     Widget fieldWidget;
 
     if (type == 'input') {
-      if (field['inputType'] == 'date') {
+      if (resolvedField['inputType'] == 'date') {
         fieldWidget = DateInputField(
-          field: field,
-          value: form.content[field['name']],
+          field: resolvedField,
+          value: form.content[resolvedField['name']],
           formSet: form.set,
           setFormState: setFormState,
           canEditForm: form.canEditForm,
           formatOptions: formatOptions,
         );
-      } else if (field['inputType'] == 'time') {
+      } else if (resolvedField['inputType'] == 'time') {
         fieldWidget = TimeInputField(
-          field: field,
-          value: form.content[field['name']],
+          field: resolvedField,
+          value: form.content[resolvedField['name']],
           formSet: form.set,
           setFormState: setFormState,
           canEditForm: form.canEditForm,
           formatOptions: formatOptions,
         );
-      } else if (field['multiple'] == true) {
+      } else if (resolvedField['multiple'] == true) {
         fieldWidget = MultipleInputField(
-          field: field,
-          value: form.content[field['name']],
+          field: resolvedField,
+          value: form.content[resolvedField['name']],
           formSet: form.set,
           setFormState: setFormState,
           canEditForm: form.canEditForm,
           formatOptions: formatOptions,
         );
-      } else if (field['inputType'] == 'number') {
+      } else if (resolvedField['inputType'] == 'number') {
         fieldWidget = NumberInputField(
-          field: field,
-          value: form.content[field['name']],
+          field: resolvedField,
+          value: form.content[resolvedField['name']],
           formSet: form.set,
           setFormState: setFormState,
           canEditForm: form.canEditForm,
           formatOptions: formatOptions,
         );
-      } else if (field['options'] != null &&
-          field['options'] is List<dynamic> &&
-          field['options'].isNotEmpty) {
+      } else if (resolvedField['options'] != null &&
+          resolvedField['options'] is List<dynamic> &&
+          resolvedField['options'].isNotEmpty) {
         fieldWidget = OptionsInputField(
-          field: field,
-          value: form.content[field['name']],
+          field: resolvedField,
+          value: form.content[resolvedField['name']],
           formSet: form.set,
           setFormState: setFormState,
           canEditForm: form.canEditForm,
@@ -88,8 +130,8 @@ class DynamicFieldRenderer extends StatelessWidget {
         );
       } else {
         fieldWidget = TextInputField(
-          field: field,
-          value: form.content[field['name']],
+          field: resolvedField,
+          value: form.content[resolvedField['name']],
           formSet: form.set,
           setFormState: setFormState,
           canEditForm: form.canEditForm,
@@ -97,10 +139,10 @@ class DynamicFieldRenderer extends StatelessWidget {
         );
       }
     } else if (type == 'select') {
-      if (field['inputType'] == 'text') {
+      if (resolvedField['inputType'] == 'text') {
         fieldWidget = PredictiveTextSelectField(
-          field: field,
-          value: form.content[field['name']],
+          field: resolvedField,
+          value: form.content[resolvedField['name']],
           formSet: form.set,
           setFormState: setFormState,
           canEditForm: form.canEditForm,
@@ -108,8 +150,8 @@ class DynamicFieldRenderer extends StatelessWidget {
         );
       } else {
         fieldWidget = SelectField(
-          field: field,
-          value: form.content[field['name']],
+          field: resolvedField,
+          value: form.content[resolvedField['name']],
           formSet: form.set,
           setFormState: setFormState,
           canEditForm: form.canEditForm,
@@ -118,27 +160,27 @@ class DynamicFieldRenderer extends StatelessWidget {
       }
     } else if (type == 'textarea') {
       fieldWidget = TextAreaField(
-        field: field,
-        value: form.content[field['name']],
+        field: resolvedField,
+        value: form.content[resolvedField['name']],
         formSet: form.set,
         setFormState: setFormState,
         canEditForm: form.canEditForm,
         formatOptions: formatOptions,
       );
     } else if (type == 'multiple') {
-      if (field['inputType'] == 'checkbox') {
+      if (resolvedField['inputType'] == 'checkbox') {
         fieldWidget = CheckboxMultipleField(
-          field: field,
-          value: form.content[field['name']],
+          field: resolvedField,
+          value: form.content[resolvedField['name']],
           formSet: form.set,
           setFormState: setFormState,
           canEditForm: form.canEditForm,
           formatOptions: formatOptions,
         );
-      } else if (field['inputType'] == 'radio') {
+      } else if (resolvedField['inputType'] == 'radio') {
         fieldWidget = RadioMultipleField(
-          field: field,
-          value: form.content[field['name']],
+          field: resolvedField,
+          value: form.content[resolvedField['name']],
           formSet: form.set,
           setFormState: setFormState,
           canEditForm: form.canEditForm,
@@ -149,8 +191,8 @@ class DynamicFieldRenderer extends StatelessWidget {
       }
     } else if (type == 'drawingboard') {
       fieldWidget = DrawingBoardField(
-        field: field,
-        value: form.content[field['name']],
+        field: resolvedField,
+        value: form.content[resolvedField['name']],
         formSet: form.set,
         setFormState: setFormState,
         canEditForm: form.canEditForm,
@@ -158,8 +200,8 @@ class DynamicFieldRenderer extends StatelessWidget {
       );
     } else if (type == 'tuple') {
       fieldWidget = TupleField(
-        field: field,
-        value: form.content[field['name']],
+        field: resolvedField,
+        value: form.content[resolvedField['name']],
         formSet: form.set,
         setFormState: setFormState,
         canEditForm: form.canEditForm,
@@ -167,8 +209,8 @@ class DynamicFieldRenderer extends StatelessWidget {
       );
     } else if (type == 'text') {
       fieldWidget = TextDisplayField(
-        field: field,
-        value: form.content[field['name']],
+        field: resolvedField,
+        value: form.content[resolvedField['name']],
         formSet: form.set,
         setFormState: setFormState,
         canEditForm: form.canEditForm,
