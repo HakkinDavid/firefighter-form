@@ -2261,20 +2261,6 @@
                 "message": "La zona de colocación debe contener solo letras, puntos y espacios."
             }
         ],
-        "regexOnlyIntegers": [
-            {
-                "name": "edad",
-                "message": "La edad debe contener solo números."
-            },
-            {
-                "name": "codigopostal",
-                "message": "El código postal debe contener solo números."
-            },
-            {
-                "name": "codigopostalpaciente",
-                "message": "El código postal del paciente debe contener solo números."
-            }
-        ],
         "regexOnlyNumbers": [
             {
                 "name": "frecuenciacontracciones",
@@ -2399,6 +2385,20 @@
             {
                 "name": "hospitaltrasladootro",
                 "message": "Debe contener solo letras, números, puntos y espacios."
+            }
+        ],
+        "regexOnlyIntegers": [
+            {
+                "name": "edad",
+                "message": "La edad debe contener solo números."
+            },
+            {
+                "name": "codigopostal",
+                "message": "El código postal debe contener solo números."
+            },
+            {
+                "name": "codigopostalpaciente",
+                "message": "El código postal del paciente debe contener solo números."
             }
         ]
     }
