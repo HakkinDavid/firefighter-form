@@ -966,6 +966,7 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
       rows: rows,
       filters: filters,
       signatureSvg: signatureSvg,
+      chartType: _selectedChartType.name,
     );
   }
 }

@@ -293,6 +293,7 @@ class ServicePDF {
     required List<List<String>> rows,
     required Map<String, String> filters,
     String? signatureSvg,
+    String chartType = 'bar',
     bool preview = true,
   }) async {
     final pdf = pw.Document();
@@ -356,10 +357,11 @@ class ServicePDF {
 
     // Build a vector horizontal bar chart for the PDF report
     final List<pw.Widget> chartWidgets = [];
-    if (rows.isNotEmpty) {
+    if (chartType != 'none' && rows.isNotEmpty) {
+      final isPie = chartType == 'pie';
       chartWidgets.add(
         pw.Text(
-          "GRÁFICO DE DISTRIBUCIÓN (TOP 6):",
+          isPie ? "DISTRIBUCIÓN DE FRECUENCIAS (TIPO PASTEL):" : "GRÁFICO DE BARRAS DE FRECUENCIAS:",
           style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10, color: primaryColor),
         ),
       );
@@ -386,9 +388,22 @@ class ServicePDF {
       // Take top 6
       final topData = chartData.take(6).toList();
 
-      for (final entry in topData) {
+      final List<PdfColor> donutColors = [
+        PdfColor.fromInt(0xFF0F172A), // Slate Dark
+        PdfColor.fromInt(0xFF3B82F6), // Indigo/Blue
+        PdfColor.fromInt(0xFF10B981), // Emerald
+        PdfColor.fromInt(0xFFF59E0B), // Amber
+        PdfColor.fromInt(0xFFEC4899), // Pink
+        PdfColor.fromInt(0xFF8B5CF6), // Violet
+        PdfColor.fromInt(0xFFEF4444), // Red
+        PdfColor.fromInt(0xFF14B8A6), // Teal
+      ];
+
+      for (int i = 0; i < topData.length; i++) {
+        final entry = topData[i];
         final percentage = total > 0 ? (entry.value / total) * 100 : 0.0;
-        final barFactor = maxVal > 0 ? (entry.value / maxVal) : 0.0;
+        final barFactor = maxVal > 0 ? (entry.value / maxVal).clamp(0.0, 1.0) : 0.0;
+        final activeColor = isPie ? donutColors[i % donutColors.length] : primaryColor;
 
         chartWidgets.add(
           pw.Padding(
@@ -397,10 +412,27 @@ class ServicePDF {
               children: [
                 pw.SizedBox(
                   width: 140,
-                  child: pw.Text(
-                    entry.key,
-                    style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold),
-                    maxLines: 1,
+                  child: pw.Row(
+                    children: [
+                      if (isPie) ...[
+                        pw.Container(
+                          width: 6,
+                          height: 6,
+                          decoration: pw.BoxDecoration(
+                            color: activeColor,
+                            shape: pw.BoxShape.circle,
+                          ),
+                        ),
+                        pw.SizedBox(width: 6),
+                      ],
+                      pw.Expanded(
+                        child: pw.Text(
+                          entry.key,
+                          style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold),
+                          maxLines: 1,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 pw.SizedBox(width: 12),
@@ -419,7 +451,7 @@ class ServicePDF {
                             child: pw.Container(
                               height: 8,
                               decoration: pw.BoxDecoration(
-                                color: primaryColor,
+                                color: activeColor,
                                 borderRadius: pw.BorderRadius.circular(4),
                               ),
                             ),
