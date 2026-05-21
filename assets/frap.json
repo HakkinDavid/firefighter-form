@@ -3,352 +3,11 @@
         "Paciente": 1,
         "Primaria": 2,
         "Servicio": 0,
-        "Resultados": 5,
+        "Resultados": 6,
         "Secundaria": 3,
-        "Tratamiento": 4
+        "Tratamiento": 4,
+        "Insumos": 5
     },
-    "supplies": [
-        {
-            "id": 0,
-            "nombre": "BOLSA VÁLVULA MASCARILLA ADULTA",
-            "category": "simple"
-        },
-        {
-            "id": 1,
-            "nombre": "FILTRO VIRAL PARA BVM",
-            "category": "simple"
-        },
-        {
-            "id": 2,
-            "nombre": "CANULAS NASOFARÍNGEA #9",
-            "category": "simple"
-        },
-        {
-            "id": 3,
-            "nombre": "GEL LUBRICANTE HIDROSOLUBLE",
-            "category": "simple"
-        },
-        {
-            "id": 4,
-            "nombre": "OXÍGENO DE TANQUE TIPO D 360 L",
-            "category": "simple"
-        },
-        {
-            "id": 5,
-            "nombre": "CANULA RÍGIDA DE SUCCIÓN",
-            "category": "simple"
-        },
-        {
-            "id": 6,
-            "nombre": "LÍNEA DE SUCCIÓN",
-            "category": "simple"
-        },
-        {
-            "id": 7,
-            "nombre": "PARCHES ADULTO PARA DAE",
-            "category": "simple"
-        },
-        {
-            "id": 8,
-            "nombre": "TIJERAS DE USO RUDO",
-            "category": "simple"
-        },
-        {
-            "id": 9,
-            "nombre": "GUANTES DE NITRILO L",
-            "category": "simple"
-        },
-        {
-            "id": 10,
-            "nombre": "CUBRE BOCAS SIMPLES",
-            "category": "simple"
-        },
-        {
-            "id": 11,
-            "nombre": "CUBRE BOCAS N#95",
-            "category": "simple"
-        },
-        {
-            "id": 12,
-            "nombre": "SOLUCIÓN SALINA 0.9% DE 250 CC",
-            "category": "simple"
-        },
-        {
-            "id": 13,
-            "nombre": "NORMOGOTERO",
-            "category": "simple"
-        },
-        {
-            "id": 14,
-            "nombre": "CÁTETER INTRAVENOSO # 18",
-            "category": "simple"
-        },
-        {
-            "id": 15,
-            "nombre": "LIGADURA",
-            "category": "simple"
-        },
-        {
-            "id": 16,
-            "nombre": "TORUNDA DE ALCOHOL",
-            "category": "simple"
-        },
-        {
-            "id": 17,
-            "nombre": "TEKA DYRAOIRE 2,5 CM",
-            "category": "simple"
-        },
-        {
-            "id": 18,
-            "nombre": "TURA REACTUVA DE GLUCOMETRÍA",
-            "category": "simple"
-        },
-        {
-            "id": 19,
-            "nombre": "LANCETA",
-            "category": "simple"
-        },
-        {
-            "id": 20,
-            "nombre": "CATÉTER IO",
-            "category": "simple"
-        },
-        {
-            "id": 21,
-            "nombre": "NALOXONA INTRANASAL",
-            "category": "simple"
-        },
-        {
-            "id": 22,
-            "nombre": "SELLO TORÁXICO P/HERIDA SUCCIÓN",
-            "category": "simple"
-        },
-        {
-            "id": 23,
-            "nombre": "TAPE GRIS MULTI-USOS",
-            "category": "simple"
-        },
-        {
-            "id": 24,
-            "nombre": "TORNIQUETE TÁCTICO DE EXTREMIDADES",
-            "category": "simple"
-        },
-        {
-            "id": 25,
-            "nombre": "VENDAJE HEMOSTÁTICO",
-            "category": "simple"
-        },
-        {
-            "id": 26,
-            "nombre": "VENDA ELÁSTICA DE 10 CM",
-            "category": "simple"
-        },
-        {
-            "id": 27,
-            "nombre": "VENDA ELÁSTICA DE 5 CM",
-            "category": "simple"
-        },
-        {
-            "id": 28,
-            "nombre": "APÓSITOS ESTERILES",
-            "category": "simple"
-        },
-        {
-            "id": 29,
-            "nombre": "APÓSITOS SIMPLES",
-            "category": "simple"
-        },
-        {
-            "id": 30,
-            "nombre": "GASAS SIMPLES 4x4",
-            "category": "simple"
-        },
-        {
-            "id": 31,
-            "nombre": "APÓSITO MULTITRAUMA",
-            "category": "simple"
-        },
-        {
-            "id": 32,
-            "nombre": "AGUA PARA IRRIGAR HERIDAS / OJOS",
-            "category": "simple"
-        },
-        {
-            "id": 33,
-            "nombre": "FERULA DE CARTÓN",
-            "category": "simple"
-        },
-        {
-            "id": 34,
-            "nombre": "TUBO TRAQUEAL # 8.5",
-            "category": "advanced"
-        },
-        {
-            "id": 35,
-            "nombre": "BUGGIE INTERCAMBIADOR",
-            "category": "advanced"
-        },
-        {
-            "id": 36,
-            "nombre": "DETECTOR DE CAPNOMETRÍA PARA T. T.",
-            "category": "advanced"
-        },
-        {
-            "id": 37,
-            "nombre": "FIJADOR DE TUBO TRAQUEAL ADULTO",
-            "category": "advanced"
-        },
-        {
-            "id": 38,
-            "nombre": "ELECTRODOS ADULTO PARA MONITOR EKG",
-            "category": "advanced"
-        },
-        {
-            "id": 39,
-            "nombre": "GEL ELECTROCONDUCTOR P/ DESFIBRILAR",
-            "category": "advanced"
-        },
-        {
-            "id": 40,
-            "nombre": "MICROGOTERO",
-            "category": "advanced"
-        },
-        {
-            "id": 41,
-            "nombre": "CATÉTER INTRAÓSEO 45 MM",
-            "category": "advanced"
-        },
-        {
-            "id": 42,
-            "nombre": "MASCARILLA LARÍNGEA # 5 70 A 100 KG",
-            "category": "advanced"
-        },
-        {
-            "id": 43,
-            "nombre": "TUBO LARÍNGEO 4 ROJO 155-180 CM",
-            "category": "advanced"
-        },
-        {
-            "id": 44,
-            "nombre": "KIT DE CRICOTIROTOMÍA",
-            "category": "advanced"
-        },
-        {
-            "id": 45,
-            "nombre": "CATÉTER P/DESCOMPRESIÓN TORÁXICA",
-            "category": "advanced"
-        },
-        {
-            "id": 46,
-            "nombre": "EPINEFRINA",
-            "category": "advanced"
-        },
-        {
-            "id": 47,
-            "nombre": "ÁCIDO TRANEXÁMICO",
-            "category": "advanced"
-        },
-        {
-            "id": 48,
-            "nombre": "NOREPINEFRINA",
-            "category": "advanced"
-        },
-        {
-            "id": 49,
-            "nombre": "NABULFINA",
-            "category": "advanced"
-        },
-        {
-            "id": 50,
-            "nombre": "FENTANILO",
-            "category": "advanced"
-        },
-        {
-            "id": 51,
-            "nombre": "ISOSORBIDE",
-            "category": "advanced"
-        },
-        {
-            "id": 52,
-            "nombre": "ÁCIDO ACETILSALICÍLICO",
-            "category": "advanced"
-        },
-        {
-            "id": 53,
-            "nombre": "GLUCAGÓN",
-            "category": "advanced"
-        },
-        {
-            "id": 54,
-            "nombre": "ATRIOUBA",
-            "category": "advanced"
-        },
-        {
-            "id": 55,
-            "nombre": "LIDOCAÍNA AL 2%",
-            "category": "advanced"
-        },
-        {
-            "id": 56,
-            "nombre": "MIDAZOLAM",
-            "category": "advanced"
-        },
-        {
-            "id": 57,
-            "nombre": "DIAZEPAM",
-            "category": "advanced"
-        },
-        {
-            "id": 58,
-            "nombre": "VECURONIO",
-            "category": "advanced"
-        },
-        {
-            "id": 59,
-            "nombre": "KETOROLACO",
-            "category": "advanced"
-        },
-        {
-            "id": 60,
-            "nombre": "PARACETAMOL",
-            "category": "advanced"
-        },
-        {
-            "id": 61,
-            "nombre": "ONDACENTRON",
-            "category": "advanced"
-        },
-        {
-            "id": 62,
-            "nombre": "DIFENHIDRAMINA",
-            "category": "advanced"
-        },
-        {
-            "id": 63,
-            "nombre": "ALBUTEROL",
-            "category": "advanced"
-        },
-        {
-            "id": 64,
-            "nombre": "SULFATO DE MAGNESIO",
-            "category": "advanced"
-        },
-        {
-            "id": 65,
-            "nombre": "DEXTROSA 50%",
-            "category": "advanced"
-        },
-        {
-            "id": 66,
-            "nombre": "NALOXONA 0.4 MG",
-            "category": "advanced"
-        },
-        {
-            "id": 67,
-            "nombre": "DOPAMINA",
-            "category": "advanced"
-        }
-    ],
     "fields": {
         "Paciente": [
             {
@@ -366,13 +25,9 @@
                 "name": "genero",
                 "type": "input",
                 "label": "Género",
-                "options": [
-                    "Mujer",
-                    "Hombre",
-                    "Otro"
-                ],
                 "multiple": false,
-                "inputType": "text"
+                "inputType": "text",
+                "optionsFrom": "genero"
             },
             {
                 "name": "generootro",
@@ -407,19 +62,8 @@
                 "name": "serviciomedico",
                 "type": "input",
                 "label": "Servicio médico",
-                "options": [
-                    "ISSSTE",
-                    "ISSSTECALI",
-                    "HGR 1",
-                    "HGR 20",
-                    "HGR 7",
-                    "HG Tijuana",
-                    "HG Rosarito",
-                    "HG Tecate",
-                    "HG Zona Este",
-                    "Otro"
-                ],
-                "inputType": "text"
+                "inputType": "text",
+                "optionsFrom": "serviciomedico"
             },
             {
                 "name": "serviciomedicootro",
@@ -471,17 +115,8 @@
                 "name": "municipiopaciente",
                 "type": "input",
                 "label": "Municipio",
-                "options": [
-                    "Tijuana",
-                    "Tecate",
-                    "Rosarito",
-                    "Ensenada",
-                    "San Quintín",
-                    "Mexicali",
-                    "San Felipe",
-                    "Otro"
-                ],
-                "inputType": "text"
+                "inputType": "text",
+                "optionsFrom": "municipiopaciente"
             },
             {
                 "name": "municipiopacienteotro",
@@ -541,88 +176,50 @@
                 "name": "CONCIENCIA",
                 "type": "select",
                 "label": "Nivel de conciencia",
-                "options": [
-                    "Alerta",
-                    "Verbal",
-                    "Dolor",
-                    "Inconsciente"
-                ]
+                "optionsFrom": "conciencia"
             },
             {
                 "name": "prioridad",
                 "type": "multiple",
                 "label": "Prioridad inicial",
-                "options": [
-                    "Verde",
-                    "Amarilla",
-                    "Roja",
-                    "Negra"
-                ],
-                "inputType": "radio"
+                "inputType": "radio",
+                "optionsFrom": "prioridad"
             },
             {
                 "name": "viaaerea",
                 "type": "select",
                 "label": "Vía aérea",
-                "options": [
-                    "Permeable",
-                    "Comprometida"
-                ]
+                "optionsFrom": "viaaerea"
             },
             {
                 "name": "ventilacion",
                 "type": "select",
                 "label": "Ventilación",
-                "options": [
-                    "Regular",
-                    "Irregular",
-                    "Rápida",
-                    "Superficial",
-                    "Apnea"
-                ]
+                "optionsFrom": "ventilacion"
             },
             {
                 "name": "pulsos",
                 "type": "select",
                 "label": "Pulsos",
-                "options": [
-                    "Ausente",
-                    "Braquial",
-                    "Carotídeo",
-                    "Femural",
-                    "Radial"
-                ]
+                "optionsFrom": "pulsos"
             },
             {
                 "name": "calidadpulsos",
                 "type": "select",
                 "label": "Calidad",
-                "options": [
-                    "Rápido",
-                    "Lento",
-                    "Rítmico",
-                    "Arrítmico"
-                ]
+                "optionsFrom": "calidadpulsos"
             },
             {
                 "name": "piel",
                 "type": "select",
                 "label": "Piel",
-                "options": [
-                    "Normal",
-                    "Pálida",
-                    "Cianótica"
-                ]
+                "optionsFrom": "piel"
             },
             {
                 "name": "caracteristicaspiel",
                 "type": "select",
                 "label": "Características",
-                "options": [
-                    "Caliente",
-                    "Fría",
-                    "Diaforesis"
-                ]
+                "optionsFrom": "caracteristicaspiel"
             },
             {
                 "name": "pos",
@@ -641,38 +238,13 @@
                 "name": "campoturno",
                 "type": "select",
                 "label": "Turno",
-                "options": [
-                    "Turno 1",
-                    "Turno 2",
-                    "Turno 3"
-                ]
+                "optionsFrom": "campoturno"
             },
             {
                 "name": "campoestacion",
                 "type": "select",
                 "label": "Estación",
-                "options": [
-                    "Central de bomberos",
-                    "Estación 1",
-                    "Estación 2",
-                    "Estación 3",
-                    "Estación 4",
-                    "Estación 5",
-                    "Estación 6",
-                    "Estación 7",
-                    "Estación 8",
-                    "Estación 9",
-                    "Estación 10",
-                    "Estación 11",
-                    "Estación 12",
-                    "Estación 13",
-                    "Estación 14",
-                    "Estación 15",
-                    "Estación 16",
-                    "Estación 17",
-                    "Estación 18",
-                    "Otra"
-                ]
+                "optionsFrom": "campoestacion"
             },
             {
                 "name": "campoestacionotra",
@@ -695,14 +267,7 @@
                 "name": "campounidad",
                 "type": "select",
                 "label": "Unidad",
-                "options": [
-                    "Máquina",
-                    "Ambulancia 1",
-                    "Ambulancia 2",
-                    "Ambulancia 3",
-                    "Ambulancia 4",
-                    "Otra"
-                ]
+                "optionsFrom": "campounidad"
             },
             {
                 "name": "campounidadotra",
@@ -738,11 +303,7 @@
                 "name": "camposervicio",
                 "type": "select",
                 "label": "Tipo de Servicio",
-                "options": [
-                    "Trauma",
-                    "Enfermo",
-                    "Gineco Obstétrico"
-                ]
+                "optionsFrom": "camposervicio"
             },
             {
                 "name": "campollamada",
@@ -813,17 +374,8 @@
                 "name": "municipio",
                 "type": "input",
                 "label": "Municipio",
-                "options": [
-                    "Tijuana",
-                    "Tecate",
-                    "Rosarito",
-                    "Ensenada",
-                    "San Quintín",
-                    "Mexicali",
-                    "San Felipe",
-                    "Otro"
-                ],
-                "inputType": "text"
+                "inputType": "text",
+                "optionsFrom": "municipio"
             },
             {
                 "name": "municipiootro",
@@ -906,42 +458,20 @@
                 "name": "resultadoemergenciacheckbox",
                 "type": "multiple",
                 "label": "Resultado de la emergencia",
-                "options": [
-                    "No amerita",
-                    "Traslado",
-                    "Se niega",
-                    "Cadáver en el lugar"
-                ],
-                "inputType": "radio"
+                "inputType": "radio",
+                "optionsFrom": "resultadoemergenciacheckbox"
             },
             {
                 "name": "trasladomultiple",
                 "type": "multiple",
                 "label": "Traslado",
-                "options": [
-                    "Hospital",
-                    "Domicilio",
-                    "Helicóptero",
-                    "Ambulancia"
-                ],
-                "inputType": "radio"
+                "inputType": "radio",
+                "optionsFrom": "trasladomultiple"
             },
             {
                 "name": "hospitaltraslado",
                 "type": "input",
                 "label": "Hospital de traslado",
-                "options": [
-                    "ISSSTE",
-                    "ISSSTECALI",
-                    "HGR 1",
-                    "HGR 20",
-                    "HGR 7",
-                    "HG Tijuana",
-                    "HG Rosarito",
-                    "HG Tecate",
-                    "HG Zona Este",
-                    "Otro"
-                ],
                 "displayOn": {
                     "equalTo": [
                         {
@@ -957,7 +487,8 @@
                         }
                     ]
                 },
-                "inputType": "text"
+                "inputType": "text",
+                "optionsFrom": "serviciomedico"
             },
             {
                 "name": "hospitaltrasladootro",
@@ -998,13 +529,8 @@
                 "name": "prioridadfinal",
                 "type": "multiple",
                 "label": "Prioridad final",
-                "options": [
-                    "Verde",
-                    "Amarilla",
-                    "Roja",
-                    "Negra"
-                ],
-                "inputType": "radio"
+                "inputType": "radio",
+                "optionsFrom": "prioridadfinal"
             },
             {
                 "name": "firmaConsentimiento",
@@ -1101,11 +627,8 @@
                 "name": "filler",
                 "type": "input",
                 "label": "Nombre del responsable de la atención",
-                "options": [
-                    "{filler}",
-                    "Otro"
-                ],
-                "inputType": "text"
+                "inputType": "text",
+                "optionsFrom": "filler"
             },
             {
                 "name": "fillerotro",
@@ -1148,21 +671,13 @@
                 "name": "pupilader",
                 "type": "select",
                 "label": "Pupila derecha",
-                "options": [
-                    "Isocórica",
-                    "Miótica",
-                    "Midriática"
-                ]
+                "optionsFrom": "pupilader"
             },
             {
                 "name": "pupilaizq",
                 "type": "select",
                 "label": "Pupila izquierda",
-                "options": [
-                    "Isocórica",
-                    "Miótica",
-                    "Midriática"
-                ]
+                "optionsFrom": "pupilaizq"
             },
             {
                 "name": "glasgowmeasure",
@@ -1174,21 +689,13 @@
                 "name": "pulmonderecho",
                 "type": "select",
                 "label": "Auscultación pulmón derecho",
-                "options": [
-                    "Normales",
-                    "Disminuidos",
-                    "Ausentes"
-                ]
+                "optionsFrom": "pulmonderecho"
             },
             {
                 "name": "pulmonizq",
                 "type": "select",
                 "label": "Auscultación pulmón izquierdo",
-                "options": [
-                    "Normales",
-                    "Disminuidos",
-                    "Ausentes"
-                ]
+                "optionsFrom": "pulmonizq"
             },
             {
                 "name": "corazon",
@@ -1301,24 +808,8 @@
                 "name": "hallazgosmultiple",
                 "type": "multiple",
                 "label": "Hallazgos físicos",
-                "options": [
-                    "Deformidades (D)",
-                    "Contusiones (CO)",
-                    "Abrasiones (A)",
-                    "Penetraciones (P)",
-                    "Quemaduras (Q)",
-                    "Laceraciones (L)",
-                    "Abulsiones / Amputaciones (AB)",
-                    "Edema (E)",
-                    "Crepitación (CR)",
-                    "Enfisema subcutáneo (ES)",
-                    "Dolor / Hiperstesia (H)",
-                    "Parestesia (PT)",
-                    "Alteración a la movilidad (AM)",
-                    "Parálisis (AM)",
-                    "Movimiento paradójico (MP)"
-                ],
-                "inputType": "checkbox"
+                "inputType": "checkbox",
+                "optionsFrom": "hallazgosmultiple"
             },
             {
                 "name": "zona_lesion",
@@ -1571,10 +1062,6 @@
                 "name": "controlprenatal",
                 "type": "multiple",
                 "label": "Control prenatal",
-                "options": [
-                    "Si",
-                    "No"
-                ],
                 "displayOn": {
                     "equalTo": [
                         {
@@ -1590,16 +1077,13 @@
                         }
                     ]
                 },
-                "inputType": "radio"
+                "inputType": "radio",
+                "optionsFrom": "controlprenatal"
             },
             {
                 "name": "riesgo",
                 "type": "multiple",
                 "label": "Embarazo de alto riesgo",
-                "options": [
-                    "Si",
-                    "No"
-                ],
                 "displayOn": {
                     "equalTo": [
                         {
@@ -1615,7 +1099,8 @@
                         }
                     ]
                 },
-                "inputType": "radio"
+                "inputType": "radio",
+                "optionsFrom": "riesgo"
             },
             {
                 "name": "horainiciocontracciones",
@@ -1704,10 +1189,6 @@
                 "name": "placenta",
                 "type": "multiple",
                 "label": "Placenta expulsada",
-                "options": [
-                    "Si",
-                    "No"
-                ],
                 "displayOn": {
                     "equalTo": [
                         {
@@ -1723,7 +1204,8 @@
                         }
                     ]
                 },
-                "inputType": "radio"
+                "inputType": "radio",
+                "optionsFrom": "placenta"
             },
             {
                 "name": "datosproducto",
@@ -1750,10 +1232,6 @@
                 "name": "prodstatus",
                 "type": "select",
                 "label": "Producto",
-                "options": [
-                    "Vivo",
-                    "Muerto"
-                ],
                 "displayOn": {
                     "equalTo": [
                         {
@@ -1768,16 +1246,13 @@
                             "name": "camposervicio"
                         }
                     ]
-                }
+                },
+                "optionsFrom": "prodstatus"
             },
             {
                 "name": "prodsexo",
                 "type": "select",
                 "label": "Sexo",
-                "options": [
-                    "Femenino",
-                    "Masculino"
-                ],
                 "displayOn": {
                     "equalTo": [
                         {
@@ -1792,7 +1267,8 @@
                             "name": "camposervicio"
                         }
                     ]
-                }
+                },
+                "optionsFrom": "prodsexo"
             },
             {
                 "name": "apgar",
@@ -1934,37 +1410,22 @@
                 "name": "aspiracion",
                 "type": "multiple",
                 "label": "Aspiración",
-                "options": [
-                    "Sí",
-                    "No"
-                ],
-                "inputType": "radio"
+                "inputType": "radio",
+                "optionsFrom": "aspiracion"
             },
             {
                 "name": "manejoviaaeriacheck",
                 "type": "multiple",
                 "label": "Manejo de vía aérea",
-                "options": [
-                    "No necesitó",
-                    "Manual",
-                    "Mecánico",
-                    "Transtraqueal"
-                ],
-                "inputType": "radio"
+                "inputType": "radio",
+                "optionsFrom": "manejoviaaeriacheck"
             },
             {
                 "name": "dispositivoapertura",
                 "type": "input",
                 "label": "Dispositivo de apertura",
-                "options": [
-                    "No aplica",
-                    "Cánula nasofaríngea",
-                    "Cánula orofaríngea",
-                    "Disp. Supraglótico",
-                    "Tubo endotraqueal",
-                    "VTP / Cánula traqueos"
-                ],
-                "inputType": "text"
+                "inputType": "text",
+                "optionsFrom": "dispositivoapertura"
             },
             {
                 "name": "intubacion",
@@ -1999,11 +1460,8 @@
                 "name": "sri",
                 "type": "multiple",
                 "label": "SRI",
-                "options": [
-                    "No",
-                    "Sí"
-                ],
-                "inputType": "radio"
+                "inputType": "radio",
+                "optionsFrom": "sri"
             },
             {
                 "name": "asistenciaventilatoria",
@@ -2014,11 +1472,7 @@
                 "name": "dispositivoav",
                 "type": "select",
                 "label": "Dispositivo",
-                "options": [
-                    "Bolsa Válvula Mascarilla",
-                    "CPAP",
-                    "Ventilador mecánico"
-                ]
+                "optionsFrom": "dispositivoav"
             },
             {
                 "name": "frecuenciaav",
@@ -2042,14 +1496,8 @@
                 "name": "oxigenoterapia",
                 "type": "input",
                 "label": "Oxigenoterapia",
-                "options": [
-                    "Puntas nasales",
-                    "Mascarilla simple",
-                    "Mascarilla con reservorio",
-                    "Nebulizador",
-                    "CPAP"
-                ],
-                "inputType": "text"
+                "inputType": "text",
+                "optionsFrom": "oxigenoterapia"
             },
             {
                 "name": "lpm",
@@ -2066,21 +1514,14 @@
                 "name": "dp",
                 "type": "multiple",
                 "label": "",
-                "options": [
-                    "No",
-                    "Sí"
-                ],
-                "inputType": "radio"
+                "inputType": "radio",
+                "optionsFrom": "dp"
             },
             {
                 "name": "hemitorax",
                 "type": "select",
                 "label": "Hemitorax",
-                "options": [
-                    "No necesitó",
-                    "Derecho",
-                    "Izquierdo"
-                ]
+                "optionsFrom": "hemitorax"
             },
             {
                 "name": "calibre",
@@ -2097,16 +1538,8 @@
                 "name": "controldehemorragiasselect",
                 "type": "input",
                 "label": "Control de hemorragias",
-                "options": [
-                    "No necesitó",
-                    "Presión directa",
-                    "Vendaje compresivo",
-                    "Agente coagulante",
-                    "Empaque de herida",
-                    "Torniquete",
-                    "Agente hemostático"
-                ],
-                "inputType": "text"
+                "inputType": "text",
+                "optionsFrom": "controldehemorragiasselect"
             },
             {
                 "name": "horacolocacionhemorragias",
@@ -2123,27 +1556,14 @@
                 "name": "viadeaccesoselect",
                 "type": "select",
                 "label": "Vía de acceso",
-                "options": [
-                    "No necesitó",
-                    "Intravascular periférico",
-                    "Intranoseo"
-                ]
+                "optionsFrom": "viadeaccesoselect"
             },
             {
                 "name": "zonacolocacion",
                 "type": "input",
                 "label": "Zona de colocación",
-                "options": [
-                    "Mano",
-                    "Antercobital",
-                    "Yugular externo",
-                    "Tibia proximal",
-                    "Tibia distal",
-                    "Húmero",
-                    "Esternon",
-                    "Otra"
-                ],
-                "inputType": "text"
+                "inputType": "text",
+                "optionsFrom": "zonacolocacion"
             },
             {
                 "name": "zonacolocacionotro",
@@ -2184,14 +1604,8 @@
                 "name": "tiposolucion",
                 "type": "multiple",
                 "label": "Tipo de solución",
-                "options": [
-                    "HARTMANN",
-                    "NaCl 0.9%",
-                    "Glucosa 5%",
-                    "Mixta",
-                    "Otras"
-                ],
-                "inputType": "checkbox"
+                "inputType": "checkbox",
+                "optionsFrom": "tiposolucion"
             },
             {
                 "name": "tiposolucionextra",
@@ -2220,41 +1634,29 @@
                 "name": "controlcervical",
                 "type": "multiple",
                 "label": "Control cervical",
-                "options": [
-                    "No",
-                    "Sí"
-                ],
-                "inputType": "radio"
+                "inputType": "radio",
+                "optionsFrom": "controlcervical"
             },
             {
                 "name": "inmovilizacion",
                 "type": "multiple",
                 "label": "Inmovilización de extremidades",
-                "options": [
-                    "No",
-                    "Sí"
-                ],
-                "inputType": "radio"
+                "inputType": "radio",
+                "optionsFrom": "inmovilizacion"
             },
             {
                 "name": "empaquetamiento",
                 "type": "multiple",
                 "label": "Empaquetamiento",
-                "options": [
-                    "No",
-                    "Sí"
-                ],
-                "inputType": "radio"
+                "inputType": "radio",
+                "optionsFrom": "empaquetamiento"
             },
             {
                 "name": "curacion",
                 "type": "multiple",
                 "label": "Curación / Vendaje",
-                "options": [
-                    "No",
-                    "Sí"
-                ],
-                "inputType": "radio"
+                "inputType": "radio",
+                "optionsFrom": "curacion"
             },
             {
                 "name": "medicamentotupla",
@@ -2296,12 +1698,8 @@
                         "name": "terapiaelectricacheckbox",
                         "type": "multiple",
                         "label": "Tipo de solución",
-                        "options": [
-                            "Desfribilación",
-                            "Cardioversión",
-                            "Marcapasos transcutáneo"
-                        ],
-                        "inputType": "radio"
+                        "inputType": "radio",
+                        "optionsFrom": "terapiaelectrica_terapiaelectricacheckbox"
                     },
                     {
                         "name": "descargas",
@@ -2326,6 +1724,33 @@
                         "type": "input",
                         "label": "Frecuencia",
                         "inputType": "number"
+                    }
+                ]
+            }
+        ],
+        "Insumos": [
+            {
+                "name": "insumos_title",
+                "text": "Control de Insumos Utilizados",
+                "type": "text"
+            },
+            {
+                "name": "insumos_consumidos",
+                "type": "tuple",
+                "label": "Listado de Insumos y Equipos Utilizados en el Servicio",
+                "tuple": [
+                    {
+                        "name": "insumo",
+                        "type": "select",
+                        "inputType": "text",
+                        "label": "Insumo / Material",
+                        "optionsFrom": "supplies"
+                    },
+                    {
+                        "name": "cantidad",
+                        "type": "input",
+                        "inputType": "number",
+                        "label": "Cantidad"
                     }
                 ]
             }
@@ -2675,6 +2100,1256 @@
             {
                 "name": "codigopostalpaciente",
                 "message": "El código postal del paciente debe contener solo números."
+            }
+        ]
+    },
+    "options": {
+        "supplies": [
+            {
+                "id": 0,
+                "name": "BOLSA VÁLVULA MASCARILLA ADULTA",
+                "category": "simple"
+            },
+            {
+                "id": 1,
+                "name": "FILTRO VIRAL PARA BVM",
+                "category": "simple"
+            },
+            {
+                "id": 2,
+                "name": "CANULAS NASOFARÍNGEA #9",
+                "category": "simple"
+            },
+            {
+                "id": 3,
+                "name": "GEL LUBRICANTE HIDROSOLUBLE",
+                "category": "simple"
+            },
+            {
+                "id": 4,
+                "name": "OXÍGENO DE TANQUE TIPO D 360 L",
+                "category": "simple"
+            },
+            {
+                "id": 5,
+                "name": "CANULA RÍGIDA DE SUCCIÓN",
+                "category": "simple"
+            },
+            {
+                "id": 6,
+                "name": "LÍNEA DE SUCCIÓN",
+                "category": "simple"
+            },
+            {
+                "id": 7,
+                "name": "PARCHES ADULTO PARA DAE",
+                "category": "simple"
+            },
+            {
+                "id": 8,
+                "name": "TIJERAS DE USO RUDO",
+                "category": "simple"
+            },
+            {
+                "id": 9,
+                "name": "GUANTES DE NITRILO L",
+                "category": "simple"
+            },
+            {
+                "id": 10,
+                "name": "CUBRE BOCAS SIMPLES",
+                "category": "simple"
+            },
+            {
+                "id": 11,
+                "name": "CUBRE BOCAS N#95",
+                "category": "simple"
+            },
+            {
+                "id": 12,
+                "name": "SOLUCIÓN SALINA 0.9% DE 250 CC",
+                "category": "simple"
+            },
+            {
+                "id": 13,
+                "name": "NORMOGOTERO",
+                "category": "simple"
+            },
+            {
+                "id": 14,
+                "name": "CÁTETER INTRAVENOSO # 18",
+                "category": "simple"
+            },
+            {
+                "id": 15,
+                "name": "LIGADURA",
+                "category": "simple"
+            },
+            {
+                "id": 16,
+                "name": "TORUNDA DE ALCOHOL",
+                "category": "simple"
+            },
+            {
+                "id": 17,
+                "name": "TEKA DYRAOIRE 2,5 CM",
+                "category": "simple"
+            },
+            {
+                "id": 18,
+                "name": "TURA REACTUVA DE GLUCOMETRÍA",
+                "category": "simple"
+            },
+            {
+                "id": 19,
+                "name": "LANCETA",
+                "category": "simple"
+            },
+            {
+                "id": 20,
+                "name": "CATÉTER IO",
+                "category": "simple"
+            },
+            {
+                "id": 21,
+                "name": "NALOXONA INTRANASAL",
+                "category": "simple"
+            },
+            {
+                "id": 22,
+                "name": "SELLO TORÁXICO P/HERIDA SUCCIÓN",
+                "category": "simple"
+            },
+            {
+                "id": 23,
+                "name": "TAPE GRIS MULTI-USOS",
+                "category": "simple"
+            },
+            {
+                "id": 24,
+                "name": "TORNIQUETE TÁCTICO DE EXTREMIDADES",
+                "category": "simple"
+            },
+            {
+                "id": 25,
+                "name": "VENDAJE HEMOSTÁTICO",
+                "category": "simple"
+            },
+            {
+                "id": 26,
+                "name": "VENDA ELÁSTICA DE 10 CM",
+                "category": "simple"
+            },
+            {
+                "id": 27,
+                "name": "VENDA ELÁSTICA DE 5 CM",
+                "category": "simple"
+            },
+            {
+                "id": 28,
+                "name": "APÓSITOS ESTERILES",
+                "category": "simple"
+            },
+            {
+                "id": 29,
+                "name": "APÓSITOS SIMPLES",
+                "category": "simple"
+            },
+            {
+                "id": 30,
+                "name": "GASAS SIMPLES 4x4",
+                "category": "simple"
+            },
+            {
+                "id": 31,
+                "name": "APÓSITO MULTITRAUMA",
+                "category": "simple"
+            },
+            {
+                "id": 32,
+                "name": "AGUA PARA IRRIGAR HERIDAS / OJOS",
+                "category": "simple"
+            },
+            {
+                "id": 33,
+                "name": "FERULA DE CARTÓN",
+                "category": "simple"
+            },
+            {
+                "id": 34,
+                "name": "TUBO TRAQUEAL # 8.5",
+                "category": "advanced"
+            },
+            {
+                "id": 35,
+                "name": "BUGGIE INTERCAMBIADOR",
+                "category": "advanced"
+            },
+            {
+                "id": 36,
+                "name": "DETECTOR DE CAPNOMETRÍA PARA T. T.",
+                "category": "advanced"
+            },
+            {
+                "id": 37,
+                "name": "FIJADOR DE TUBO TRAQUEAL ADULTO",
+                "category": "advanced"
+            },
+            {
+                "id": 38,
+                "name": "ELECTRODOS ADULTO PARA MONITOR EKG",
+                "category": "advanced"
+            },
+            {
+                "id": 39,
+                "name": "GEL ELECTROCONDUCTOR P/ DESFIBRILAR",
+                "category": "advanced"
+            },
+            {
+                "id": 40,
+                "name": "MICROGOTERO",
+                "category": "advanced"
+            },
+            {
+                "id": 41,
+                "name": "CATÉTER INTRAÓSEO 45 MM",
+                "category": "advanced"
+            },
+            {
+                "id": 42,
+                "name": "MASCARILLA LARÍNGEA # 5 70 A 100 KG",
+                "category": "advanced"
+            },
+            {
+                "id": 43,
+                "name": "TUBO LARÍNGEO 4 ROJO 155-180 CM",
+                "category": "advanced"
+            },
+            {
+                "id": 44,
+                "name": "KIT DE CRICOTIROTOMÍA",
+                "category": "advanced"
+            },
+            {
+                "id": 45,
+                "name": "CATÉTER P/DESCOMPRESIÓN TORÁXICA",
+                "category": "advanced"
+            },
+            {
+                "id": 46,
+                "name": "EPINEFRINA",
+                "category": "advanced"
+            },
+            {
+                "id": 47,
+                "name": "ÁCIDO TRANEXÁMICO",
+                "category": "advanced"
+            },
+            {
+                "id": 48,
+                "name": "NOREPINEFRINA",
+                "category": "advanced"
+            },
+            {
+                "id": 49,
+                "name": "NABULFINA",
+                "category": "advanced"
+            },
+            {
+                "id": 50,
+                "name": "FENTANILO",
+                "category": "advanced"
+            },
+            {
+                "id": 51,
+                "name": "ISOSORBIDE",
+                "category": "advanced"
+            },
+            {
+                "id": 52,
+                "name": "ÁCIDO ACETILSALICÍLICO",
+                "category": "advanced"
+            },
+            {
+                "id": 53,
+                "name": "GLUCAGÓN",
+                "category": "advanced"
+            },
+            {
+                "id": 54,
+                "name": "ATRIOUBA",
+                "category": "advanced"
+            },
+            {
+                "id": 55,
+                "name": "LIDOCAÍNA AL 2%",
+                "category": "advanced"
+            },
+            {
+                "id": 56,
+                "name": "MIDAZOLAM",
+                "category": "advanced"
+            },
+            {
+                "id": 57,
+                "name": "DIAZEPAM",
+                "category": "advanced"
+            },
+            {
+                "id": 58,
+                "name": "VECURONIO",
+                "category": "advanced"
+            },
+            {
+                "id": 59,
+                "name": "KETOROLACO",
+                "category": "advanced"
+            },
+            {
+                "id": 60,
+                "name": "PARACETAMOL",
+                "category": "advanced"
+            },
+            {
+                "id": 61,
+                "name": "ONDACENTRON",
+                "category": "advanced"
+            },
+            {
+                "id": 62,
+                "name": "DIFENHIDRAMINA",
+                "category": "advanced"
+            },
+            {
+                "id": 63,
+                "name": "ALBUTEROL",
+                "category": "advanced"
+            },
+            {
+                "id": 64,
+                "name": "SULFATO DE MAGNESIO",
+                "category": "advanced"
+            },
+            {
+                "id": 65,
+                "name": "DEXTROSA 50%",
+                "category": "advanced"
+            },
+            {
+                "id": 66,
+                "name": "NALOXONA 0.4 MG",
+                "category": "advanced"
+            },
+            {
+                "id": 67,
+                "name": "DOPAMINA",
+                "category": "advanced"
+            }
+        ],
+        "genero": [
+            {
+                "id": 0,
+                "name": "Mujer"
+            },
+            {
+                "id": 1,
+                "name": "Hombre"
+            },
+            {
+                "id": 2,
+                "name": "Otro"
+            }
+        ],
+        "serviciomedico": [
+            {
+                "id": 0,
+                "name": "ISSSTE"
+            },
+            {
+                "id": 1,
+                "name": "ISSSTECALI"
+            },
+            {
+                "id": 2,
+                "name": "HGR 1"
+            },
+            {
+                "id": 3,
+                "name": "HGR 20"
+            },
+            {
+                "id": 4,
+                "name": "HGR 7"
+            },
+            {
+                "id": 5,
+                "name": "HG Tijuana"
+            },
+            {
+                "id": 6,
+                "name": "HG Rosarito"
+            },
+            {
+                "id": 7,
+                "name": "HG Tecate"
+            },
+            {
+                "id": 8,
+                "name": "HG Zona Este"
+            },
+            {
+                "id": 9,
+                "name": "Otro"
+            }
+        ],
+        "campoestacion": [
+            {
+                "id": 0,
+                "name": "Central de bomberos"
+            },
+            {
+                "id": 1,
+                "name": "Estación 1"
+            },
+            {
+                "id": 2,
+                "name": "Estación 2"
+            },
+            {
+                "id": 3,
+                "name": "Estación 3"
+            },
+            {
+                "id": 4,
+                "name": "Estación 4"
+            },
+            {
+                "id": 5,
+                "name": "Estación 5"
+            },
+            {
+                "id": 6,
+                "name": "Estación 6"
+            },
+            {
+                "id": 7,
+                "name": "Estación 7"
+            },
+            {
+                "id": 8,
+                "name": "Estación 8"
+            },
+            {
+                "id": 9,
+                "name": "Estación 9"
+            },
+            {
+                "id": 10,
+                "name": "Estación 10"
+            },
+            {
+                "id": 11,
+                "name": "Estación 11"
+            },
+            {
+                "id": 12,
+                "name": "Estación 12"
+            },
+            {
+                "id": 13,
+                "name": "Estación 13"
+            },
+            {
+                "id": 14,
+                "name": "Estación 14"
+            },
+            {
+                "id": 15,
+                "name": "Estación 15"
+            },
+            {
+                "id": 16,
+                "name": "Estación 16"
+            },
+            {
+                "id": 17,
+                "name": "Estación 17"
+            },
+            {
+                "id": 18,
+                "name": "Estación 18"
+            },
+            {
+                "id": 19,
+                "name": "Otra"
+            }
+        ],
+        "campounidad": [
+            {
+                "id": 0,
+                "name": "Máquina"
+            },
+            {
+                "id": 1,
+                "name": "Ambulancia 1"
+            },
+            {
+                "id": 2,
+                "name": "Ambulancia 2"
+            },
+            {
+                "id": 3,
+                "name": "Ambulancia 3"
+            },
+            {
+                "id": 4,
+                "name": "Ambulancia 4"
+            },
+            {
+                "id": 5,
+                "name": "Otra"
+            }
+        ],
+        "municipiopaciente": [
+            {
+                "id": 0,
+                "name": "Tijuana"
+            },
+            {
+                "id": 1,
+                "name": "Tecate"
+            },
+            {
+                "id": 2,
+                "name": "Rosarito"
+            },
+            {
+                "id": 3,
+                "name": "Ensenada"
+            },
+            {
+                "id": 4,
+                "name": "San Quintín"
+            },
+            {
+                "id": 5,
+                "name": "Mexicali"
+            },
+            {
+                "id": 6,
+                "name": "San Felipe"
+            },
+            {
+                "id": 7,
+                "name": "Otro"
+            }
+        ],
+        "conciencia": [
+            {
+                "id": 0,
+                "name": "Alerta"
+            },
+            {
+                "id": 1,
+                "name": "Verbal"
+            },
+            {
+                "id": 2,
+                "name": "Dolor"
+            },
+            {
+                "id": 3,
+                "name": "Inconsciente"
+            }
+        ],
+        "prioridad": [
+            {
+                "id": 0,
+                "name": "Verde"
+            },
+            {
+                "id": 1,
+                "name": "Amarilla"
+            },
+            {
+                "id": 2,
+                "name": "Roja"
+            },
+            {
+                "id": 3,
+                "name": "Negra"
+            }
+        ],
+        "viaaerea": [
+            {
+                "id": 0,
+                "name": "Permeable"
+            },
+            {
+                "id": 1,
+                "name": "Comprometida"
+            }
+        ],
+        "ventilacion": [
+            {
+                "id": 0,
+                "name": "Regular"
+            },
+            {
+                "id": 1,
+                "name": "Irregular"
+            },
+            {
+                "id": 2,
+                "name": "Rápida"
+            },
+            {
+                "id": 3,
+                "name": "Superficial"
+            },
+            {
+                "id": 4,
+                "name": "Apnea"
+            }
+        ],
+        "pulsos": [
+            {
+                "id": 0,
+                "name": "Ausente"
+            },
+            {
+                "id": 1,
+                "name": "Braquial"
+            },
+            {
+                "id": 2,
+                "name": "Carotídeo"
+            },
+            {
+                "id": 3,
+                "name": "Femural"
+            },
+            {
+                "id": 4,
+                "name": "Radial"
+            }
+        ],
+        "calidadpulsos": [
+            {
+                "id": 0,
+                "name": "Rápido"
+            },
+            {
+                "id": 1,
+                "name": "Lento"
+            },
+            {
+                "id": 2,
+                "name": "Rítmico"
+            },
+            {
+                "id": 3,
+                "name": "Arrítmico"
+            }
+        ],
+        "piel": [
+            {
+                "id": 0,
+                "name": "Normal"
+            },
+            {
+                "id": 1,
+                "name": "Pálida"
+            },
+            {
+                "id": 2,
+                "name": "Cianótica"
+            }
+        ],
+        "caracteristicaspiel": [
+            {
+                "id": 0,
+                "name": "Caliente"
+            },
+            {
+                "id": 1,
+                "name": "Fría"
+            },
+            {
+                "id": 2,
+                "name": "Diaforesis"
+            }
+        ],
+        "campoturno": [
+            {
+                "id": 0,
+                "name": "Turno 1"
+            },
+            {
+                "id": 1,
+                "name": "Turno 2"
+            },
+            {
+                "id": 2,
+                "name": "Turno 3"
+            }
+        ],
+        "camposervicio": [
+            {
+                "id": 0,
+                "name": "Trauma"
+            },
+            {
+                "id": 1,
+                "name": "Enfermo"
+            },
+            {
+                "id": 2,
+                "name": "Gineco Obstétrico"
+            }
+        ],
+        "municipio": [
+            {
+                "id": 0,
+                "name": "Tijuana"
+            },
+            {
+                "id": 1,
+                "name": "Tecate"
+            },
+            {
+                "id": 2,
+                "name": "Rosarito"
+            },
+            {
+                "id": 3,
+                "name": "Ensenada"
+            },
+            {
+                "id": 4,
+                "name": "San Quintín"
+            },
+            {
+                "id": 5,
+                "name": "Mexicali"
+            },
+            {
+                "id": 6,
+                "name": "San Felipe"
+            },
+            {
+                "id": 7,
+                "name": "Otro"
+            }
+        ],
+        "resultadoemergenciacheckbox": [
+            {
+                "id": 0,
+                "name": "No amerita"
+            },
+            {
+                "id": 1,
+                "name": "Traslado"
+            },
+            {
+                "id": 2,
+                "name": "Se niega"
+            },
+            {
+                "id": 3,
+                "name": "Cadáver en el lugar"
+            }
+        ],
+        "trasladomultiple": [
+            {
+                "id": 0,
+                "name": "Hospital"
+            },
+            {
+                "id": 1,
+                "name": "Domicilio"
+            },
+            {
+                "id": 2,
+                "name": "Helicóptero"
+            },
+            {
+                "id": 3,
+                "name": "Ambulancia"
+            }
+        ],
+        "prioridadfinal": [
+            {
+                "id": 0,
+                "name": "Verde"
+            },
+            {
+                "id": 1,
+                "name": "Amarilla"
+            },
+            {
+                "id": 2,
+                "name": "Roja"
+            },
+            {
+                "id": 3,
+                "name": "Negra"
+            }
+        ],
+        "filler": [
+            {
+                "id": 0,
+                "name": "{filler}"
+            },
+            {
+                "id": 1,
+                "name": "Otro"
+            }
+        ],
+        "pupilader": [
+            {
+                "id": 0,
+                "name": "Isocórica"
+            },
+            {
+                "id": 1,
+                "name": "Miótica"
+            },
+            {
+                "id": 2,
+                "name": "Midriática"
+            }
+        ],
+        "pupilaizq": [
+            {
+                "id": 0,
+                "name": "Isocórica"
+            },
+            {
+                "id": 1,
+                "name": "Miótica"
+            },
+            {
+                "id": 2,
+                "name": "Midriática"
+            }
+        ],
+        "pulmonderecho": [
+            {
+                "id": 0,
+                "name": "Normales"
+            },
+            {
+                "id": 1,
+                "name": "Disminuidos"
+            },
+            {
+                "id": 2,
+                "name": "Ausentes"
+            }
+        ],
+        "pulmonizq": [
+            {
+                "id": 0,
+                "name": "Normales"
+            },
+            {
+                "id": 1,
+                "name": "Disminuidos"
+            },
+            {
+                "id": 2,
+                "name": "Ausentes"
+            }
+        ],
+        "hallazgosmultiple": [
+            {
+                "id": 0,
+                "name": "Deformidades (D)"
+            },
+            {
+                "id": 1,
+                "name": "Contusiones (CO)"
+            },
+            {
+                "id": 2,
+                "name": "Abrasiones (A)"
+            },
+            {
+                "id": 3,
+                "name": "Penetraciones (P)"
+            },
+            {
+                "id": 4,
+                "name": "Quemaduras (Q)"
+            },
+            {
+                "id": 5,
+                "name": "Laceraciones (L)"
+            },
+            {
+                "id": 6,
+                "name": "Abulsiones / Amputaciones (AB)"
+            },
+            {
+                "id": 7,
+                "name": "Edema (E)"
+            },
+            {
+                "id": 8,
+                "name": "Crepitación (CR)"
+            },
+            {
+                "id": 9,
+                "name": "Enfisema subcutáneo (ES)"
+            },
+            {
+                "id": 10,
+                "name": "Dolor / Hiperstesia (H)"
+            },
+            {
+                "id": 11,
+                "name": "Parestesia (PT)"
+            },
+            {
+                "id": 12,
+                "name": "Alteración a la movilidad (AM)"
+            },
+            {
+                "id": 13,
+                "name": "Parálisis (AM)"
+            },
+            {
+                "id": 14,
+                "name": "Movimiento paradójico (MP)"
+            }
+        ],
+        "controlprenatal": [
+            {
+                "id": 0,
+                "name": "Si"
+            },
+            {
+                "id": 1,
+                "name": "No"
+            }
+        ],
+        "riesgo": [
+            {
+                "id": 0,
+                "name": "Si"
+            },
+            {
+                "id": 1,
+                "name": "No"
+            }
+        ],
+        "placenta": [
+            {
+                "id": 0,
+                "name": "Si"
+            },
+            {
+                "id": 1,
+                "name": "No"
+            }
+        ],
+        "prodstatus": [
+            {
+                "id": 0,
+                "name": "Vivo"
+            },
+            {
+                "id": 1,
+                "name": "Muerto"
+            }
+        ],
+        "prodsexo": [
+            {
+                "id": 0,
+                "name": "Femenino"
+            },
+            {
+                "id": 1,
+                "name": "Masculino"
+            }
+        ],
+        "aspiracion": [
+            {
+                "id": 0,
+                "name": "Sí"
+            },
+            {
+                "id": 1,
+                "name": "No"
+            }
+        ],
+        "manejoviaaeriacheck": [
+            {
+                "id": 0,
+                "name": "No necesitó"
+            },
+            {
+                "id": 1,
+                "name": "Manual"
+            },
+            {
+                "id": 2,
+                "name": "Mecánico"
+            },
+            {
+                "id": 3,
+                "name": "Transtraqueal"
+            }
+        ],
+        "dispositivoapertura": [
+            {
+                "id": 0,
+                "name": "No aplica"
+            },
+            {
+                "id": 1,
+                "name": "Cánula nasofaríngea"
+            },
+            {
+                "id": 2,
+                "name": "Cánula orofaríngea"
+            },
+            {
+                "id": 3,
+                "name": "Disp. Supraglótico"
+            },
+            {
+                "id": 4,
+                "name": "Tubo endotraqueal"
+            },
+            {
+                "id": 5,
+                "name": "VTP / Cánula traqueos"
+            }
+        ],
+        "sri": [
+            {
+                "id": 0,
+                "name": "No"
+            },
+            {
+                "id": 1,
+                "name": "Sí"
+            }
+        ],
+        "dispositivoav": [
+            {
+                "id": 0,
+                "name": "Bolsa Válvula Mascarilla"
+            },
+            {
+                "id": 1,
+                "name": "CPAP"
+            },
+            {
+                "id": 2,
+                "name": "Ventilador mecánico"
+            }
+        ],
+        "oxigenoterapia": [
+            {
+                "id": 0,
+                "name": "Puntas nasales"
+            },
+            {
+                "id": 1,
+                "name": "Mascarilla simple"
+            },
+            {
+                "id": 2,
+                "name": "Mascarilla con reservorio"
+            },
+            {
+                "id": 3,
+                "name": "Nebulizador"
+            },
+            {
+                "id": 4,
+                "name": "CPAP"
+            }
+        ],
+        "dp": [
+            {
+                "id": 0,
+                "name": "No"
+            },
+            {
+                "id": 1,
+                "name": "Sí"
+            }
+        ],
+        "hemitorax": [
+            {
+                "id": 0,
+                "name": "No necesitó"
+            },
+            {
+                "id": 1,
+                "name": "Derecho"
+            },
+            {
+                "id": 2,
+                "name": "Izquierdo"
+            }
+        ],
+        "controldehemorragiasselect": [
+            {
+                "id": 0,
+                "name": "No necesitó"
+            },
+            {
+                "id": 1,
+                "name": "Presión directa"
+            },
+            {
+                "id": 2,
+                "name": "Vendaje compresivo"
+            },
+            {
+                "id": 3,
+                "name": "Agente coagulante"
+            },
+            {
+                "id": 4,
+                "name": "Empaque de herida"
+            },
+            {
+                "id": 5,
+                "name": "Torniquete"
+            },
+            {
+                "id": 6,
+                "name": "Agente hemostático"
+            }
+        ],
+        "viadeaccesoselect": [
+            {
+                "id": 0,
+                "name": "No necesitó"
+            },
+            {
+                "id": 1,
+                "name": "Intravascular periférico"
+            },
+            {
+                "id": 2,
+                "name": "Intranoseo"
+            }
+        ],
+        "zonacolocacion": [
+            {
+                "id": 0,
+                "name": "Mano"
+            },
+            {
+                "id": 1,
+                "name": "Antercobital"
+            },
+            {
+                "id": 2,
+                "name": "Yugular externo"
+            },
+            {
+                "id": 3,
+                "name": "Tibia proximal"
+            },
+            {
+                "id": 4,
+                "name": "Tibia distal"
+            },
+            {
+                "id": 5,
+                "name": "Húmero"
+            },
+            {
+                "id": 6,
+                "name": "Esternon"
+            },
+            {
+                "id": 7,
+                "name": "Otra"
+            }
+        ],
+        "tiposolucion": [
+            {
+                "id": 0,
+                "name": "HARTMANN"
+            },
+            {
+                "id": 1,
+                "name": "NaCl 0.9%"
+            },
+            {
+                "id": 2,
+                "name": "Glucosa 5%"
+            },
+            {
+                "id": 3,
+                "name": "Mixta"
+            },
+            {
+                "id": 4,
+                "name": "Otras"
+            }
+        ],
+        "controlcervical": [
+            {
+                "id": 0,
+                "name": "No"
+            },
+            {
+                "id": 1,
+                "name": "Sí"
+            }
+        ],
+        "inmovilizacion": [
+            {
+                "id": 0,
+                "name": "No"
+            },
+            {
+                "id": 1,
+                "name": "Sí"
+            }
+        ],
+        "empaquetamiento": [
+            {
+                "id": 0,
+                "name": "No"
+            },
+            {
+                "id": 1,
+                "name": "Sí"
+            }
+        ],
+        "curacion": [
+            {
+                "id": 0,
+                "name": "No"
+            },
+            {
+                "id": 1,
+                "name": "Sí"
+            }
+        ],
+        "terapiaelectrica_terapiaelectricacheckbox": [
+            {
+                "id": 0,
+                "name": "Desfribilación"
+            },
+            {
+                "id": 1,
+                "name": "Cardioversión"
+            },
+            {
+                "id": 2,
+                "name": "Marcapasos transcutáneo"
             }
         ]
     }
