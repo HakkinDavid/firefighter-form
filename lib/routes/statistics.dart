@@ -439,10 +439,10 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                     onPressed: countsList.isEmpty ? null : _exportPdfReport,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Icon(CupertinoIcons.share_up, size: 18),
-                        SizedBox(width: 6),
-                        Text('Exportar PDF', style: TextStyle(fontWeight: FontWeight.w600)),
+                      children: [
+                        Icon(CupertinoIcons.share_up, size: 18, color: Settings.instance.colors.textOverPrimary),
+                        const SizedBox(width: 6),
+                        Text('Exportar PDF', style: TextStyle(fontWeight: FontWeight.w600, color: Settings.instance.colors.textOverPrimary)),
                       ],
                     ),
                   ),
@@ -658,15 +658,15 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                   children: const {
                     ChartType.bar: Padding(
                       padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Text('Gráfico de Barras', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                      child: Text('Gráfico de barras', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                     ),
                     ChartType.pie: Padding(
                       padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Text('Gráfico de Pastel', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                      child: Text('Gráfico de pastel', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                     ),
                     ChartType.none: Padding(
                       padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Text('Solo Tabla', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                      child: Text('Sin gráfico', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                     ),
                   },
                 ),
@@ -751,7 +751,7 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                           Expanded(
                             flex: 2,
                             child: Text(
-                              'Porcentaje (%)',
+                              'Porcentaje',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Settings.instance.colors.textOverPrimary,
@@ -915,7 +915,7 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                 Navigator.pop(context);
               }
             },
-            child: const Text('Confirmar y Exportar'),
+            child: const Text('Exportar'),
           ),
         ],
       ),
