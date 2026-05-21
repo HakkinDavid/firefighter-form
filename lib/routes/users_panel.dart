@@ -26,14 +26,142 @@ class _UsersPanelState extends State<UsersPanel> {
     return sorted;
   }
 
-  Future<void> _onUpdateRoleButtonTap(
+  void _onUpdateRoleButtonTap(
     FirefighterUser user,
     bool promote,
-  ) async {
+  ) {
     if (!_isAdmin) return;
-    await Settings.instance.setUserRole(
-      user.id,
-      user.role + (promote ? 1 : -1),
+    final targetRole = user.role + (promote ? 1 : -1);
+    final targetRoleName = switch (targetRole) {
+      2 => "Administrador",
+      1 => "Supervisor",
+      0 => "Bombero",
+      _ => "Usuario",
+    };
+
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        title: const Text('Modificar rango'),
+        message: Text(
+          '¿Estás seguro de que deseas cambiar el rango de ${user.fullName} de "${user.roleName}" a "$targetRoleName"?',
+        ),
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              Navigator.pop(context);
+              await Settings.instance.setUserRole(user.id, targetRole);
+            },
+            child: Text('Cambiar rango a $targetRoleName'),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancelar'),
+        ),
+      ),
+    );
+  }
+
+  void _showConfirmAddWatched(FirefighterUser parent, FirefighterUser child) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        title: const Text('Agregar tutelado'),
+        message: Text(
+          '¿Estás seguro de que deseas establecer a ${parent.fullName} como tutelar de ${child.fullName}?',
+        ),
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              Navigator.pop(context);
+              await Settings.instance.setUserHierarchy(child.id, parent.id);
+            },
+            child: const Text('Confirmar asignación'),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancelar'),
+        ),
+      ),
+    );
+  }
+
+  void _showConfirmReplaceWatcher(FirefighterUser child, FirefighterUser parent) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        title: const Text('Cambiar tutelar'),
+        message: Text(
+          '¿Estás seguro de que deseas asignar a ${parent.fullName} como tutelar de ${child.fullName}?',
+        ),
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              Navigator.pop(context);
+              await Settings.instance.setUserHierarchy(child.id, parent.id);
+            },
+            child: const Text('Confirmar asignación'),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancelar'),
+        ),
+      ),
+    );
+  }
+
+  void _showConfirmRemoveWatched(FirefighterUser parent, FirefighterUser child) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        title: const Text('Quitar tutelado'),
+        message: Text(
+          '¿Estás seguro de que deseas que ${child.fullName} deje de ser tutelado por ${parent.fullName}?',
+        ),
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              Navigator.pop(context);
+              await Settings.instance.setUserHierarchy(child.id, null);
+            },
+            isDestructiveAction: true,
+            child: const Text('Quitar relación'),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancelar'),
+        ),
+      ),
+    );
+  }
+
+  void _showConfirmRemoveWatcher(FirefighterUser child, FirefighterUser parent) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        title: const Text('Quitar tutelar'),
+        message: Text(
+          '¿Estás seguro de que deseas quitar a ${parent.fullName} como tutelar de ${child.fullName}?',
+        ),
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              Navigator.pop(context);
+              await Settings.instance.setUserHierarchy(child.id, null);
+            },
+            isDestructiveAction: true,
+            child: const Text('Quitar relación'),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancelar'),
+        ),
+      ),
     );
   }
 
@@ -116,23 +244,23 @@ class _UsersPanelState extends State<UsersPanel> {
     await showCupertinoModalPopup<void>(
       context: context,
       builder: (context) => CupertinoActionSheet(
-        title: Text('Agregar tutelado'),
+        title: const Text('Agregar tutelado'),
         message: Text(
           'Selecciona un usuario para tutelarlo con ${user.fullName}.',
         ),
         actions: [
           for (final candidate in candidates)
             CupertinoActionSheetAction(
-              onPressed: () async {
+              onPressed: () {
                 Navigator.pop(context);
-                await Settings.instance.setUserHierarchy(candidate.id, user.id);
+                _showConfirmAddWatched(user, candidate);
               },
               child: Text(candidate.fullName),
             ),
         ],
         cancelButton: CupertinoActionSheetAction(
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancelar'),
+          child: const Text('Cancelar'),
         ),
       ),
     );
@@ -161,21 +289,21 @@ class _UsersPanelState extends State<UsersPanel> {
     await showCupertinoModalPopup<void>(
       context: context,
       builder: (context) => CupertinoActionSheet(
-        title: Text('Cambiar tutelar'),
+        title: const Text('Cambiar tutelar'),
         message: Text('Selecciona quién tutelará a ${user.fullName}.'),
         actions: [
           for (final candidate in candidates)
             CupertinoActionSheetAction(
-              onPressed: () async {
+              onPressed: () {
                 Navigator.pop(context);
-                await Settings.instance.setUserHierarchy(user.id, candidate.id);
+                _showConfirmReplaceWatcher(user, candidate);
               },
               child: Text(candidate.fullName),
             ),
         ],
         cancelButton: CupertinoActionSheetAction(
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancelar'),
+          child: const Text('Cancelar'),
         ),
       ),
     );
@@ -312,9 +440,9 @@ class _UsersPanelState extends State<UsersPanel> {
                                   return [
                                     CupertinoButton(
                                       onPressed: () =>
-                                          Settings.instance.setUserHierarchy(
-                                            watchedUser.id,
-                                            null,
+                                          _showConfirmRemoveWatched(
+                                            liveUser,
+                                            watchedUser,
                                           ),
                                       padding: EdgeInsets.all(6),
                                       minimumSize: Size(0, 0),
@@ -390,10 +518,10 @@ class _UsersPanelState extends State<UsersPanel> {
                                       if (!_isAdmin) return const <Widget>[];
                                       return [
                                         CupertinoButton(
-                                          onPressed: () => Settings.instance
-                                              .setUserHierarchy(
-                                                liveUser.id,
-                                                null,
+                                          onPressed: () =>
+                                              _showConfirmRemoveWatcher(
+                                                liveUser,
+                                                watcher,
                                               ),
                                           padding: EdgeInsets.all(6),
                                           minimumSize: Size(0, 0),
