@@ -71,6 +71,78 @@
         {
             "id": 15,
             "nombre": "LIGADURA"
+        },
+        {
+            "id": 16,
+            "nombre": "TORUNDA DE ALCOHOL"
+        },
+        {
+            "id": 17,
+            "nombre": "TEKA DYRAOIRE 2,5 CM"
+        },
+        {
+            "id": 18,
+            "nombre": "TURA REACTUVA DE GLUCOMETRÍA"
+        },
+        {
+            "id": 19,
+            "nombre": "LANCETA"
+        },
+        {
+            "id": 20,
+            "nombre": "CATÉTER IO"
+        },
+        {
+            "id": 21,
+            "nombre": "NALOXONA INTRANASAL"
+        },
+        {
+            "id": 22,
+            "nombre": "SELLO TORÁXICO P/HERIDA SUCCIÓN"
+        },
+        {
+            "id": 23,
+            "nombre": "TAPE GRIS MULTI-USOS"
+        },
+        {
+            "id": 24,
+            "nombre": "TORNIQUETE TÁCTICO DE EXTREMIDADES"
+        },
+        {
+            "id": 25,
+            "nombre": "VENDAJE HEMOSTÁTICO"
+        },
+        {
+            "id": 26,
+            "nombre": "VENDA ELÁSTICA DE 10 CM"
+        },
+        {
+            "id": 27,
+            "nombre": "VENDA ELÁSTICA DE 5 CM"
+        },
+        {
+            "id": 28,
+            "nombre": "APÓSITOS ESTERILES"
+        },
+        {
+            "id": 29,
+            "nombre": "APÓSITOS SIMPLES"
+        },
+        {
+            "id": 30,
+            "nombre": "GASAS SIMPLES 4x4"
+        },
+        {
+            "id": 31,
+            "nombre": "APÓSITO MULTITRAUMA"
+        },
+        {
+            "id": 32,
+            "nombre": "AGUA PARA IRRIGAR HERIDAS / OJOS"
+        },
+        {
+            "id": 33,
+            "nombre": "FERULA DE CARTÓN"
         }
     ],
     "fields": {
