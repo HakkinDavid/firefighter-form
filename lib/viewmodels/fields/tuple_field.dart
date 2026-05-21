@@ -2,6 +2,7 @@ import 'package:bomberos/models/settings.dart' show Settings;
 import 'package:bomberos/viewmodels/fields/input_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show Card;
+import 'package:flutter/services.dart';
 
 class TupleField extends InputField {
   const TupleField({
@@ -15,10 +16,22 @@ class TupleField extends InputField {
   });
 
   @override
-  State<InputField> createState() => _NumberInputFieldState();
+  State<InputField> createState() => _TupleFieldState();
 }
 
-class _NumberInputFieldState extends InputFieldState {
+class _TupleFieldState extends InputFieldState {
+  String _normalize(String input) {
+    var s = input.toLowerCase();
+    s = s.replaceAll(RegExp(r'[áàäâ]'), 'a');
+    s = s.replaceAll(RegExp(r'[éèëê]'), 'e');
+    s = s.replaceAll(RegExp(r'[íìïî]'), 'i');
+    s = s.replaceAll(RegExp(r'[óòöô]'), 'o');
+    s = s.replaceAll(RegExp(r'[úùüû]'), 'u');
+    s = s.replaceAll(RegExp(r'[ñ]'), 'n');
+    s = s.replaceAll(RegExp(r'[^a-z0-9]'), '');
+    return s;
+  }
+
   @override
   Widget build(BuildContext context) {
     final tupleFields = widget.field['tuple'] as List<dynamic>? ?? [];
@@ -49,7 +62,134 @@ class _NumberInputFieldState extends InputFieldState {
                           subfield['label'] ?? subfield['name'],
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        if (subfield['type'] == 'input' &&
+                        if (subfield['type'] == 'select')
+                          Row(
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    if (!widget.canEditForm) return;
+                                    await showCupertinoModalPopup(
+                                      context: context,
+                                      builder: (_) {
+                                        String searchText = '';
+                                        return StatefulBuilder(
+                                          builder: (BuildContext context, StateSetter popupState) {
+                                            final searchNormalized = _normalize(searchText);
+                                            final rawOptions = subfield['options'] as List<dynamic>? ?? [];
+                                            final formattedOptions = widget.formatOptions(rawOptions) ?? const [];
+                                            final filteredOptions = formattedOptions.where((opt) {
+                                              if (searchNormalized.isEmpty) return true;
+                                              final optText = _normalize(opt.toString());
+                                              return optText.contains(searchNormalized);
+                                            }).toList();
+
+                                            return SafeArea(
+                                              child: Container(
+                                                color: Settings.instance.colors.primary,
+                                                height: 400,
+                                                padding: EdgeInsets.all(16),
+                                                child: Column(
+                                                  children: [
+                                                    CupertinoTextField(
+                                                      style: TextStyle(
+                                                        color: Settings.instance.colors.primary,
+                                                      ),
+                                                      placeholderStyle: TextStyle(
+                                                        color: Settings.instance.colors.disabled,
+                                                      ),
+                                                      placeholder: subfield['label'] ?? subfield['name'],
+                                                      decoration: BoxDecoration(
+                                                        color: Settings.instance.colors.background,
+                                                        borderRadius: BorderRadius.circular(12),
+                                                        border: Border.all(
+                                                          color: Settings.instance.colors.disabled,
+                                                        ),
+                                                      ),
+                                                      padding: const EdgeInsets.all(12),
+                                                      autofocus: true,
+                                                      autocorrect: false,
+                                                      onChanged: (val) {
+                                                        popupState(() {
+                                                          searchText = val;
+                                                        });
+                                                      },
+                                                    ),
+                                                    SizedBox(height: 12),
+                                                    Expanded(
+                                                      child: ListView(
+                                                        children: filteredOptions.map<Widget>((opt) {
+                                                          return CupertinoButton(
+                                                            onPressed: () {
+                                                              widget.setFormState(() {
+                                                                tupleList[i][subfield['name']] = opt.toString();
+                                                                widget.formSet(
+                                                                  widget.field['name'],
+                                                                  tupleList,
+                                                                );
+                                                              });
+                                                              Navigator.of(context).pop();
+                                                            },
+                                                            alignment: Alignment.centerLeft,
+                                                            padding: EdgeInsets.symmetric(vertical: 12),
+                                                            child: Text(
+                                                              opt.toString(),
+                                                              style: TextStyle(
+                                                                color: Settings.instance.colors.primaryContrast,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        }).toList(),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(color: CupertinoColors.separator),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            subValue == ''
+                                                ? 'Sin seleccionar'
+                                                : subValue.toString(),
+                                            style: TextStyle(fontSize: 16),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        Icon(CupertinoIcons.chevron_down, size: 20),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              if (subValue != '' && widget.canEditForm)
+                                CupertinoButton(
+                                  padding: EdgeInsets.zero,
+                                  child: Icon(CupertinoIcons.clear, size: 20),
+                                  onPressed: () {
+                                    widget.setFormState(() {
+                                      tupleList[i][subfield['name']] = '';
+                                      widget.formSet(widget.field['name'], tupleList);
+                                    });
+                                  },
+                                ),
+                            ],
+                          )
+                        else if (subfield['type'] == 'input' &&
                             subfield['inputType'] == 'time')
                           Row(
                             children: [
@@ -134,6 +274,12 @@ class _NumberInputFieldState extends InputFieldState {
                           CupertinoTextField(
                             readOnly: !widget.canEditForm,
                             placeholder: subfield['label'] ?? subfield['name'],
+                            keyboardType: subfield['inputType'] == 'number'
+                                ? TextInputType.number
+                                : TextInputType.text,
+                            inputFormatters: subfield['inputType'] == 'number'
+                                ? [FilteringTextInputFormatter.digitsOnly]
+                                : null,
                             controller: TextEditingController(text: subValue)
                               ..selection = TextSelection.collapsed(
                                 offset: subValue.length,

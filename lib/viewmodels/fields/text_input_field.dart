@@ -13,10 +13,10 @@ class TextInputField extends InputField {
   });
 
   @override
-  State<InputField> createState() => _NumberInputFieldState();
+  State<InputField> createState() => _TextInputFieldState();
 }
 
-class _NumberInputFieldState extends InputFieldState {
+class _TextInputFieldState extends InputFieldState {
   @override
   Widget build(BuildContext context) {
     return Column(

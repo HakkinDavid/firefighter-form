@@ -17,14 +17,7 @@ class CheckboxMultipleField extends InputField {
 }
 
 class _NumberInputFieldState extends InputFieldState {
-  late final List<dynamic> options;
-
-  @override
-  void initState() {
-    super.initState();
-
-    options = widget.formatOptions(widget.field['options'] as List<dynamic>?);
-  }
+  List<dynamic> get options => widget.formatOptions(widget.field['options'] as List<dynamic>?) ?? const [];
 
   @override
   Widget build(BuildContext context) {

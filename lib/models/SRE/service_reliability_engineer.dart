@@ -428,7 +428,8 @@ class ServiceReliabilityEngineer {
     DateTime start = DateTime.now();
     List<(String, Map<String, dynamic> Function()?)> completedWrites = [];
 
-    for (var writeRequest in _writeQueue) {
+    final currentQueue = List.from(_writeQueue);
+    for (var writeRequest in currentQueue) {
       Logging(
         "Atendiendo ${writeRequest.$1.replaceRange(0, writeRequest.$1.length - 30, '...')}",
         caller: "SRE (_saveToDisk)",

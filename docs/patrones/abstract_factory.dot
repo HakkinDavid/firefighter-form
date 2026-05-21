@@ -1,0 +1,91 @@
+digraph AbstractFactory {
+  graph [
+    rankdir=TB,
+    fontname="Helvetica",
+    bgcolor="white",
+    pad=0.2,
+    nodesep=0.45,
+    ranksep=0.7,
+    compound=true,
+    splines=ortho,
+  ];
+
+  node [
+    shape=record,
+    fontname="Helvetica",
+    fontsize=10,
+    style="filled",
+    fillcolor="white",
+    color="#5b6b7a",
+    penwidth=1.2,
+    margin="0.08,0.05",
+  ];
+
+  edge [
+    fontname="Helvetica",
+    fontsize=9,
+    color="#4d5f73",
+    arrowsize=0.8,
+  ];
+
+  subgraph cluster_factory {
+    label="Abstract Factory: renderizado dinámico de campos";
+    color="#9fb3c8";
+    style="rounded";
+
+    renderer [label="{DynamicFieldRenderer|build()\ldespacha según el tipo de campo\l|selecciona el componente visual concreto\l}"];
+    app_factory [label="{Aplicación (contexto)|main.dart\lroutes/*\lviewmodels/*\lmodels/*\l|usa DynamicFieldRenderer según la plantilla del formulario\l}"];
+  }
+
+  subgraph cluster_products {
+    label="Productos abstractos y concretos";
+    color="#c8d6e5";
+    style="rounded";
+
+    input [label="{InputField (abstracta)|field\lvalue\lformSet\lsetFormState\lformatOptions\lcanEditForm\l|createState()\l}"];
+    text [label="{TextInputField|build()\l}"];
+    number [label="{NumberInputField|build()\l}"];
+    date [label="{DateInputField|build()\l}"];
+    time [label="{TimeInputField|build()\l}"];
+    select [label="{SelectField|initState()\lbuild()\l}"];
+    options [label="{OptionsInputField|initState()\lbuild()\l}"];
+    multiple [label="{MultipleInputField|build()\l}"];
+    checkbox [label="{CheckboxMultipleField|initState()\lbuild()\l}"];
+    radio [label="{RadioMultipleField|initState()\lbuild()\l}"];
+    textarea [label="{TextAreaField|build()\l}"];
+    drawing [label="{DrawingBoardField|build()\l}"];
+    tuple [label="{TupleField|build()\l}"];
+    display [label="{TextDisplayField|build()\l}"];
+  }
+
+  app_factory -> renderer [arrowhead="vee", penwidth=1.2, label="despacho por esquema de campo"];
+  app_factory -> input [arrowhead="vee", penwidth=1.2, label="familia de campos especializados"];
+
+  renderer -> text [arrowhead="vee", style="dashed"];
+  renderer -> number [arrowhead="vee", style="dashed"];
+  renderer -> date [arrowhead="vee", style="dashed"];
+  renderer -> time [arrowhead="vee", style="dashed"];
+  renderer -> options [arrowhead="vee", style="dashed"];
+  renderer -> select [arrowhead="vee", style="dashed"];
+  renderer -> multiple [arrowhead="vee", style="dashed"];
+  renderer -> checkbox [arrowhead="vee", style="dashed"];
+  renderer -> radio [arrowhead="vee", style="dashed"];
+  renderer -> textarea [arrowhead="vee", style="dashed"];
+  renderer -> drawing [arrowhead="vee", style="dashed"];
+  renderer -> tuple [arrowhead="vee", style="dashed"];
+  renderer -> display [arrowhead="vee", style="dashed"];
+
+  input -> text [arrowhead="empty"];
+  input -> number [arrowhead="empty"];
+  input -> date [arrowhead="empty"];
+  input -> time [arrowhead="empty"];
+  input -> select [arrowhead="empty"];
+  input -> options [arrowhead="empty"];
+  input -> multiple [arrowhead="empty"];
+  input -> checkbox [arrowhead="empty"];
+  input -> radio [arrowhead="empty"];
+  input -> textarea [arrowhead="empty"];
+  input -> drawing [arrowhead="empty"];
+  input -> tuple [arrowhead="empty"];
+  input -> display [arrowhead="empty"];
+}

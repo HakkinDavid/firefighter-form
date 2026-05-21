@@ -76,7 +76,9 @@ class Settings {
   Stream<List<ServiceForm>> get formsListStream =>
       _formsStreamController.stream;
 
+  // ignore: unnecessary_getters_setters
   Map<String, FirefighterUser> get userCache => _userCache;
+  // ignore: unnecessary_getters_setters
   List<ServiceForm> get formsQueue => _formsQueue;
   // Direct setters for now
   set userCache(Map<String, FirefighterUser> userCache) {
@@ -493,4 +495,5 @@ class Settings {
       // no importa si no se borra, mejor para nosotros.
     }
   }
+
 }

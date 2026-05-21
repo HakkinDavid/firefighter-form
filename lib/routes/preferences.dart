@@ -2,7 +2,6 @@ import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/viewmodels/header.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
 class Preferences extends StatefulWidget {
   const Preferences({super.key});
@@ -58,8 +57,7 @@ class _PreferencesState extends State<Preferences> {
       "icon": CupertinoIcons.graph_square_fill,
       "route": () => "/statistics",
       "available": () =>
-          (Settings.instance.self?.hasSupervisorRights ?? false) &&
-          kDebugMode, // TODO: Una vez terminadas estas secciones del app, remover la bandera de modo Debug para acceder
+          Settings.instance.self?.hasSupervisorRights ?? false,
     },
   ];
 

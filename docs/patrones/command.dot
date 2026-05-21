@@ -1,0 +1,41 @@
+digraph CommandUML {
+  graph [
+    fontname="Helvetica",
+    rankdir=TB,
+    splines=polyline,
+    nodesep=0.45,
+    ranksep=0.75,
+    bgcolor="white"
+  ];
+
+  node [
+    shape=record,
+    fontname="Helvetica",
+    fontsize=10,
+    margin="0.06,0.04"
+  ];
+
+  edge [
+    fontname="Helvetica",
+    fontsize=9,
+    arrowsize=0.7
+  ];
+
+  invoker [label="{ServiceReliabilityEngineer|gestor de cola / invocador\lcola de tareas\lcola de escritura\l|enqueueTasks()\lenqueueWriteTasks()\l_processQueue()\l}"];
+  command [label="{Task|objeto comando\lheuristic\lduty\ldereliction\ldependsOn\lbandera pendiente\l|setAsPending()\lrunTask()\l}"];
+  guard [label="{Heuristic|guardia de ejecución\l|evaluate()\lresult getter\l}"];
+  settings [label="{Settings|receptor para comandos de almacenamiento / sincronización / administración\l|setForms()\lrefreshUsers()\luploadTemplate()\luploadForm()\ldeleteForm()\l}"];
+  form [label="{ServiceForm|receptor para comandos de guardar / borrar / renderizar\l|save()\ldelete()\lrender()\l}"];
+  overlay [label="{OverlayService|receptor para comando de notificación\l|showOverlay()\lcloseCurrentOverlay()\l}"];
+  user [label="{FirefighterUser|receptor para comandos de escritura administrativa\l|toJson()\lfromJson()\l}"];
+  app [label="{Aplicación (contexto)|main.dart\lroutes/*\lviewmodels/*\lmodels/*\l|emite comandos desde acciones de UI y arranque\l}"];
+
+  invoker -> command [arrowhead="vee", penwidth=1.4, label="almacena y despacha"];
+  command -> guard [arrowhead="vee", style="dashed", label="verifica antes de ejecutar"];
+  command -> settings [arrowhead="vee", style="dashed", label="receptor común"];
+  command -> form [arrowhead="vee", style="dashed", label="guardar/borrar/renderizar"];
+  command -> overlay [arrowhead="vee", style="dashed", label="alternativa / aviso"];
+  command -> user [arrowhead="vee", style="dashed", label="cambios administrativos"];
+  app -> invoker [arrowhead="vee", penwidth=1.2, label="dispara colas"];
+  app -> command [arrowhead="vee", penwidth=1.2, label="emite acciones"];
+}

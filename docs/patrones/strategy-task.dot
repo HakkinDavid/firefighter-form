@@ -1,0 +1,43 @@
+digraph StrategyUML {
+  graph [
+    fontname="Helvetica",
+    rankdir=TB,
+    splines=polyline,
+    nodesep=0.45,
+    ranksep=0.75,
+    bgcolor="white"
+  ];
+
+  node [
+    shape=record,
+    fontname="Helvetica",
+    fontsize=10,
+    margin="0.06,0.04"
+  ];
+
+  edge [
+    fontname="Helvetica",
+    fontsize=9,
+    arrowsize=0.7
+  ];
+
+  subgraph cluster_task_strategies {
+    label="Estrategias de viabilidad de tareas";
+    labelloc="t";
+    style="rounded";
+    color="#b59dd8";
+
+    heuristic [label="{Heuristic (abstracta)|evaluate()\lresult getter\l|interfaz de política\l}"];
+    disk [label="{DiskHeuristic|lastWriteTime: static int\llastWriteTimestamp: static DateTime\l|evaluate()\l}"];
+    conn [label="{ConnectionHeuristic|InternetAddress.lookup()\l|evaluate()\l}"];
+    sre [label="{ServiceReliabilityEngineer|selecciona tareas y las ejecuta\l|initialize()\lenqueueTasks()\l_processQueue()\l}"];
+
+    disk -> heuristic [arrowhead="empty", label="implementa"];
+    conn -> heuristic [arrowhead="empty", label="implementa"];
+    sre -> heuristic [arrowhead="vee", style="dashed", label="usa"];
+  }
+
+  app [label="{Aplicación (contexto)|main.dart\lroutes/*\lviewmodels/*\lmodels/*\l|elige rutas de ejecución y renderizado según el contexto\l}"];
+
+  app -> sre [arrowhead="vee", penwidth=1.2, label="política en tiempo de ejecución"];
+}

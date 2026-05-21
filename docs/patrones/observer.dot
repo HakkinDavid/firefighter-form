@@ -1,0 +1,42 @@
+digraph ObserverUML {
+  graph [
+    fontname="Helvetica",
+    rankdir=TB,
+    splines=polyline,
+    nodesep=0.45,
+    ranksep=0.75,
+    bgcolor="white"
+  ];
+
+  node [
+    shape=record,
+    fontname="Helvetica",
+    fontsize=10,
+    margin="0.06,0.04"
+  ];
+
+  edge [
+    fontname="Helvetica",
+    fontsize=9,
+    arrowsize=0.7
+  ];
+
+  settings [label="{Settings|flujo de caché de usuarios\lflujo de lista de formularios\l|emite en setForms(), refreshUsers(), enqueueForm(), dequeueForm()\l}"];
+  home [label="{Home|observador del flujo de formularios\l|_loadSavedForms()\lbuild()\l}"];
+  search [label="{Search|observador del flujo de formularios\l|passesSearchCriteria()\l_fetchUserName()\lbuild()\l}"];
+  users [label="{UsersPanel|observador del flujo de caché de usuarios\l|_sortedUsers()\l_onUpdateRoleButtonTap()\lbuild()\l}"];
+  controller [label="{ServiceCanvasController|extends ChangeNotifier\ltrazos previos\ltrazos actuales\lSVG previo\l|addPointToCurrentStroke()\lstartNewStroke()\lclear()\lexportAsSvg()\lnotifyListeners()\l}"];
+  canvas [label="{ServiceCanvas|escucha a ServiceCanvasController\l|initState()\ldidUpdateWidget()\ldispose()\lbuild()\l}"];
+  form_list [label="{FormList|lee la caché actual de usuarios y la lista de formularios\l|_getUserFuture()\l_buildResponsibleName()\lbuild()\l}"];
+  users_list [label="{UsersList|lee la caché actual de usuarios\l|_getUserFuture()\l_buildWatcherName()\lbuild()\l}"];
+  app [label="{Aplicación (contexto)|main.dart\lroutes/*\lviewmodels/*\lmodels/*\l|se suscribe a flujos y notificaciones de repintado\l}"];
+
+  settings -> home [arrowhead="vee", style="dashed", label="actualizaciones de formularios"];
+  settings -> search [arrowhead="vee", style="dashed", label="actualizaciones de formularios"];
+  settings -> users [arrowhead="vee", style="dashed", label="actualizaciones de caché de usuarios"];
+  controller -> canvas [arrowhead="vee", style="dashed", label="notificaciones de repintado"];
+  settings -> form_list [arrowhead="vee", style="dashed", label="estado consumido"];
+  settings -> users_list [arrowhead="vee", style="dashed", label="estado consumido"];
+  app -> settings [arrowhead="vee", penwidth=1.2, label="se suscribe a flujos broadcast"];
+  app -> controller [arrowhead="vee", penwidth=1.2, label="UI reactiva del lienzo"];
+}

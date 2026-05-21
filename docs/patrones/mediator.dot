@@ -1,0 +1,45 @@
+digraph MediatorUML {
+  graph [
+    fontname="Helvetica",
+    rankdir=TB,
+    splines=polyline,
+    nodesep=0.45,
+    ranksep=0.7,
+    bgcolor="white"
+  ];
+
+  node [
+    shape=record,
+    fontname="Helvetica",
+    fontsize=10,
+    margin="0.06,0.04"
+  ];
+
+  edge [
+    fontname="Helvetica",
+    fontsize=9,
+    arrowsize=0.7
+  ];
+
+  sre [label="{ServiceReliabilityEngineer|registro de tareas\lcola de tareas\lcola de escritura\lmutex\lcanal nativo\ltemporizador\l|initialize()\lenqueueTasks()\lenqueueWriteTasks()\l_processQueue()\l_askForUserPermission()\l_loadFromDisk()\l_saveToDisk()\l_isUpdateAvailable()\l_updateApp()\l}"];
+  task [label="{Task|heuristic\lduty\ldereliction\ldependsOn\lbandera pendiente\l|setAsPending()\lrunTask()\l}"];
+  heuristic [label="{Heuristic (abstracta)|evaluate()\lresult getter\l|interfaz de política\l}"];
+  disk [label="{DiskHeuristic|lastWriteTime: static int\llastWriteTimestamp: static DateTime\l|evaluate()\l}"];
+  conn [label="{ConnectionHeuristic|usa InternetAddress.lookup()\l|evaluate()\l}"];
+  settings [label="{Settings|userCache\lformsQueue\lformsList\lnavigatorKey\l|setForms()\lrefreshUsers()\luploadForm()\ldeleteForm()\lgetTemplate()\l}"];
+  overlay [label="{OverlayService|overlay actual\l|showOverlay()\lcloseCurrentOverlay()\l}"];
+  form [label="{ServiceForm|agregado guiado por plantilla\l|load()\lset()\lsave()\ldelete()\lrender()\lhandleFieldRestrictions()\l}"];
+  user [label="{FirefighterUser|registro de usuario de dominio\l|toJson()\lfromJson()\l}"];
+  app [label="{Aplicación (contexto)|main.dart\lroutes/*\lviewmodels/*\lmodels/*\l|inicia SRE y consume servicios coordinados\l}"];
+
+  sre -> task [arrowhead="vee", penwidth=1.4, label="media / ejecuta"];
+  task -> heuristic [arrowhead="vee", style="dashed", label="protege"];
+  disk -> heuristic [arrowhead="empty", label="especializa"];
+  conn -> heuristic [arrowhead="empty", label="especializa"];
+  sre -> settings [arrowhead="vee", style="dashed", label="delega"];
+  sre -> overlay [arrowhead="vee", style="dashed", label="muestra aviso de actualización"];
+  sre -> form [arrowhead="vee", style="dashed", label="sincroniza / carga destinos"];
+  sre -> user [arrowhead="vee", style="dashed", label="actualiza destinos"];
+  app -> sre [arrowhead="vee", penwidth=1.2, label="arranque orquestado"];
+  app -> settings [arrowhead="vee", penwidth=1.2, label="estado compartido de la app"];
+}

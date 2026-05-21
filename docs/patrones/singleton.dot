@@ -1,0 +1,43 @@
+digraph SingletonUML {
+  graph [
+    fontname="Helvetica",
+    rankdir=TB,
+    splines=polyline,
+    nodesep=0.45,
+    ranksep=0.7,
+    bgcolor="white"
+  ];
+
+  node [
+    shape=record,
+    fontname="Helvetica",
+    fontsize=10,
+    margin="0.06,0.04"
+  ];
+
+  edge [
+    fontname="Helvetica",
+    fontsize=9,
+    arrowsize=0.7
+  ];
+
+  settings [label="{Settings (instancia única)|instance: Settings\lcolors: ColorsSettings\lnavigatorKey\l_userId\l_allowDebugging\lcaché de usuarios\lcola de formularios\llista de formularios\lflujo de caché de usuarios\lflujo de lista de formularios\l|setUserId()\lsetUser()\lsetForms()\lfetchUser()\lgetTemplate()\lrefreshUsers()\lrefreshTemplates()\lenqueueForm()\ldequeueForm()\luploadForm()\lsyncForms()\ldeleteForm()\l}"];
+
+  sre [label="{ServiceReliabilityEngineer (instancia única)|instance: ServiceReliabilityEngineer\l_tasksRepository\l_tasksQueue\l_writeQueue\l_busy: Mutex\l_platform: canal de plataforma\lappVersion: String\l_timer: Timer?\l|initialize()\lenqueueTasks()\l_processQueue()\lenqueueWriteTasks()\lfetchAppVersion()\l_loadFromDisk()\l_saveToDisk()\l_isUpdateAvailable()\l_updateApp()\l}"];
+
+  colors [label="{ColorsSettings|primary\lprimaryBright\lbackground\lprimaryContrast\lprimaryContrastDark\ltextOverPrimary\lattentionBadge\ldisabled\l|paleta de colores\l}"];
+  db [label="{DatabaseSettings|host\lurl\lanonKey\l|configuración estática de Supabase\l}"];
+  user [label="{FirefighterUser|id\lgivenName\lfirstSurname\lsecondSurname\lrole\lwatchedByUserId\lwatchesUsersId\l|fullName\lroleName\lgetters de permisos\ltoJson()\lfromJson()\l}"];
+  form [label="{ServiceForm|id\ltemplateId\lfiller\lfilledAt\lstatus\lcontent\lerrors\l|load()\lset()\lsave()\ldelete()\lrender()\lhandleFieldRestrictions()\lshouldDisplay()\l}"];
+  app [label="{Aplicación (contexto)|main.dart\lroutes/*\lviewmodels/*\lmodels/*\l|usa Settings como estado global\lusa SRE para arranque y trabajo en segundo plano\l}"];
+
+  settings -> colors [arrowhead="vee", label="tiene"];
+  settings -> db [arrowhead="vee", style="dashed", label="lee"];
+  settings -> user [arrowhead="vee", style="dashed", label="almacena"];
+  settings -> form [arrowhead="vee", style="dashed", label="encola"];
+  sre -> settings [arrowhead="vee", style="dashed", label="coordina"];
+  sre -> form [arrowhead="vee", style="dashed", label="carga / sincroniza"];
+  sre -> user [arrowhead="vee", style="dashed", label="restaura / actualiza"];
+  app -> settings [arrowhead="vee", penwidth=1.2, label="acceso global"];
+  app -> sre [arrowhead="vee", penwidth=1.2, label="arranque / segundo plano"];
+}

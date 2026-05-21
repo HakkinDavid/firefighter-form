@@ -14,18 +14,11 @@ class SelectField extends InputField {
   });
 
   @override
-  State<InputField> createState() => _NumberInputFieldState();
+  State<InputField> createState() => _SelectFieldState();
 }
 
-class _NumberInputFieldState extends InputFieldState {
-  late final List<dynamic> options;
-
-  @override
-  void initState() {
-    super.initState();
-
-    options = widget.formatOptions(widget.field['options'] as List<dynamic>?);
-  }
+class _SelectFieldState extends InputFieldState {
+  List<dynamic> get options => widget.formatOptions(widget.field['options'] as List<dynamic>?) ?? const [];
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +33,7 @@ class _NumberInputFieldState extends InputFieldState {
                 onTap: () async {
                   if (!widget.canEditForm) return;
                   int selected = options.indexOf(widget.value);
+                  if (selected < 0) selected = 0;
                   int pickedIndex = selected;
                   await showCupertinoModalPopup(
                     context: context,
@@ -72,12 +66,14 @@ class _NumberInputFieldState extends InputFieldState {
                                 ),
                               ),
                               onPressed: () async {
-                                widget.setFormState(() {
-                                  widget.formSet(
-                                    widget.field['name'],
-                                    options[pickedIndex],
-                                  );
-                                });
+                                if (options.isNotEmpty && pickedIndex >= 0 && pickedIndex < options.length) {
+                                  widget.setFormState(() {
+                                    widget.formSet(
+                                      widget.field['name'],
+                                      options[pickedIndex],
+                                    );
+                                  });
+                                }
                                 if (!mounted) return;
                                 Navigator.of(context).pop();
                               },
