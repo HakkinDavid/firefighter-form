@@ -3,6 +3,7 @@ import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/viewmodels/header.dart';
 import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/pdf_renderer.dart';
+import 'package:bomberos/viewmodels/canvas.dart';
 import 'package:flutter/cupertino.dart';
 
 class StatisticsPanel extends StatefulWidget {
@@ -18,7 +19,7 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
   String? _selectedCatalogKey;
   String? _selectedFilterField; // e.g. field internal name
   String? _selectedFilterValue = 'Todos';
-  Map<String, int> _initialStock = {};
+  final Map<String, int> _initialStock = {};
   List<Map<String, dynamic>> _filterFieldsList = [];
 
   @override
@@ -37,8 +38,6 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
         forms.map((f) => f.isLoaded ? Future.value() : f.load()),
       );
 
-      // Load persistent stock map
-      _initialStock = await Settings.instance.loadInitialStock();
 
       // Extract catalogs options map from first available form template
       if (forms.isNotEmpty) {
@@ -738,7 +737,6 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
               setState(() {
                 _initialStock[itemName] = newStock;
               });
-              await Settings.instance.saveInitialStock(_initialStock);
               if (!context.mounted) return;
               Navigator.pop(context);
             },
@@ -752,6 +750,73 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
 
   Future<void> _exportPdfReport() async {
     if (_selectedCatalogKey == null) return;
+
+    final canvasController = ServiceCanvasController();
+    String? signatureSvg;
+    bool isConfirmed = false;
+
+    await showCupertinoDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => CupertinoAlertDialog(
+        title: const Text('Firma del Responsable'),
+        content: Padding(
+          padding: const EdgeInsets.only(top: 12.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Por favor dibuje su firma a continuación para autorizar el reporte.',
+                style: TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                height: 180,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Settings.instance.colors.disabled),
+                  borderRadius: BorderRadius.circular(8),
+                  color: CupertinoColors.white,
+                ),
+                child: ServiceCanvas(
+                  controller: canvasController,
+                  readOnly: false,
+                ),
+              ),
+              const SizedBox(height: 8),
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                child: const Text('Limpiar Firma', style: TextStyle(color: CupertinoColors.destructiveRed)),
+                onPressed: () {
+                  canvasController.clear();
+                },
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancelar'),
+          ),
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () async {
+              signatureSvg = await canvasController.exportAsSvg();
+              isConfirmed = true;
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Confirmar y Exportar'),
+          ),
+        ],
+      ),
+    );
+
+    if (!isConfirmed) return;
 
     final countsMap = _calculateAggregatedCounts();
     final countsList = countsMap.entries.toList();
@@ -803,6 +868,7 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
       headers: headers,
       rows: rows,
       filters: filters,
+      signatureSvg: signatureSvg,
     );
   }
 }
