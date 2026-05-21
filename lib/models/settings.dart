@@ -242,7 +242,7 @@ class Settings {
 
       if (await directory.exists()) {
         await for (var t in directory.list()) {
-          String name = t.path.split('/').last.split('.').first;
+          String name = t.path.split(RegExp(r'[/\\]')).last.split('.').first;
           int? tId = int.tryParse(name);
           if (tId != null && tId > (newest ?? 0)) newest = tId;
         }
@@ -298,7 +298,7 @@ class Settings {
         final List<(String, Map<String, dynamic> Function()?)>
         templateRefreshTasks = [];
         await for (var t in directory.list()) {
-          String name = t.path.split('/').last.split('.').first;
+          String name = t.path.split(RegExp(r'[/\\]')).last.split('.').first;
           int? tId = int.tryParse(name);
           if (tId == null) continue;
           templateRefreshTasks.addAll([
