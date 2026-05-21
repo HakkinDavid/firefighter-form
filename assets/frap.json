@@ -2100,6 +2100,10 @@
             {
                 "name": "codigopostalpaciente",
                 "message": "El código postal del paciente debe contener solo números."
+            },
+            {
+                "name": "cantidad",
+                "message": "La cantidad debe contener solo números enteros."
             }
         ]
     },
