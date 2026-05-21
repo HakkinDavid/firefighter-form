@@ -104,7 +104,7 @@ class _TupleFieldState extends InputFieldState {
                                                     SizedBox(height: 12),
                                                     Expanded(
                                                       child: ListView(
-                                                        children: filteredOptions.map((opt) {
+                                                        children: filteredOptions.map<Widget>((opt) {
                                                           return CupertinoButton(
                                                             onPressed: () {
                                                               widget.setFormState(() {
