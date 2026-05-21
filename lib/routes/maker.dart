@@ -164,6 +164,9 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
     if (template['restrictions'] is! Map<String, dynamic>) {
       template['restrictions'] = <String, dynamic>{};
     }
+    if (template['options'] is! Map<String, dynamic>) {
+      template['options'] = <String, dynamic>{};
+    }
 
     final fields = template['fields'] as Map<String, dynamic>;
     final order = template['order'] as Map<String, dynamic>;
@@ -337,11 +340,15 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
         if (field.containsKey('inputType') && field['inputType'] != 'text') {
           field.remove('inputType');
         }
-        if (field['options'] is! List<dynamic>) {
-          field['options'] = <dynamic>['Opcion 1'];
-        }
-        if ((field['options'] as List<dynamic>).isEmpty) {
-          (field['options'] as List<dynamic>).add('Opcion 1');
+        if (!field.containsKey('optionsFrom')) {
+          if (field['options'] is! List<dynamic>) {
+            field['options'] = <dynamic>['Opcion 1'];
+          }
+          if ((field['options'] as List<dynamic>).isEmpty) {
+            (field['options'] as List<dynamic>).add('Opcion 1');
+          }
+        } else {
+          field.remove('options');
         }
         break;
       case 'textarea':
@@ -361,11 +368,15 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
         field['inputType'] = _dslMultipleInputTypes.contains(multipleType)
             ? multipleType
             : 'radio';
-        if (field['options'] is! List<dynamic>) {
-          field['options'] = <dynamic>['Opcion 1'];
-        }
-        if ((field['options'] as List<dynamic>).isEmpty) {
-          (field['options'] as List<dynamic>).add('Opcion 1');
+        if (!field.containsKey('optionsFrom')) {
+          if (field['options'] is! List<dynamic>) {
+            field['options'] = <dynamic>['Opcion 1'];
+          }
+          if ((field['options'] as List<dynamic>).isEmpty) {
+            (field['options'] as List<dynamic>).add('Opcion 1');
+          }
+        } else {
+          field.remove('options');
         }
         break;
       case 'drawingboard':
@@ -441,11 +452,15 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
       if (sub.containsKey('inputType') && sub['inputType'] != 'text') {
         sub.remove('inputType');
       }
-      if (sub['options'] is! List<dynamic>) {
-        sub['options'] = <dynamic>['Opcion 1'];
-      }
-      if ((sub['options'] as List<dynamic>).isEmpty) {
-        (sub['options'] as List<dynamic>).add('Opcion 1');
+      if (!sub.containsKey('optionsFrom')) {
+        if (sub['options'] is! List<dynamic>) {
+          sub['options'] = <dynamic>['Opcion 1'];
+        }
+        if ((sub['options'] as List<dynamic>).isEmpty) {
+          (sub['options'] as List<dynamic>).add('Opcion 1');
+        }
+      } else {
+        sub.remove('options');
       }
     } else if (type == 'multiple') {
       final inputType = (sub['inputType'] ?? 'radio').toString();
@@ -453,11 +468,15 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
           ? inputType
           : 'radio';
       sub['label'] = (sub['label'] ?? '').toString();
-      if (sub['options'] is! List<dynamic>) {
-        sub['options'] = <dynamic>['Opcion 1'];
-      }
-      if ((sub['options'] as List<dynamic>).isEmpty) {
-        (sub['options'] as List<dynamic>).add('Opcion 1');
+      if (!sub.containsKey('optionsFrom')) {
+        if (sub['options'] is! List<dynamic>) {
+          sub['options'] = <dynamic>['Opcion 1'];
+        }
+        if ((sub['options'] as List<dynamic>).isEmpty) {
+          (sub['options'] as List<dynamic>).add('Opcion 1');
+        }
+      } else {
+        sub.remove('options');
       }
     } else {
       sub['text'] = (sub['text'] ?? '').toString();
@@ -790,7 +809,14 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                           await _showRestrictionsEditor();
                           setModalState(() {});
                         },
-                        child: Text('Editar restricciones'),
+                        child: Text('Restricciones'),
+                      ),
+                      CupertinoButton(
+                        onPressed: () async {
+                          await _showGlobalCatalogsEditor();
+                          setModalState(() {});
+                        },
+                        child: Text('Catálogos'),
                       ),
                       Spacer(),
                       CupertinoButton.filled(
@@ -885,6 +911,286 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                     },
                     child: Text('Listo'),
                   ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showGlobalCatalogsEditor() async {
+    if (_template == null) return;
+    final options = _template!['options'] as Map<String, dynamic>;
+
+    await showCupertinoModalPopup<void>(
+      context: context,
+      builder: (context) => SafeArea(
+        child: StatefulBuilder(
+          builder: (context, setModalState) => Container(
+            height: 560,
+            color: CupertinoColors.systemBackground.resolveFrom(context),
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Gestor de Catálogos',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 12),
+                Expanded(
+                  child: ListView(
+                    children: options.keys.map((catalogKey) {
+                      final List<dynamic> items = options[catalogKey] is List
+                          ? options[catalogKey] as List<dynamic>
+                          : [];
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 4),
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: CupertinoColors.systemGrey6.resolveFrom(context),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    catalogKey,
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                  ),
+                                  Text(
+                                    '${items.length} elementos',
+                                    style: TextStyle(color: CupertinoColors.secondaryLabel, fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () async {
+                                final renamed = await _promptText(
+                                  title: 'Renombrar catálogo',
+                                  initial: catalogKey,
+                                  placeholder: 'Nombre del catálogo',
+                                );
+                                if (renamed == null || renamed.trim().isEmpty) return;
+                                final newKey = renamed.trim().replaceAll(RegExp(r'\s+'), '_').toLowerCase();
+                                if (newKey == catalogKey) return;
+                                if (options.containsKey(newKey)) {
+                                  if (!context.mounted) return;
+                                  await showCupertinoDialog<void>(
+                                    context: context,
+                                    builder: (context) => CupertinoAlertDialog(
+                                      title: Text('Error'),
+                                      content: Text('Ya existe un catálogo con el nombre "$newKey".'),
+                                      actions: [
+                                        CupertinoDialogAction(
+                                          onPressed: () => Navigator.pop(context),
+                                          child: Text('Aceptar'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                  return;
+                                }
+                                options[newKey] = options.remove(catalogKey);
+                                _normalizeTemplateInPlace(_template!);
+                                setModalState(() {});
+                              },
+                              child: Icon(CupertinoIcons.pencil),
+                            ),
+                            CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () async {
+                                await _showCatalogItemsEditor(catalogKey, items);
+                                setModalState(() {});
+                              },
+                              child: Icon(CupertinoIcons.list_bullet),
+                            ),
+                            CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                options.remove(catalogKey);
+                                _normalizeTemplateInPlace(_template!);
+                                setModalState(() {});
+                              },
+                              child: Icon(CupertinoIcons.delete, color: CupertinoColors.systemRed),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                Row(
+                  children: [
+                    CupertinoButton(
+                      onPressed: () async {
+                        final name = await _promptText(
+                          title: 'Nuevo catálogo',
+                          placeholder: 'ej. marcas_vehiculos',
+                        );
+                        if (name == null || name.trim().isEmpty) return;
+                        final newKey = name.trim().replaceAll(RegExp(r'\s+'), '_').toLowerCase();
+                        if (options.containsKey(newKey)) {
+                          if (!context.mounted) return;
+                          await showCupertinoDialog<void>(
+                            context: context,
+                            builder: (context) => CupertinoAlertDialog(
+                              title: Text('Error'),
+                              content: Text('Ya existe un catálogo con el nombre "$newKey".'),
+                              actions: [
+                                CupertinoDialogAction(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text('Aceptar'),
+                                ),
+                              ],
+                            ),
+                          );
+                          return;
+                        }
+                        options[newKey] = <dynamic>[];
+                        _normalizeTemplateInPlace(_template!);
+                        setModalState(() {});
+                      },
+                      child: Text('+ Agregar catálogo'),
+                    ),
+                    Spacer(),
+                    CupertinoButton.filled(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('Listo'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showCatalogItemsEditor(String catalogKey, List<dynamic> items) async {
+    await showCupertinoModalPopup<void>(
+      context: context,
+      builder: (context) => SafeArea(
+        child: StatefulBuilder(
+          builder: (context, setModalState) => Container(
+            height: 560,
+            color: CupertinoColors.systemBackground.resolveFrom(context),
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Catálogo: $catalogKey',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 10),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: items.length,
+                    itemBuilder: (context, idx) {
+                      final item = items[idx];
+                      final id = (item is Map) ? (item['id'] ?? idx) : idx;
+                      final name = (item is Map) ? (item['name'] ?? item.toString()) : item.toString();
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 4),
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: CupertinoColors.systemGrey6.resolveFrom(context),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            Text(
+                              '[$id]',
+                              style: TextStyle(fontFamily: 'monospace', color: CupertinoColors.secondaryLabel),
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                name,
+                                style: TextStyle(fontSize: 16),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () async {
+                                final newName = await _promptText(
+                                  title: 'Editar elemento',
+                                  initial: name,
+                                  placeholder: 'Nombre del elemento',
+                                );
+                                if (newName == null || newName.trim().isEmpty) return;
+                                if (item is Map) {
+                                  item['name'] = newName.trim();
+                                } else {
+                                  items[idx] = {
+                                    'id': id,
+                                    'name': newName.trim(),
+                                  };
+                                }
+                                _normalizeTemplateInPlace(_template!);
+                                setModalState(() {});
+                              },
+                              child: Icon(CupertinoIcons.pencil),
+                            ),
+                            CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                items.removeAt(idx);
+                                _normalizeTemplateInPlace(_template!);
+                                setModalState(() {});
+                              },
+                              child: Icon(CupertinoIcons.delete, color: CupertinoColors.systemRed),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Row(
+                  children: [
+                    CupertinoButton(
+                      onPressed: () async {
+                        final name = await _promptText(
+                          title: 'Agregar a $catalogKey',
+                          placeholder: 'Nombre del nuevo elemento',
+                        );
+                        if (name == null || name.trim().isEmpty) return;
+                        
+                        int maxId = -1;
+                        for (final item in items) {
+                          if (item is Map && item['id'] is int) {
+                            if (item['id'] > maxId) maxId = item['id'];
+                          }
+                        }
+                        final nextId = maxId + 1;
+
+                        items.add({
+                          'id': nextId,
+                          'name': name.trim(),
+                        });
+                        _normalizeTemplateInPlace(_template!);
+                        setModalState(() {});
+                      },
+                      child: Text('+ Agregar elemento'),
+                    ),
+                    Spacer(),
+                    CupertinoButton.filled(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('Listo'),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -1597,20 +1903,75 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                 SizedBox(height: 8),
                 if (draftType == 'input' ||
                     draftType == 'select' ||
-                    draftType == 'multiple')
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () async {
-                      await _showOptionsEditor(
-                        draftOptions,
-                        requiredAtLeastOne:
-                            draftType == 'select' || draftType == 'multiple',
-                        title: 'Opciones (options)',
+                    draftType == 'multiple') ...[
+                  GestureDetector(
+                    onTap: () async {
+                      final optionsMap = (_template!['options'] as Map<String, dynamic>? ?? {});
+                      final catalogKeys = optionsMap.keys.toList();
+                      await showCupertinoModalPopup<void>(
+                        context: context,
+                        builder: (context) => CupertinoActionSheet(
+                          title: Text('Enlazar catálogo (optionsFrom)'),
+                          actions: [
+                            CupertinoActionSheetAction(
+                              onPressed: () {
+                                draft.remove('optionsFrom');
+                                setModalState(() {});
+                                Navigator.pop(context);
+                              },
+                              child: Text('Ninguno (Opciones locales)'),
+                            ),
+                            for (final key in catalogKeys)
+                              CupertinoActionSheetAction(
+                                onPressed: () {
+                                  draft['optionsFrom'] = key;
+                                  draftOptions.clear();
+                                  setModalState(() {});
+                                  Navigator.pop(context);
+                                },
+                                child: Text(key),
+                              ),
+                          ],
+                          cancelButton: CupertinoActionSheetAction(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text('Cancelar'),
+                          ),
+                        ),
                       );
-                      setModalState(() {});
                     },
-                    child: Text('Editar opciones (${draftOptions.length})'),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      margin: EdgeInsets.only(top: 8),
+                      decoration: BoxDecoration(
+                        color: CupertinoColors.systemGrey6.resolveFrom(context),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(draft['optionsFrom'] != null
+                              ? 'Catálogo: ${draft['optionsFrom']}'
+                              : 'Catálogo: Ninguno (Opciones locales)'),
+                          Icon(CupertinoIcons.chevron_down),
+                        ],
+                      ),
+                    ),
                   ),
+                  if (draft['optionsFrom'] == null)
+                    CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () async {
+                        await _showOptionsEditor(
+                          draftOptions,
+                          requiredAtLeastOne:
+                              draftType == 'select' || draftType == 'multiple',
+                          title: 'Opciones (options)',
+                        );
+                        setModalState(() {});
+                      },
+                      child: Text('Editar opciones (${draftOptions.length})'),
+                    ),
+                ],
                 if (draftType == 'tuple')
                   CupertinoButton(
                     padding: EdgeInsets.zero,
@@ -1717,9 +2078,14 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                           if (draftType == 'input' ||
                               draftType == 'select' ||
                               draftType == 'multiple') {
-                            draft['options'] = List<dynamic>.from(draftOptions);
+                            if (draft['optionsFrom'] != null) {
+                              draft.remove('options');
+                            } else {
+                              draft['options'] = List<dynamic>.from(draftOptions);
+                            }
                           } else {
                             draft.remove('options');
+                            draft.remove('optionsFrom');
                           }
 
                           if (draftType == 'tuple') {
@@ -2370,7 +2736,7 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                       builder: (context) => CupertinoActionSheet(
                         title: Text('Tipo de subcampo (type)'),
                         actions: [
-                          for (final t in ['input', 'multiple', 'text'])
+                          for (final t in ['input', 'multiple', 'text', 'select'])
                             CupertinoActionSheetAction(
                               onPressed: () {
                                 subType = t;
@@ -2475,19 +2841,76 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                     ),
                   ),
                 ],
-                if (subType == 'input' || subType == 'multiple')
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () async {
-                      await _showOptionsEditor(
-                        draftOptions,
-                        requiredAtLeastOne: subType == 'multiple',
-                        title: 'Opciones (options)',
+                if (subType == 'input' ||
+                    subType == 'multiple' ||
+                    subType == 'select') ...[
+                  GestureDetector(
+                    onTap: () async {
+                      final optionsMap = (_template!['options'] as Map<String, dynamic>? ?? {});
+                      final catalogKeys = optionsMap.keys.toList();
+                      await showCupertinoModalPopup<void>(
+                        context: context,
+                        builder: (context) => CupertinoActionSheet(
+                          title: Text('Enlazar catálogo (optionsFrom)'),
+                          actions: [
+                            CupertinoActionSheetAction(
+                              onPressed: () {
+                                draft.remove('optionsFrom');
+                                setModalState(() {});
+                                Navigator.pop(context);
+                              },
+                              child: Text('Ninguno (Opciones locales)'),
+                            ),
+                            for (final key in catalogKeys)
+                              CupertinoActionSheetAction(
+                                onPressed: () {
+                                  draft['optionsFrom'] = key;
+                                  draftOptions.clear();
+                                  setModalState(() {});
+                                  Navigator.pop(context);
+                                },
+                                child: Text(key),
+                              ),
+                          ],
+                          cancelButton: CupertinoActionSheetAction(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text('Cancelar'),
+                          ),
+                        ),
                       );
-                      setModalState(() {});
                     },
-                    child: Text('Editar opciones (${draftOptions.length})'),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      margin: EdgeInsets.only(top: 8),
+                      decoration: BoxDecoration(
+                        color: CupertinoColors.systemGrey6.resolveFrom(context),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(draft['optionsFrom'] != null
+                              ? 'Catálogo: ${draft['optionsFrom']}'
+                              : 'Catálogo: Ninguno (Opciones locales)'),
+                          Icon(CupertinoIcons.chevron_down),
+                        ],
+                      ),
+                    ),
                   ),
+                  if (draft['optionsFrom'] == null)
+                    CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () async {
+                        await _showOptionsEditor(
+                          draftOptions,
+                          requiredAtLeastOne: subType == 'multiple' || subType == 'select',
+                          title: 'Opciones (options)',
+                        );
+                        setModalState(() {});
+                      },
+                      child: Text('Editar opciones (${draftOptions.length})'),
+                    ),
+                ],
                 Spacer(),
                 Row(
                   children: [
@@ -2506,10 +2929,19 @@ class _ServiceTemplateMakerState extends State<ServiceTemplateMaker> {
                             draft['text'] = textController.text;
                             draft.remove('inputType');
                             draft.remove('options');
+                            draft.remove('optionsFrom');
                           } else {
                             draft.remove('text');
-                            draft['inputType'] = subInputType;
-                            draft['options'] = draftOptions;
+                            if (subType == 'input' || subType == 'multiple') {
+                              draft['inputType'] = subInputType;
+                            } else {
+                              draft.remove('inputType');
+                            }
+                            if (draft['optionsFrom'] != null) {
+                              draft.remove('options');
+                            } else {
+                              draft['options'] = draftOptions;
+                            }
                           }
 
                           _normalizeTupleSubfieldInPlace(draft);
