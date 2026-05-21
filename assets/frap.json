@@ -10,139 +10,343 @@
     "supplies": [
         {
             "id": 0,
-            "nombre": "BOLSA VÁLVULA MASCARILLA ADULTA"
+            "nombre": "BOLSA VÁLVULA MASCARILLA ADULTA",
+            "category": "simple"
         },
         {
             "id": 1,
-            "nombre": "FILTRO VIRAL PARA BVM"
+            "nombre": "FILTRO VIRAL PARA BVM",
+            "category": "simple"
         },
         {
             "id": 2,
-            "nombre": "CANULAS NASOFARÍNGEA #9"
+            "nombre": "CANULAS NASOFARÍNGEA #9",
+            "category": "simple"
         },
         {
             "id": 3,
-            "nombre": "GEL LUBRICANTE HIDROSOLUBLE"
+            "nombre": "GEL LUBRICANTE HIDROSOLUBLE",
+            "category": "simple"
         },
         {
             "id": 4,
-            "nombre": "OXÍGENO DE TANQUE TIPO D 360 L"
+            "nombre": "OXÍGENO DE TANQUE TIPO D 360 L",
+            "category": "simple"
         },
         {
             "id": 5,
-            "nombre": "CANULA RÍGIDA DE SUCCIÓN"
+            "nombre": "CANULA RÍGIDA DE SUCCIÓN",
+            "category": "simple"
         },
         {
             "id": 6,
-            "nombre": "LÍNEA DE SUCCIÓN"
+            "nombre": "LÍNEA DE SUCCIÓN",
+            "category": "simple"
         },
         {
             "id": 7,
-            "nombre": "PARCHES ADULTO PARA DAE"
+            "nombre": "PARCHES ADULTO PARA DAE",
+            "category": "simple"
         },
         {
             "id": 8,
-            "nombre": "TIJERAS DE USO RUDO"
+            "nombre": "TIJERAS DE USO RUDO",
+            "category": "simple"
         },
         {
             "id": 9,
-            "nombre": "GUANTES DE NITRILO L"
+            "nombre": "GUANTES DE NITRILO L",
+            "category": "simple"
         },
         {
             "id": 10,
-            "nombre": "CUBRE BOCAS SIMPLES"
+            "nombre": "CUBRE BOCAS SIMPLES",
+            "category": "simple"
         },
         {
             "id": 11,
-            "nombre": "CUBRE BOCAS N#95"
+            "nombre": "CUBRE BOCAS N#95",
+            "category": "simple"
         },
         {
             "id": 12,
-            "nombre": "SOLUCIÓN SALINA 0.9% DE 250 CC"
+            "nombre": "SOLUCIÓN SALINA 0.9% DE 250 CC",
+            "category": "simple"
         },
         {
             "id": 13,
-            "nombre": "NORMOGOTERO"
+            "nombre": "NORMOGOTERO",
+            "category": "simple"
         },
         {
             "id": 14,
-            "nombre": "CÁTETER INTRAVENOSO # 18"
+            "nombre": "CÁTETER INTRAVENOSO # 18",
+            "category": "simple"
         },
         {
             "id": 15,
-            "nombre": "LIGADURA"
+            "nombre": "LIGADURA",
+            "category": "simple"
         },
         {
             "id": 16,
-            "nombre": "TORUNDA DE ALCOHOL"
+            "nombre": "TORUNDA DE ALCOHOL",
+            "category": "simple"
         },
         {
             "id": 17,
-            "nombre": "TEKA DYRAOIRE 2,5 CM"
+            "nombre": "TEKA DYRAOIRE 2,5 CM",
+            "category": "simple"
         },
         {
             "id": 18,
-            "nombre": "TURA REACTUVA DE GLUCOMETRÍA"
+            "nombre": "TURA REACTUVA DE GLUCOMETRÍA",
+            "category": "simple"
         },
         {
             "id": 19,
-            "nombre": "LANCETA"
+            "nombre": "LANCETA",
+            "category": "simple"
         },
         {
             "id": 20,
-            "nombre": "CATÉTER IO"
+            "nombre": "CATÉTER IO",
+            "category": "simple"
         },
         {
             "id": 21,
-            "nombre": "NALOXONA INTRANASAL"
+            "nombre": "NALOXONA INTRANASAL",
+            "category": "simple"
         },
         {
             "id": 22,
-            "nombre": "SELLO TORÁXICO P/HERIDA SUCCIÓN"
+            "nombre": "SELLO TORÁXICO P/HERIDA SUCCIÓN",
+            "category": "simple"
         },
         {
             "id": 23,
-            "nombre": "TAPE GRIS MULTI-USOS"
+            "nombre": "TAPE GRIS MULTI-USOS",
+            "category": "simple"
         },
         {
             "id": 24,
-            "nombre": "TORNIQUETE TÁCTICO DE EXTREMIDADES"
+            "nombre": "TORNIQUETE TÁCTICO DE EXTREMIDADES",
+            "category": "simple"
         },
         {
             "id": 25,
-            "nombre": "VENDAJE HEMOSTÁTICO"
+            "nombre": "VENDAJE HEMOSTÁTICO",
+            "category": "simple"
         },
         {
             "id": 26,
-            "nombre": "VENDA ELÁSTICA DE 10 CM"
+            "nombre": "VENDA ELÁSTICA DE 10 CM",
+            "category": "simple"
         },
         {
             "id": 27,
-            "nombre": "VENDA ELÁSTICA DE 5 CM"
+            "nombre": "VENDA ELÁSTICA DE 5 CM",
+            "category": "simple"
         },
         {
             "id": 28,
-            "nombre": "APÓSITOS ESTERILES"
+            "nombre": "APÓSITOS ESTERILES",
+            "category": "simple"
         },
         {
             "id": 29,
-            "nombre": "APÓSITOS SIMPLES"
+            "nombre": "APÓSITOS SIMPLES",
+            "category": "simple"
         },
         {
             "id": 30,
-            "nombre": "GASAS SIMPLES 4x4"
+            "nombre": "GASAS SIMPLES 4x4",
+            "category": "simple"
         },
         {
             "id": 31,
-            "nombre": "APÓSITO MULTITRAUMA"
+            "nombre": "APÓSITO MULTITRAUMA",
+            "category": "simple"
         },
         {
             "id": 32,
-            "nombre": "AGUA PARA IRRIGAR HERIDAS / OJOS"
+            "nombre": "AGUA PARA IRRIGAR HERIDAS / OJOS",
+            "category": "simple"
         },
         {
             "id": 33,
-            "nombre": "FERULA DE CARTÓN"
+            "nombre": "FERULA DE CARTÓN",
+            "category": "simple"
+        },
+        {
+            "id": 34,
+            "nombre": "TUBO TRAQUEAL # 8.5",
+            "category": "advanced"
+        },
+        {
+            "id": 35,
+            "nombre": "BUGGIE INTERCAMBIADOR",
+            "category": "advanced"
+        },
+        {
+            "id": 36,
+            "nombre": "DETECTOR DE CAPNOMETRÍA PARA T. T.",
+            "category": "advanced"
+        },
+        {
+            "id": 37,
+            "nombre": "FIJADOR DE TUBO TRAQUEAL ADULTO",
+            "category": "advanced"
+        },
+        {
+            "id": 38,
+            "nombre": "ELECTRODOS ADULTO PARA MONITOR EKG",
+            "category": "advanced"
+        },
+        {
+            "id": 39,
+            "nombre": "GEL ELECTROCONDUCTOR P/ DESFIBRILAR",
+            "category": "advanced"
+        },
+        {
+            "id": 40,
+            "nombre": "MICROGOTERO",
+            "category": "advanced"
+        },
+        {
+            "id": 41,
+            "nombre": "CATÉTER INTRAÓSEO 45 MM",
+            "category": "advanced"
+        },
+        {
+            "id": 42,
+            "nombre": "MASCARILLA LARÍNGEA # 5 70 A 100 KG",
+            "category": "advanced"
+        },
+        {
+            "id": 43,
+            "nombre": "TUBO LARÍNGEO 4 ROJO 155-180 CM",
+            "category": "advanced"
+        },
+        {
+            "id": 44,
+            "nombre": "KIT DE CRICOTIROTOMÍA",
+            "category": "advanced"
+        },
+        {
+            "id": 45,
+            "nombre": "CATÉTER P/DESCOMPRESIÓN TORÁXICA",
+            "category": "advanced"
+        },
+        {
+            "id": 46,
+            "nombre": "EPINEFRINA",
+            "category": "advanced"
+        },
+        {
+            "id": 47,
+            "nombre": "ÁCIDO TRANEXÁMICO",
+            "category": "advanced"
+        },
+        {
+            "id": 48,
+            "nombre": "NOREPINEFRINA",
+            "category": "advanced"
+        },
+        {
+            "id": 49,
+            "nombre": "NABULFINA",
+            "category": "advanced"
+        },
+        {
+            "id": 50,
+            "nombre": "FENTANILO",
+            "category": "advanced"
+        },
+        {
+            "id": 51,
+            "nombre": "ISOSORBIDE",
+            "category": "advanced"
+        },
+        {
+            "id": 52,
+            "nombre": "ÁCIDO ACETILSALICÍLICO",
+            "category": "advanced"
+        },
+        {
+            "id": 53,
+            "nombre": "GLUCAGÓN",
+            "category": "advanced"
+        },
+        {
+            "id": 54,
+            "nombre": "ATRIOUBA",
+            "category": "advanced"
+        },
+        {
+            "id": 55,
+            "nombre": "LIDOCAÍNA AL 2%",
+            "category": "advanced"
+        },
+        {
+            "id": 56,
+            "nombre": "MIDAZOLAM",
+            "category": "advanced"
+        },
+        {
+            "id": 57,
+            "nombre": "DIAZEPAM",
+            "category": "advanced"
+        },
+        {
+            "id": 58,
+            "nombre": "VECURONIO",
+            "category": "advanced"
+        },
+        {
+            "id": 59,
+            "nombre": "KETOROLACO",
+            "category": "advanced"
+        },
+        {
+            "id": 60,
+            "nombre": "PARACETAMOL",
+            "category": "advanced"
+        },
+        {
+            "id": 61,
+            "nombre": "ONDACENTRON",
+            "category": "advanced"
+        },
+        {
+            "id": 62,
+            "nombre": "DIFENHIDRAMINA",
+            "category": "advanced"
+        },
+        {
+            "id": 63,
+            "nombre": "ALBUTEROL",
+            "category": "advanced"
+        },
+        {
+            "id": 64,
+            "nombre": "SULFATO DE MAGNESIO",
+            "category": "advanced"
+        },
+        {
+            "id": 65,
+            "nombre": "DEXTROSA 50%",
+            "category": "advanced"
+        },
+        {
+            "id": 66,
+            "nombre": "NALOXONA 0.4 MG",
+            "category": "advanced"
+        },
+        {
+            "id": 67,
+            "nombre": "DOPAMINA",
+            "category": "advanced"
         }
     ],
     "fields": {
