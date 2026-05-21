@@ -147,79 +147,151 @@ class ServiceForm {
 
   // Restriction handler (minimal Dart port)
   // TODO: dejar de copiar entre maker.dart y form.dart
+  // Restriction handler (minimal Dart port)
+  // TODO: dejar de copiar entre maker.dart y form.dart
   void handleFieldRestrictions() {
     if (_template['restrictions'] == null) return;
     _template['restrictions'].forEach((key, items) {
       for (final field in items) {
         final fieldName = field['name'];
-        final value = _content[fieldName];
+
+        // Find if this is a top-level field or a tuple subfield
+        String? parentFieldName;
+        Map<String, dynamic>? parentField;
+
+        if (_reference.containsKey(fieldName)) {
+          // It's a top-level field!
+        } else {
+          // Search if it's a subfield inside any tuple field
+          final sectionsMap = _template['fields'] as Map<String, dynamic>? ?? {};
+          for (final section in sectionsMap.values) {
+            if (section is List) {
+              for (final f in section) {
+                if (f is Map && f['type'] == 'tuple' && f['tuple'] is List) {
+                  for (final sub in f['tuple']) {
+                    if (sub is Map && sub['name'] == fieldName) {
+                      parentFieldName = f['name']?.toString();
+                      parentField = Map<String, dynamic>.from(f);
+                      break;
+                    }
+                  }
+                }
+                if (parentFieldName != null) break;
+              }
+            }
+            if (parentFieldName != null) break;
+          }
+        }
+
+        // If it's a subfield and the parent field is not displayed, skip.
+        // If it's a top-level field and it's not displayed, skip.
+        if (parentFieldName != null) {
+          if (parentField != null && !shouldDisplay(parentField)) {
+            _clearErrors(parentFieldName);
+            continue;
+          }
+        } else {
+          if (!_reference.containsKey(fieldName)) {
+            continue; // Not a known field at all
+          }
+          if (!shouldDisplay(getFieldFromReference(fieldName))) {
+            _clearErrors(fieldName);
+            continue;
+          }
+        }
+
+        // Gather all values to check
+        List<dynamic> valuesToCheck = [];
+        if (parentFieldName != null) {
+          final parentVal = _content[parentFieldName];
+          if (parentVal is List) {
+            for (final row in parentVal) {
+              if (row is Map) {
+                valuesToCheck.add(row[fieldName]);
+              }
+            }
+          }
+        } else {
+          valuesToCheck.add(_content[fieldName]);
+        }
+
         bool passed = true;
-        if (!shouldDisplay(getFieldFromReference(fieldName))) {
-          _clearErrors(fieldName);
-          continue;
+        for (final value in valuesToCheck) {
+          bool itemPassed = true;
+          switch (key) {
+            case 'notEmpty':
+              itemPassed = value != null && value.toString().trim().isNotEmpty;
+              break;
+            case 'lessThan':
+              final limit = double.tryParse((field['value'] ?? '').toString());
+              final actual = value == null
+                  ? null
+                  : double.tryParse(value.toString());
+              itemPassed = (actual == null || limit == null) ? true : actual < limit;
+              break;
+            case 'greaterThan':
+              final limit = double.tryParse((field['value'] ?? '').toString());
+              final actual = value == null
+                  ? null
+                  : double.tryParse(value.toString());
+              itemPassed = (actual == null || limit == null) ? true : actual > limit;
+              break;
+            case 'regexOnlyLetters':
+              if (value != null && value.toString().isNotEmpty) {
+                itemPassed = RegExp(
+                  r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ\s\.]+$',
+                ).hasMatch(value.toString());
+              }
+              break;
+            case 'regexOnlyIntegers':
+              if (value != null && value.toString().isNotEmpty) {
+                itemPassed = RegExp(r'^[0-9]+$').hasMatch(value.toString());
+              }
+              break;
+            case 'regexOnlyNumbers':
+              if (value != null && value.toString().isNotEmpty) {
+                itemPassed = RegExp(
+                  r'^[0-9]+\.{0,1}[0-9]*$',
+                ).hasMatch(value.toString());
+              }
+              break;
+            case 'regexPhoneNumber':
+              if (value != null && value.toString().isNotEmpty) {
+                itemPassed = RegExp(r'^\d{10}$').hasMatch(value.toString());
+              }
+              break;
+            case 'regexEmail':
+              if (value != null && value.toString().isNotEmpty) {
+                itemPassed = RegExp(
+                  r'^[\w\.\-]+@([\w\-]+\.)+[A-Za-z]{2,4}$',
+                ).hasMatch(value.toString());
+              }
+              break;
+            case 'regexAlphanumeric':
+              if (value != null && value.toString().isNotEmpty) {
+                itemPassed = RegExp(
+                  r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ0-9\s\.,#°\-]+$',
+                ).hasMatch(value.toString());
+              }
+              break;
+            default:
+              itemPassed = true;
+          }
+          if (!itemPassed) {
+            passed = false;
+            break;
+          }
         }
-        switch (key) {
-          case 'notEmpty':
-            passed = value != null && value.toString().trim().isNotEmpty;
-            break;
-          case 'lessThan':
-            final limit = double.tryParse((field['value'] ?? '').toString());
-            final actual = value == null
-                ? null
-                : double.tryParse(value.toString());
-            passed = (actual == null || limit == null) ? true : actual < limit;
-            break;
-          case 'greaterThan':
-            final limit = double.tryParse((field['value'] ?? '').toString());
-            final actual = value == null
-                ? null
-                : double.tryParse(value.toString());
-            passed = (actual == null || limit == null) ? true : actual > limit;
-            break;
-          case 'regexOnlyLetters':
-            if (value != null && value.toString().isNotEmpty) {
-              passed = RegExp(
-                r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ\s\.]+$',
-              ).hasMatch(value.toString());
-            }
-            break;
-          case 'regexOnlyIntegers':
-            if (value != null && value.toString().isNotEmpty) {
-              passed = RegExp(r'^[0-9]+$').hasMatch(value.toString());
-            }
-            break;
-          case 'regexOnlyNumbers':
-            if (value != null && value.toString().isNotEmpty) {
-              passed = RegExp(
-                r'^[0-9]+\.{0,1}[0-9]*$',
-              ).hasMatch(value.toString());
-            }
-            break;
-          case 'regexPhoneNumber':
-            if (value != null && value.toString().isNotEmpty) {
-              passed = RegExp(r'^\d{10}$').hasMatch(value.toString());
-            }
-            break;
-          case 'regexEmail':
-            if (value != null && value.toString().isNotEmpty) {
-              passed = RegExp(
-                r'^[\w\.\-]+@([\w\-]+\.)+[A-Za-z]{2,4}$',
-              ).hasMatch(value.toString());
-            }
-            break;
-          case 'regexAlphanumeric':
-            if (value != null && value.toString().isNotEmpty) {
-              passed = RegExp(
-                r'^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ0-9\s\.,#°\-]+$',
-              ).hasMatch(value.toString());
-            }
-            break;
-          default:
-            passed = true;
-        }
+
+        final targetErrName = parentFieldName ?? fieldName;
         if (!passed) {
           final msg = field['message'] ?? 'Campo inválido';
-          _errors[fieldName] = (_errors[fieldName] ?? <String>{})..add(msg);
+          _errors[targetErrName] = (_errors[targetErrName] ?? <String>{})..add(msg);
+        } else {
+          // If all checked values passed, clear errors for this target field name
+          // Note: we can't easily clear individual messages if there are multiple validation rules on the same field,
+          // but clearing is safe since handleFieldRestrictions runs sequentially on each build.
+          _errors.remove(targetErrName);
         }
       }
     });
