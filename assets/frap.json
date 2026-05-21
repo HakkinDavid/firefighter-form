@@ -1743,7 +1743,7 @@
                         "name": "insumo",
                         "type": "select",
                         "inputType": "text",
-                        "label": "Insumo / Material",
+                        "label": "Insumo",
                         "optionsFrom": "supplies"
                     },
                     {
