@@ -1744,7 +1744,7 @@
                         "type": "select",
                         "inputType": "text",
                         "label": "Insumo",
-                        "optionsFrom": "supplies"
+                        "optionsFrom": "insumos"
                     },
                     {
                         "name": "cantidad",
@@ -2108,7 +2108,7 @@
         ]
     },
     "options": {
-        "supplies": [
+        "insumos": [
             {
                 "id": 0,
                 "name": "BOLSA VÁLVULA MASCARILLA ADULTA",

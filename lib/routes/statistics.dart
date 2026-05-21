@@ -48,7 +48,7 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
       }
 
       if (_options.keys.isNotEmpty) {
-        _selectedCatalogKey = _options.keys.contains('supplies') ? 'supplies' : _options.keys.first;
+        _selectedCatalogKey = _options.keys.contains('insumos') ? 'insumos' : _options.keys.first;
       }
 
       // Collect eligible filter fields (standard non-tuple non-drawing fields with labels)
@@ -214,7 +214,7 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
     });
 
     final totalCount = countsList.fold<double>(0.0, (sum, entry) => sum + entry.value);
-    final isSupplies = _selectedCatalogKey == 'supplies';
+    final isSupplies = _selectedCatalogKey == 'insumos';
 
     return CupertinoPageScaffold(
       navigationBar: null,
@@ -827,7 +827,7 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
     });
 
     final totalCount = countsList.fold<double>(0.0, (sum, entry) => sum + entry.value);
-    final isSupplies = _selectedCatalogKey == 'supplies';
+    final isSupplies = _selectedCatalogKey == 'insumos';
 
     final title = isSupplies ? 'Reporte de Consumo e Inventario' : 'Reporte de Frecuencias de Catálogo';
     final List<String> headers = isSupplies
