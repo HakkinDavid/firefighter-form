@@ -355,7 +355,7 @@ class ServicePDF {
       filterWidgets.add(pw.SizedBox(height: 12));
     }
 
-    // Build a vector horizontal bar chart for the PDF report
+    // Build a vector horizontal bar or pie chart for the PDF report
     final List<pw.Widget> chartWidgets = [];
     if (chartType != 'none' && rows.isNotEmpty) {
       final isPie = chartType == 'pie';
@@ -385,9 +385,6 @@ class ServicePDF {
           ? 1.0
           : chartData.map((e) => e.value).reduce((a, b) => a > b ? a : b);
 
-      // Take top 6
-      final topData = chartData.take(6).toList();
-
       final List<PdfColor> donutColors = [
         PdfColor.fromInt(0xFF0F172A), // Slate Dark
         PdfColor.fromInt(0xFF3B82F6), // Indigo/Blue
@@ -399,85 +396,156 @@ class ServicePDF {
         PdfColor.fromInt(0xFF14B8A6), // Teal
       ];
 
-      for (int i = 0; i < topData.length; i++) {
-        final entry = topData[i];
-        final percentage = total > 0 ? (entry.value / total) * 100 : 0.0;
-        final barFactor = maxVal > 0 ? (entry.value / maxVal).clamp(0.0, 1.0) : 0.0;
-        final activeColor = isPie ? donutColors[i % donutColors.length] : primaryColor;
+      if (isPie) {
+        // Group data into top 6 + "Otros" to match screen donut chart behavior
+        final List<MapEntry<String, double>> displayData = [];
+        double othersSum = 0;
+        if (chartData.length <= 7) {
+          displayData.addAll(chartData);
+        } else {
+          displayData.addAll(chartData.take(6));
+          othersSum = chartData.skip(6).fold(0.0, (sum, entry) => sum + entry.value);
+          if (othersSum > 0) {
+            displayData.add(MapEntry('Otros', othersSum));
+          }
+        }
+
+        // Create Pie datasets
+        final List<pw.PieDataSet> datasets = [];
+        for (int i = 0; i < displayData.length; i++) {
+          final entry = displayData[i];
+          datasets.add(
+            pw.PieDataSet(
+              legend: entry.key,
+              value: entry.value,
+              color: donutColors[i % donutColors.length],
+            ),
+          );
+        }
 
         chartWidgets.add(
-          pw.Padding(
-            padding: const pw.EdgeInsets.symmetric(vertical: 3.0),
-            child: pw.Row(
-              children: [
-                pw.SizedBox(
-                  width: 140,
-                  child: pw.Row(
-                    children: [
-                      if (isPie) ...[
-                        pw.Container(
-                          width: 6,
-                          height: 6,
-                          decoration: pw.BoxDecoration(
-                            color: activeColor,
-                            shape: pw.BoxShape.circle,
-                          ),
-                        ),
-                        pw.SizedBox(width: 6),
-                      ],
-                      pw.Expanded(
-                        child: pw.Text(
-                          entry.key,
-                          style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold),
-                          maxLines: 1,
-                        ),
-                      ),
-                    ],
-                  ),
+          pw.Row(
+            crossAxisAlignment: pw.CrossAxisAlignment.center,
+            children: [
+              // Pie chart native vector view
+              pw.SizedBox(
+                width: 130,
+                height: 130,
+                child: pw.Chart(
+                  grid: pw.PieGrid(),
+                  datasets: datasets,
                 ),
-                pw.SizedBox(width: 12),
-                pw.Expanded(
-                  child: pw.Container(
-                    height: 8,
-                    decoration: pw.BoxDecoration(
-                      color: PdfColors.grey200,
-                      borderRadius: pw.BorderRadius.circular(4),
-                    ),
-                    child: pw.Row(
-                      children: [
-                        if (barFactor > 0)
-                          pw.Expanded(
-                            flex: (barFactor * 1000).toInt(),
-                            child: pw.Container(
-                              height: 8,
-                              decoration: pw.BoxDecoration(
-                                color: activeColor,
-                                borderRadius: pw.BorderRadius.circular(4),
-                              ),
+              ),
+              pw.SizedBox(width: 30),
+              // Interactive Legend list on the right
+              pw.Expanded(
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  mainAxisSize: pw.MainAxisSize.min,
+                  children: List.generate(displayData.length, (index) {
+                    final entry = displayData[index];
+                    final pct = total > 0 ? (entry.value / total) * 100 : 0.0;
+                    final color = donutColors[index % donutColors.length];
+
+                    return pw.Padding(
+                      padding: const pw.EdgeInsets.symmetric(vertical: 2.0),
+                      child: pw.Row(
+                        children: [
+                          pw.Container(
+                            width: 6,
+                            height: 6,
+                            decoration: pw.BoxDecoration(
+                              color: color,
+                              shape: pw.BoxShape.circle,
                             ),
                           ),
-                        if (1 - barFactor > 0)
+                          pw.SizedBox(width: 8),
                           pw.Expanded(
-                            flex: ((1 - barFactor) * 1000).toInt(),
-                            child: pw.SizedBox(),
+                            child: pw.Text(
+                              entry.key,
+                              style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold),
+                              maxLines: 1,
+                            ),
                           ),
-                      ],
-                    ),
-                  ),
+                          pw.SizedBox(width: 8),
+                          pw.Text(
+                            "${entry.value.toStringAsFixed(0)} (${pct.toStringAsFixed(1)}%)",
+                            style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: PdfColors.grey700),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
                 ),
-                pw.SizedBox(width: 12),
-                pw.SizedBox(
-                  width: 70,
-                  child: pw.Text(
-                    "${entry.value.toStringAsFixed(0)} (${percentage.toStringAsFixed(1)}%)",
-                    style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: PdfColors.grey700),
-                    textAlign: pw.TextAlign.right,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
+      } else {
+        // Standard Bar Chart: unified primary color and labels
+        final topData = chartData.take(6).toList();
+        for (int i = 0; i < topData.length; i++) {
+          final entry = topData[i];
+          final percentage = total > 0 ? (entry.value / total) * 100 : 0.0;
+          final barFactor = maxVal > 0 ? (entry.value / maxVal).clamp(0.0, 1.0) : 0.0;
+
+          chartWidgets.add(
+            pw.Padding(
+              padding: const pw.EdgeInsets.symmetric(vertical: 3.0),
+              child: pw.Row(
+                children: [
+                  pw.SizedBox(
+                    width: 140,
+                    child: pw.Text(
+                      entry.key,
+                      style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold),
+                      maxLines: 1,
+                    ),
+                  ),
+                  pw.SizedBox(width: 12),
+                  pw.Expanded(
+                    child: pw.Container(
+                      height: 8,
+                      decoration: pw.BoxDecoration(
+                        color: PdfColors.grey200,
+                        borderRadius: pw.BorderRadius.circular(4),
+                      ),
+                      child: pw.Row(
+                        children: [
+                          if (barFactor > 0)
+                            pw.Expanded(
+                              flex: (barFactor * 1000).toInt(),
+                              child: pw.Container(
+                                height: 8,
+                                decoration: pw.BoxDecoration(
+                                  color: primaryColor,
+                                  borderRadius: pw.BorderRadius.circular(4),
+                                ),
+                              ),
+                            ),
+                          if (1 - barFactor > 0)
+                            pw.Expanded(
+                              flex: ((1 - barFactor) * 1000).toInt(),
+                              child: pw.SizedBox(),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  pw.SizedBox(width: 12),
+                  pw.SizedBox(
+                    width: 70,
+                    child: pw.Text(
+                      "${entry.value.toStringAsFixed(0)} (${percentage.toStringAsFixed(1)}%)",
+                      style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: PdfColors.grey700),
+                      textAlign: pw.TextAlign.right,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
       }
       chartWidgets.add(pw.SizedBox(height: 20));
     }
