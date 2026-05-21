@@ -935,7 +935,7 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
     final isSupplies = _selectedCatalogKey == 'insumos';
 
     final title = isSupplies ? 'Reporte de Consumo e Inventario' : 'Reporte de Frecuencias de Catálogo';
-    final List<String> headers = ['ELEMENTO / INSUMO', 'CANTIDAD / FRECUENCIA', 'PORCENTAJE (%)'];
+    final List<String> headers = ['INSUMO', 'CANTIDAD', 'PORCENTAJE'];
 
     final List<List<String>> rows = [];
     for (final entry in countsList) {
