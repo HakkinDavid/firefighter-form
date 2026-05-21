@@ -492,7 +492,7 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                           Expanded(
                             flex: 3,
                             child: Text(
-                              isSupplies ? 'Material / Insumo' : 'Elemento de Catálogo',
+                              isSupplies ? 'Insumo' : 'Elemento de Catálogo',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Settings.instance.colors.textOverPrimary,
@@ -831,7 +831,7 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
 
     final title = isSupplies ? 'Reporte de Consumo e Inventario' : 'Reporte de Frecuencias de Catálogo';
     final List<String> headers = isSupplies
-        ? ['MATERIAL / INSUMO', 'CONSUMIDO', 'STOCK INICIAL', 'EXISTENCIA ACTUAL']
+        ? ['INSUMO', 'CONSUMIDO', 'STOCK INICIAL', 'EXISTENCIA ACTUAL']
         : ['ELEMENTO', 'FRECUENCIA', 'PORCENTAJE (%)'];
 
     final List<List<String>> rows = [];
