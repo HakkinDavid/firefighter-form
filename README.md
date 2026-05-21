@@ -124,3 +124,83 @@ RNF-07. Mantenibilidad y Actualización (Prioridad: Sí)
 
 RNF-08. Respaldo y Recuperación (Prioridad: Sí)
     - Asegurar respaldo de datos y mecanismos de recuperación ante pérdidas de credenciales o del dispositivo.
+
+
+Instrucciones de instalación y ejecución
+----------------------------
+1. Ir a [https://github.com/HakkinDavid/firefighter-form/releases/latest](https://github.com/HakkinDavid/firefighter-form/releases/latest).
+2. Descargar el ejecutable para la plataforma deseada (Windows o Android).
+3. Instalar.
+4. Abrir el app.
+5. Crear una cuenta o iniciar sesión.
+6. Crear formularios.
+
+
+Tecnologías utilizadas
+----------------------------
+- Flutter
+  - SDK
+  - cupertino_icons: ^1.0.8
+  - supabase_flutter: ^2.10.1
+  - path_provider: ^2.1.5
+  - uuid: ^4.5.1
+  - flutter_svg: ^2.2.1
+  - pdf: ^3.10.7
+  - printing: ^5.13.1
+  - open_filex: ^4.4.0
+  - mutex: ^3.1.0
+  - package_info_plus: ^9.0.0
+- PostgreSQL
+
+
+Estructura general
+----------------------------
+lib
+├── main.dart
+├── models
+│   ├── SRE
+│   │   ├── Heuristic
+│   │   │   ├── connection_heuristic.dart
+│   │   │   ├── disk_heuristic.dart
+│   │   │   └── heuristic.dart
+│   │   ├── Task
+│   │   │   └── task.dart
+│   │   └── service_reliability_engineer.dart
+│   ├── form.dart
+│   ├── logging.dart
+│   ├── pdf_renderer.dart
+│   ├── settings.dart
+│   └── user.dart
+├── routes
+│   ├── console.dart
+│   ├── form.dart
+│   ├── home.dart
+│   ├── maker.dart
+│   ├── preferences.dart
+│   ├── search.dart
+│   ├── statistics.dart
+│   ├── users_panel.dart
+│   └── welcome.dart
+└── viewmodels
+    ├── canvas.dart
+    ├── dynamic_field_renderer.dart
+    ├── fields
+    │   ├── checkbox_multiple_field.dart
+    │   ├── date_input_field.dart
+    │   ├── drawing_board_field.dart
+    │   ├── input_field.dart
+    │   ├── multiple_input_field.dart
+    │   ├── number_input_field.dart
+    │   ├── options_input_field.dart
+    │   ├── predictive_text_select_field.dart
+    │   ├── radio_multiple_field.dart
+    │   ├── select_field.dart
+    │   ├── text_display_field.dart
+    │   ├── text_input_field.dart
+    │   ├── textarea_field.dart
+    │   ├── time_input_field.dart
+    │   └── tuple_field.dart
+    ├── form_list.dart
+    ├── header.dart
+    ├── overlay_service.dart
+    └── users_list.dart
