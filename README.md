@@ -124,16 +124,3 @@ RNF-07. Mantenibilidad y Actualización (Prioridad: Sí)
 
 RNF-08. Respaldo y Recuperación (Prioridad: Sí)
     - Asegurar respaldo de datos y mecanismos de recuperación ante pérdidas de credenciales o del dispositivo.
-
-RNF-09. Accesibilidad (Prioridad: No)
-    - Considerar buenas prácticas para accesibilidad de usuarios con discapacidad.
-
-
-Próximos Pasos
---------------
-1. Solicitar y recibir de bomberos el formulario final y padrones de insumos/listas a digitalizar.
-2. Definir el Mínimo Producto Viable (MVP) para la primera versión de la aplicación.
-3. Diseñar el prototipo del sistema, incluyendo la estructura del formulario digital y las interfaces principales.
-4. Validar con bomberos que los campos del formulario y funcionalidades cumplen con los requerimientos establecidos.
-5. Explorar y definir opciones de almacenamiento y sincronización considerando las restricciones de conectividad.
-6. Programar una reunión de seguimiento para revisar avances, resolver dudas y ajustar el alcance según necesidades detectadas.
