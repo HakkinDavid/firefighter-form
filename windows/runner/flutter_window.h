@@ -5,6 +5,7 @@
 #include <flutter/flutter_view_controller.h>
 
 #include <memory>
+#include <string>
 
 #include "win32_window.h"
 
@@ -28,6 +29,10 @@ class FlutterWindow : public Win32Window {
 
   // The Flutter instance hosted by this window.
   std::unique_ptr<flutter::FlutterViewController> flutter_controller_;
+
+  std::string latest_version_;
+  std::string latest_changelog_;
+  std::string latest_windows_url_;
 };
 
 #endif  // RUNNER_FLUTTER_WINDOW_H_

@@ -29,7 +29,7 @@ class ServiceReliabilityEngineer {
   final List<(String, Map<String, dynamic> Function()?)> _writeQueue = [];
   final _busy = Mutex();
 
-  static final _platform = Platform.isAndroid
+  static final _platform = Platform.isAndroid || Platform.isWindows
       ? const MethodChannel('mx.cetys.bomberos/low_level')
       : null;
 
@@ -103,7 +103,7 @@ class ServiceReliabilityEngineer {
       "SyncForms",
       "UpdateTemplate",
       "IsUpdateAvailable",
-      "RefreshUsers"
+      "RefreshUsers",
     });
 
     ServiceReliabilityEngineer.startTimer();
@@ -192,7 +192,7 @@ class ServiceReliabilityEngineer {
   Future<void> _isUpdateAvailable() async {
     if (_platform == null) {
       Logging(
-        "El dispositivo no es Android. Saliendo de la función...",
+        "El dispositivo no soporta actualizaciones automáticas. Saliendo de la función...",
         caller: "SRE (_isUpdateAvailable)",
       );
       return;
@@ -279,7 +279,7 @@ class ServiceReliabilityEngineer {
                     );
                     OverlayService.closeCurrentOverlay();
                     enqueueTasks({"SaveToDisk", "UpdateApp"});
-                    },
+                  },
                   color: Settings.instance.colors.primaryContrastDark,
                   child: const Text('Actualizar'),
                 ),
@@ -294,7 +294,7 @@ class ServiceReliabilityEngineer {
   Future<void> _updateApp() async {
     if (_platform == null) {
       Logging(
-        "El dispositivo no es Android. Saliendo de la función...",
+        "El dispositivo no soporta actualizaciones automáticas. Saliendo de la función...",
         caller: "SRE (_updateApp)",
       );
       return;
@@ -352,7 +352,8 @@ class ServiceReliabilityEngineer {
           final Map<String, dynamic> userDataMap = jsonDecode(userDataString);
 
           Settings.instance.userId = userDataMap['userId'];
-          Settings.instance.allowDebugging = userDataMap['allowDebugging'] ?? false;
+          Settings.instance.allowDebugging =
+              userDataMap['allowDebugging'] ?? false;
 
           Logging(
             "Actualizado Settings.instance.userId: ${Settings.instance.userId}",

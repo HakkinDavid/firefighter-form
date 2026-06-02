@@ -120,6 +120,35 @@ jobs:
             cp artifacts/windows/* release/ || true
           fi
 
+      - name: 🧾 Write release metadata
+        if: ${{ steps.runs.outputs.android_run_id != '' || steps.runs.outputs.windows_run_id != '' }}
+        env:
+          LATEST_VERSION: ${{ steps.vars.outputs.version }}
+          CHANGELOG: ${{ steps.commit.outputs.message }}
+        run: |
+          APK_URL=""
+          WINDOWS_URL=""
+
+          if [ -f release/bomberos-android-release.apk ]; then
+            APK_URL="https://github.com/HakkinDavid/firefighter-form/releases/latest/download/bomberos-android-release.apk"
+          fi
+
+          if [ -f release/bomberos-windows-release.zip ]; then
+            WINDOWS_URL="https://github.com/HakkinDavid/firefighter-form/releases/latest/download/bomberos-windows-release.zip"
+          fi
+
+          jq -n \
+            --arg latest_version "$LATEST_VERSION" \
+            --arg changelog "$CHANGELOG" \
+            --arg apk_url "$APK_URL" \
+            --arg windows_url "$WINDOWS_URL" \
+            '{
+              latest_version: $latest_version,
+              changelog: $changelog,
+              apk_url: $apk_url,
+              windows_url: $windows_url
+            }' > release/metadata.json
+
       - name: ✅ Check collected files
         if: ${{ steps.runs.outputs.android_run_id != '' || steps.runs.outputs.windows_run_id != '' }}
         id: files
