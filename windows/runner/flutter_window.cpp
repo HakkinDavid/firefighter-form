@@ -40,6 +40,25 @@ std::wstring Utf16FromUtf8(const std::string& utf8_string) {
   return utf16_string;
 }
 
+std::string Utf8FromUtf16(const std::wstring& utf16_string) {
+  if (utf16_string.empty()) {
+    return std::string();
+  }
+  int target_length =
+      ::WideCharToMultiByte(CP_UTF8, 0, utf16_string.c_str(),
+                            (int)utf16_string.size(), nullptr, 0, nullptr,
+                            nullptr);
+  if (target_length <= 0) {
+    return std::string();
+  }
+  std::string utf8_string;
+  utf8_string.resize(target_length);
+  ::WideCharToMultiByte(CP_UTF8, 0, utf16_string.c_str(),
+                        (int)utf16_string.size(), utf8_string.data(),
+                        target_length, nullptr, nullptr);
+  return utf8_string;
+}
+
 std::wstring GetTempPathForFile(const std::wstring& filename) {
   wchar_t temp_path[MAX_PATH];
   DWORD length = ::GetTempPathW(MAX_PATH, temp_path);
@@ -125,15 +144,25 @@ bool DownloadFile(const std::wstring& url, const std::wstring& destination) {
   return SUCCEEDED(result);
 }
 
-std::wstring PowerShellSingleQuoted(const std::wstring& value) {
-  std::wstring quoted = L"'";
+std::wstring CommandLineDoubleQuoted(const std::wstring& value) {
+  std::wstring quoted = L"\"";
+  size_t backslash_count = 0;
   for (wchar_t character : value) {
-    quoted.push_back(character);
-    if (character == L'\'') {
-      quoted.push_back(L'\'');
+    if (character == L'\\') {
+      ++backslash_count;
+      continue;
     }
+
+    if (character == L'"') {
+      quoted.append(backslash_count * 2 + 1, L'\\');
+    } else {
+      quoted.append(backslash_count, L'\\');
+    }
+    backslash_count = 0;
+    quoted.push_back(character);
   }
-  quoted.push_back(L'\'');
+  quoted.append(backslash_count * 2, L'\\');
+  quoted.push_back(L'"');
   return quoted;
 }
 
@@ -142,28 +171,38 @@ bool WriteUpdaterScript(const std::wstring& script_path,
                         const std::filesystem::path& executable_path,
                         const std::wstring& zip_path,
                         DWORD current_pid) {
-  std::wofstream script(script_path.c_str(), std::ios::binary);
+  std::ofstream script(std::filesystem::path(script_path), std::ios::binary);
   if (!script) {
     return false;
   }
+  std::filesystem::path log_path =
+      app_directory / L"bomberos-windows-update.log";
 
-  std::wstring extract_path =
-      GetTempPathForFile(L"bomberos-windows-update-extracted");
-
-  script << L"$ErrorActionPreference = 'Stop'\n"
-         << L"$zip = " << PowerShellSingleQuoted(zip_path) << L"\n"
-         << L"$extract = " << PowerShellSingleQuoted(extract_path) << L"\n"
-         << L"$target = " << PowerShellSingleQuoted(app_directory.wstring())
-         << L"\n"
-         << L"$exe = " << PowerShellSingleQuoted(executable_path.wstring())
-         << L"\n"
-         << L"Wait-Process -Id " << current_pid << L"\n"
-         << L"Remove-Item $extract -Recurse -Force -ErrorAction SilentlyContinue\n"
-         << L"New-Item -ItemType Directory -Path $extract -Force | Out-Null\n"
-         << L"Expand-Archive -Path $zip -DestinationPath $extract -Force\n"
-         << L"Copy-Item -Path (Join-Path $extract '*') -Destination $target "
-            L"-Recurse -Force\n"
-         << L"Start-Process -FilePath $exe\n";
+  script << "@echo off\r\n"
+         << "setlocal\r\n"
+         << "set \"zip=" << Utf8FromUtf16(zip_path) << "\"\r\n"
+         << "set \"target=" << Utf8FromUtf16(app_directory.wstring())
+         << "\"\r\n"
+         << "set \"exe=" << Utf8FromUtf16(executable_path.wstring())
+         << "\"\r\n"
+         << "set \"log=" << Utf8FromUtf16(log_path.wstring()) << "\"\r\n"
+         << "echo Starting Windows update > \"%log%\"\r\n"
+         << "echo ZIP: %zip% >> \"%log%\"\r\n"
+         << "echo Target: %target% >> \"%log%\"\r\n"
+         << ":wait_for_app\r\n"
+         << "tasklist /FI \"PID eq " << current_pid
+         << "\" /NH 2>NUL | findstr /C:\"" << current_pid
+         << "\" >NUL\r\n"
+         << "if not errorlevel 1 (\r\n"
+         << "  timeout /T 1 /NOBREAK >NUL\r\n"
+         << "  goto wait_for_app\r\n"
+         << ")\r\n"
+         << "tar.exe -xf \"%zip%\" -C \"%target%\" >> \"%log%\" 2>&1\r\n"
+         << "if errorlevel 1 (\r\n"
+         << "  echo tar.exe failed with error %errorlevel% >> \"%log%\"\r\n"
+         << "  exit /B %errorlevel%\r\n"
+         << ")\r\n"
+         << "start \"\" \"%exe%\"\r\n";
 
   return true;
 }
@@ -249,15 +288,6 @@ bool FlutterWindow::OnCreate() {
             return;
           }
 
-          std::wstring zip_path = GetTempPathForFile(
-              Utf16FromUtf8("bomberos-windows-release-v" + latest_version_ +
-                            ".zip"));
-          if (!DownloadFile(Utf16FromUtf8(latest_windows_url_), zip_path)) {
-            result->Error("DOWNLOAD_ERROR",
-                          "No se pudo descargar la actualización de Windows.");
-            return;
-          }
-
           std::filesystem::path executable_path = CurrentExecutablePath();
           if (executable_path.empty()) {
             result->Error("UPDATE_ERROR",
@@ -265,10 +295,22 @@ bool FlutterWindow::OnCreate() {
             return;
           }
 
+          std::filesystem::path app_directory = executable_path.parent_path();
+          std::filesystem::path zip_path =
+              app_directory /
+              Utf16FromUtf8("bomberos-windows-release-v" + latest_version_ +
+                            ".zip");
+          if (!DownloadFile(Utf16FromUtf8(latest_windows_url_),
+                            zip_path.wstring())) {
+            result->Error("DOWNLOAD_ERROR",
+                          "No se pudo descargar la actualización de Windows.");
+            return;
+          }
+
           std::wstring script_path =
-              GetTempPathForFile(L"bomberos-windows-update.ps1");
-          if (!WriteUpdaterScript(script_path, executable_path.parent_path(),
-                                  executable_path, zip_path,
+              (app_directory / L"bomberos-windows-update.cmd").wstring();
+          if (!WriteUpdaterScript(script_path, app_directory,
+                                  executable_path, zip_path.wstring(),
                                   ::GetCurrentProcessId())) {
             result->Error("UPDATE_ERROR",
                           "No se pudo preparar el instalador de Windows.");
@@ -276,10 +318,9 @@ bool FlutterWindow::OnCreate() {
           }
 
           std::wstring parameters =
-              L"-NoProfile -ExecutionPolicy Bypass -File " +
-              PowerShellSingleQuoted(script_path);
+              L"/C " + CommandLineDoubleQuoted(script_path);
           HINSTANCE shell_result = ::ShellExecuteW(
-              nullptr, L"open", L"powershell.exe", parameters.c_str(), nullptr,
+              nullptr, L"open", L"cmd.exe", parameters.c_str(), nullptr,
               SW_HIDE);
 
           if (reinterpret_cast<intptr_t>(shell_result) <= 32) {
