@@ -202,6 +202,7 @@ bool WriteUpdaterScript(const std::wstring& script_path,
          << "  echo tar.exe failed with error %errorlevel% >> \"%log%\"\r\n"
          << "  exit /B %errorlevel%\r\n"
          << ")\r\n"
+         << "del /F /Q \"%zip%\" >> \"%log%\" 2>&1\r\n"
          << "start \"\" \"%exe%\"\r\n";
 
   return true;
