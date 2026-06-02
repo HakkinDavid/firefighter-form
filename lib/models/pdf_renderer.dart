@@ -51,7 +51,7 @@ class ServicePDF {
               ),
               pw.Text("Dirección de Bomberos Tijuana"),
               pw.Text(
-                "Formato de Registro de Atención Hospitalaria",
+                template["formname"],
                 style: pw.TextStyle(
                   fontSize: 14,
                   fontWeight: pw.FontWeight.bold,
