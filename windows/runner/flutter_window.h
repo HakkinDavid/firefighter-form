@@ -3,7 +3,10 @@
 
 #include <flutter/dart_project.h>
 #include <flutter/flutter_view_controller.h>
+#include <flutter/method_channel.h>
+#include <flutter/standard_method_codec.h>
 
+#include <functional>
 #include <memory>
 #include <string>
 
@@ -15,6 +18,9 @@ class FlutterWindow : public Win32Window {
   // Creates a new FlutterWindow hosting a Flutter view running |project|.
   explicit FlutterWindow(const flutter::DartProject& project);
   virtual ~FlutterWindow();
+
+  // Helper to post callbacks to be executed on the Win32 main UI thread.
+  void PostToMainThread(std::function<void()> callback);
 
  protected:
   // Win32Window:
@@ -29,6 +35,9 @@ class FlutterWindow : public Win32Window {
 
   // The Flutter instance hosted by this window.
   std::unique_ptr<flutter::FlutterViewController> flutter_controller_;
+
+  // Method channel for SRE low-level platform calls.
+  std::unique_ptr<flutter::MethodChannel<flutter::EncodableValue>> channel_;
 
   std::string latest_version_;
   std::string latest_changelog_;
