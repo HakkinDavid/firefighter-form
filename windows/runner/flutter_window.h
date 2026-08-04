@@ -6,6 +6,7 @@
 #include <flutter/method_channel.h>
 #include <flutter/standard_method_codec.h>
 
+#include <functional>
 #include <memory>
 #include <string>
 
@@ -17,6 +18,9 @@ class FlutterWindow : public Win32Window {
   // Creates a new FlutterWindow hosting a Flutter view running |project|.
   explicit FlutterWindow(const flutter::DartProject& project);
   virtual ~FlutterWindow();
+
+  // Helper to post callbacks to be executed on the Win32 main UI thread.
+  void PostToMainThread(std::function<void()> callback);
 
  protected:
   // Win32Window:
