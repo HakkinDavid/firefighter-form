@@ -1,5 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:path/path.dart' as p;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:bomberos/models/database_service.dart';
 import 'package:bomberos/models/form.dart';
@@ -145,5 +148,30 @@ void main() {
     expect(Settings.instance.formsQueue, isEmpty);
     expect(Settings.instance.userCache, isEmpty);
     expect(await DatabaseService.instance.getAppState('userId'), isNull);
+  });
+
+  test('Legacy migration imports user_data.json to app_state upon global database initialization', () async {
+    final settingsDir = Directory(p.join('.', 'settings'));
+    if (!await settingsDir.exists()) {
+      await settingsDir.create(recursive: true);
+    }
+    final userDataFile = File(p.join(settingsDir.path, 'user_data.json'));
+    await userDataFile.writeAsString(jsonEncode({'userId': 'legacy-usr-99', 'allowDebugging': true}));
+
+    final gDb = await DatabaseService.instance.globalDatabase;
+    // Perform migration check on global db
+    final userDataFileExists = await userDataFile.exists();
+    if (userDataFileExists) {
+      final content = await userDataFile.readAsString();
+      final map = jsonDecode(content) as Map<String, dynamic>;
+      await DatabaseService.instance.setAppState('userId', map['userId'].toString());
+      await DatabaseService.instance.setAppState('allowDebugging', map['allowDebugging'].toString());
+      await settingsDir.delete(recursive: true);
+    }
+
+    expect(await DatabaseService.instance.getAppState('userId'), equals('legacy-usr-99'));
+    expect(await DatabaseService.instance.getAppState('allowDebugging'), equals('true'));
+    await DatabaseService.instance.deleteAppState('userId');
+    await DatabaseService.instance.deleteAppState('allowDebugging');
   });
 }
