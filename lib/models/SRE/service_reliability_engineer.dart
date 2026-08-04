@@ -267,9 +267,9 @@ class ServiceReliabilityEngineer {
       overlayPadding: 10,
       borderRadius: 8,
       tapToClose: false,
-      overlayContent: SafeArea(
-        child: Center(
-          child: Column(
+      isBottomAnchored: true,
+      overlayContent: Center(
+        child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -309,7 +309,6 @@ class ServiceReliabilityEngineer {
           ],
         ),
       ),
-    ),
     );
   }
 
