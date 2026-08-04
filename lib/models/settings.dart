@@ -238,9 +238,11 @@ class Settings {
 
     // 5. Enqueue SRE reload and sync tasks for new user
     ServiceReliabilityEngineer.instance.enqueueTasks({
+      "LoadFromDisk",
+      "SetUser",
+      "SyncForms",
       "RefreshUsers",
       "SetForms",
-      "SyncForms",
     });
 
     // 6. Non-blocking cloud token session restoration in background microtask
