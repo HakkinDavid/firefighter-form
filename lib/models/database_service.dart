@@ -183,110 +183,25 @@ class DatabaseService {
   Future<void> _migrateLegacyFilesIfNeeded(Database globalDb) async {
     try {
       final docsDir = await getApplicationDocumentsDirectory();
-      final oldSingleDbPath = p.join(docsDir.path, 'bomberos.db');
       final settingsDir = Directory(p.join(docsDir.path, 'settings'));
       final templatesDir = Directory(p.join(docsDir.path, 'frap'));
 
-      final oldDbFile = File(oldSingleDbPath);
-      final hasOldDb = await oldDbFile.exists();
       final hasSettingsDir = await settingsDir.exists();
       final hasTemplatesDir = await templatesDir.exists();
 
-      if (!hasOldDb && !hasSettingsDir && !hasTemplatesDir) {
+      if (!hasSettingsDir && !hasTemplatesDir) {
         return;
       }
 
       Logging(
-        "Iniciando migración legacy a arquitectura multi-base de datos...",
+        "Iniciando migración SQLite...",
         caller: "DatabaseService (_migrateLegacyFilesIfNeeded)",
         attentionLevel: 2,
       );
 
       String? activeUserId;
 
-      // 1. If old bomberos.db exists, migrate its contents
-      if (hasOldDb) {
-        try {
-          final oldDb = await openDatabase(oldSingleDbPath);
-          final appStates = await oldDb.query('app_state');
-          for (var r in appStates) {
-            await globalDb.insert('app_state', r,
-                conflictAlgorithm: ConflictAlgorithm.replace);
-            if (r['key'] == 'userId') {
-              activeUserId = r['value'] as String?;
-            }
-          }
-
-          final templates = await oldDb.query('template');
-          for (var t in templates) {
-            await globalDb.insert('template', t,
-                conflictAlgorithm: ConflictAlgorithm.replace);
-          }
-
-          if (activeUserId != null && activeUserId.isNotEmpty) {
-            final userDb = await _initUserDatabase(activeUserId);
-
-            final names = await oldDb.query('user_name');
-            for (var r in names) {
-              await userDb.insert('user_name', r,
-                  conflictAlgorithm: ConflictAlgorithm.replace);
-            }
-            final roles = await oldDb.query('user_role');
-            for (var r in roles) {
-              await userDb.insert('user_role', r,
-                  conflictAlgorithm: ConflictAlgorithm.replace);
-            }
-            final hierarchies = await oldDb.query('user_hierarchy');
-            for (var r in hierarchies) {
-              await userDb.insert('user_hierarchy', r,
-                  conflictAlgorithm: ConflictAlgorithm.replace);
-            }
-            final forms = await oldDb.query('filled_in');
-            for (var r in forms) {
-              await userDb.insert('filled_in', r,
-                  conflictAlgorithm: ConflictAlgorithm.replace);
-            }
-
-            // Create initial local_user_account for active user
-            final activeUserRow =
-                names.firstWhere((element) => element['id'] == activeUserId,
-                    orElse: () => {
-                          'id': activeUserId,
-                          'given': 'Usuario',
-                          'surname1': 'Local',
-                        });
-            final roleRow = roles.firstWhere(
-                (element) => element['id'] == activeUserId,
-                orElse: () => {'value': 0});
-
-            await globalDb.insert(
-              'local_user_accounts',
-              {
-                'user_id': activeUserId,
-                'email': '',
-                'given_name': activeUserRow['given'] ?? 'Usuario',
-                'first_surname': activeUserRow['surname1'] ?? 'Local',
-                'second_surname': activeUserRow['surname2'],
-                'role': roleRow['value'] ?? 0,
-                'refresh_token': null,
-                'last_login_at': DateTime.now().toIso8601String(),
-                'is_session_valid': 1,
-              },
-              conflictAlgorithm: ConflictAlgorithm.replace,
-            );
-          }
-
-          await oldDb.close();
-          await oldDbFile.delete();
-          Logging("Migración desde bomberos.db completada exitosamente.",
-              caller: "DatabaseService", attentionLevel: 2);
-        } catch (e) {
-          Logging("Error migrando desde bomberos.db antigua: $e",
-              caller: "DatabaseService", attentionLevel: 3);
-        }
-      }
-
-      // 2. Migrate legacy JSON directories if present
+      // 1. Migrate legacy JSON directories if present
       if (hasSettingsDir || hasTemplatesDir) {
         final userDataFile = File(p.join(settingsDir.path, 'user_data.json'));
         if (await userDataFile.exists()) {
