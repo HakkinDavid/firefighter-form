@@ -1,5 +1,4 @@
 # Aplicación de Atención Prehospitalaria y Servicios Digitales para Bomberos
-===============================================================================
 
 Introducción
 ------------
