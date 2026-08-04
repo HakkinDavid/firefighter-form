@@ -15,6 +15,7 @@ class OverlayService {
     double overlayPadding = 5,
     double borderRadius = 4,
     bool tapToClose = true,
+    bool isBottomAnchored = false,
   }) {
     // Close existing overlay if open
     closeCurrentOverlay();
@@ -30,6 +31,7 @@ class OverlayService {
         overlayPadding: overlayPadding,
         borderRadius: borderRadius,
         tapToClose: tapToClose,
+        isBottomAnchored: isBottomAnchored,
         onClose: closeCurrentOverlay,
       ),
     );
@@ -51,6 +53,7 @@ class OverlayObject extends StatefulWidget {
   final double overlayPadding;
   final double borderRadius;
   final bool tapToClose;
+  final bool isBottomAnchored;
   final VoidCallback onClose;
   const OverlayObject({
     super.key,
@@ -61,6 +64,7 @@ class OverlayObject extends StatefulWidget {
     required this.overlayPadding,
     required this.borderRadius,
     required this.tapToClose,
+    required this.isBottomAnchored,
     required this.onClose
   });
 
@@ -71,6 +75,7 @@ class OverlayObject extends StatefulWidget {
 class _OverlayObjectState extends State<OverlayObject> {
   @override
   Widget build(BuildContext context) {
+    final topPadding = MediaQuery.of(context).padding.top;
     return SafeArea(
       child: Stack(
         children: [
@@ -83,22 +88,37 @@ class _OverlayObjectState extends State<OverlayObject> {
               child: Container(color: CupertinoColors.transparent),
             ),
           ),
-          Positioned(
-            left: widget.position.dx - (widget.overlayWidth - widget.buttonSize.width)/2,
-            top: widget.position.dy + 10,
-            child: Material(
-              elevation: 8,
-              borderRadius: BorderRadius.circular(widget.borderRadius),
-              // New ColorSettings, perhaps?
-              color: CupertinoColors.darkBackgroundGray.withValues(alpha: 0.8),
-              child: Container(
-                width: widget.overlayWidth,
-                padding: EdgeInsets.all(widget.overlayPadding),
-                // Render widget
-                child: widget.overlayContent,
-              ),
-            ),
-          ),
+          widget.isBottomAnchored
+              ? Positioned(
+                  left: (MediaQuery.of(context).size.width - widget.overlayWidth) / 2,
+                  bottom: 16,
+                  child: Material(
+                    elevation: 8,
+                    borderRadius: BorderRadius.circular(widget.borderRadius),
+                    color: CupertinoColors.darkBackgroundGray.withValues(alpha: 0.8),
+                    child: Container(
+                      width: widget.overlayWidth,
+                      padding: EdgeInsets.all(widget.overlayPadding),
+                      child: widget.overlayContent,
+                    ),
+                  ),
+                )
+              : Positioned(
+                  left: widget.position.dx - (widget.overlayWidth - widget.buttonSize.width) / 2,
+                  top: widget.position.dy > topPadding
+                      ? widget.position.dy - topPadding + 10
+                      : widget.position.dy + 10,
+                  child: Material(
+                    elevation: 8,
+                    borderRadius: BorderRadius.circular(widget.borderRadius),
+                    color: CupertinoColors.darkBackgroundGray.withValues(alpha: 0.8),
+                    child: Container(
+                      width: widget.overlayWidth,
+                      padding: EdgeInsets.all(widget.overlayPadding),
+                      child: widget.overlayContent,
+                    ),
+                  ),
+                ),
         ],
       ),
     );

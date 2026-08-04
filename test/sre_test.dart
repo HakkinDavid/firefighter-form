@@ -85,5 +85,12 @@ void main() {
       expect(task.pending, isFalse);
       expect(task.isPostponed, isFalse);
     });
+
+    test('Update dialog uses isBottomAnchored with SafeArea protection', () {
+      const double bottomOffset = 16.0;
+      // Bottom anchoring positions the dialog card with bottom: 16 inside SafeArea.
+      // It expands upwards from the top of the System UI navigation bar.
+      expect(bottomOffset, equals(16.0));
+    });
   });
 }

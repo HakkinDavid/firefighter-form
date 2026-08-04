@@ -267,11 +267,12 @@ class ServiceReliabilityEngineer {
       overlayPadding: 10,
       borderRadius: 8,
       tapToClose: false,
+      isBottomAnchored: true,
       overlayContent: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
             Text(
               "Se encontró una versión más reciente de la aplicación, ¿actualizar ahora?",
               style: TextStyle(
