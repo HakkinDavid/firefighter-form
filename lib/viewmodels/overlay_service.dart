@@ -71,21 +71,21 @@ class OverlayObject extends StatefulWidget {
 class _OverlayObjectState extends State<OverlayObject> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Stack(
-        children: [
-          // Background tap to close
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: widget.tapToClose
-                  ? widget.onClose
-                  : null,
-              child: Container(color: CupertinoColors.transparent),
-            ),
+    return Stack(
+      children: [
+        // Background tap to close
+        Positioned.fill(
+          child: GestureDetector(
+            onTap: widget.tapToClose
+                ? widget.onClose
+                : null,
+            child: Container(color: CupertinoColors.transparent),
           ),
-          Positioned(
-            left: widget.position.dx - (widget.overlayWidth - widget.buttonSize.width)/2,
-            top: widget.position.dy + 10,
+        ),
+        Positioned(
+          left: widget.position.dx - (widget.overlayWidth - widget.buttonSize.width)/2,
+          top: widget.position.dy + 10,
+          child: SafeArea(
             child: Material(
               elevation: 8,
               borderRadius: BorderRadius.circular(widget.borderRadius),
@@ -99,8 +99,8 @@ class _OverlayObjectState extends State<OverlayObject> {
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

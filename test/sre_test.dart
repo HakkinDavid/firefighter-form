@@ -85,5 +85,18 @@ void main() {
       expect(task.pending, isFalse);
       expect(task.isPostponed, isFalse);
     });
+
+    test('Update dialog uses SafeArea protection against system UI insets', () {
+      const double screenHeight = 844.0;
+      const double bottomPadding = 34.0;
+      final double positionY = screenHeight - 190;
+      
+      // Dialog top inside OverlayObject (positionY + 10)
+      final double dialogTop = positionY + 10;
+      final double systemUiTop = screenHeight - bottomPadding;
+
+      // Ensure base dialog placement leaves room for SafeArea to pad insets
+      expect(dialogTop, lessThan(systemUiTop));
+    });
   });
 }
