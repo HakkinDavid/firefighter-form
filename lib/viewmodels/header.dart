@@ -44,6 +44,8 @@ class _HeaderState extends State<Header> {
         ? (contentWidth / 2)
         : 300;
 
+    final isSessionValid = Settings.instance.isSessionValid;
+
     OverlayService.showOverlay(
       position: position,
       buttonSize: buttonSize,
@@ -54,10 +56,11 @@ class _HeaderState extends State<Header> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "Usuario: ${widget.username}",
+              "Usuario: ${widget.username ?? 'Local'}",
               style: TextStyle(
                 color: Settings.instance.colors.textOverPrimary,
                 fontSize: 14,
+                fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.center,
             ),
@@ -66,10 +69,48 @@ class _HeaderState extends State<Header> {
                 "Tutelar: ${widget.adminUsername}",
                 style: TextStyle(
                   color: Settings.instance.colors.textOverPrimary,
-                  fontSize: 14,
+                  fontSize: 13,
                 ),
                 textAlign: TextAlign.center,
               ),
+            if (!isSessionValid) ...[
+              const SizedBox(height: 6),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: CupertinoColors.systemOrange.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: CupertinoColors.systemOrange),
+                ),
+                child: const Text(
+                  "⚠️ Sesión en nube expirada\nSincronización deshabilitada",
+                  style: TextStyle(
+                    color: CupertinoColors.systemOrange,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+            const SizedBox(height: 8),
+            CupertinoButton(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              color: Settings.instance.colors.primaryContrast,
+              minimumSize: Size.zero,
+              onPressed: () {
+                OverlayService.closeCurrentOverlay();
+                Navigator.pushReplacementNamed(context, '/welcome');
+              },
+              child: Text(
+                'Cambiar de usuario',
+                style: TextStyle(
+                  color: Settings.instance.colors.primary,
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -79,6 +120,7 @@ class _HeaderState extends State<Header> {
   @override
   Widget build(BuildContext context) {
     final String? currentRoute = ModalRoute.of(context)?.settings.name;
+    final isSessionValid = Settings.instance.isSessionValid;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -97,7 +139,6 @@ class _HeaderState extends State<Header> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // The 600 could be a macro in settings. Something like WIDESCREEN
                   if (contentWidth < 600) ...[
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,16 +233,33 @@ class _HeaderState extends State<Header> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  IconButton(
-                                    key: _buttonKey,
-                                    icon: const Icon(
-                                      CupertinoIcons.person_crop_circle,
-                                      size: 30,
-                                    ),
-                                    padding: EdgeInsets.zero,
-                                    color: Settings().colors.primaryContrast,
-                                    onPressed: () =>
-                                        _showUserMenu(contentWidth),
+                                  Stack(
+                                    children: [
+                                      IconButton(
+                                        key: _buttonKey,
+                                        icon: const Icon(
+                                          CupertinoIcons.person_crop_circle,
+                                          size: 30,
+                                        ),
+                                        padding: EdgeInsets.zero,
+                                        color: Settings().colors.primaryContrast,
+                                        onPressed: () =>
+                                            _showUserMenu(contentWidth),
+                                      ),
+                                      if (!isSessionValid)
+                                        Positioned(
+                                          right: 0,
+                                          top: 0,
+                                          child: Container(
+                                            width: 10,
+                                            height: 10,
+                                            decoration: const BoxDecoration(
+                                              color: CupertinoColors.systemOrange,
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
                                   ),
                                   const SizedBox(width: 12),
                                   if (currentRoute == '/home') ...[

@@ -3,13 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:bomberos/models/database_service.dart';
 import 'package:bomberos/models/form.dart';
+import 'package:bomberos/models/local_account.dart';
 import 'package:bomberos/models/user.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
       const MethodChannel('plugins.flutter.io/path_provider'),
       (MethodCall methodCall) async {
         return '.';
@@ -20,7 +22,7 @@ void main() {
   });
 
   test('DatabaseService initializes tables and CRUD operations work correctly', () async {
-    final db = await DatabaseService.instance.database;
+    final db = await DatabaseService.instance.globalDatabase;
     expect(db.isOpen, isTrue);
 
     // Test app_state CRUD
@@ -28,7 +30,23 @@ void main() {
     final val = await DatabaseService.instance.getAppState('test_key');
     expect(val, equals('test_val'));
 
-    // Test User CRUD
+    // Test Local User Accounts CRUD
+    final account1 = LocalUserAccount(
+      userId: 'usr-1',
+      email: 'juan@bomberos.org',
+      givenName: 'Juan',
+      firstSurname: 'Pérez',
+      secondSurname: 'Gómez',
+      role: 0,
+      refreshToken: 'tok-123',
+      lastLoginAt: DateTime.now(),
+    );
+    await DatabaseService.instance.saveLocalAccount(account1);
+    final accounts = await DatabaseService.instance.getLocalAccounts();
+    expect(accounts.any((a) => a.userId == 'usr-1'), isTrue);
+
+    // Test User & Form CRUD in isolated user DB
+    await DatabaseService.instance.switchUserDatabase('usr-1');
     final user = FirefighterUser(
       id: 'usr-1',
       givenName: 'Juan',
@@ -71,6 +89,16 @@ void main() {
     // Local draft MUST be preserved (WHERE status = 2 guard)
     final formsAfterRemoteSync = await DatabaseService.instance.getFormsQueue();
     expect(formsAfterRemoteSync.first.content['campo1'], equals('respuesta'));
+
+    // Test Multi-DB User Isolation: Switch to usr-2, form-1 MUST NOT exist in usr-2 DB
+    await DatabaseService.instance.switchUserDatabase('usr-2');
+    final usr2Forms = await DatabaseService.instance.getAllForms();
+    expect(usr2Forms.isEmpty, isTrue);
+
+    // Switch back to usr-1, form-1 MUST still exist
+    await DatabaseService.instance.switchUserDatabase('usr-1');
+    final usr1Forms = await DatabaseService.instance.getAllForms();
+    expect(usr1Forms.length, equals(1));
 
     // Cleanup
     await DatabaseService.instance.deleteForm('form-1');

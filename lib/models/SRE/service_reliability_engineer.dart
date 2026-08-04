@@ -109,6 +109,16 @@ class ServiceReliabilityEngineer {
     ServiceReliabilityEngineer.startTimer();
   }
 
+  Future<void> lockAndFlush() async {
+    await _busy.acquire();
+    try {
+      await _saveToDisk();
+      _tasksQueue.clear();
+    } finally {
+      _busy.release();
+    }
+  }
+
   void enqueueTasks(Iterable<String> requestedTasks) {
     for (String requested in requestedTasks) {
       if (!_tasksRepository.containsKey(requested)) {
@@ -343,13 +353,15 @@ class ServiceReliabilityEngineer {
       final userId = await DatabaseService.instance.getAppState('userId');
       final allowDebuggingStr = await DatabaseService.instance.getAppState('allowDebugging');
 
-      if (userId != null) {
+      if (userId != null && userId.isNotEmpty) {
         Settings.instance.userId = userId;
+        await DatabaseService.instance.switchUserDatabase(userId);
       }
       if (allowDebuggingStr != null) {
         Settings.instance.allowDebugging = (allowDebuggingStr == 'true');
       }
 
+      await Settings.instance.loadLocalAccounts();
       Settings.instance.userCache = await DatabaseService.instance.getUsers();
       Settings.instance.formsQueue = await DatabaseService.instance.getFormsQueue();
 

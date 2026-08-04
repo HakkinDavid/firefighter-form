@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
 import 'package:bomberos/models/database_service.dart';
 import 'package:bomberos/models/form.dart';
+import 'package:bomberos/models/local_account.dart';
 import 'package:bomberos/models/logging.dart';
 import 'package:bomberos/models/user.dart';
 import 'package:flutter/cupertino.dart';
@@ -55,7 +56,7 @@ class Settings {
     Logging(
       "${state ? "Activando" : "Desactivando"} depuración",
       caller: "Settings (allowDebugging)",
-      attentionLevel: 2
+      attentionLevel: 2,
     );
   }
 
@@ -64,9 +65,13 @@ class Settings {
   Map<String, FirefighterUser> _userCache = {};
   List<ServiceForm> _formsQueue = [];
   List<ServiceForm> _formsList = [];
+  List<LocalUserAccount> _localAccounts = [];
+  bool _isSessionValid = true;
+
+  bool get isSessionValid => _isSessionValid;
 
   final StreamController<Map<String, FirefighterUser>>
-  _userCacheStreamController =
+      _userCacheStreamController =
       StreamController<Map<String, FirefighterUser>>.broadcast();
   Stream<Map<String, FirefighterUser>> get userCacheStream =>
       _userCacheStreamController.stream;
@@ -76,11 +81,18 @@ class Settings {
   Stream<List<ServiceForm>> get formsListStream =>
       _formsStreamController.stream;
 
+  final StreamController<List<LocalUserAccount>>
+      _localAccountsStreamController =
+      StreamController<List<LocalUserAccount>>.broadcast();
+  Stream<List<LocalUserAccount>> get localAccountsStream =>
+      _localAccountsStreamController.stream;
+
   // ignore: unnecessary_getters_setters
   Map<String, FirefighterUser> get userCache => _userCache;
   // ignore: unnecessary_getters_setters
   List<ServiceForm> get formsQueue => _formsQueue;
-  // Direct setters for now
+  List<LocalUserAccount> get localAccounts => _localAccounts;
+
   set userCache(Map<String, FirefighterUser> userCache) {
     _userCache = userCache;
   }
@@ -89,7 +101,7 @@ class Settings {
     _formsQueue = formsQueue;
   }
 
-  bool get isLoggedIn => _userId != null && _userCache.containsKey(_userId);
+  bool get isLoggedIn => _userId != null && _userId!.isNotEmpty;
 
   FirefighterUser? get self => _userCache[_userId];
   FirefighterUser? get watcher => _userCache[self?.watchedByUserId ?? ""];
@@ -102,6 +114,154 @@ class Settings {
         ));
     _formsStreamController.add(combined);
     return combined;
+  }
+
+  Future<void> loadLocalAccounts() async {
+    _localAccounts = await DatabaseService.instance.getLocalAccounts();
+    _localAccountsStreamController.add(_localAccounts);
+  }
+
+  Future<void> registerOrUpdateCurrentLocalAccount() async {
+    final currentUser = Supabase.instance.client.auth.currentUser;
+    final currentSession = Supabase.instance.client.auth.currentSession;
+    if (currentUser == null) return;
+
+    final uId = currentUser.id;
+    final uEmail = currentUser.email ?? '';
+    final refreshToken = currentSession?.refreshToken;
+
+    // Fetch or use self user info
+    FirefighterUser? selfUser = _userCache[uId];
+    if (selfUser == null) {
+      try {
+        await refreshUsers();
+        selfUser = _userCache[uId];
+      } catch (e) {
+        // Fallback
+      }
+    }
+
+    final account = LocalUserAccount(
+      userId: uId,
+      email: uEmail,
+      givenName: selfUser?.givenName ?? 'Bombero',
+      firstSurname: selfUser?.firstSurname ?? 'Local',
+      secondSurname: selfUser?.secondSurname,
+      role: selfUser?.role ?? 0,
+      refreshToken: refreshToken,
+      lastLoginAt: DateTime.now(),
+      isSessionValid: true,
+    );
+
+    await DatabaseService.instance.saveLocalAccount(account);
+    await loadLocalAccounts();
+  }
+
+  Future<void> switchActiveUser(String targetUserId) async {
+    Logging(
+      "Iniciando cambio atómico al usuario $targetUserId...",
+      caller: "Settings (switchActiveUser)",
+      attentionLevel: 2,
+    );
+
+    await ServiceReliabilityEngineer.instance.lockAndFlush();
+
+    // 1. Clear current in-memory caches
+    _userCache.clear();
+    _formsQueue.clear();
+    _formsList.clear();
+
+    // 2. Switch database connection in DatabaseService
+    await DatabaseService.instance.switchUserDatabase(targetUserId);
+
+    // 3. Set active user ID
+    _userId = targetUserId;
+    await DatabaseService.instance.setAppState('userId', targetUserId);
+
+    // 4. Restore Supabase JWT session if refresh token exists
+    final account = await DatabaseService.instance.getLocalAccount(targetUserId);
+    if (account != null && account.refreshToken != null && account.refreshToken!.isNotEmpty) {
+      try {
+        final res = await Supabase.instance.client.auth.setSession(account.refreshToken!);
+        if (res.session != null) {
+          _isSessionValid = true;
+          // Update refresh token if rotated
+          if (res.session!.refreshToken != null &&
+              res.session!.refreshToken != account.refreshToken) {
+            final updatedAccount = account.copyWith(
+              refreshToken: res.session!.refreshToken,
+              lastLoginAt: DateTime.now(),
+              isSessionValid: true,
+            );
+            await DatabaseService.instance.saveLocalAccount(updatedAccount);
+          }
+        }
+      } catch (e) {
+        Logging(
+          "No se pudo validar el token en la nube para $targetUserId: $e. Manteniendo sesión local activa.",
+          caller: "Settings (switchActiveUser)",
+          attentionLevel: 2,
+        );
+        _isSessionValid = false;
+        final updatedAccount = account.copyWith(isSessionValid: false);
+        await DatabaseService.instance.saveLocalAccount(updatedAccount);
+      }
+    } else {
+      _isSessionValid = false;
+    }
+
+    // 5. Enqueue SRE reload and sync tasks for new user
+    ServiceReliabilityEngineer.instance.enqueueTasks({
+      "LoadFromDisk",
+      "RefreshUsers",
+      "SetForms",
+      "SyncForms",
+    });
+
+    await loadLocalAccounts();
+
+    // 6. Notify stream controllers
+    _userCacheStreamController.add(_userCache);
+    _formsStreamController.add(formsList);
+  }
+
+  Future<bool> removeLocalAccountWithAuth(
+    String targetUserId,
+    String password,
+  ) async {
+    final account = await DatabaseService.instance.getLocalAccount(targetUserId);
+    if (account == null) return false;
+
+    try {
+      // Re-authenticate credentials against Supabase online
+      final res = await Supabase.instance.client.auth.signInWithPassword(
+        email: account.email,
+        password: password,
+      );
+
+      if (res.user?.id == targetUserId) {
+        await DatabaseService.instance.removeLocalAccount(targetUserId);
+        await loadLocalAccounts();
+
+        // If the removed account was active, clear active user ID or switch to remaining account
+        if (_userId == targetUserId) {
+          if (_localAccounts.isNotEmpty) {
+            await switchActiveUser(_localAccounts.first.userId);
+          } else {
+            _userId = null;
+            await DatabaseService.instance.setAppState('userId', '');
+          }
+        }
+        return true;
+      }
+    } catch (e) {
+      Logging(
+        "Fallo de re-autenticación al eliminar cuenta local: $e",
+        caller: "Settings (removeLocalAccountWithAuth)",
+        attentionLevel: 3,
+      );
+    }
+    return false;
   }
 
   Future<void> setUserRole(String userId, int userRole) async {
@@ -180,6 +340,7 @@ class Settings {
     try {
       setUserId();
       await fetchUser();
+      await registerOrUpdateCurrentLocalAccount();
     } catch (e) {
       Logging(
         "Error intentando establecer usuario. Probablemente no hay una sesión activa.\n\t\t$e",
@@ -213,6 +374,7 @@ class Settings {
   void setUserId() {
     _userId = Supabase.instance.client.auth.currentUser!.id;
     DatabaseService.instance.setAppState('userId', _userId!);
+    DatabaseService.instance.switchUserDatabase(_userId!);
   }
 
   Future<FirefighterUser> fetchUser({String? pUserId}) async {
@@ -414,6 +576,15 @@ class Settings {
   }
 
   Future<bool> uploadForm(ServiceForm form) async {
+    if (!_isSessionValid) {
+      Logging(
+        "Ignorando envío de formulario ${form.id}: La sesión en la nube no es válida para el usuario activo.",
+        caller: "Settings (uploadForm)",
+        attentionLevel: 2,
+      );
+      return false;
+    }
+
     try {
       await Supabase.instance.client.rpc(
         'upload_filled_in',
@@ -431,6 +602,15 @@ class Settings {
   }
 
   Future<void> syncForms() async {
+    if (!_isSessionValid) {
+      Logging(
+        "Sincronización omitida: La sesión actual requiere re-autenticación online.",
+        caller: "Settings (syncForms)",
+        attentionLevel: 2,
+      );
+      return;
+    }
+
     final syncCandidates = List<ServiceForm>.from(
       _formsQueue.where((f) => f.status == 1),
     );
@@ -446,7 +626,7 @@ class Settings {
 
   Future<void> deleteForm(ServiceForm form) async {
     try {
-      if (form.status == 2) {
+      if (form.status == 2 && _isSessionValid) {
         await Supabase.instance.client.rpc(
           'delete_filled_in',
           params: {'p_id': form.id},
@@ -460,6 +640,4 @@ class Settings {
       // no importa si no se borra, mejor para nosotros.
     }
   }
-
 }
-
