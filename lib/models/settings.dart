@@ -180,7 +180,9 @@ class Settings {
   Future<void> setUser() async {
     try {
       await setUserId();
-      await fetchUser();
+      if (_userId != null && _userId!.isNotEmpty) {
+        await fetchUser();
+      }
     } catch (e) {
       Logging(
         "Error intentando establecer usuario. Probablemente no hay una sesión activa.\n\t\t$e",
@@ -191,11 +193,28 @@ class Settings {
   }
 
   Future<void> setUserId([String? explicitUserId]) async {
-    final currentSupabaseUser = Supabase.instance.client.auth.currentUser;
-    _userId = explicitUserId ?? currentSupabaseUser?.id;
+    String? currentSupabaseUserId;
+    try {
+      currentSupabaseUserId = Supabase.instance.client.auth.currentUser?.id;
+    } catch (_) {}
+    _userId = explicitUserId ?? currentSupabaseUserId;
     if (_userId != null && _userId!.isNotEmpty) {
       await DatabaseService.instance.getUserDatabase(_userId!);
       await DatabaseService.instance.setAppState('userId', _userId!);
+      _userCache = await DatabaseService.instance.getUsers();
+      _formsQueue = await DatabaseService.instance.getFormsQueue();
+      _formsList = await DatabaseService.instance.getAllForms();
+      _userCacheStreamController.add(_userCache);
+      _formsStreamController.add(formsList);
+    } else {
+      await DatabaseService.instance.closeUserDatabase();
+      await DatabaseService.instance.deleteAppState('userId');
+      _userId = null;
+      _userCache = {};
+      _formsQueue = [];
+      _formsList = [];
+      _userCacheStreamController.add(_userCache);
+      _formsStreamController.add([]);
     }
   }
 
@@ -205,13 +224,7 @@ class Settings {
     } catch (e) {
       Logging("Error al cerrar sesión en Supabase: $e", caller: "Settings (logOut)", attentionLevel: 2);
     }
-    await DatabaseService.instance.closeUserDatabase();
-    _userId = null;
-    _userCache = {};
-    _formsQueue = [];
-    _formsList = [];
-    _userCacheStreamController.add(_userCache);
-    _formsStreamController.add([]);
+    await setUserId(null);
     Logging("Sesión cerrada correctamente. Memoria y base de datos de usuario desmontadas.", caller: "Settings (logOut)", attentionLevel: 2);
   }
 
@@ -344,9 +357,10 @@ class Settings {
         );
       }
 
+      final Map<String, FirefighterUser> freshUserCache = {};
       for (var userNameRecordX in userNamesRecord) {
         String idX = userNameRecordX['id'];
-        _userCache[idX] = FirefighterUser(
+        freshUserCache[idX] = FirefighterUser(
           id: idX,
           givenName: userNameRecordX['given'],
           firstSurname: userNameRecordX['surname1'],
@@ -356,6 +370,7 @@ class Settings {
           watchesUsersId: watcherMapById[idX] ?? <String>{},
         );
       }
+      _userCache = freshUserCache;
       _userCacheStreamController.add(_userCache);
       await DatabaseService.instance.saveUsers(_userCache);
     } catch (e) {

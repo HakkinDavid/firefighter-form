@@ -300,10 +300,18 @@ class DatabaseService {
     return null;
   }
 
+  Future<void> deleteAppState(String key) async {
+    final db = await globalDatabase;
+    await db.delete('app_state', where: 'key = ?', whereArgs: [key]);
+  }
+
   // === USERS CACHE CRUD (User DB) ===
   Future<void> saveUsers(Map<String, FirefighterUser> userCache) async {
     final db = await getUserDatabase();
     await db.transaction((txn) async {
+      await txn.delete('user_hierarchy');
+      await txn.delete('user_role');
+      await txn.delete('user_name');
       for (var u in userCache.values) {
         await _insertUserInTxn(txn, u);
       }

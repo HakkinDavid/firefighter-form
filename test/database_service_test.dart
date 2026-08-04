@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:bomberos/models/database_service.dart';
 import 'package:bomberos/models/form.dart';
+import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/models/user.dart';
 
 void main() {
@@ -95,10 +96,54 @@ void main() {
     expect(t25Content, isNotNull);
     expect(t25Content!['formname'], equals('Template v25'));
 
+    // Test deleteAppState
+    await DatabaseService.instance.setAppState('userId', 'usr-1');
+    expect(await DatabaseService.instance.getAppState('userId'), equals('usr-1'));
+    await DatabaseService.instance.deleteAppState('userId');
+    expect(await DatabaseService.instance.getAppState('userId'), isNull);
+
+    // Test saveUsers table clearing (user scope isolation)
+    await DatabaseService.instance.getUserDatabase('usr-1');
+    final userA = FirefighterUser(id: 'usr-A', givenName: 'UserA', firstSurname: 'A', secondSurname: null, role: 0);
+    final userB = FirefighterUser(id: 'usr-B', givenName: 'UserB', firstSurname: 'B', secondSurname: null, role: 0);
+    await DatabaseService.instance.saveUsers({'usr-A': userA, 'usr-B': userB});
+    expect((await DatabaseService.instance.getUsers()).length, equals(2));
+    
+    // Saving a fresh single-user map must clear previous users from DB
+    await DatabaseService.instance.saveUsers({'usr-A': userA});
+    final updatedUsers = await DatabaseService.instance.getUsers();
+    expect(updatedUsers.length, equals(1));
+    expect(updatedUsers.containsKey('usr-A'), isTrue);
+    expect(updatedUsers.containsKey('usr-B'), isFalse);
+
     // Cleanup
     await DatabaseService.instance.getUserDatabase('usr-1');
     await DatabaseService.instance.deleteForm('form-1');
     final emptyQueue = await DatabaseService.instance.getFormsQueue();
     expect(emptyQueue.isEmpty, isTrue);
+  });
+
+  test('Settings.setUserId(null) properly clears active user state, app_state and memory queues', () async {
+    await Settings.instance.setUserId('usr-test');
+    expect(Settings.instance.userId, equals('usr-test'));
+    expect(await DatabaseService.instance.getAppState('userId'), equals('usr-test'));
+
+    final draft = ServiceForm(
+      'draft-1',
+      1,
+      'usr-test',
+      DateTime.now(),
+      {'data': 'test'},
+      0,
+    );
+    await Settings.instance.enqueueForm(draft);
+    expect(Settings.instance.formsQueue.length, equals(1));
+
+    // Sign out / setUserId(null)
+    await Settings.instance.setUserId(null);
+    expect(Settings.instance.userId, isEmpty);
+    expect(Settings.instance.formsQueue, isEmpty);
+    expect(Settings.instance.userCache, isEmpty);
+    expect(await DatabaseService.instance.getAppState('userId'), isNull);
   });
 }

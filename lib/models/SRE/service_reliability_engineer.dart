@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/services.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:bomberos/models/logging.dart' show Logging;
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/viewmodels/overlay_service.dart';
@@ -347,10 +348,17 @@ class ServiceReliabilityEngineer {
         Settings.instance.allowDebugging = (allowDebuggingStr == 'true');
       }
 
-      if (userId != null && userId.isNotEmpty) {
+      String? currentAuthUserId;
+      try {
+        currentAuthUserId = Supabase.instance.client.auth.currentUser?.id;
+      } catch (_) {}
+
+      if (currentAuthUserId != null && currentAuthUserId.isNotEmpty) {
+        await Settings.instance.setUserId(currentAuthUserId);
+      } else if (userId != null && userId.isNotEmpty) {
         await Settings.instance.setUserId(userId);
-        Settings.instance.userCache = await DatabaseService.instance.getUsers();
-        Settings.instance.formsQueue = await DatabaseService.instance.getFormsQueue();
+      } else {
+        await Settings.instance.setUserId(null);
       }
 
       Logging(
