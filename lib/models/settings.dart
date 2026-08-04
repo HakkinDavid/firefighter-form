@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
 import 'package:bomberos/models/database_service.dart';
 import 'package:bomberos/models/form.dart';
@@ -258,7 +259,8 @@ class Settings {
     try {
       int? newest = await DatabaseService.instance.getNewestSavedTemplateId();
       if (newest == null) {
-        ServiceReliabilityEngineer.instance.enqueueTasks({"UpdateTemplate"});
+        await updateTemplate();
+        newest = await DatabaseService.instance.getNewestSavedTemplateId();
       }
       return newest;
     } catch (e) {
@@ -365,27 +367,36 @@ class Settings {
     }
   }
 
-  Future<(String, Map<String, dynamic> Function())> fetchTemplate({
+  Future<(int, Map<String, dynamic> Function())> fetchTemplate({
     int? id,
   }) async {
-    late final String templateRoute;
-    late final Map<String, dynamic> template;
+    late final Map<String, dynamic> templateRecord;
 
     if (id != null) {
-      template = await getTemplateRecord(tId: id);
-      templateRoute = await getTemplateRoute(id);
+      templateRecord = await getTemplateRecord(tId: id);
     } else {
-      template = await getTemplateRecord();
-      templateRoute = await getTemplateRoute(template['id']);
+      templateRecord = await getTemplateRecord();
     }
-    return (templateRoute, () => template['content'] as Map<String, dynamic>);
+
+    final int tId = templateRecord['id'] as int;
+
+    return (
+      tId,
+      () {
+        final content = templateRecord['content'];
+        if (content is String) {
+          return json.decode(content) as Map<String, dynamic>;
+        }
+        return content as Map<String, dynamic>;
+      },
+    );
   }
 
   Future<void> updateTemplate() async {
     try {
       final template = await fetchTemplate();
+      final tId = template.$1;
       final content = template.$2();
-      final tId = content['id'] as int? ?? 1;
       if (await isTemplateAvailable(tId)) return;
       await DatabaseService.instance.saveTemplate(tId, content);
     } catch (e) {

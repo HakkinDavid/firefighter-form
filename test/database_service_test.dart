@@ -84,6 +84,17 @@ void main() {
     final user2Forms = await DatabaseService.instance.getAllForms();
     expect(user2Forms.isEmpty, isTrue); // User 2 has empty DB initially
 
+    // Test Template CRUD & Versioning (MAX(id))
+    await DatabaseService.instance.saveTemplate(1, {'formname': 'Template v1'});
+    await DatabaseService.instance.saveTemplate(25, {'formname': 'Template v25'});
+
+    final newestId = await DatabaseService.instance.getNewestSavedTemplateId();
+    expect(newestId, equals(25));
+
+    final t25Content = await DatabaseService.instance.getTemplate(25);
+    expect(t25Content, isNotNull);
+    expect(t25Content!['formname'], equals('Template v25'));
+
     // Cleanup
     await DatabaseService.instance.getUserDatabase('usr-1');
     await DatabaseService.instance.deleteForm('form-1');
