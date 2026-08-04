@@ -82,37 +82,45 @@ std::string ReadFileUtf8(const std::wstring& path) {
 }
 
 std::string JsonStringValue(const std::string& json, const std::string& key) {
-  std::regex pattern("\"" + key + "\"\\s*:\\s*\"((?:\\\\.|[^\"])*)\"");
-  std::smatch match;
-  if (!std::regex_search(json, match, pattern)) {
+  std::string target_key = "\"" + key + "\"";
+  size_t key_pos = json.find(target_key);
+  if (key_pos == std::string::npos) {
     return std::string();
   }
 
-  std::string value = match[1].str();
-  std::string unescaped;
-  unescaped.reserve(value.size());
-  for (size_t i = 0; i < value.size(); ++i) {
-    if (value[i] != '\\' || i + 1 >= value.size()) {
-      unescaped.push_back(value[i]);
-      continue;
-    }
+  size_t colon_pos = json.find(':', key_pos + target_key.length());
+  if (colon_pos == std::string::npos) {
+    return std::string();
+  }
 
-    char escaped = value[++i];
-    switch (escaped) {
-      case 'n':
-        unescaped.push_back('\n');
-        break;
-      case 'r':
-        unescaped.push_back('\r');
-        break;
-      case 't':
-        unescaped.push_back('\t');
-        break;
-      default:
-        unescaped.push_back(escaped);
-        break;
+  size_t quote_start = json.find('"', colon_pos + 1);
+  if (quote_start == std::string::npos) {
+    return std::string();
+  }
+
+  std::string unescaped;
+  unescaped.reserve(64);
+
+  bool escaping = false;
+  for (size_t i = quote_start + 1; i < json.length(); ++i) {
+    char c = json[i];
+    if (escaping) {
+      switch (c) {
+        case 'n': unescaped.push_back('\n'); break;
+        case 'r': unescaped.push_back('\r'); break;
+        case 't': unescaped.push_back('\t'); break;
+        default:  unescaped.push_back(c); break;
+      }
+      escaping = false;
+    } else if (c == '\\') {
+      escaping = true;
+    } else if (c == '"') {
+      break;
+    } else {
+      unescaped.push_back(c);
     }
   }
+
   return unescaped;
 }
 
@@ -259,73 +267,96 @@ bool FlutterWindow::OnCreate() {
         if (call.method_name() == "isUpdateAvailable") {
           auto result_shared = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
           std::thread([this, result = result_shared]() {
-            std::cout << "[Windows Native] Background thread started for isUpdateAvailable" << std::endl;
-            std::fflush(stdout);
-
-            HRESULT co_hr = ::CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-            std::cout << "[Windows Native] CoInitializeEx result: 0x" << std::hex << co_hr << std::dec << std::endl;
-            std::fflush(stdout);
-
-            std::wstring metadata_path =
-                GetTempPathForFile(L"bomberos-update-metadata.json");
-
-            bool download_success = DownloadFile(kMetadataUrl, metadata_path);
-            std::cout << "[Windows Native] DownloadFile metadata success: " << (download_success ? "true" : "false") << std::endl;
-            std::fflush(stdout);
-
-            if (SUCCEEDED(co_hr)) {
-              ::CoUninitialize();
-            }
-
-            if (!download_success) {
-              PostToMainThread([result]() {
-                std::cout << "[Windows Native (Main Thread)] Returning UPDATE_ERROR to Dart" << std::endl;
-                std::fflush(stdout);
-                result->Error("UPDATE_ERROR", "No se pudo descargar metadata.json.");
-              });
-              return;
-            }
-
-            std::string metadata = ReadFileUtf8(metadata_path);
-            std::cout << "[Windows Native] Read metadata.json (" << metadata.length() << " bytes)" << std::endl;
-            std::fflush(stdout);
-
-            latest_version_ =
-                FirstJsonStringValue(metadata, {"latest_version", "latestversion"});
-            latest_changelog_ = JsonStringValue(metadata, "changelog");
-            latest_windows_url_ = FirstJsonStringValue(
-                metadata, {"windows_url", "installer_url", "exe_url", "msi_url"});
-
-            std::cout << "[Windows Native] Latest version: '" << latest_version_
-                      << "', Windows URL: '" << latest_windows_url_ << "'" << std::endl;
-            std::fflush(stdout);
-
-            flutter::EncodableMap release_data;
-            release_data[flutter::EncodableValue("current_version")] =
-                flutter::EncodableValue(CurrentAppVersion());
-
-            if (latest_version_.empty() || latest_windows_url_.empty()) {
-              latest_version_.clear();
-              latest_changelog_.clear();
-              latest_windows_url_.clear();
-              release_data[flutter::EncodableValue("available")] =
-                  flutter::EncodableValue(false);
-            } else {
-              release_data[flutter::EncodableValue("available")] =
-                  flutter::EncodableValue(true);
-              release_data[flutter::EncodableValue("latest_version")] =
-                  flutter::EncodableValue(latest_version_);
-              release_data[flutter::EncodableValue("changelog")] =
-                  flutter::EncodableValue(latest_changelog_);
-              release_data[flutter::EncodableValue("windows_url")] =
-                  flutter::EncodableValue(latest_windows_url_);
-            }
-
-            PostToMainThread([result, release_data]() {
-              std::cout << "[Windows Native (Main Thread)] Returning isUpdateAvailable success to Dart" << std::endl;
+            try {
+              std::cout << "[Windows Native] Background thread started for isUpdateAvailable" << std::endl;
               std::fflush(stdout);
-              result->Success(flutter::EncodableValue(release_data));
-            });
+
+              HRESULT co_hr = ::CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+              std::cout << "[Windows Native] CoInitializeEx result: 0x" << std::hex << co_hr << std::dec << std::endl;
+              std::fflush(stdout);
+
+              std::wstring metadata_path =
+                  GetTempPathForFile(L"bomberos-update-metadata.json");
+
+              bool download_success = DownloadFile(kMetadataUrl, metadata_path);
+              std::cout << "[Windows Native] DownloadFile metadata success: " << (download_success ? "true" : "false") << std::endl;
+              std::fflush(stdout);
+
+              if (SUCCEEDED(co_hr)) {
+                ::CoUninitialize();
+              }
+
+              if (!download_success) {
+                PostToMainThread([result]() {
+                  std::cout << "[Windows Native (Main Thread)] Returning UPDATE_ERROR to Dart" << std::endl;
+                  std::fflush(stdout);
+                  result->Error("UPDATE_ERROR", "No se pudo descargar metadata.json.");
+                });
+                return;
+              }
+
+              std::string metadata = ReadFileUtf8(metadata_path);
+              std::cout << "[Windows Native] Read metadata.json (" << metadata.length() << " bytes)" << std::endl;
+              std::fflush(stdout);
+
+              std::string latest_ver =
+                  FirstJsonStringValue(metadata, {"latest_version", "latestversion"});
+              std::string latest_log = JsonStringValue(metadata, "changelog");
+              std::string latest_url = FirstJsonStringValue(
+                  metadata, {"windows_url", "installer_url", "exe_url", "msi_url"});
+
+              std::cout << "[Windows Native] Extracted latest_version: '" << latest_ver
+                        << "', windows_url: '" << latest_url << "'" << std::endl;
+              std::fflush(stdout);
+
+              flutter::EncodableMap release_data;
+              release_data[flutter::EncodableValue("current_version")] =
+                  flutter::EncodableValue(CurrentAppVersion());
+
+              bool is_available = !latest_ver.empty() && !latest_url.empty();
+              if (!is_available) {
+                release_data[flutter::EncodableValue("available")] =
+                    flutter::EncodableValue(false);
+              } else {
+                release_data[flutter::EncodableValue("available")] =
+                    flutter::EncodableValue(true);
+                release_data[flutter::EncodableValue("latest_version")] =
+                    flutter::EncodableValue(latest_ver);
+                release_data[flutter::EncodableValue("changelog")] =
+                    flutter::EncodableValue(latest_log);
+                release_data[flutter::EncodableValue("windows_url")] =
+                    flutter::EncodableValue(latest_url);
+              }
+
+              PostToMainThread([this, result, release_data, is_available, latest_ver, latest_log, latest_url]() {
+                if (is_available) {
+                  latest_version_ = latest_ver;
+                  latest_changelog_ = latest_log;
+                  latest_windows_url_ = latest_url;
+                } else {
+                  latest_version_.clear();
+                  latest_changelog_.clear();
+                  latest_windows_url_.clear();
+                }
+
+                std::cout << "[Windows Native (Main Thread)] Returning isUpdateAvailable success to Dart" << std::endl;
+                std::fflush(stdout);
+                result->Success(flutter::EncodableValue(release_data));
+              });
+            } catch (const std::exception& e) {
+              std::cout << "[Windows Native Exception] Exception in isUpdateAvailable thread: " << e.what() << std::endl;
+              std::fflush(stdout);
+              std::string msg = e.what();
+              PostToMainThread([result, msg]() {
+                result->Error("UPDATE_ERROR", msg);
+              });
+            } catch (...) {
+              std::cout << "[Windows Native Exception] Unknown exception in isUpdateAvailable thread" << std::endl;
+              std::fflush(stdout);
+              PostToMainThread([result]() {
+                result->Error("UPDATE_ERROR", "Excepción desconocida en hilo nativo.");
+              });
+            }
           }).detach();
           return;
         }
