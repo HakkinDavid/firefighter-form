@@ -109,16 +109,6 @@ class ServiceReliabilityEngineer {
     ServiceReliabilityEngineer.startTimer();
   }
 
-  Future<void> lockAndFlush() async {
-    await _busy.acquire();
-    try {
-      await _saveToDisk();
-      _tasksQueue.clear();
-    } finally {
-      _busy.release();
-    }
-  }
-
   void enqueueTasks(Iterable<String> requestedTasks) {
     for (String requested in requestedTasks) {
       if (!_tasksRepository.containsKey(requested)) {
@@ -345,43 +335,26 @@ class ServiceReliabilityEngineer {
     }
   }
 
-  void resetQueue() {
-    _tasksQueue.clear();
-    _writeQueue.clear();
-  }
-
   // === DISK / DATABASE FUNCTIONS ===
   Future<void> _loadFromDisk() async {
     try {
       DateTime start = DateTime.now();
 
-      final currentUserId = Settings.instance.userId;
-      final storedUserId = await DatabaseService.instance.getAppState('userId');
-      final targetUserId = currentUserId.isNotEmpty
-          ? currentUserId
-          : storedUserId;
+      final userId = await DatabaseService.instance.getAppState('userId');
+      final allowDebuggingStr = await DatabaseService.instance.getAppState('allowDebugging');
 
-      final allowDebuggingStr =
-          await DatabaseService.instance.getAppState('allowDebugging');
-
-      if (targetUserId != null && targetUserId.isNotEmpty) {
-        Settings.instance.userId = targetUserId;
-        await DatabaseService.instance.switchUserDatabase(targetUserId);
+      if (userId != null) {
+        Settings.instance.userId = userId;
       }
       if (allowDebuggingStr != null) {
         Settings.instance.allowDebugging = (allowDebuggingStr == 'true');
       }
 
-      await Settings.instance.loadLocalAccounts();
-      final usersMap = await DatabaseService.instance.getUsers();
-      final queueForms = await DatabaseService.instance.getFormsQueue();
-      final allForms = await DatabaseService.instance.getAllForms();
-
-      Settings.instance.userCache = usersMap;
-      Settings.instance.setFormsFromDisk(queueForms, allForms);
+      Settings.instance.userCache = await DatabaseService.instance.getUsers();
+      Settings.instance.formsQueue = await DatabaseService.instance.getFormsQueue();
 
       Logging(
-        "Cargado de SQLite: userId=${Settings.instance.userId}, userCache=${Settings.instance.userCache.keys}, formsQueue=${queueForms.length}, totalForms=${allForms.length}",
+        "Cargado de SQLite: userId=${Settings.instance.userId}, userCache=${Settings.instance.userCache.keys}, formsQueue=${Settings.instance.formsQueue.length}",
         caller: "SRE (_loadFromDisk)",
       );
 

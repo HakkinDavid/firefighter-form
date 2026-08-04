@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/viewmodels/overlay_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,39 +20,19 @@ class Header extends StatefulWidget {
 
 class _HeaderState extends State<Header> {
   final GlobalKey _buttonKey = GlobalKey();
-  StreamSubscription? _userCacheSubscription;
-
-  @override
-  void initState() {
-    super.initState();
-    _userCacheSubscription =
-        Settings.instance.userCacheStream.listen((_) {
-      if (mounted) setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    _userCacheSubscription?.cancel();
-    super.dispose();
-  }
 
   void _goToSearch() async {
     await Navigator.pushNamed(context, '/search');
-    if (mounted) setState(() {});
+    setState(() {});
   }
 
   void _goToPreferences() async {
     await Navigator.pushNamed(context, '/preferences');
-    if (mounted) setState(() {});
+    setState(() {});
   }
 
   void _goBack() {
-    if (Navigator.canPop(context)) {
-      Navigator.pop(context);
-    } else {
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-    }
+    Navigator.pop(context);
   }
 
   void _showUserMenu(double contentWidth) {
@@ -65,10 +44,6 @@ class _HeaderState extends State<Header> {
         ? (contentWidth / 2)
         : 300;
 
-    final isSessionValid = Settings.instance.isSessionValid;
-    final displayUsername =
-        Settings.instance.self?.fullName ?? widget.username ?? 'Usuario local';
-
     OverlayService.showOverlay(
       position: position,
       buttonSize: buttonSize,
@@ -79,63 +54,22 @@ class _HeaderState extends State<Header> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "Usuario: $displayUsername",
+              "Usuario: ${widget.username}",
               style: TextStyle(
                 color: Settings.instance.colors.textOverPrimary,
                 fontSize: 14,
-                fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.center,
             ),
-            if (widget.adminUsername != null ||
-                Settings.instance.watcher?.fullName != null)
+            if (widget.adminUsername != null)
               Text(
-                "Tutelar: ${widget.adminUsername ?? Settings.instance.watcher?.fullName}",
+                "Tutelar: ${widget.adminUsername}",
                 style: TextStyle(
                   color: Settings.instance.colors.textOverPrimary,
-                  fontSize: 13,
+                  fontSize: 14,
                 ),
                 textAlign: TextAlign.center,
               ),
-            if (!isSessionValid) ...[
-              const SizedBox(height: 6),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: CupertinoColors.systemOrange.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: CupertinoColors.systemOrange),
-                ),
-                child: const Text(
-                  "Sesión expirada",
-                  style: TextStyle(
-                    color: CupertinoColors.systemOrange,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-            const SizedBox(height: 8),
-            CupertinoButton(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              color: Settings.instance.colors.primaryContrast,
-              minimumSize: Size.zero,
-              onPressed: () {
-                OverlayService.closeCurrentOverlay();
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/welcome', (route) => false);
-              },
-              child: Text(
-                'Cambiar usuario',
-                style: TextStyle(
-                  color: Settings.instance.colors.primary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -145,9 +79,6 @@ class _HeaderState extends State<Header> {
   @override
   Widget build(BuildContext context) {
     final String? currentRoute = ModalRoute.of(context)?.settings.name;
-    final isSessionValid = Settings.instance.isSessionValid;
-    final isWelcomeRoute =
-        currentRoute == '/welcome' || currentRoute == '/';
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -166,6 +97,7 @@ class _HeaderState extends State<Header> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // The 600 could be a macro in settings. Something like WIDESCREEN
                   if (contentWidth < 600) ...[
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -255,71 +187,54 @@ class _HeaderState extends State<Header> {
                               ),
                               textAlign: TextAlign.center,
                             ),
-                            if (!isWelcomeRoute)
+                            if (widget.username != null)
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Stack(
-                                    children: [
-                                      IconButton(
-                                        key: _buttonKey,
-                                        icon: const Icon(
-                                          CupertinoIcons.person_crop_circle,
-                                          size: 30,
-                                        ),
-                                        padding: EdgeInsets.zero,
-                                        color: Settings.instance.colors.primaryContrast,
-                                        onPressed: () =>
-                                            _showUserMenu(contentWidth),
-                                      ),
-                                      if (!isSessionValid)
-                                        Positioned(
-                                          right: 0,
-                                          top: 0,
-                                          child: Container(
-                                            width: 10,
-                                            height: 10,
-                                            decoration: const BoxDecoration(
-                                              color: CupertinoColors.systemOrange,
-                                              shape: BoxShape.circle,
-                                            ),
-                                          ),
-                                        ),
-                                    ],
+                                  IconButton(
+                                    key: _buttonKey,
+                                    icon: const Icon(
+                                      CupertinoIcons.person_crop_circle,
+                                      size: 30,
+                                    ),
+                                    padding: EdgeInsets.zero,
+                                    color: Settings().colors.primaryContrast,
+                                    onPressed: () =>
+                                        _showUserMenu(contentWidth),
                                   ),
                                   const SizedBox(width: 12),
-                                  if (currentRoute == '/home' ||
-                                      currentRoute == null) ...[
+                                  if (currentRoute == '/home') ...[
                                     IconButton(
-                                      icon: const Icon(
+                                      icon: Icon(
                                         CupertinoIcons.search,
                                         size: 30,
                                       ),
                                       padding: EdgeInsets.zero,
-                                      color: Settings.instance.colors.primaryContrast,
+                                      color: Settings().colors.primaryContrast,
                                       onPressed: _goToSearch,
                                     ),
                                     const SizedBox(width: 12),
                                     IconButton(
-                                      icon: const Icon(
+                                      icon: Icon(
                                         CupertinoIcons.settings,
                                         size: 30,
                                       ),
                                       padding: EdgeInsets.zero,
-                                      color: Settings.instance.colors.primaryContrast,
+                                      color: Settings().colors.primaryContrast,
                                       onPressed: _goToPreferences,
                                     ),
                                   ],
                                   if (currentRoute != '/home' &&
-                                      currentRoute != null)
+                                      currentRoute != '/' &&
+                                      currentRoute != '/welcome')
                                     IconButton(
-                                      icon: const Icon(
+                                      icon: Icon(
                                         CupertinoIcons.arrow_left_circle,
                                         size: 30,
                                       ),
                                       padding: EdgeInsets.zero,
-                                      color: Settings.instance.colors.primaryContrast,
+                                      color: Settings().colors.primaryContrast,
                                       onPressed: _goBack,
                                     ),
                                 ],

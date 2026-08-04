@@ -7,18 +7,12 @@ class ConnectionHeuristic extends Heuristic {
   @override
   Future<bool> evaluate() async {
     try {
-      final socket = await Socket.connect(DatabaseSettings.host, 443,
-              timeout: const Duration(milliseconds: 500));
-      socket.destroy();
-      return true;
+      final result = await InternetAddress.lookup(DatabaseSettings.host)
+          .timeout(const Duration(seconds: 3));
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
     } catch (_) {
-      try {
-        final result = await InternetAddress.lookup(DatabaseSettings.host)
-            .timeout(const Duration(milliseconds: 500));
-        return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
-      } catch (_) {
-        return false;
-      }
+      return false;
     }
   }
 }
+

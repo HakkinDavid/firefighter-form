@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'package:bomberos/models/SRE/Heuristic/connection_heuristic.dart';
 import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
 import 'package:bomberos/models/database_service.dart';
 import 'package:bomberos/models/form.dart';
-import 'package:bomberos/models/local_account.dart';
 import 'package:bomberos/models/logging.dart';
 import 'package:bomberos/models/user.dart';
 import 'package:flutter/cupertino.dart';
@@ -57,7 +55,7 @@ class Settings {
     Logging(
       "${state ? "Activando" : "Desactivando"} depuración",
       caller: "Settings (allowDebugging)",
-      attentionLevel: 2,
+      attentionLevel: 2
     );
   }
 
@@ -66,31 +64,9 @@ class Settings {
   Map<String, FirefighterUser> _userCache = {};
   List<ServiceForm> _formsQueue = [];
   List<ServiceForm> _formsList = [];
-  List<LocalUserAccount> _localAccounts = [];
-  bool _isSessionValid = true;
-
-  bool get isSessionValid => _isSessionValid;
-
-  bool get isCloudAuthAligned {
-    if (!_isSessionValid) return false;
-    final cloudUser = Supabase.instance.client.auth.currentUser;
-    return cloudUser != null && cloudUser.id == _userId;
-  }
-
-  Future<bool> ensureCloudAuthAligned() async {
-    if (!isCloudAuthAligned) {
-      if (_userId != null && _userId!.isNotEmpty) {
-        final matches = _localAccounts.where((a) => a.userId == _userId);
-        final account = matches.isNotEmpty ? matches.first : null;
-        unawaited(_refreshCloudSession(_userId!, account));
-      }
-      return false;
-    }
-    return true;
-  }
 
   final StreamController<Map<String, FirefighterUser>>
-      _userCacheStreamController =
+  _userCacheStreamController =
       StreamController<Map<String, FirefighterUser>>.broadcast();
   Stream<Map<String, FirefighterUser>> get userCacheStream =>
       _userCacheStreamController.stream;
@@ -100,18 +76,11 @@ class Settings {
   Stream<List<ServiceForm>> get formsListStream =>
       _formsStreamController.stream;
 
-  final StreamController<List<LocalUserAccount>>
-      _localAccountsStreamController =
-      StreamController<List<LocalUserAccount>>.broadcast();
-  Stream<List<LocalUserAccount>> get localAccountsStream =>
-      _localAccountsStreamController.stream;
-
   // ignore: unnecessary_getters_setters
   Map<String, FirefighterUser> get userCache => _userCache;
   // ignore: unnecessary_getters_setters
   List<ServiceForm> get formsQueue => _formsQueue;
-  List<LocalUserAccount> get localAccounts => _localAccounts;
-
+  // Direct setters for now
   set userCache(Map<String, FirefighterUser> userCache) {
     _userCache = userCache;
   }
@@ -120,31 +89,10 @@ class Settings {
     _formsQueue = formsQueue;
   }
 
-  bool get isLoggedIn => _userId != null && _userId!.isNotEmpty;
+  bool get isLoggedIn => _userId != null && _userCache.containsKey(_userId);
 
-  FirefighterUser? get self {
-    if (_userId == null || _userId!.isEmpty) return null;
-    if (_userCache.containsKey(_userId)) {
-      return _userCache[_userId];
-    }
-    final matches = _localAccounts.where((a) => a.userId == _userId);
-    if (matches.isNotEmpty) {
-      final account = matches.first;
-      return FirefighterUser(
-        id: account.userId,
-        givenName: account.givenName,
-        firstSurname: account.firstSurname,
-        secondSurname: account.secondSurname,
-        role: account.role,
-      );
-    }
-    return null;
-  }
-  FirefighterUser? get watcher {
-    final watcherId = self?.watchedByUserId;
-    if (watcherId == null || watcherId.isEmpty) return null;
-    return _userCache[watcherId];
-  }
+  FirefighterUser? get self => _userCache[_userId];
+  FirefighterUser? get watcher => _userCache[self?.watchedByUserId ?? ""];
 
   List<ServiceForm> get formsList {
     final combined =
@@ -156,181 +104,7 @@ class Settings {
     return combined;
   }
 
-  Future<void> loadLocalAccounts() async {
-    _localAccounts = await DatabaseService.instance.getLocalAccounts();
-    _localAccountsStreamController.add(_localAccounts);
-  }
-
-  Future<void> registerOrUpdateCurrentLocalAccount() async {
-    final currentUser = Supabase.instance.client.auth.currentUser;
-    final currentSession = Supabase.instance.client.auth.currentSession;
-    if (currentUser == null) return;
-
-    final uId = currentUser.id;
-    final uEmail = currentUser.email ?? '';
-    final refreshToken = currentSession?.refreshToken;
-
-    // Fetch or use self user info
-    FirefighterUser? selfUser = _userCache[uId];
-    if (selfUser == null) {
-      try {
-        await refreshUsers();
-        selfUser = _userCache[uId];
-      } catch (e) {
-        // Fallback
-      }
-    }
-
-    final account = LocalUserAccount(
-      userId: uId,
-      email: uEmail,
-      givenName: selfUser?.givenName ?? 'Bombero',
-      firstSurname: selfUser?.firstSurname ?? 'Local',
-      secondSurname: selfUser?.secondSurname,
-      role: selfUser?.role ?? 0,
-      refreshToken: refreshToken,
-      lastLoginAt: DateTime.now(),
-      isSessionValid: true,
-    );
-
-    await DatabaseService.instance.saveLocalAccount(account);
-    await loadLocalAccounts();
-  }
-
-  void setFormsFromDisk(
-    List<ServiceForm> queueForms,
-    List<ServiceForm> allForms,
-  ) {
-    _formsQueue = List.from(queueForms);
-    _formsList = List.from(allForms);
-    _formsStreamController.add(formsList);
-  }
-
-  Future<void> switchActiveUser(String targetUserId) async {
-    Logging(
-      "Iniciando cambio atómico al usuario $targetUserId...",
-      caller: "Settings (switchActiveUser)",
-      attentionLevel: 2,
-    );
-
-    ServiceReliabilityEngineer.instance.resetQueue();
-    await ServiceReliabilityEngineer.instance.lockAndFlush();
-
-    // 1. Clear current in-memory caches
-    _userCache.clear();
-    _formsQueue.clear();
-    _formsList.clear();
-
-    // 2. Set active user ID
-    _userId = targetUserId;
-    await DatabaseService.instance.setAppState('userId', targetUserId);
-
-    // 3. Switch database connection in DatabaseService
-    await DatabaseService.instance.switchUserDatabase(targetUserId);
-
-
-    // 4. Instant local re-hydration from SQLite (< 2ms)
-    await loadLocalAccounts();
-
-    final matches = _localAccounts.where((a) => a.userId == targetUserId);
-    final account = matches.isNotEmpty ? matches.first : null;
-    _isSessionValid = account?.isSessionValid ?? true;
-
-    // 5. Enqueue SRE reload and sync tasks for new user
-    ServiceReliabilityEngineer.instance.enqueueTasks({
-      "LoadFromDisk",
-      "SetUser",
-      "SyncForms",
-      "RefreshUsers",
-      "SetForms",
-    });
-
-    // 6. Non-blocking cloud token session restoration in background microtask
-    unawaited(_refreshCloudSession(targetUserId, account));
-  }
-
-  Future<void> _refreshCloudSession(
-      String targetUserId, LocalUserAccount? account) async {
-    if (account == null ||
-        account.refreshToken == null ||
-        account.refreshToken!.isEmpty) {
-      return;
-    }
-    final isOnline = await ConnectionHeuristic().evaluate();
-    if (!isOnline) return;
-
-    try {
-      final res = await Supabase.instance.client.auth
-          .setSession(account.refreshToken!);
-      if (res.session != null) {
-        _isSessionValid = true;
-        if (res.session!.refreshToken != null &&
-            res.session!.refreshToken != account.refreshToken) {
-          final updatedAccount = account.copyWith(
-            refreshToken: res.session!.refreshToken,
-            lastLoginAt: DateTime.now(),
-            isSessionValid: true,
-          );
-          await DatabaseService.instance.saveLocalAccount(updatedAccount);
-          await loadLocalAccounts();
-        }
-      }
-    } on AuthException catch (e) {
-      Logging(
-        "Token no válido o revocado en la nube para $targetUserId: ${e.message}",
-        caller: "Settings (_refreshCloudSession)",
-        attentionLevel: 3,
-      );
-      _isSessionValid = false;
-      final updatedAccount = account.copyWith(isSessionValid: false);
-      await DatabaseService.instance.saveLocalAccount(updatedAccount);
-      await loadLocalAccounts();
-    } catch (e) {
-      _isSessionValid = true;
-    }
-  }
-
-  Future<bool> removeLocalAccountWithAuth(
-    String targetUserId,
-    String password,
-  ) async {
-    final account = await DatabaseService.instance.getLocalAccount(targetUserId);
-    if (account == null) return false;
-
-    try {
-      // Re-authenticate credentials against Supabase online
-      final res = await Supabase.instance.client.auth.signInWithPassword(
-        email: account.email,
-        password: password,
-      );
-
-      if (res.user?.id == targetUserId) {
-        await DatabaseService.instance.removeLocalAccount(targetUserId);
-        await loadLocalAccounts();
-
-        // If the removed account was active, clear active user ID or switch to remaining account
-        if (_userId == targetUserId) {
-          if (_localAccounts.isNotEmpty) {
-            await switchActiveUser(_localAccounts.first.userId);
-          } else {
-            _userId = null;
-            await DatabaseService.instance.setAppState('userId', '');
-          }
-        }
-        return true;
-      }
-    } catch (e) {
-      Logging(
-        "Fallo de re-autenticación al eliminar cuenta local: $e",
-        caller: "Settings (removeLocalAccountWithAuth)",
-        attentionLevel: 3,
-      );
-    }
-    return false;
-  }
-
   Future<void> setUserRole(String userId, int userRole) async {
-    if (!await ensureCloudAuthAligned()) return;
     await Supabase.instance.client.rpc(
       'set_user_role',
       params: {'p_user_id': userId, 'p_role_id': userRole},
@@ -343,7 +117,6 @@ class Settings {
   }
 
   Future<void> setUserHierarchy(String watchedId, String? watcherId) async {
-    if (!await ensureCloudAuthAligned()) return;
     await Supabase.instance.client.rpc(
       'set_user_hierarchy',
       params: {'p_watched_id': watchedId, 'p_watcher_id': watcherId},
@@ -407,7 +180,6 @@ class Settings {
     try {
       setUserId();
       await fetchUser();
-      await registerOrUpdateCurrentLocalAccount();
     } catch (e) {
       Logging(
         "Error intentando establecer usuario. Probablemente no hay una sesión activa.\n\t\t$e",
@@ -418,7 +190,6 @@ class Settings {
   }
 
   Future<void> setForms() async {
-    if (!await ensureCloudAuthAligned()) return;
     try {
       final formRecords = await Supabase.instance.client
           .from('filled_in')
@@ -442,7 +213,6 @@ class Settings {
   void setUserId() {
     _userId = Supabase.instance.client.auth.currentUser!.id;
     DatabaseService.instance.setAppState('userId', _userId!);
-    DatabaseService.instance.switchUserDatabase(_userId!);
   }
 
   Future<FirefighterUser> fetchUser({String? pUserId}) async {
@@ -523,7 +293,6 @@ class Settings {
   }
 
   Future<void> refreshUsers() async {
-    if (!await ensureCloudAuthAligned()) return;
     try {
       final userNamesRecord = await Supabase.instance.client
           .from('user_name')
@@ -606,7 +375,6 @@ class Settings {
 
   // This will be an actual function later
   Future<bool> uploadTemplate(Map<String, dynamic> template) async {
-    if (!await ensureCloudAuthAligned()) return false;
     try {
       await Supabase.instance.client.rpc(
         'upload_template',
@@ -646,15 +414,6 @@ class Settings {
   }
 
   Future<bool> uploadForm(ServiceForm form) async {
-    if (!await ensureCloudAuthAligned()) {
-      Logging(
-        "Ignorando envío de formulario ${form.id}: La identidad del usuario autenticado en la nube no coincide con el usuario activo local.",
-        caller: "Settings (uploadForm)",
-        attentionLevel: 2,
-      );
-      return false;
-    }
-
     try {
       await Supabase.instance.client.rpc(
         'upload_filled_in',
@@ -672,15 +431,6 @@ class Settings {
   }
 
   Future<void> syncForms() async {
-    if (!await ensureCloudAuthAligned()) {
-      Logging(
-        "Sincronización omitida: La sesión autenticada en la nube no está alineada con el usuario activo local.",
-        caller: "Settings (syncForms)",
-        attentionLevel: 2,
-      );
-      return;
-    }
-
     final syncCandidates = List<ServiceForm>.from(
       _formsQueue.where((f) => f.status == 1),
     );
@@ -696,7 +446,7 @@ class Settings {
 
   Future<void> deleteForm(ServiceForm form) async {
     try {
-      if (form.status == 2 && await ensureCloudAuthAligned()) {
+      if (form.status == 2) {
         await Supabase.instance.client.rpc(
           'delete_filled_in',
           params: {'p_id': form.id},
@@ -710,4 +460,6 @@ class Settings {
       // no importa si no se borra, mejor para nosotros.
     }
   }
+
 }
+
