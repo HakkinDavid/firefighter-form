@@ -110,8 +110,29 @@ class Settings {
 
   bool get isLoggedIn => _userId != null && _userId!.isNotEmpty;
 
-  FirefighterUser? get self => _userCache[_userId];
-  FirefighterUser? get watcher => _userCache[self?.watchedByUserId ?? ""];
+  FirefighterUser? get self {
+    if (_userId == null || _userId!.isEmpty) return null;
+    if (_userCache.containsKey(_userId)) {
+      return _userCache[_userId];
+    }
+    final matches = _localAccounts.where((a) => a.userId == _userId);
+    if (matches.isNotEmpty) {
+      final account = matches.first;
+      return FirefighterUser(
+        id: account.userId,
+        givenName: account.givenName,
+        firstSurname: account.firstSurname,
+        secondSurname: account.secondSurname,
+        role: account.role,
+      );
+    }
+    return null;
+  }
+  FirefighterUser? get watcher {
+    final watcherId = self?.watchedByUserId;
+    if (watcherId == null || watcherId.isEmpty) return null;
+    return _userCache[watcherId];
+  }
 
   List<ServiceForm> get formsList {
     final combined =
@@ -188,72 +209,71 @@ class Settings {
     _formsQueue.clear();
     _formsList.clear();
 
-    // 2. Switch database connection in DatabaseService
-    await DatabaseService.instance.switchUserDatabase(targetUserId);
-
-    // 3. Set active user ID
+    // 2. Set active user ID
     _userId = targetUserId;
     await DatabaseService.instance.setAppState('userId', targetUserId);
 
-    // 4. Restore Supabase JWT session if online and refresh token exists
-    final account = await DatabaseService.instance.getLocalAccount(targetUserId);
-    final isOnline = await ConnectionHeuristic().evaluate();
+    // 3. Switch database connection in DatabaseService
+    await DatabaseService.instance.switchUserDatabase(targetUserId);
 
-    if (isOnline &&
-        account != null &&
-        account.refreshToken != null &&
-        account.refreshToken!.isNotEmpty) {
-      try {
-        final res = await Supabase.instance.client.auth
-            .setSession(account.refreshToken!);
-        if (res.session != null) {
-          _isSessionValid = true;
-          // Update refresh token if rotated
-          if (res.session!.refreshToken != null &&
-              res.session!.refreshToken != account.refreshToken) {
-            final updatedAccount = account.copyWith(
-              refreshToken: res.session!.refreshToken,
-              lastLoginAt: DateTime.now(),
-              isSessionValid: true,
-            );
-            await DatabaseService.instance.saveLocalAccount(updatedAccount);
-          }
-        }
-      } on AuthException catch (e) {
-        Logging(
-          "Token no válido o revocado en la nube para $targetUserId: ${e.message}",
-          caller: "Settings (switchActiveUser)",
-          attentionLevel: 3,
-        );
-        _isSessionValid = false;
-        final updatedAccount = account.copyWith(isSessionValid: false);
-        await DatabaseService.instance.saveLocalAccount(updatedAccount);
-      } catch (e) {
-        Logging(
-          "Red no disponible al conmutar usuario $targetUserId: $e. Manteniendo sesión local activa.",
-          caller: "Settings (switchActiveUser)",
-          attentionLevel: 1,
-        );
-        _isSessionValid = true;
-      }
-    } else {
-      // Offline: Instant local switch (< 5ms) without blocking HTTP network call
-      _isSessionValid = account?.isSessionValid ?? true;
-    }
+
+    // 4. Instant local re-hydration from SQLite (< 2ms)
+    await loadLocalAccounts();
+
+    final matches = _localAccounts.where((a) => a.userId == targetUserId);
+    final account = matches.isNotEmpty ? matches.first : null;
+    _isSessionValid = account?.isSessionValid ?? true;
 
     // 5. Enqueue SRE reload and sync tasks for new user
     ServiceReliabilityEngineer.instance.enqueueTasks({
-      "LoadFromDisk",
       "RefreshUsers",
       "SetForms",
       "SyncForms",
     });
 
-    await loadLocalAccounts();
+    // 6. Non-blocking cloud token session restoration in background microtask
+    unawaited(_refreshCloudSession(targetUserId, account));
+  }
 
-    // 6. Notify stream controllers
-    _userCacheStreamController.add(_userCache);
-    _formsStreamController.add(formsList);
+  Future<void> _refreshCloudSession(
+      String targetUserId, LocalUserAccount? account) async {
+    if (account == null ||
+        account.refreshToken == null ||
+        account.refreshToken!.isEmpty) {
+      return;
+    }
+    final isOnline = await ConnectionHeuristic().evaluate();
+    if (!isOnline) return;
+
+    try {
+      final res = await Supabase.instance.client.auth
+          .setSession(account.refreshToken!);
+      if (res.session != null) {
+        _isSessionValid = true;
+        if (res.session!.refreshToken != null &&
+            res.session!.refreshToken != account.refreshToken) {
+          final updatedAccount = account.copyWith(
+            refreshToken: res.session!.refreshToken,
+            lastLoginAt: DateTime.now(),
+            isSessionValid: true,
+          );
+          await DatabaseService.instance.saveLocalAccount(updatedAccount);
+          await loadLocalAccounts();
+        }
+      }
+    } on AuthException catch (e) {
+      Logging(
+        "Token no válido o revocado en la nube para $targetUserId: ${e.message}",
+        caller: "Settings (_refreshCloudSession)",
+        attentionLevel: 3,
+      );
+      _isSessionValid = false;
+      final updatedAccount = account.copyWith(isSessionValid: false);
+      await DatabaseService.instance.saveLocalAccount(updatedAccount);
+      await loadLocalAccounts();
+    } catch (e) {
+      _isSessionValid = true;
+    }
   }
 
   Future<bool> removeLocalAccountWithAuth(

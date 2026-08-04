@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/viewmodels/overlay_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,15 +21,31 @@ class Header extends StatefulWidget {
 
 class _HeaderState extends State<Header> {
   final GlobalKey _buttonKey = GlobalKey();
+  StreamSubscription? _userCacheSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _userCacheSubscription =
+        Settings.instance.userCacheStream.listen((_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _userCacheSubscription?.cancel();
+    super.dispose();
+  }
 
   void _goToSearch() async {
     await Navigator.pushNamed(context, '/search');
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   void _goToPreferences() async {
     await Navigator.pushNamed(context, '/preferences');
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   void _goBack() {
@@ -49,6 +66,8 @@ class _HeaderState extends State<Header> {
         : 300;
 
     final isSessionValid = Settings.instance.isSessionValid;
+    final displayUsername =
+        Settings.instance.self?.fullName ?? widget.username ?? 'Usuario local';
 
     OverlayService.showOverlay(
       position: position,
@@ -60,7 +79,7 @@ class _HeaderState extends State<Header> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "Usuario: ${widget.username ?? 'Usuario local'}",
+              "Usuario: $displayUsername",
               style: TextStyle(
                 color: Settings.instance.colors.textOverPrimary,
                 fontSize: 14,
@@ -68,9 +87,10 @@ class _HeaderState extends State<Header> {
               ),
               textAlign: TextAlign.center,
             ),
-            if (widget.adminUsername != null)
+            if (widget.adminUsername != null ||
+                Settings.instance.watcher?.fullName != null)
               Text(
-                "Tutelar: ${widget.adminUsername}",
+                "Tutelar: ${widget.adminUsername ?? Settings.instance.watcher?.fullName}",
                 style: TextStyle(
                   color: Settings.instance.colors.textOverPrimary,
                   fontSize: 13,
@@ -249,7 +269,7 @@ class _HeaderState extends State<Header> {
                                           size: 30,
                                         ),
                                         padding: EdgeInsets.zero,
-                                        color: Settings().colors.primaryContrast,
+                                        color: Settings.instance.colors.primaryContrast,
                                         onPressed: () =>
                                             _showUserMenu(contentWidth),
                                       ),
@@ -277,7 +297,7 @@ class _HeaderState extends State<Header> {
                                         size: 30,
                                       ),
                                       padding: EdgeInsets.zero,
-                                      color: Settings().colors.primaryContrast,
+                                      color: Settings.instance.colors.primaryContrast,
                                       onPressed: _goToSearch,
                                     ),
                                     const SizedBox(width: 12),
@@ -287,7 +307,7 @@ class _HeaderState extends State<Header> {
                                         size: 30,
                                       ),
                                       padding: EdgeInsets.zero,
-                                      color: Settings().colors.primaryContrast,
+                                      color: Settings.instance.colors.primaryContrast,
                                       onPressed: _goToPreferences,
                                     ),
                                   ],
@@ -299,7 +319,7 @@ class _HeaderState extends State<Header> {
                                         size: 30,
                                       ),
                                       padding: EdgeInsets.zero,
-                                      color: Settings().colors.primaryContrast,
+                                      color: Settings.instance.colors.primaryContrast,
                                       onPressed: _goBack,
                                     ),
                                 ],

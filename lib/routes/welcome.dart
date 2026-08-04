@@ -93,7 +93,7 @@ class _WelcomeState extends State<Welcome> {
         );
 
         if (response.user != null) {
-          await Settings.instance.setUser();
+          await Settings.instance.switchActiveUser(response.user!.id);
           if (mounted) {
             Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
           }
@@ -114,7 +114,7 @@ class _WelcomeState extends State<Welcome> {
             },
           );
 
-          await Settings.instance.setUser();
+          await Settings.instance.switchActiveUser(response.user!.id);
           if (mounted) {
             Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
           }
