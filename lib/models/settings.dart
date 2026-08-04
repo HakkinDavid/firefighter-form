@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
+import 'package:bomberos/models/database_service.dart';
 import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/logging.dart';
 import 'package:bomberos/models/user.dart';
@@ -43,14 +43,15 @@ class Settings {
 
   String get userId => _userId ?? '';
   set userId(String userId) {
-    // Maybe check with regex that the id format is correct
     _userId = userId;
+    DatabaseService.instance.setAppState('userId', userId);
   }
 
   bool _allowDebugging = false;
 
   set allowDebugging(bool state) {
     _allowDebugging = state;
+    DatabaseService.instance.setAppState('allowDebugging', state.toString());
     ServiceReliabilityEngineer.instance.enqueueTasks(["RefreshUsers"]);
     Logging(
       "${state ? "Activando" : "Desactivando"} depuración",
@@ -178,8 +179,10 @@ class Settings {
 
   Future<void> setUser() async {
     try {
-      setUserId();
-      await fetchUser();
+      await setUserId();
+      if (_userId != null && _userId!.isNotEmpty) {
+        await fetchUser();
+      }
     } catch (e) {
       Logging(
         "Error intentando establecer usuario. Probablemente no hay una sesión activa.\n\t\t$e",
@@ -189,17 +192,53 @@ class Settings {
     }
   }
 
+  Future<void> setUserId([String? explicitUserId]) async {
+    String? currentSupabaseUserId;
+    try {
+      currentSupabaseUserId = Supabase.instance.client.auth.currentUser?.id;
+    } catch (_) {}
+    _userId = explicitUserId ?? currentSupabaseUserId;
+    if (_userId != null && _userId!.isNotEmpty) {
+      await DatabaseService.instance.getUserDatabase(_userId!);
+      await DatabaseService.instance.setAppState('userId', _userId!);
+      _userCache = await DatabaseService.instance.getUsers();
+      _formsQueue = await DatabaseService.instance.getFormsQueue();
+      _formsList = await DatabaseService.instance.getAllForms();
+      _userCacheStreamController.add(_userCache);
+      _formsStreamController.add(formsList);
+    } else {
+      await DatabaseService.instance.closeUserDatabase();
+      await DatabaseService.instance.deleteAppState('userId');
+      _userId = null;
+      _userCache = {};
+      _formsQueue = [];
+      _formsList = [];
+      _userCacheStreamController.add(_userCache);
+      _formsStreamController.add([]);
+    }
+  }
+
+  Future<void> logOut() async {
+    try {
+      await Supabase.instance.client.auth.signOut();
+    } catch (e) {
+      Logging("Error al cerrar sesión en Supabase: $e", caller: "Settings (logOut)", attentionLevel: 2);
+    }
+    await setUserId(null);
+    Logging("Sesión cerrada correctamente. Memoria y base de datos de usuario desmontadas.", caller: "Settings (logOut)", attentionLevel: 2);
+  }
+
   Future<void> setForms() async {
     try {
       final formRecords = await Supabase.instance.client
           .from('filled_in')
           .select('*')
           .order('filled_at');
-      _formsList = formRecords
-          .asMap()
-          .map((key, value) => MapEntry(key, ServiceForm.fromJson(value)))
-          .values
+      final remoteForms = formRecords
+          .map((value) => ServiceForm.fromJson(value))
           .toList();
+      await DatabaseService.instance.saveRemoteForms(remoteForms);
+      _formsList = await DatabaseService.instance.getAllForms();
       _formsStreamController.add(formsList);
     } catch (e) {
       Logging(
@@ -210,10 +249,6 @@ class Settings {
     }
   }
 
-  void setUserId() {
-    _userId = Supabase.instance.client.auth.currentUser!.id;
-  }
-
   Future<FirefighterUser> fetchUser({String? pUserId}) async {
     pUserId ??= _userId!;
     await refreshUsers();
@@ -221,40 +256,29 @@ class Settings {
   }
 
   Future<bool> isTemplateAvailable(int id) async {
-    return await File(await getTemplateRoute(id)).exists();
+    return (await DatabaseService.instance.getTemplate(id)) != null;
   }
 
   Future<Map<String, dynamic>> getTemplate(int id) async {
-    if (!(await isTemplateAvailable(id))) {
-      final template = await fetchTemplate(id: id);
-      ServiceReliabilityEngineer.instance.enqueueWriteTasks([template]);
-      return template.$2();
-    }
-    File templateFile = File(await getTemplateRoute(id));
+    final cached = await DatabaseService.instance.getTemplate(id);
+    if (cached != null) return cached;
 
-    return json.decode(await templateFile.readAsString());
+    final template = await fetchTemplate(id: id);
+    await DatabaseService.instance.saveTemplate(id, template.$2());
+    return template.$2();
   }
 
   Future<int?> getNewestSavedTemplate() async {
     try {
-      final directory = Directory(await getTemplatesDirectoryRoute());
-      int? newest;
-
-      if (await directory.exists()) {
-        await for (var t in directory.list()) {
-          String name = t.path.split(RegExp(r'[/\\]')).last.split('.').first;
-          int? tId = int.tryParse(name);
-          if (tId != null && tId > (newest ?? 0)) newest = tId;
-        }
-      } else {
-        ServiceReliabilityEngineer.instance.enqueueTasks({"UpdateTemplate"});
+      int? newest = await DatabaseService.instance.getNewestSavedTemplateId();
+      if (newest == null) {
+        await updateTemplate();
+        newest = await DatabaseService.instance.getNewestSavedTemplateId();
       }
-
       return newest;
     } catch (e) {
       // Handle exceptions if needed
     }
-
     return null;
   }
 
@@ -293,22 +317,10 @@ class Settings {
 
   Future<void> refreshTemplates() async {
     try {
-      final directory = Directory(await getTemplatesDirectoryRoute());
-      if (await directory.exists()) {
-        final List<(String, Map<String, dynamic> Function()?)>
-        templateRefreshTasks = [];
-        await for (var t in directory.list()) {
-          String name = t.path.split(RegExp(r'[/\\]')).last.split('.').first;
-          int? tId = int.tryParse(name);
-          if (tId == null) continue;
-          templateRefreshTasks.addAll([
-            (t.path, null),
-            await fetchTemplate(id: tId),
-          ]);
-        }
-        ServiceReliabilityEngineer.instance.enqueueWriteTasks(
-          templateRefreshTasks,
-        );
+      final savedIds = await DatabaseService.instance.getSavedTemplateIds();
+      for (var tId in savedIds) {
+        final template = await fetchTemplate(id: tId);
+        await DatabaseService.instance.saveTemplate(tId, template.$2());
       }
     } catch (e) {
       // yo cuando no hago algo
@@ -345,9 +357,10 @@ class Settings {
         );
       }
 
+      final Map<String, FirefighterUser> freshUserCache = {};
       for (var userNameRecordX in userNamesRecord) {
         String idX = userNameRecordX['id'];
-        _userCache[idX] = FirefighterUser(
+        freshUserCache[idX] = FirefighterUser(
           id: idX,
           givenName: userNameRecordX['given'],
           firstSurname: userNameRecordX['surname1'],
@@ -357,12 +370,9 @@ class Settings {
           watchesUsersId: watcherMapById[idX] ?? <String>{},
         );
       }
+      _userCache = freshUserCache;
       _userCacheStreamController.add(_userCache);
-      String directory = await getSettingsDirectoryRoute();
-      ServiceReliabilityEngineer.instance.enqueueWriteTasks([
-        ('$directory/user_data.json', mapAccessor('userData')),
-        ('$directory/user_cache.json', mapAccessor('userCache')),
-      ]);
+      await DatabaseService.instance.saveUsers(_userCache);
     } catch (e) {
       Logging(
         "Error intentando refrescar usuarios: $e",
@@ -372,27 +382,38 @@ class Settings {
     }
   }
 
-  Future<(String, Map<String, dynamic> Function())> fetchTemplate({
+  Future<(int, Map<String, dynamic> Function())> fetchTemplate({
     int? id,
   }) async {
-    late final String templateRoute;
-    late final Map<String, dynamic> template;
+    late final Map<String, dynamic> templateRecord;
 
     if (id != null) {
-      template = await getTemplateRecord(tId: id);
-      templateRoute = await getTemplateRoute(id);
+      templateRecord = await getTemplateRecord(tId: id);
     } else {
-      template = await getTemplateRecord();
-      templateRoute = await getTemplateRoute(template['id']);
+      templateRecord = await getTemplateRecord();
     }
-    return (templateRoute, () => template['content'] as Map<String, dynamic>);
+
+    final int tId = templateRecord['id'] as int;
+
+    return (
+      tId,
+      () {
+        final content = templateRecord['content'];
+        if (content is String) {
+          return json.decode(content) as Map<String, dynamic>;
+        }
+        return content as Map<String, dynamic>;
+      },
+    );
   }
 
   Future<void> updateTemplate() async {
     try {
       final template = await fetchTemplate();
-      if (await File(template.$1).exists()) return;
-      ServiceReliabilityEngineer.instance.enqueueWriteTasks([template]);
+      final tId = template.$1;
+      final content = template.$2();
+      if (await isTemplateAvailable(tId)) return;
+      await DatabaseService.instance.saveTemplate(tId, content);
     } catch (e) {
       // yo cuando hago algo
     }
@@ -424,14 +445,7 @@ class Settings {
       _formsQueue[index] = form;
     }
 
-    String directory = await getSettingsDirectoryRoute();
-
-    ServiceReliabilityEngineer.instance.enqueueWriteTasks([
-      (
-        '$directory/forms/${form.id}.json',
-        mapAccessor('formsQueue', id: form.id),
-      ),
-    ]);
+    await DatabaseService.instance.saveForm(form);
 
     ServiceReliabilityEngineer.instance.enqueueTasks({"SyncForms"});
     _formsStreamController.add(formsList);
@@ -440,10 +454,7 @@ class Settings {
   Future<void> dequeueForm(String id) async {
     _formsQueue.removeWhere((f) => f.id == id);
 
-    String directory = await getSettingsDirectoryRoute();
-    ServiceReliabilityEngineer.instance.enqueueWriteTasks([
-      ('$directory/forms/$id.json', null),
-    ]);
+    await DatabaseService.instance.deleteForm(id);
 
     _formsStreamController.add(formsList);
   }
@@ -472,7 +483,7 @@ class Settings {
 
     for (var syncing in syncCandidates) {
       if (!(await uploadForm(syncing))) {
-        return;
+        throw Exception("Fallo de envío en formulario ${syncing.id} por problema de conexión.");
       }
     }
 
@@ -486,9 +497,9 @@ class Settings {
           'delete_filled_in',
           params: {'p_id': form.id},
         );
-      } else {
-        await Settings.instance.dequeueForm(form.id);
       }
+      await DatabaseService.instance.deleteForm(form.id);
+      _formsQueue.removeWhere((f) => f.id == form.id);
       ServiceReliabilityEngineer.instance.enqueueTasks({"SetForms"});
       _formsStreamController.add(formsList);
     } catch (error) {
@@ -497,3 +508,4 @@ class Settings {
   }
 
 }
+

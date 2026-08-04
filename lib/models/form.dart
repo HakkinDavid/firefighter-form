@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:bomberos/models/database_service.dart';
 import 'package:bomberos/models/logging.dart' show Logging;
 import 'package:bomberos/models/pdf_renderer.dart';
 import 'package:bomberos/models/settings.dart';
@@ -7,11 +9,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:uuid/data.dart';
 import 'package:uuid/uuid.dart';
 
+enum AutosaveState { idle, saving, saved, error }
+
 class ServiceForm {
   Map<String, dynamic> _template = const {};
   final Map<String, (String, int)> _reference = {};
   List<String> _sectionKeys = const [];
   final Map<String, Set<String>> _errors = {};
+
+  Timer? _autosaveTimer;
+  final ValueNotifier<AutosaveState> autosaveStatus =
+      ValueNotifier(AutosaveState.idle);
 
   String? _id;
   final int _templateId;
@@ -85,6 +93,40 @@ class ServiceForm {
     _content[fieldName] =
         newValue ?? getDefaultValue(getFieldFromReference(fieldName));
     _clearErrors(fieldName);
+    _triggerAutosave();
+  }
+
+  void _triggerAutosave() {
+    _autosaveTimer?.cancel();
+    autosaveStatus.value = AutosaveState.idle;
+    _autosaveTimer = Timer(const Duration(milliseconds: 750), () {
+      saveDraft();
+    });
+  }
+
+  Future<void> saveDraft() async {
+    _autosaveTimer?.cancel();
+    if (!edited || !canSaveForm) return;
+
+    try {
+      autosaveStatus.value = AutosaveState.saving;
+      await DatabaseService.instance.saveForm(this);
+      _savedContentFingerprint = _fingerprintContent(_content);
+      autosaveStatus.value = AutosaveState.saved;
+    } catch (e) {
+      autosaveStatus.value = AutosaveState.error;
+    }
+  }
+
+  Future<void> flushAutosave() async {
+    if (_autosaveTimer?.isActive ?? false) {
+      await saveDraft();
+    }
+  }
+
+  void dispose() {
+    _autosaveTimer?.cancel();
+    autosaveStatus.dispose();
   }
 
   void _clearErrors(String fieldName) {
@@ -92,6 +134,7 @@ class ServiceForm {
   }
 
   Future<void> save({bool shouldSetAsFinished = false}) async {
+    _autosaveTimer?.cancel();
     if (shouldSetAsFinished && canFinishForm) {
       _status = 1;
     } else if (!canSaveForm) {
@@ -99,6 +142,7 @@ class ServiceForm {
     }
     await Settings.instance.enqueueForm(this);
     _savedContentFingerprint = _fingerprintContent(_content);
+    autosaveStatus.value = AutosaveState.saved;
   }
 
   Future<void> delete() async {

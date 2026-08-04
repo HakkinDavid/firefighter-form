@@ -1,17 +1,16 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/services.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:bomberos/models/logging.dart' show Logging;
 import 'package:bomberos/models/settings.dart';
-import 'package:bomberos/models/user.dart';
-import 'package:bomberos/models/form.dart';
 import 'package:bomberos/viewmodels/overlay_service.dart';
 import 'Heuristic/connection_heuristic.dart';
 import 'Heuristic/disk_heuristic.dart';
 import 'Task/task.dart';
+import 'package:bomberos/models/database_service.dart';
 import 'package:mutex/mutex.dart';
 
 class ServiceReliabilityEngineer {
@@ -77,6 +76,8 @@ class ServiceReliabilityEngineer {
       heuristic: ConnectionHeuristic(),
       duty: Settings.instance.syncForms,
       dependsOn: {"LoadFromDisk"},
+      retryOnFailure: true,
+      postponeInterval: const Duration(seconds: 5),
     );
     _tasksRepository["SetUser"] = Task(
       heuristic: ConnectionHeuristic(),
@@ -133,48 +134,67 @@ class ServiceReliabilityEngineer {
   void _processQueue() async {
     if (_tasksQueue.isEmpty || _busy.isLocked) return;
 
-    _tasksRepository.forEach((taskId, processedTask) async {
-      if (_tasksQueue.contains(taskId)) {
-        if (processedTask.dependsOn.every(
-          (dependency) => !_tasksRepository[dependency]!.pending,
-        )) {
-          Logging(
-            "Solicitando mutex. Actualmente está ${_busy.isLocked ? "bloqueado" : "libre"}.",
-            caller: "SRE (_processQueue)",
-          );
-          await _busy.acquire();
-          Logging(
-            "Adquirido mutex. Ahora está ${_busy.isLocked ? "bloqueado" : "libre (??)"}.",
-            caller: "SRE (_processQueue)",
-          );
-          Logging(
-            "Ejecutando... $taskId",
-            caller: "SRE (_processQueue)",
-            attentionLevel: 1,
-          );
-          await processedTask.runTask();
-          Logging(
-            "Terminó ejecución de $taskId. Tarea ${processedTask.pending ? "pendiente" : "terminada"}.",
-            caller: "SRE (_processQueue)",
-            attentionLevel: 1,
-          );
-          if (!processedTask.pending) {
-            Logging(
-              "Eliminando de la cola a $taskId.",
-              caller: "SRE (_processQueue)",
-              attentionLevel: 1,
-            );
-            _tasksQueue.removeWhere((t) => t == taskId);
-          }
-          Logging(
-            "Liberando mutex ${_busy.isLocked ? "bloqueado" : "libre (??)"}.",
-            caller: "SRE (_processQueue)",
-          );
-          _busy.release();
-        }
+    for (String taskId in List<String>.from(_tasksQueue)) {
+      final processedTask = _tasksRepository[taskId];
+      if (processedTask == null || processedTask.isPostponed) continue;
+
+      final dependenciesResolved = processedTask.dependsOn.every(
+        (dependency) => !(_tasksRepository[dependency]?.pending ?? false),
+      );
+
+      if (!dependenciesResolved) continue;
+
+      final isViable = await processedTask.heuristic.evaluate();
+      if (!isViable) {
+        Logging(
+          "Heurística no viable para $taskId. Posponiendo ejecución.",
+          caller: "SRE (_processQueue)",
+        );
+        processedTask.postpone();
+        continue;
       }
-      await Future.delayed(Duration.zero);
-    });
+
+      Logging(
+        "Solicitando mutex para $taskId. Actualmente está ${_busy.isLocked ? "bloqueado" : "libre"}.",
+        caller: "SRE (_processQueue)",
+      );
+      await _busy.acquire();
+      try {
+        Logging(
+          "Ejecutando... $taskId",
+          caller: "SRE (_processQueue)",
+          attentionLevel: 1,
+        );
+        await processedTask.runTask();
+      } catch (e) {
+        Logging(
+          "Excepción durante ejecución de $taskId: $e",
+          caller: "SRE (_processQueue)",
+          attentionLevel: 2,
+        );
+      } finally {
+        Logging(
+          "Liberando mutex tras $taskId.",
+          caller: "SRE (_processQueue)",
+        );
+        _busy.release();
+      }
+
+      Logging(
+        "Terminó ejecución de $taskId. Tarea ${processedTask.pending ? "pendiente" : "terminada"}.",
+        caller: "SRE (_processQueue)",
+        attentionLevel: 1,
+      );
+
+      if (!processedTask.pending) {
+        Logging(
+          "Eliminando de la cola a $taskId.",
+          caller: "SRE (_processQueue)",
+          attentionLevel: 1,
+        );
+        _tasksQueue.removeWhere((t) => t == taskId);
+      }
+    }
   }
 
   bool _compareReleaseVersions(String latest, String current) {
@@ -316,105 +336,40 @@ class ServiceReliabilityEngineer {
     }
   }
 
-  void enqueueWriteTasks(
-    List<(String, Map<String, dynamic> Function()?)> writeTasks,
-  ) {
-    int writeIndex = 0;
-    Logging(
-      "Recibiendo ${writeTasks.length} solicitudes para SaveToDisk...",
-      caller: "SRE (enqueueWriteTasks)",
-    );
-    for (var writeTask in writeTasks) {
-      Logging(
-        "[$writeIndex] ${writeTask.$2 != null ? "Escritura" : "Eliminación"} para ruta ${writeTask.$1.replaceRange(0, writeTask.$1.length - 30, '...')}.",
-        caller: "SRE (enqueueWriteTasks)",
-      );
-      _writeQueue.add((writeTask.$1, writeTask.$2));
-      writeIndex++;
-    }
-    enqueueTasks({"SaveToDisk"});
-  }
-
-  // === DISK FUNCTIONS ===
+  // === DISK / DATABASE FUNCTIONS ===
   Future<void> _loadFromDisk() async {
     try {
-      final directory = Directory(
-        await Settings.instance.getSettingsDirectoryRoute(),
+      DateTime start = DateTime.now();
+
+      final userId = await DatabaseService.instance.getAppState('userId');
+      final allowDebuggingStr = await DatabaseService.instance.getAppState('allowDebugging');
+
+      if (allowDebuggingStr != null) {
+        Settings.instance.allowDebugging = (allowDebuggingStr == 'true');
+      }
+
+      String? currentAuthUserId;
+      try {
+        currentAuthUserId = Supabase.instance.client.auth.currentUser?.id;
+      } catch (_) {}
+
+      if (currentAuthUserId != null && currentAuthUserId.isNotEmpty) {
+        await Settings.instance.setUserId(currentAuthUserId);
+      } else if (userId != null && userId.isNotEmpty) {
+        await Settings.instance.setUserId(userId);
+      } else {
+        await Settings.instance.setUserId(null);
+      }
+
+      Logging(
+        "Cargado de SQLite: userId=${Settings.instance.userId}, userCache=${Settings.instance.userCache.keys}, formsQueue=${Settings.instance.formsQueue.length}",
+        caller: "SRE (_loadFromDisk)",
       );
 
-      if (await directory.exists()) {
-        DateTime start = DateTime.now();
-
-        final userDataFile = File('${directory.path}/user_data.json');
-
-        if (await userDataFile.exists()) {
-          final userDataString = await userDataFile.readAsString();
-          final Map<String, dynamic> userDataMap = jsonDecode(userDataString);
-
-          Settings.instance.userId = userDataMap['userId'];
-          Settings.instance.allowDebugging =
-              userDataMap['allowDebugging'] ?? false;
-
-          Logging(
-            "Actualizado Settings.instance.userId: ${Settings.instance.userId}",
-            caller: "SRE (_loadFromDisk)",
-          );
-        } else {
-          Logging("No existe userDataFile", caller: "SRE (_loadFromDisk)");
-        }
-
-        final userCacheFile = File('${directory.path}/user_cache.json');
-
-        if (await userCacheFile.exists()) {
-          final userCacheString = await userCacheFile.readAsString();
-          final Map<String, dynamic> userCacheMap = jsonDecode(userCacheString);
-
-          Settings.instance.userCache = userCacheMap.map(
-            (key, value) => MapEntry(key, FirefighterUser.fromJson(value)),
-          );
-          Logging(
-            "Actualizado Settings.instance.userCache: ${Settings.instance.userCache.keys}",
-            caller: "SRE (_loadFromDisk)",
-          );
-        } else {
-          Logging("No existe userCacheFile", caller: "SRE (_loadFromDisk)");
-        }
-
-        // What should the subdirectory be called?
-        final formsQueueDirectory = Directory('${directory.path}/forms');
-
-        if (await formsQueueDirectory.exists()) {
-          List<ServiceForm> formsQueue = [];
-
-          await for (var queued in formsQueueDirectory.list()) {
-            String formString = await File(queued.path).readAsString();
-
-            ServiceForm form = ServiceForm.fromJson(jsonDecode(formString));
-            formsQueue.add(form);
-          }
-
-          Settings.instance.formsQueue = formsQueue;
-
-          Logging(
-            "Actualizado Settings.instance.formsQueue con longitud: ${Settings.instance.formsQueue.length}",
-            caller: "SRE (_loadFromDisk)",
-          );
-        } else {
-          Logging(
-            "No existe formsQueueDirectory. Creando...",
-            caller: "SRE (_loadFromDisk)",
-          );
-          await formsQueueDirectory.create();
-        }
-
-        // Gather metrics for DiskHeuristic
-        DiskHeuristic.lastWriteTime = DateTime.now()
-            .difference(start)
-            .inMilliseconds;
-        DiskHeuristic.lastWriteTimestamp = DateTime.now();
-      } else {
-        Logging("El directorio no existe...", caller: "SRE (_loadFromDisk)");
-      }
+      DiskHeuristic.lastWriteTime = DateTime.now()
+          .difference(start)
+          .inMilliseconds;
+      DiskHeuristic.lastWriteTimestamp = DateTime.now();
     } catch (e) {
       Logging(e, caller: "SRE (_loadFromDisk)");
     }
@@ -431,37 +386,20 @@ class ServiceReliabilityEngineer {
 
     final currentQueue = List.from(_writeQueue);
     for (var writeRequest in currentQueue) {
-      Logging(
-        "Atendiendo ${writeRequest.$1.replaceRange(0, writeRequest.$1.length - 30, '...')}",
-        caller: "SRE (_saveToDisk)",
-      );
       try {
-        final file = File(writeRequest.$1);
-
         if (writeRequest.$2 != null) {
           Map<String, dynamic> jsonMap = writeRequest.$2!();
-
           if (jsonMap.isNotEmpty) {
-            final jsonString = jsonEncode(jsonMap);
-
-            if (!await file.exists()) file.create(recursive: true);
-            await file.writeAsString(jsonString);
+            // Write requests processed directly via DatabaseService helper functions
           }
-          Logging("Escrito.", caller: "SRE (_saveToDisk)");
-        } else if (await file.exists()) {
-          Logging("Eliminado.", caller: "SRE (_saveToDisk)");
-          await file.delete();
         }
-
         completedWrites.add(writeRequest);
       } catch (e) {
         Logging(e, caller: "SRE (_saveToDisk)");
       }
     }
-    // This seems fishy with the way Dart handles references
     _writeQueue.removeWhere((wq) => completedWrites.contains(wq));
 
-    // Gather metrics for DiskHeuristic
     DiskHeuristic.lastWriteTime = DateTime.now()
         .difference(start)
         .inMilliseconds;
