@@ -7,6 +7,7 @@ import 'package:bomberos/models/user.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DatabaseService {
   static final DatabaseService instance = DatabaseService._internal();
@@ -102,10 +103,17 @@ class DatabaseService {
       },
     );
 
+    _globalDb = db;
+
     // Execute one-time legacy migration if legacy files or legacy bomberos.db exist
     await _migrateLegacyFilesIfNeeded(db);
 
     return db;
+  }
+
+  Future<void> migrateLegacyFilesIfNeeded() async {
+    final db = await globalDatabase;
+    await _migrateLegacyFilesIfNeeded(db);
   }
 
   Future<Database> _initUserDatabase(String userId) async {
@@ -120,45 +128,47 @@ class DatabaseService {
       dbPath,
       version: 1,
       onCreate: (Database db, int version) async {
-        // User names, roles, and hierarchy cache
-        await db.execute('''
-          CREATE TABLE user_name (
-            id TEXT PRIMARY KEY,
-            given TEXT NOT NULL,
-            surname1 TEXT NOT NULL,
-            surname2 TEXT
-          );
-        ''');
-
-        await db.execute('''
-          CREATE TABLE user_role (
-            id TEXT PRIMARY KEY,
-            value INTEGER NOT NULL
-          );
-        ''');
-
-        await db.execute('''
-          CREATE TABLE user_hierarchy (
-            id TEXT PRIMARY KEY,
-            watched_by TEXT
-          );
-        ''');
-
-        // Forms filled by or visible to this user session
-        await db.execute('''
-          CREATE TABLE filled_in (
-            id TEXT PRIMARY KEY,
-            template_id INTEGER NOT NULL,
-            filler TEXT NOT NULL,
-            status INTEGER NOT NULL,
-            content TEXT NOT NULL,
-            filled_at TEXT NOT NULL
-          );
-        ''');
+        await _createTablesInUserDb(db);
       },
     );
 
     return db;
+  }
+
+  static Future<void> _createTablesInUserDb(Database db) async {
+    await db.execute('''
+      CREATE TABLE user_name (
+        id TEXT PRIMARY KEY,
+        given TEXT NOT NULL,
+        surname1 TEXT NOT NULL,
+        surname2 TEXT
+      );
+    ''');
+
+    await db.execute('''
+      CREATE TABLE user_role (
+        id TEXT PRIMARY KEY,
+        value INTEGER NOT NULL
+      );
+    ''');
+
+    await db.execute('''
+      CREATE TABLE user_hierarchy (
+        id TEXT PRIMARY KEY,
+        watched_by TEXT
+      );
+    ''');
+
+    await db.execute('''
+      CREATE TABLE filled_in (
+        id TEXT PRIMARY KEY,
+        template_id INTEGER NOT NULL,
+        filler TEXT NOT NULL,
+        status INTEGER NOT NULL,
+        content TEXT NOT NULL,
+        filled_at TEXT NOT NULL
+      );
+    ''');
   }
 
   Future<void> switchUserDatabase(String userId) async {
@@ -185,80 +195,233 @@ class DatabaseService {
       final docsDir = await getApplicationDocumentsDirectory();
       final settingsDir = Directory(p.join(docsDir.path, 'settings'));
       final templatesDir = Directory(p.join(docsDir.path, 'frap'));
+      final legacyFormsDir = Directory(p.join(docsDir.path, 'forms'));
+      final settingsFormsDir = Directory(p.join(settingsDir.path, 'forms'));
 
       final hasSettingsDir = await settingsDir.exists();
       final hasTemplatesDir = await templatesDir.exists();
+      final hasLegacyFormsDir = await legacyFormsDir.exists();
+      final hasSettingsFormsDir = await settingsFormsDir.exists();
 
-      if (!hasSettingsDir && !hasTemplatesDir) {
+      if (!hasSettingsDir &&
+          !hasTemplatesDir &&
+          !hasLegacyFormsDir &&
+          !hasSettingsFormsDir) {
         return;
       }
 
       Logging(
-        "Iniciando migración SQLite...",
+        "Iniciando migración de archivos JSON legacy a base de datos multi-usuario...",
         caller: "DatabaseService (_migrateLegacyFilesIfNeeded)",
         attentionLevel: 2,
       );
 
       String? activeUserId;
+      Map<String, FirefighterUser> legacyUsersMap = {};
 
-      // 1. Migrate legacy JSON directories if present
-      if (hasSettingsDir || hasTemplatesDir) {
-        final userDataFile = File(p.join(settingsDir.path, 'user_data.json'));
-        if (await userDataFile.exists()) {
-          try {
-            final content = await userDataFile.readAsString();
-            final map = jsonDecode(content) as Map<String, dynamic>;
-            if (map.containsKey('userId') && map['userId'] != null) {
-              activeUserId = map['userId'].toString();
-              await globalDb.insert('app_state',
-                  {'key': 'userId', 'value': activeUserId},
-                  conflictAlgorithm: ConflictAlgorithm.replace);
-            }
-            if (map.containsKey('allowDebugging')) {
-              await globalDb.insert('app_state',
-                  {'key': 'allowDebugging', 'value': map['allowDebugging'].toString()},
-                  conflictAlgorithm: ConflictAlgorithm.replace);
-            }
-          } catch (e) {
-            Logging("Error migrando user_data.json: $e",
-                caller: "DatabaseService", attentionLevel: 3);
+      // 1. Migrate user_data.json -> app_state (globalDb)
+      final userDataFile = File(p.join(settingsDir.path, 'user_data.json'));
+      if (await userDataFile.exists()) {
+        try {
+          final content = await userDataFile.readAsString();
+          final map = jsonDecode(content) as Map<String, dynamic>;
+          if (map.containsKey('userId') && map['userId'] != null) {
+            activeUserId = map['userId'].toString();
+            await globalDb.insert('app_state',
+                {'key': 'userId', 'value': activeUserId},
+                conflictAlgorithm: ConflictAlgorithm.replace);
           }
+          if (map.containsKey('allowDebugging')) {
+            await globalDb.insert('app_state',
+                {'key': 'allowDebugging', 'value': map['allowDebugging'].toString()},
+                conflictAlgorithm: ConflictAlgorithm.replace);
+          }
+        } catch (e) {
+          Logging("Error migrando user_data.json: $e",
+              caller: "DatabaseService", attentionLevel: 3);
+        }
+      }
+
+      // 2. Migrate user_cache.json -> register LocalUserAccount in globalDb & prepare user profiles
+      final userCacheFile = File(p.join(settingsDir.path, 'user_cache.json'));
+      if (await userCacheFile.exists()) {
+        try {
+          final content = await userCacheFile.readAsString();
+          final map = jsonDecode(content) as Map<String, dynamic>;
+          for (var entry in map.entries) {
+            final uMap = entry.value as Map<String, dynamic>;
+            final u = FirefighterUser.fromJson(uMap);
+            legacyUsersMap[u.id] = u;
+          }
+        } catch (e) {
+          Logging("Error migrando user_cache.json: $e",
+              caller: "DatabaseService", attentionLevel: 3);
+        }
+      }
+
+      // Register legacy active user as LocalUserAccount in globalDb if present
+      if (activeUserId != null && activeUserId.isNotEmpty) {
+        final activeUserObj = legacyUsersMap[activeUserId];
+        User? currentUser;
+        Session? currentSession;
+        try {
+          currentUser = Supabase.instance.client.auth.currentUser;
+          currentSession = Supabase.instance.client.auth.currentSession;
+        } catch (_) {}
+
+        final account = LocalUserAccount(
+          userId: activeUserId,
+          email: currentUser?.email ?? '',
+          givenName: activeUserObj?.givenName ?? '',
+          firstSurname: activeUserObj?.firstSurname ?? '',
+          secondSurname: activeUserObj?.secondSurname,
+          role: activeUserObj?.role ?? 0,
+          refreshToken: currentSession?.refreshToken,
+          lastLoginAt: DateTime.now(),
+          isSessionValid: true,
+        );
+        await globalDb.insert('local_user_accounts', account.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace);
+      }
+
+      // 3. Migrate frap/ (templates) -> globalDb
+      if (hasTemplatesDir) {
+        try {
+          final entities = await templatesDir.list().toList();
+          for (var entity in entities) {
+            if (entity is File && entity.path.endsWith('.json')) {
+              final filename = p.basenameWithoutExtension(entity.path);
+              final tId = int.tryParse(filename);
+              if (tId != null) {
+                final tContent = await entity.readAsString();
+                await globalDb.insert('template', {
+                  'id': tId,
+                  'content': tContent,
+                  'created_at': DateTime.now().toIso8601String(),
+                }, conflictAlgorithm: ConflictAlgorithm.replace);
+              }
+            }
+          }
+        } catch (e) {
+          Logging("Error migrando plantillas JSON: $e",
+              caller: "DatabaseService", attentionLevel: 3);
+        }
+      }
+
+      // 4. Migrate user profiles & forms to target user databases
+      final targetUserId = activeUserId ??
+          (legacyUsersMap.isNotEmpty ? legacyUsersMap.keys.first : '');
+      if (targetUserId.isNotEmpty) {
+        final Map<String, Database> openedUserDbs = {};
+
+        Future<Database> getOrOpenUserDb(String uid) async {
+          if (openedUserDbs.containsKey(uid)) return openedUserDbs[uid]!;
+          if (_currentUserId == uid && _userDb != null) {
+            openedUserDbs[uid] = _userDb!;
+            return _userDb!;
+          }
+          final usersDir = Directory(p.join(docsDir.path, 'users'));
+          if (!await usersDir.exists()) await usersDir.create(recursive: true);
+          final dbPath = p.join(usersDir.path, 'user_$uid.db');
+          final db = await openDatabase(
+            dbPath,
+            version: 1,
+            onCreate: (Database db, int version) async {
+              await _createTablesInUserDb(db);
+            },
+          );
+          openedUserDbs[uid] = db;
+          return db;
         }
 
-        if (hasTemplatesDir) {
+        final targetUserDb = await getOrOpenUserDb(targetUserId);
+
+        // Migrate cached user directory into user_{targetUserId}.db
+        for (var u in legacyUsersMap.values) {
+          await _insertUserInTxn(targetUserDb, u);
+        }
+
+        // Collect all legacy form directories
+        final List<Directory> formDirs = [
+          if (hasLegacyFormsDir) legacyFormsDir,
+          if (hasSettingsFormsDir) settingsFormsDir,
+        ];
+
+        int migratedFormsCount = 0;
+
+        for (var fDir in formDirs) {
           try {
-            await for (var entity in templatesDir.list()) {
+            final entities = await fDir.list().toList();
+            for (var entity in entities) {
               if (entity is File && entity.path.endsWith('.json')) {
-                final filename = p.basenameWithoutExtension(entity.path);
-                final tId = int.tryParse(filename);
-                if (tId != null) {
-                  final tContent = await entity.readAsString();
-                  await globalDb.insert('template', {
-                    'id': tId,
-                    'content': tContent,
-                    'created_at': DateTime.now().toIso8601String(),
+                try {
+                  final formStr = await entity.readAsString();
+                  final formMap = jsonDecode(formStr) as Map<String, dynamic>;
+
+                  final formId = (formMap['id'] ?? formMap['p_id']) as String?;
+                  if (formId == null || formId.isEmpty) continue;
+
+                  final templateId = (formMap['template_id'] ?? formMap['p_template_id']) as int? ?? 1;
+                  final rawFiller = formMap['filler'] as String?;
+                  final fillerUserId = (rawFiller != null && rawFiller.isNotEmpty) ? rawFiller : targetUserId;
+                  final status = (formMap['status'] ?? formMap['p_status']) as int? ?? 0;
+                  final filledAtStr = (formMap['filled_at'] ?? formMap['p_filled_at']) as String? ?? DateTime.now().toIso8601String();
+
+                  dynamic rawContent = formMap['content'] ?? formMap['p_content'];
+                  String contentJsonStr = (rawContent is String) ? rawContent : jsonEncode(rawContent ?? {});
+
+                  final formDb = await getOrOpenUserDb(fillerUserId);
+
+                  await formDb.insert('filled_in', {
+                    'id': formId,
+                    'template_id': templateId,
+                    'filler': fillerUserId,
+                    'status': status,
+                    'content': contentJsonStr,
+                    'filled_at': filledAtStr,
                   }, conflictAlgorithm: ConflictAlgorithm.replace);
+
+                  migratedFormsCount++;
+                } catch (e) {
+                  Logging(
+                      "Error migrando archivo de formulario individual ${entity.path}: $e",
+                      caller: "DatabaseService",
+                      attentionLevel: 3);
                 }
               }
             }
           } catch (e) {
-            Logging("Error migrando plantillas JSON: $e",
-                caller: "DatabaseService", attentionLevel: 3);
+            Logging(
+                "Error escaneando directorio de formularios legacy ${fDir.path}: $e",
+                caller: "DatabaseService",
+                attentionLevel: 3);
           }
         }
 
-        if (hasSettingsDir) {
-          try {
-            if (await settingsDir.exists()) {
-              await settingsDir.delete(recursive: true);
-            }
-            if (await templatesDir.exists()) {
-              await templatesDir.delete(recursive: true);
-            }
-          } catch (e) {
-            // Ignorar errores de limpieza
+        for (var entry in openedUserDbs.entries) {
+          if (entry.key != _currentUserId) {
+            await entry.value.close();
           }
         }
+
+        Logging(
+            "Migración legacy: Se importaron $migratedFormsCount formularios a SQLite.",
+            caller: "DatabaseService",
+            attentionLevel: 2);
+      }
+
+      // 5. Cleanup legacy JSON directories
+      try {
+        if (await settingsDir.exists()) await settingsDir.delete(recursive: true);
+        if (await templatesDir.exists()) await templatesDir.delete(recursive: true);
+        if (await legacyFormsDir.exists()) await legacyFormsDir.delete(recursive: true);
+        Logging(
+            "Migración legacy completada y archivos de disco eliminados correctamente.",
+            caller: "DatabaseService",
+            attentionLevel: 2);
+      } catch (e) {
+        Logging("Advertencia al eliminar archivos legacy: $e",
+            caller: "DatabaseService", attentionLevel: 1);
       }
     } catch (e) {
       Logging("Error general en _migrateLegacyFilesIfNeeded: $e",

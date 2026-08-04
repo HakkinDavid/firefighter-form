@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -104,5 +106,82 @@ void main() {
     await DatabaseService.instance.deleteForm('form-1');
     final emptyQueue = await DatabaseService.instance.getFormsQueue();
     expect(emptyQueue.isEmpty, isTrue);
+  });
+
+  test('Legacy JSON migration correctly imports user profiles and filled-in forms into per-user DB', () async {
+    // Create mock legacy directory structure
+    final settingsDir = Directory('./settings');
+    final formsDir = Directory('./forms');
+    final frapDir = Directory('./frap');
+
+    if (!await settingsDir.exists()) await settingsDir.create();
+    if (!await formsDir.exists()) await formsDir.create();
+    if (!await frapDir.exists()) await frapDir.create();
+
+    // Create mock user_data.json
+    final userDataFile = File('./settings/user_data.json');
+    await userDataFile.writeAsString('{"userId": "legacy-usr-999", "allowDebugging": true}');
+
+    // Create mock user_cache.json
+    final userCacheFile = File('./settings/user_cache.json');
+    await userCacheFile.writeAsString('''
+    {
+      "legacy-usr-999": {
+        "id": "legacy-usr-999",
+        "givenName": "Carlos",
+        "firstSurname": "Mendoza",
+        "secondSurname": "Soto",
+        "role": 1,
+        "watchedByUserId": null,
+        "watchesUsersId": []
+      }
+    }
+    ''');
+
+    // Create mock legacy template
+    final templateFile = File('./frap/1.json');
+    await templateFile.writeAsString('{"id": 1, "title": "Parte General"}');
+
+    // Create mock legacy filled-in form
+    final legacyFormFile = File('./forms/legacy-form-100.json');
+    final legacyForm = ServiceForm(
+      'legacy-form-100',
+      1,
+      'legacy-usr-999',
+      DateTime.now(),
+      {'motivo': 'Incendio vehicular'},
+      0, // Draft
+    );
+    await legacyFormFile.writeAsString(jsonEncode(legacyForm.toJson()));
+
+    // Run migration
+    await DatabaseService.instance.migrateLegacyFilesIfNeeded();
+
+    // Verify app_state migrated
+    final migratedUserId = await DatabaseService.instance.getAppState('userId');
+    expect(migratedUserId, equals('legacy-usr-999'));
+
+    // Verify local_user_accounts registered
+    final accounts = await DatabaseService.instance.getLocalAccounts();
+    expect(accounts.any((a) => a.userId == 'legacy-usr-999'), isTrue);
+
+    // Verify template migrated
+    final templateContent = await DatabaseService.instance.getTemplate(1);
+    expect(templateContent != null, isTrue);
+
+    // Switch to legacy user DB and verify user profiles & form queue
+    await DatabaseService.instance.switchUserDatabase('legacy-usr-999');
+    final users = await DatabaseService.instance.getUsers();
+    expect(users.containsKey('legacy-usr-999'), isTrue);
+    expect(users['legacy-usr-999']!.fullName, equals('Carlos Mendoza Soto'));
+
+    final forms = await DatabaseService.instance.getFormsQueue();
+    expect(forms.any((f) => f.id == 'legacy-form-100'), isTrue);
+    expect(forms.firstWhere((f) => f.id == 'legacy-form-100').content['motivo'], equals('Incendio vehicular'));
+
+    // Cleanup mock directories
+    if (await settingsDir.exists()) await settingsDir.delete(recursive: true);
+    if (await formsDir.exists()) await formsDir.delete(recursive: true);
+    if (await frapDir.exists()) await frapDir.delete(recursive: true);
   });
 }
