@@ -11,7 +11,7 @@ permissions:
 jobs:
   build-release:
     name: Build and Release Windows
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
       - name: 🧭 Checkout code
@@ -37,13 +37,8 @@ jobs:
       - name: 🧰 Install dependencies
         run: flutter pub get
       
-      - name: Setup Visual Studio Build Tools
-        uses: microsoft/setup-msbuild@v2
-        
-      - name: Setup CMake
-        uses: jwlawson/actions-setup-cmake@v2
-        with:
-          cmake-version: '3.27'
+      - name: Diagnostic Doctor Step
+        run: flutter doctor -v
 
       - name: 🏗️ Build Windows release
         run: flutter build windows --release --build-name=$(Get-Date -Format "yy.MM.dd")
