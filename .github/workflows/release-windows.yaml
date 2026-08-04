@@ -12,12 +12,17 @@ jobs:
   build-release:
     name: Build and Release Windows
     runs-on: windows-latest
+    env:
+      CMAKE_GENERATOR: "Visual Studio 17 2022"
 
     steps:
       - name: 🧭 Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: 🛠️ Set up MSVC developer environment
+        uses: ilammy/msvc-dev-cmd@v1
 
       - name: 💾 Cache Flutter packages
         uses: actions/cache@v4
