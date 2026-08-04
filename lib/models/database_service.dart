@@ -102,6 +102,8 @@ class DatabaseService {
       },
     );
 
+    await _migrateGlobalLegacyFilesIfNeeded(db);
+
     return db;
   }
 
@@ -153,13 +155,13 @@ class DatabaseService {
       },
     );
 
-    await _migrateLegacyFilesIfNeeded(userId, db);
+    await _migrateUserLegacyFilesIfNeeded(userId, db);
 
     return db;
   }
 
   // === LEGACY ONE-TIME MIGRATION ===
-  Future<void> _migrateLegacyFilesIfNeeded(String userId, Database userDb) async {
+  Future<void> _migrateGlobalLegacyFilesIfNeeded(Database gDb) async {
     try {
       final docsDir = await getApplicationDocumentsDirectory();
       final settingsDir = Directory(p.join(docsDir.path, 'settings'));
@@ -169,11 +171,9 @@ class DatabaseService {
         return;
       }
 
-      Logging("Iniciando migración de archivos JSON legacy...", caller: "DatabaseService (_migrateLegacyFilesIfNeeded)", attentionLevel: 2);
+      Logging("Iniciando migración global de archivos JSON legacy...", caller: "DatabaseService (_migrateGlobalLegacyFilesIfNeeded)", attentionLevel: 2);
 
-      final gDb = await globalDatabase;
-
-      // 1. Migrate user_data.json to global.db & userDb
+      // 1. Migrate user_data.json to global.db (app_state)
       final userDataFile = File(p.join(settingsDir.path, 'user_data.json'));
       if (await userDataFile.exists()) {
         try {
@@ -211,8 +211,24 @@ class DatabaseService {
           Logging("Error migrando plantillas: $e", caller: "DatabaseService", attentionLevel: 3);
         }
       }
+    } catch (e) {
+      Logging("Error general en _migrateGlobalLegacyFilesIfNeeded: $e", caller: "DatabaseService", attentionLevel: 4);
+    }
+  }
 
-      // 3. Migrate user_cache.json and forms/ into users/{userId}.db
+  Future<void> _migrateUserLegacyFilesIfNeeded(String userId, Database userDb) async {
+    try {
+      final docsDir = await getApplicationDocumentsDirectory();
+      final settingsDir = Directory(p.join(docsDir.path, 'settings'));
+      final templatesDir = Directory(p.join(docsDir.path, 'frap'));
+
+      if (!await settingsDir.exists() && !await templatesDir.exists()) {
+        return;
+      }
+
+      Logging("Iniciando migración de datos de usuario legacy...", caller: "DatabaseService (_migrateUserLegacyFilesIfNeeded)", attentionLevel: 2);
+
+      // Migrate user_cache.json and forms/ into users/{userId}.db
       await userDb.transaction((txn) async {
         final userCacheFile = File(p.join(settingsDir.path, 'user_cache.json'));
         if (await userCacheFile.exists()) {
@@ -262,7 +278,7 @@ class DatabaseService {
         Logging("Advertencia al eliminar archivos legacy: $e", caller: "DatabaseService", attentionLevel: 1);
       }
     } catch (e) {
-      Logging("Error general en _migrateLegacyFilesIfNeeded: $e", caller: "DatabaseService", attentionLevel: 4);
+      Logging("Error general en _migrateUserLegacyFilesIfNeeded: $e", caller: "DatabaseService", attentionLevel: 4);
     }
   }
 
