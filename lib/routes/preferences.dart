@@ -16,7 +16,7 @@ class _PreferencesState extends State<Preferences> {
     super.dispose();
   }
 
-  final List<Map<String, dynamic>> optionsTemplate = [
+  List<Map<String, dynamic>> get optionsTemplate => [
     {
       "title": "Refrescar plantillas",
       "type": "button",
@@ -58,6 +58,18 @@ class _PreferencesState extends State<Preferences> {
       "route": () => "/statistics",
       "available": () =>
           Settings.instance.self?.hasSupervisorRights ?? false,
+    },
+    {
+      "title": "Cerrar sesión",
+      "type": "button",
+      "icon": CupertinoIcons.square_arrow_left_fill,
+      "action": () async {
+        await Settings.instance.logOut();
+        Settings.instance.navigatorKey.currentState
+            ?.pushNamedAndRemoveUntil('/welcome', (route) => false);
+      },
+      "status": () => false,
+      "available": () => true,
     },
   ];
 

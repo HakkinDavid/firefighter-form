@@ -178,7 +178,7 @@ class Settings {
 
   Future<void> setUser() async {
     try {
-      setUserId();
+      await setUserId();
       await fetchUser();
     } catch (e) {
       Logging(
@@ -187,6 +187,31 @@ class Settings {
         attentionLevel: 4,
       );
     }
+  }
+
+  Future<void> setUserId([String? explicitUserId]) async {
+    final currentSupabaseUser = Supabase.instance.client.auth.currentUser;
+    _userId = explicitUserId ?? currentSupabaseUser?.id;
+    if (_userId != null && _userId!.isNotEmpty) {
+      await DatabaseService.instance.getUserDatabase(_userId!);
+      await DatabaseService.instance.setAppState('userId', _userId!);
+    }
+  }
+
+  Future<void> logOut() async {
+    try {
+      await Supabase.instance.client.auth.signOut();
+    } catch (e) {
+      Logging("Error al cerrar sesión en Supabase: $e", caller: "Settings (logOut)", attentionLevel: 2);
+    }
+    await DatabaseService.instance.closeUserDatabase();
+    _userId = null;
+    _userCache = {};
+    _formsQueue = [];
+    _formsList = [];
+    _userCacheStreamController.add(_userCache);
+    _formsStreamController.add([]);
+    Logging("Sesión cerrada correctamente. Memoria y base de datos de usuario desmontadas.", caller: "Settings (logOut)", attentionLevel: 2);
   }
 
   Future<void> setForms() async {
@@ -208,11 +233,6 @@ class Settings {
         attentionLevel: 2,
       );
     }
-  }
-
-  void setUserId() {
-    _userId = Supabase.instance.client.auth.currentUser!.id;
-    DatabaseService.instance.setAppState('userId', _userId!);
   }
 
   Future<FirefighterUser> fetchUser({String? pUserId}) async {

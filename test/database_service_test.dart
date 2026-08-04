@@ -20,15 +20,19 @@ void main() {
   });
 
   test('DatabaseService initializes tables and CRUD operations work correctly', () async {
-    final db = await DatabaseService.instance.database;
-    expect(db.isOpen, isTrue);
+    // Initialize user DB for 'usr-1'
+    final userDb = await DatabaseService.instance.getUserDatabase('usr-1');
+    expect(userDb.isOpen, isTrue);
 
-    // Test app_state CRUD
+    final globalDb = await DatabaseService.instance.globalDatabase;
+    expect(globalDb.isOpen, isTrue);
+
+    // Test app_state CRUD (Global DB)
     await DatabaseService.instance.setAppState('test_key', 'test_val');
     final val = await DatabaseService.instance.getAppState('test_key');
     expect(val, equals('test_val'));
 
-    // Test User CRUD
+    // Test User CRUD (User DB for 'usr-1')
     final user = FirefighterUser(
       id: 'usr-1',
       givenName: 'Juan',
@@ -41,7 +45,7 @@ void main() {
     expect(users.containsKey('usr-1'), isTrue);
     expect(users['usr-1']!.fullName, equals('Juan Pérez Gómez'));
 
-    // Test Form CRUD & Local Precedence Guard
+    // Test Form CRUD & Local Precedence Guard (User DB)
     final formDraft = ServiceForm(
       'form-1',
       1,
@@ -72,7 +76,16 @@ void main() {
     final formsAfterRemoteSync = await DatabaseService.instance.getFormsQueue();
     expect(formsAfterRemoteSync.first.content['campo1'], equals('respuesta'));
 
+    // Test user database teardown and isolation for second user 'usr-2'
+    await DatabaseService.instance.closeUserDatabase();
+
+    final user2Db = await DatabaseService.instance.getUserDatabase('usr-2');
+    expect(user2Db.isOpen, isTrue);
+    final user2Forms = await DatabaseService.instance.getAllForms();
+    expect(user2Forms.isEmpty, isTrue); // User 2 has empty DB initially
+
     // Cleanup
+    await DatabaseService.instance.getUserDatabase('usr-1');
     await DatabaseService.instance.deleteForm('form-1');
     final emptyQueue = await DatabaseService.instance.getFormsQueue();
     expect(emptyQueue.isEmpty, isTrue);

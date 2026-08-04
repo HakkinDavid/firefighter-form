@@ -343,15 +343,15 @@ class ServiceReliabilityEngineer {
       final userId = await DatabaseService.instance.getAppState('userId');
       final allowDebuggingStr = await DatabaseService.instance.getAppState('allowDebugging');
 
-      if (userId != null) {
-        Settings.instance.userId = userId;
-      }
       if (allowDebuggingStr != null) {
         Settings.instance.allowDebugging = (allowDebuggingStr == 'true');
       }
 
-      Settings.instance.userCache = await DatabaseService.instance.getUsers();
-      Settings.instance.formsQueue = await DatabaseService.instance.getFormsQueue();
+      if (userId != null && userId.isNotEmpty) {
+        await Settings.instance.setUserId(userId);
+        Settings.instance.userCache = await DatabaseService.instance.getUsers();
+        Settings.instance.formsQueue = await DatabaseService.instance.getFormsQueue();
+      }
 
       Logging(
         "Cargado de SQLite: userId=${Settings.instance.userId}, userCache=${Settings.instance.userCache.keys}, formsQueue=${Settings.instance.formsQueue.length}",
