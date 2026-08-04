@@ -196,18 +196,25 @@ class Settings {
             await DatabaseService.instance.saveLocalAccount(updatedAccount);
           }
         }
-      } catch (e) {
+      } on AuthException catch (e) {
         Logging(
-          "No se pudo validar el token en la nube para $targetUserId: $e. Manteniendo sesión local activa.",
+          "Token no válido o revocado en la nube para $targetUserId: ${e.message}",
           caller: "Settings (switchActiveUser)",
-          attentionLevel: 2,
+          attentionLevel: 3,
         );
         _isSessionValid = false;
         final updatedAccount = account.copyWith(isSessionValid: false);
         await DatabaseService.instance.saveLocalAccount(updatedAccount);
+      } catch (e) {
+        Logging(
+          "Red no disponible al conmutar usuario $targetUserId: $e. Manteniendo sesión local activa.",
+          caller: "Settings (switchActiveUser)",
+          attentionLevel: 1,
+        );
+        _isSessionValid = true;
       }
     } else {
-      _isSessionValid = false;
+      _isSessionValid = true;
     }
 
     // 5. Enqueue SRE reload and sync tasks for new user

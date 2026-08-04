@@ -78,15 +78,15 @@ class _HeaderState extends State<Header> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: CupertinoColors.systemOrange.withOpacity(0.2),
+                  color: CupertinoColors.systemOrange.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(color: CupertinoColors.systemOrange),
                 ),
                 child: const Text(
-                  "⚠️ Sesión en nube expirada\nSincronización deshabilitada",
+                  "Sesión expirada",
                   style: TextStyle(
                     color: CupertinoColors.systemOrange,
-                    fontSize: 11,
+                    fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
                   textAlign: TextAlign.center,
@@ -103,7 +103,7 @@ class _HeaderState extends State<Header> {
                 Navigator.pushReplacementNamed(context, '/welcome');
               },
               child: Text(
-                'Cambiar de usuario',
+                'Cambiar usuario',
                 style: TextStyle(
                   color: Settings.instance.colors.primary,
                   fontSize: 13,
