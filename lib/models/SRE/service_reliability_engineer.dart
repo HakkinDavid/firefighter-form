@@ -75,6 +75,8 @@ class ServiceReliabilityEngineer {
       heuristic: ConnectionHeuristic(),
       duty: Settings.instance.syncForms,
       dependsOn: {"LoadFromDisk"},
+      retryOnFailure: true,
+      postponeInterval: const Duration(seconds: 5),
     );
     _tasksRepository["SetUser"] = Task(
       heuristic: ConnectionHeuristic(),
@@ -131,48 +133,67 @@ class ServiceReliabilityEngineer {
   void _processQueue() async {
     if (_tasksQueue.isEmpty || _busy.isLocked) return;
 
-    _tasksRepository.forEach((taskId, processedTask) async {
-      if (_tasksQueue.contains(taskId)) {
-        if (processedTask.dependsOn.every(
-          (dependency) => !_tasksRepository[dependency]!.pending,
-        )) {
-          Logging(
-            "Solicitando mutex. Actualmente está ${_busy.isLocked ? "bloqueado" : "libre"}.",
-            caller: "SRE (_processQueue)",
-          );
-          await _busy.acquire();
-          Logging(
-            "Adquirido mutex. Ahora está ${_busy.isLocked ? "bloqueado" : "libre (??)"}.",
-            caller: "SRE (_processQueue)",
-          );
-          Logging(
-            "Ejecutando... $taskId",
-            caller: "SRE (_processQueue)",
-            attentionLevel: 1,
-          );
-          await processedTask.runTask();
-          Logging(
-            "Terminó ejecución de $taskId. Tarea ${processedTask.pending ? "pendiente" : "terminada"}.",
-            caller: "SRE (_processQueue)",
-            attentionLevel: 1,
-          );
-          if (!processedTask.pending) {
-            Logging(
-              "Eliminando de la cola a $taskId.",
-              caller: "SRE (_processQueue)",
-              attentionLevel: 1,
-            );
-            _tasksQueue.removeWhere((t) => t == taskId);
-          }
-          Logging(
-            "Liberando mutex ${_busy.isLocked ? "bloqueado" : "libre (??)"}.",
-            caller: "SRE (_processQueue)",
-          );
-          _busy.release();
-        }
+    for (String taskId in List<String>.from(_tasksQueue)) {
+      final processedTask = _tasksRepository[taskId];
+      if (processedTask == null || processedTask.isPostponed) continue;
+
+      final dependenciesResolved = processedTask.dependsOn.every(
+        (dependency) => !(_tasksRepository[dependency]?.pending ?? false),
+      );
+
+      if (!dependenciesResolved) continue;
+
+      final isViable = await processedTask.heuristic.evaluate();
+      if (!isViable) {
+        Logging(
+          "Heurística no viable para $taskId. Posponiendo ejecución.",
+          caller: "SRE (_processQueue)",
+        );
+        processedTask.postpone();
+        continue;
       }
-      await Future.delayed(Duration.zero);
-    });
+
+      Logging(
+        "Solicitando mutex para $taskId. Actualmente está ${_busy.isLocked ? "bloqueado" : "libre"}.",
+        caller: "SRE (_processQueue)",
+      );
+      await _busy.acquire();
+      try {
+        Logging(
+          "Ejecutando... $taskId",
+          caller: "SRE (_processQueue)",
+          attentionLevel: 1,
+        );
+        await processedTask.runTask();
+      } catch (e) {
+        Logging(
+          "Excepción durante ejecución de $taskId: $e",
+          caller: "SRE (_processQueue)",
+          attentionLevel: 2,
+        );
+      } finally {
+        Logging(
+          "Liberando mutex tras $taskId.",
+          caller: "SRE (_processQueue)",
+        );
+        _busy.release();
+      }
+
+      Logging(
+        "Terminó ejecución de $taskId. Tarea ${processedTask.pending ? "pendiente" : "terminada"}.",
+        caller: "SRE (_processQueue)",
+        attentionLevel: 1,
+      );
+
+      if (!processedTask.pending) {
+        Logging(
+          "Eliminando de la cola a $taskId.",
+          caller: "SRE (_processQueue)",
+          attentionLevel: 1,
+        );
+        _tasksQueue.removeWhere((t) => t == taskId);
+      }
+    }
   }
 
   bool _compareReleaseVersions(String latest, String current) {

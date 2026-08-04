@@ -437,7 +437,7 @@ class Settings {
 
     for (var syncing in syncCandidates) {
       if (!(await uploadForm(syncing))) {
-        return;
+        throw Exception("Fallo de envío en formulario ${syncing.id} por problema de conexión.");
       }
     }
 
