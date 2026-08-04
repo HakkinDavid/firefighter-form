@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:bomberos/models/SRE/Heuristic/connection_heuristic.dart';
 import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
 import 'package:bomberos/models/database_service.dart';
 import 'package:bomberos/models/form.dart';
@@ -163,6 +164,15 @@ class Settings {
     await loadLocalAccounts();
   }
 
+  void setFormsFromDisk(
+    List<ServiceForm> queueForms,
+    List<ServiceForm> allForms,
+  ) {
+    _formsQueue = List.from(queueForms);
+    _formsList = List.from(allForms);
+    _formsStreamController.add(formsList);
+  }
+
   Future<void> switchActiveUser(String targetUserId) async {
     Logging(
       "Iniciando cambio atómico al usuario $targetUserId...",
@@ -170,6 +180,7 @@ class Settings {
       attentionLevel: 2,
     );
 
+    ServiceReliabilityEngineer.instance.resetQueue();
     await ServiceReliabilityEngineer.instance.lockAndFlush();
 
     // 1. Clear current in-memory caches
@@ -184,11 +195,17 @@ class Settings {
     _userId = targetUserId;
     await DatabaseService.instance.setAppState('userId', targetUserId);
 
-    // 4. Restore Supabase JWT session if refresh token exists
+    // 4. Restore Supabase JWT session if online and refresh token exists
     final account = await DatabaseService.instance.getLocalAccount(targetUserId);
-    if (account != null && account.refreshToken != null && account.refreshToken!.isNotEmpty) {
+    final isOnline = await ConnectionHeuristic().evaluate();
+
+    if (isOnline &&
+        account != null &&
+        account.refreshToken != null &&
+        account.refreshToken!.isNotEmpty) {
       try {
-        final res = await Supabase.instance.client.auth.setSession(account.refreshToken!);
+        final res = await Supabase.instance.client.auth
+            .setSession(account.refreshToken!);
         if (res.session != null) {
           _isSessionValid = true;
           // Update refresh token if rotated
@@ -220,7 +237,8 @@ class Settings {
         _isSessionValid = true;
       }
     } else {
-      _isSessionValid = true;
+      // Offline: Instant local switch (< 5ms) without blocking HTTP network call
+      _isSessionValid = account?.isSessionValid ?? true;
     }
 
     // 5. Enqueue SRE reload and sync tasks for new user

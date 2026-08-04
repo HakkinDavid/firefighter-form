@@ -95,7 +95,7 @@ class _WelcomeState extends State<Welcome> {
         if (response.user != null) {
           await Settings.instance.setUser();
           if (mounted) {
-            Navigator.pushReplacementNamed(context, "/home");
+            Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
           }
         }
       } else {
@@ -116,7 +116,7 @@ class _WelcomeState extends State<Welcome> {
 
           await Settings.instance.setUser();
           if (mounted) {
-            Navigator.pushReplacementNamed(context, "/home");
+            Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
           }
         }
       }
@@ -144,7 +144,7 @@ class _WelcomeState extends State<Welcome> {
     try {
       await Settings.instance.switchActiveUser(account.userId);
       if (mounted) {
-        Navigator.pushReplacementNamed(context, "/home");
+        Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
       }
     } catch (e) {
       setState(() {

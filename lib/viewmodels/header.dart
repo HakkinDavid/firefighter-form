@@ -32,7 +32,11 @@ class _HeaderState extends State<Header> {
   }
 
   void _goBack() {
-    Navigator.pop(context);
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    } else {
+      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+    }
   }
 
   void _showUserMenu(double contentWidth) {
@@ -56,7 +60,7 @@ class _HeaderState extends State<Header> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "Usuario: ${widget.username ?? 'Local'}",
+              "Usuario: ${widget.username ?? 'Usuario local'}",
               style: TextStyle(
                 color: Settings.instance.colors.textOverPrimary,
                 fontSize: 14,
@@ -100,7 +104,8 @@ class _HeaderState extends State<Header> {
               minimumSize: Size.zero,
               onPressed: () {
                 OverlayService.closeCurrentOverlay();
-                Navigator.pushReplacementNamed(context, '/welcome');
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/welcome', (route) => false);
               },
               child: Text(
                 'Cambiar usuario',
@@ -121,6 +126,8 @@ class _HeaderState extends State<Header> {
   Widget build(BuildContext context) {
     final String? currentRoute = ModalRoute.of(context)?.settings.name;
     final isSessionValid = Settings.instance.isSessionValid;
+    final isWelcomeRoute =
+        currentRoute == '/welcome' || currentRoute == '/';
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -228,7 +235,7 @@ class _HeaderState extends State<Header> {
                               ),
                               textAlign: TextAlign.center,
                             ),
-                            if (widget.username != null)
+                            if (!isWelcomeRoute)
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -262,9 +269,10 @@ class _HeaderState extends State<Header> {
                                     ],
                                   ),
                                   const SizedBox(width: 12),
-                                  if (currentRoute == '/home') ...[
+                                  if (currentRoute == '/home' ||
+                                      currentRoute == null) ...[
                                     IconButton(
-                                      icon: Icon(
+                                      icon: const Icon(
                                         CupertinoIcons.search,
                                         size: 30,
                                       ),
@@ -274,7 +282,7 @@ class _HeaderState extends State<Header> {
                                     ),
                                     const SizedBox(width: 12),
                                     IconButton(
-                                      icon: Icon(
+                                      icon: const Icon(
                                         CupertinoIcons.settings,
                                         size: 30,
                                       ),
@@ -284,10 +292,9 @@ class _HeaderState extends State<Header> {
                                     ),
                                   ],
                                   if (currentRoute != '/home' &&
-                                      currentRoute != '/' &&
-                                      currentRoute != '/welcome')
+                                      currentRoute != null)
                                     IconButton(
-                                      icon: Icon(
+                                      icon: const Icon(
                                         CupertinoIcons.arrow_left_circle,
                                         size: 30,
                                       ),
