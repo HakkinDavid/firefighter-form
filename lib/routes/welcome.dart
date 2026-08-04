@@ -192,7 +192,7 @@ class _WelcomeState extends State<Welcome> {
                                     ? 'Registrarse'
                                     : _isRecovering
                                     ? 'Recuperar contraseña'
-                                    : 'Iniciar Sesión',
+                                    : 'Iniciar sesión',
                                 style: CupertinoTheme.of(context)
                                     .textTheme
                                     .navLargeTitleTextStyle
