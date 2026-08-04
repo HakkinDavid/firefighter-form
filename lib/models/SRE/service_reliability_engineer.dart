@@ -335,25 +335,6 @@ class ServiceReliabilityEngineer {
     }
   }
 
-  void enqueueWriteTasks(
-    List<(String, Map<String, dynamic> Function()?)> writeTasks,
-  ) {
-    int writeIndex = 0;
-    Logging(
-      "Recibiendo ${writeTasks.length} solicitudes para SaveToDisk...",
-      caller: "SRE (enqueueWriteTasks)",
-    );
-    for (var writeTask in writeTasks) {
-      Logging(
-        "[$writeIndex] ${writeTask.$2 != null ? "Escritura" : "Eliminación"} para ruta ${writeTask.$1.replaceRange(0, writeTask.$1.length - 30, '...')}.",
-        caller: "SRE (enqueueWriteTasks)",
-      );
-      _writeQueue.add((writeTask.$1, writeTask.$2));
-      writeIndex++;
-    }
-    enqueueTasks({"SaveToDisk"});
-  }
-
   // === DISK / DATABASE FUNCTIONS ===
   Future<void> _loadFromDisk() async {
     try {
