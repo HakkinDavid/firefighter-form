@@ -70,6 +70,12 @@ class Settings {
 
   bool get isSessionValid => _isSessionValid;
 
+  bool get isCloudAuthAligned {
+    if (!_isSessionValid) return false;
+    final cloudUser = Supabase.instance.client.auth.currentUser;
+    return cloudUser != null && cloudUser.id == _userId;
+  }
+
   final StreamController<Map<String, FirefighterUser>>
       _userCacheStreamController =
       StreamController<Map<String, FirefighterUser>>.broadcast();
@@ -583,9 +589,9 @@ class Settings {
   }
 
   Future<bool> uploadForm(ServiceForm form) async {
-    if (!_isSessionValid) {
+    if (!isCloudAuthAligned) {
       Logging(
-        "Ignorando envío de formulario ${form.id}: La sesión en la nube no es válida para el usuario activo.",
+        "Ignorando envío de formulario ${form.id}: La identidad del usuario autenticado en la nube no coincide con el usuario activo local.",
         caller: "Settings (uploadForm)",
         attentionLevel: 2,
       );
@@ -609,9 +615,9 @@ class Settings {
   }
 
   Future<void> syncForms() async {
-    if (!_isSessionValid) {
+    if (!isCloudAuthAligned) {
       Logging(
-        "Sincronización omitida: La sesión actual requiere re-autenticación online.",
+        "Sincronización omitida: La sesión autenticada en la nube no está alineada con el usuario activo local.",
         caller: "Settings (syncForms)",
         attentionLevel: 2,
       );
@@ -633,7 +639,7 @@ class Settings {
 
   Future<void> deleteForm(ServiceForm form) async {
     try {
-      if (form.status == 2 && _isSessionValid) {
+      if (form.status == 2 && isCloudAuthAligned) {
         await Supabase.instance.client.rpc(
           'delete_filled_in',
           params: {'p_id': form.id},
