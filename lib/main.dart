@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:bomberos/models/form.dart';
 import 'package:bomberos/models/settings.dart';
 import 'package:bomberos/models/SRE/service_reliability_engineer.dart';
@@ -11,9 +12,15 @@ import 'package:bomberos/routes/statistics.dart';
 import 'package:bomberos/routes/users_panel.dart';
 import 'package:bomberos/routes/welcome.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
   await Supabase.initialize(
     url: DatabaseSettings.url,
     anonKey: DatabaseSettings.anonKey,

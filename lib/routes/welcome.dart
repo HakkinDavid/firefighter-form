@@ -30,6 +30,14 @@ class _WelcomeState extends State<Welcome> {
   String _errorMessage = '';
 
   @override
+  void initState() {
+    super.initState();
+    if (Supabase.instance.client.auth.currentUser != null) {
+      Settings.instance.setUser();
+    }
+  }
+
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
