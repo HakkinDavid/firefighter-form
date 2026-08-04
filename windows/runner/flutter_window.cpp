@@ -12,6 +12,7 @@
 #include <regex>
 #include <sstream>
 #include <string>
+#include <thread>
 
 #include "flutter/generated_plugin_registrant.h"
 
@@ -241,43 +242,50 @@ bool FlutterWindow::OnCreate() {
              std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>>
                  result) {
         if (call.method_name() == "isUpdateAvailable") {
-          std::wstring metadata_path =
-              GetTempPathForFile(L"bomberos-update-metadata.json");
+          auto result_shared = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+          std::thread([this, result = result_shared]() {
+            ::CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
-          if (!DownloadFile(kMetadataUrl, metadata_path)) {
-            result->Error("UPDATE_ERROR", "No se pudo descargar metadata.json.");
-            return;
-          }
+            std::wstring metadata_path =
+                GetTempPathForFile(L"bomberos-update-metadata.json");
 
-          std::string metadata = ReadFileUtf8(metadata_path);
-          latest_version_ =
-              FirstJsonStringValue(metadata, {"latest_version", "latestversion"});
-          latest_changelog_ = JsonStringValue(metadata, "changelog");
-          latest_windows_url_ = FirstJsonStringValue(
-              metadata, {"windows_url", "installer_url", "exe_url", "msi_url"});
+            if (!DownloadFile(kMetadataUrl, metadata_path)) {
+              ::CoUninitialize();
+              result->Error("UPDATE_ERROR", "No se pudo descargar metadata.json.");
+              return;
+            }
 
-          flutter::EncodableMap release_data;
-          release_data[flutter::EncodableValue("current_version")] =
-              flutter::EncodableValue(CurrentAppVersion());
+            std::string metadata = ReadFileUtf8(metadata_path);
+            latest_version_ =
+                FirstJsonStringValue(metadata, {"latest_version", "latestversion"});
+            latest_changelog_ = JsonStringValue(metadata, "changelog");
+            latest_windows_url_ = FirstJsonStringValue(
+                metadata, {"windows_url", "installer_url", "exe_url", "msi_url"});
 
-          if (latest_version_.empty() || latest_windows_url_.empty()) {
-            latest_version_.clear();
-            latest_changelog_.clear();
-            latest_windows_url_.clear();
-            release_data[flutter::EncodableValue("available")] =
-                flutter::EncodableValue(false);
-          } else {
-            release_data[flutter::EncodableValue("available")] =
-                flutter::EncodableValue(true);
-            release_data[flutter::EncodableValue("latest_version")] =
-                flutter::EncodableValue(latest_version_);
-            release_data[flutter::EncodableValue("changelog")] =
-                flutter::EncodableValue(latest_changelog_);
-            release_data[flutter::EncodableValue("windows_url")] =
-                flutter::EncodableValue(latest_windows_url_);
-          }
+            flutter::EncodableMap release_data;
+            release_data[flutter::EncodableValue("current_version")] =
+                flutter::EncodableValue(CurrentAppVersion());
 
-          result->Success(flutter::EncodableValue(release_data));
+            if (latest_version_.empty() || latest_windows_url_.empty()) {
+              latest_version_.clear();
+              latest_changelog_.clear();
+              latest_windows_url_.clear();
+              release_data[flutter::EncodableValue("available")] =
+                  flutter::EncodableValue(false);
+            } else {
+              release_data[flutter::EncodableValue("available")] =
+                  flutter::EncodableValue(true);
+              release_data[flutter::EncodableValue("latest_version")] =
+                  flutter::EncodableValue(latest_version_);
+              release_data[flutter::EncodableValue("changelog")] =
+                  flutter::EncodableValue(latest_changelog_);
+              release_data[flutter::EncodableValue("windows_url")] =
+                  flutter::EncodableValue(latest_windows_url_);
+            }
+
+            ::CoUninitialize();
+            result->Success(flutter::EncodableValue(release_data));
+          }).detach();
           return;
         }
 
@@ -289,49 +297,59 @@ bool FlutterWindow::OnCreate() {
             return;
           }
 
-          std::filesystem::path executable_path = CurrentExecutablePath();
-          if (executable_path.empty()) {
-            result->Error("UPDATE_ERROR",
-                          "No se pudo ubicar el ejecutable actual.");
-            return;
-          }
+          auto result_shared = std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>>(std::move(result));
+          std::thread([this, result = result_shared]() {
+            ::CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
-          std::filesystem::path app_directory = executable_path.parent_path();
-          std::filesystem::path zip_path =
-              app_directory /
-              Utf16FromUtf8("bomberos-windows-release-v" + latest_version_ +
-                            ".zip");
-          if (!DownloadFile(Utf16FromUtf8(latest_windows_url_),
-                            zip_path.wstring())) {
-            result->Error("DOWNLOAD_ERROR",
-                          "No se pudo descargar la actualización de Windows.");
-            return;
-          }
+            std::filesystem::path executable_path = CurrentExecutablePath();
+            if (executable_path.empty()) {
+              ::CoUninitialize();
+              result->Error("UPDATE_ERROR",
+                            "No se pudo ubicar el ejecutable actual.");
+              return;
+            }
 
-          std::wstring script_path =
-              (app_directory / L"bomberos-windows-update.cmd").wstring();
-          if (!WriteUpdaterScript(script_path, app_directory,
-                                  executable_path, zip_path.wstring(),
-                                  ::GetCurrentProcessId())) {
-            result->Error("UPDATE_ERROR",
-                          "No se pudo preparar el instalador de Windows.");
-            return;
-          }
+            std::filesystem::path app_directory = executable_path.parent_path();
+            std::filesystem::path zip_path =
+                app_directory /
+                Utf16FromUtf8("bomberos-windows-release-v" + latest_version_ +
+                              ".zip");
+            if (!DownloadFile(Utf16FromUtf8(latest_windows_url_),
+                              zip_path.wstring())) {
+              ::CoUninitialize();
+              result->Error("DOWNLOAD_ERROR",
+                            "No se pudo descargar la actualización de Windows.");
+              return;
+            }
 
-          std::wstring parameters =
-              L"/C " + CommandLineDoubleQuoted(script_path);
-          HINSTANCE shell_result = ::ShellExecuteW(
-              nullptr, L"open", L"cmd.exe", parameters.c_str(), nullptr,
-              SW_HIDE);
+            std::wstring script_path =
+                (app_directory / L"bomberos-windows-update.cmd").wstring();
+            if (!WriteUpdaterScript(script_path, app_directory,
+                                    executable_path, zip_path.wstring(),
+                                    ::GetCurrentProcessId())) {
+              ::CoUninitialize();
+              result->Error("UPDATE_ERROR",
+                            "No se pudo preparar el instalador de Windows.");
+              return;
+            }
 
-          if (reinterpret_cast<intptr_t>(shell_result) <= 32) {
-            result->Error("UPDATE_ERROR",
-                          "No se pudo iniciar el instalador de Windows.");
-            return;
-          }
+            std::wstring parameters =
+                L"/C " + CommandLineDoubleQuoted(script_path);
+            HINSTANCE shell_result = ::ShellExecuteW(
+                nullptr, L"open", L"cmd.exe", parameters.c_str(), nullptr,
+                SW_HIDE);
 
-          result->Success(flutter::EncodableValue(true));
-          ::PostMessage(GetHandle(), WM_CLOSE, 0, 0);
+            if (reinterpret_cast<intptr_t>(shell_result) <= 32) {
+              ::CoUninitialize();
+              result->Error("UPDATE_ERROR",
+                            "No se pudo iniciar el instalador de Windows.");
+              return;
+            }
+
+            ::CoUninitialize();
+            result->Success(flutter::EncodableValue(true));
+            ::PostMessage(GetHandle(), WM_CLOSE, 0, 0);
+          }).detach();
           return;
         }
 

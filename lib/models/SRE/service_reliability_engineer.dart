@@ -218,22 +218,33 @@ class ServiceReliabilityEngineer {
       return;
     }
 
-    final releaseMap = await _platform!.invokeMethod('isUpdateAvailable');
-    if (releaseMap['available'] == true &&
-        _compareReleaseVersions(
-          releaseMap['latest_version'],
-          releaseMap['current_version'],
-        )) {
+    try {
+      final releaseMap = await _platform!.invokeMethod('isUpdateAvailable');
+      if (releaseMap != null &&
+          releaseMap['available'] == true &&
+          releaseMap['latest_version'] != null &&
+          releaseMap['current_version'] != null &&
+          _compareReleaseVersions(
+            releaseMap['latest_version'].toString(),
+            releaseMap['current_version'].toString(),
+          )) {
+        Logging(
+          "Se encontró la versión v${releaseMap['latest_version']} (actual v${releaseMap['current_version']}). Llamando _askForUserPermission.",
+          caller: "SRE (_isUpdateAvailable)",
+          attentionLevel: 3,
+        );
+        _askForUserPermission();
+      } else {
+        Logging(
+          "No se encontraron actualizaciones del app (available: ${releaseMap?['available']}). La versión actual es v${releaseMap?['current_version']}.",
+          caller: "SRE (_isUpdateAvailable)",
+        );
+      }
+    } catch (e) {
       Logging(
-        "Se encontró la versión v${releaseMap['latest_version']} (actual v${releaseMap['current_version']}). Llamando _askForUserPermission.",
+        "Error verificando actualizaciones del app: $e",
         caller: "SRE (_isUpdateAvailable)",
-        attentionLevel: 3,
-      );
-      _askForUserPermission();
-    } else {
-      Logging(
-        "No se encontraron actualizaciones del app (available: ${releaseMap['available']}). La versión actual es v${releaseMap['current_version']}.",
-        caller: "SRE (_isUpdateAvailable)",
+        attentionLevel: 2,
       );
     }
   }
