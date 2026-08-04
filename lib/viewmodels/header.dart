@@ -73,16 +73,16 @@ class _HeaderState extends State<Header> {
             const SizedBox(height: 12),
             CupertinoButton(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              color: CupertinoColors.destructiveRed,
+              color: Settings.instance.colors.primary,
               onPressed: () async {
                 OverlayService.closeCurrentOverlay();
                 await Settings.instance.logOut();
                 Settings.instance.navigatorKey.currentState
                     ?.pushNamedAndRemoveUntil('/welcome', (route) => false);
               },
-              child: const Text(
+              child: Text(
                 'Cerrar sesión',
-                style: TextStyle(color: CupertinoColors.white, fontSize: 14),
+                style: TextStyle(color: Settings.instance.colors.textOverPrimary, fontSize: 14),
               ),
             ),
           ],
