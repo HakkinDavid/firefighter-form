@@ -77,6 +77,18 @@ class Settings {
     return cloudUser != null && cloudUser.id == _userId;
   }
 
+  Future<bool> ensureCloudAuthAligned() async {
+    if (!isCloudAuthAligned) {
+      if (_userId != null && _userId!.isNotEmpty) {
+        final matches = _localAccounts.where((a) => a.userId == _userId);
+        final account = matches.isNotEmpty ? matches.first : null;
+        unawaited(_refreshCloudSession(_userId!, account));
+      }
+      return false;
+    }
+    return true;
+  }
+
   final StreamController<Map<String, FirefighterUser>>
       _userCacheStreamController =
       StreamController<Map<String, FirefighterUser>>.broadcast();
@@ -316,6 +328,7 @@ class Settings {
   }
 
   Future<void> setUserRole(String userId, int userRole) async {
+    if (!await ensureCloudAuthAligned()) return;
     await Supabase.instance.client.rpc(
       'set_user_role',
       params: {'p_user_id': userId, 'p_role_id': userRole},
@@ -328,6 +341,7 @@ class Settings {
   }
 
   Future<void> setUserHierarchy(String watchedId, String? watcherId) async {
+    if (!await ensureCloudAuthAligned()) return;
     await Supabase.instance.client.rpc(
       'set_user_hierarchy',
       params: {'p_watched_id': watchedId, 'p_watcher_id': watcherId},
@@ -402,6 +416,7 @@ class Settings {
   }
 
   Future<void> setForms() async {
+    if (!await ensureCloudAuthAligned()) return;
     try {
       final formRecords = await Supabase.instance.client
           .from('filled_in')
@@ -506,6 +521,7 @@ class Settings {
   }
 
   Future<void> refreshUsers() async {
+    if (!await ensureCloudAuthAligned()) return;
     try {
       final userNamesRecord = await Supabase.instance.client
           .from('user_name')
@@ -588,6 +604,7 @@ class Settings {
 
   // This will be an actual function later
   Future<bool> uploadTemplate(Map<String, dynamic> template) async {
+    if (!await ensureCloudAuthAligned()) return false;
     try {
       await Supabase.instance.client.rpc(
         'upload_template',
@@ -627,7 +644,7 @@ class Settings {
   }
 
   Future<bool> uploadForm(ServiceForm form) async {
-    if (!isCloudAuthAligned) {
+    if (!await ensureCloudAuthAligned()) {
       Logging(
         "Ignorando envío de formulario ${form.id}: La identidad del usuario autenticado en la nube no coincide con el usuario activo local.",
         caller: "Settings (uploadForm)",
@@ -653,7 +670,7 @@ class Settings {
   }
 
   Future<void> syncForms() async {
-    if (!isCloudAuthAligned) {
+    if (!await ensureCloudAuthAligned()) {
       Logging(
         "Sincronización omitida: La sesión autenticada en la nube no está alineada con el usuario activo local.",
         caller: "Settings (syncForms)",
@@ -677,7 +694,7 @@ class Settings {
 
   Future<void> deleteForm(ServiceForm form) async {
     try {
-      if (form.status == 2 && isCloudAuthAligned) {
+      if (form.status == 2 && await ensureCloudAuthAligned()) {
         await Supabase.instance.client.rpc(
           'delete_filled_in',
           params: {'p_id': form.id},
